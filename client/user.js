@@ -56,7 +56,6 @@ Template.login_popover.rendered = function(){
 		$(".popover").popover({
 			//html:true,
 			//content:$('div#div-login-form').html()
-
 		});
 		
 }
@@ -82,7 +81,6 @@ Template.login_popover.events = {
 		Session.set('login', false);
 		console.log('new');
 		$('#registerModal').modal("toggle");
-		
 	},
 	'click span#login-submit': function(e,t){
 		$("form.login_form").submit();
@@ -122,10 +120,27 @@ Template.register_form.events({
 
 
 Template.user_finder_modal.rendered = function(){
-	console.log('initialising ...');
 	$('#user-finder-modal').modal();
 	$("#user-finder-modal").on('hidden.bs.modal', function(){
-		Session.set('user_finder', false);
+		Session.set('find_user', false);
 	})
-	console.log('ready');
 }
+
+Template.user_finder_modal.events({
+	'submit form.user-finder#user-finder-form': function(e,t){
+		e.preventDefault();
+		var user_name = t.find("input.form-control#user-name-f").value;
+		console.log(user_name);
+
+		if (user_name.length < 4){
+			Session.set('users_found',false);
+			return false;
+		}
+		var users = Meteor.call("find_user",user_name,function(error,users){
+			console.log('callback: ' + users);
+			Session.set("users_found", users);
+		});
+
+		console.log(users);
+	}
+})

@@ -187,6 +187,12 @@ Router.map( function() {
 	    			total:total
 	    		};
 	    	},
+	    	find_user: function(){
+	    		return Session.get('find_user');
+	    	},
+	    	user_found: function(){
+	    		return Session.get("users_found");
+	    	},
 	    	activeChat: "active",
 	    	pageTitle: "Chat app"
 	    	//myUsersList: function(){//var users = UsersRelations.find({user:Session.get('currentUser')._id});

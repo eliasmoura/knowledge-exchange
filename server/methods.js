@@ -213,6 +213,11 @@ Meteor.methods({
 			GroupRequest.insert({user: user, group: group, message: message, type: 2});
 		throw Meteor.Error(1000, "The person you are trying to send a request doesn't exit");
 	},
+	find_user: function(user_name){
+		var users = Meteor.users.find( { "profile.name": { $regex: user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
+		console.log(users);
+		return users;
+	},
 	user_friendship_request: function(user, message){
 		if (Meteor.users.findOne({_id: user}))
 			UserRequest.insert({user: Meteor.userId(), request_to: user, message: message});

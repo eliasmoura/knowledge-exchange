@@ -29,7 +29,8 @@ Template.chatrooms_side.events = {
 		Session.set('group-conf', e.target.id);
 	},
 	'click span#add-find-user': function(e,t){
-		Session.set("user_finder", true);
+		Session.set("find_user", true);
+		console.log('click find user');
 	}
 }
 Template.chatrooms_side_xs.events = {
@@ -122,7 +123,7 @@ Template.group_chat_finder.events({
 				});
 				Meteor.call("create_group", groupname,details,languages, members);
 			}
-			$('#group-chat-finder-modal').modal('hide');	
+			$('#group-chat-finder-modal').modal('hide');
 		}
 	},
 	'click input#find-create-btn':function(e,t){
