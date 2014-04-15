@@ -132,7 +132,7 @@ Template.user_finder_modal.events({
 		var user_name = t.find("input.form-control#user-name-f").value;
 		console.log(user_name);
 
-		if (user_name.length < 4){
+		if (user_name.length < 3){
 			Session.set('users_found',false);
 			return false;
 		}
@@ -142,5 +142,17 @@ Template.user_finder_modal.events({
 		});
 
 		console.log(users);
+	}
+});
+Template.user_finder.events({
+	'click span.send-request': function(e,t){
+		var userId = e.target.id;
+		console.log('prepering the request');
+		var message = 'Some thing to say :)';
+		if (userId){
+			Meteor.call("user_friendship_request", userId, message);
+			console.log('request sent');
+		}
+		else console.log('request not sent');
 	}
 })

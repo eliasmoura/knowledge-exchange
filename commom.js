@@ -42,7 +42,10 @@ Router.map( function() {
 		    	Meteor.subscribe("languages-list"),
 		    	Meteor.subscribe("group-chat"),
 		    	Meteor.subscribe("requests"),
-		    	Meteor.subscribe("user-list")
+		    	Meteor.subscribe("user-list"),
+		    	Meteor.subscribe("user-contact"),
+		    	Meteor.subscribe("privatechat"),
+		    	Meteor.subscribe("privatemessages")
 	    	];
 	    },
 	    onBeforeAction:function(){
@@ -60,6 +63,15 @@ Router.map( function() {
 	    },
 	    data:
 	    {
+	    	contacts: function(){
+	    		var users_relations = UsersRelations.find({}).fetch();
+	    		var users_relationsArray = new Array();
+	    		users_relations.forEach(function(row){
+	    			users_relationsArray.push(row.contact);
+	    		});
+	    		var users = Meteor.users.find({_id:{$in:users_relationsArray}}).fetch();
+	    		return users;
+	    	},
 	    	roomactive: function(room){
 	    		var room = User_Chatroom.findOne({user:Meteor.userId(), room:room});
 	    		return room.active;
@@ -73,7 +85,6 @@ Router.map( function() {
 	    			var user_chatroom = User_Chatroom.findOne({user:Meteor.userId(), active:true});
 	    			var user_group = User_Group.findOne({user:Meteor.userId(), active:true});
 	    			var privatechat = PrivateChat.findOne({user:Meteor.userId(), active:true});
-
 	    			if (user_chatroom != undefined){
 	    				room = Chatrooms.findOne({_id:user_chatroom['room']});
 	    			}
@@ -81,9 +92,9 @@ Router.map( function() {
 	    				room = Groups.findOne({_id:user_group['group']});
 	    			}	
     				else if (privatechat != undefined){
-    					room = PrivateChat.findOne({_id:privatechat['chat']});
+    					var user = Meteor.users.findOne({_id:privatechat['contact']});
+    					room = {name:user.profile.name};
     				}
-
 	    			return room;
 	    		}catch (e){
 	    			//console.log(e);
@@ -115,10 +126,8 @@ Router.map( function() {
 					});	
     			}	
 				else if (privatechat != undefined){
-					PrivateChat.find({chat:privatechat['chat'], active:true},
-						{sort: {time: -1}}).fetch().forEach(function(row){
-							userlist.push({user:Meteor.users.findOne({_id:row['user']})});
-					});	
+					userlist.push({user:Meteor.users.findOne({_id:privatechat.user})});
+					userlist.push({user:Meteor.users.findOne({_id:privatechat.contact})});
 				}
 				return userlist;
 	    	},
@@ -138,7 +147,7 @@ Router.map( function() {
     				}catch(e){console.log(e);}
     			}	
 				else if (privatechat != undefined){
-					messages = PrivateMessages.find({privatechat:privatechat.chat});
+					messages = PrivateMessages.find({chat:{$in: [privatechat._id]}});
 					console.log('privatechat');
 				}
 	    		
@@ -175,15 +184,15 @@ Router.map( function() {
 	    			});
 
 	    		if(userFriendshipRequest)
-		    		groupsRequests_Participation.fetch().forEach(function(row){
-		    			userArray.push(Meteor.users.find({_id: {$in: row.user}}));
+		    		userFriendshipRequest.fetch().forEach(function(row){
+		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
 		    		});
-
+		    	
 
 	    		return {
 	    			participation:participationArray,
 	    			invitation:groupsRequests_Invitation,
-	    			friendship:userFriendshipRequest,
+	    			friendship:userArray,
 	    			total:total
 	    		};
 	    	},

@@ -29,16 +29,25 @@ Meteor.publish("requests", function(){
 });
 
 
-Meteor.publish("user-friend", function(){
-	return User_Friend.find({user:this.userId});
+Meteor.publish("user-contact", function(){
+	return UsersRelations.find({user:this.userId});
 });
-Meteor.publish("privatechat", function(privatechats){
-	return PrivateChat.find({chat:{$in: privatechats}})
+Meteor.publish("privatechat", function(){
+	return PrivateChat.find({user:this.userId});
 });
 
 Meteor.publish("user-list", function(){
 	return Meteor.users.find({},{fields:{_id:1, "profile.name":1,"profile.lastname":1}});
 });
+
+Meteor.publish("privatemessages",function(){
+	var messages = null;
+	var chat = PrivateChat.findOne({user:this.userId, active:true});
+	try{
+		messages = PrivateMessages.find({chat:{$in:[chat._id]}})
+	}catch(e){}
+	return messages;
+})
 
 
 
@@ -131,17 +140,17 @@ Meteor.publish("chat-corrections", function(){
 
 	if (user_chatroom != undefined){
 		messages = Messages.find({room:user_chatroom.room});
-		console.log('chat');
+		console.log('c_chat');
 	}
 	else if (user_group != undefined){
 		try{
 		messages = GroupChat.find({groupchat:user_group.group});
 		}catch(e){console.log(e);}
-		console.log('group');
+		console.log('c_group');
 	}	
 	else if (privatechat != undefined){
-		messages = PrivateMessages.find({privatechat:privatechat.chat});
-		console.log('privatechat');
+		messages = PrivateMessages.find({chat:privatechat._id});
+		console.log('c_privatechat');
 	}
 	if (messages)
 	messages.forEach(function(row){

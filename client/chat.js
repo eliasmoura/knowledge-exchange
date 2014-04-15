@@ -116,7 +116,7 @@ Template.group_chat_finder.events({
 					});	
 				}catch(e){}
 				
-				var langs = t.findAll(".lang");
+				var langs = t.find(".lang");
 				var languages = new Array();
 				langs.each(function(){
 					languages.push($(this).option);

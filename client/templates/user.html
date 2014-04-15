@@ -49,23 +49,28 @@
 		    	<div class="modal-body container"><!--content here-->
 		        	{{#each notifications.friendship}}
 			        	<div class="friend-request">
-			        		<label for="" class="username">{{name}} {{lastname}}:</label>
+			        		<label for="" class="username">{{user.profile.name}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{message}} </span>
-			        		<input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept' 'Acept'}}"/>
-			        		<input type="button" class="deny btn btn-default" id="{{_id}}" value="{{mf 'deny' 'Deny'}}" />
+			        		<input type='button' class="acept btn btn-primary" id="{{request}}" value="{{mf 'acept' 'Acept'}}"/>
+			        		<input type="button" class="deny btn btn-default" id="{{request}}" value="{{mf 'deny' 'Deny'}}" />
+			        		<input type="text" value="{{type.type}}" class="request-type{{request}} hide"/>
 			        	</div>
 			        {{/each}}
 			        {{#each notifications.participation}}
 			        	<div class="friend-request">
 			        		<label for="" class="username">{{user._id}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{group.message}} {{group.type}} </span>
-			        		<input type='button' class="acept btn btn-primary" id="{{group._id}}" value="{{mf 'acept'}}" /><input type="button" class="deny btn btn-default" id="{{group._id}}" value="{{mf 'deny' }}" />
+			        		<input type='button' class="acept btn btn-primary" id="{{group._id}}" value="{{mf 'acept'}}" />
+			        		<input type="button" class="deny btn btn-default" id="{{group._id}}" value="{{mf 'deny' }}" />
 			        		<input type="text" value="{{group.type}}" class="request-type{{group._id}} hide"/>
 			        	</div>
 			        {{/each}}
 			        {{#each notifications.invitation}}
 			        	<div class="friend-request">
-			        		<label for="" class="group">{{name}}:</label><span id="">{{message}} </span><input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept'}}"/><input type="button" class="deny btn btn-default" id="{{_id}}" value="{{mf 'deny'}}" />
+			        		<label for="" class="group">{{name}}:</label><span id="">{{message}} </span>
+			        		<input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept'}}"/>
+			        		<input type="button" class="deny btn btn-default" id="{{_id}}" value="{{mf 'deny'}}" />
+			        		<input type="text" value="{{group.type}}" class="request-type{{group._id}} hide"/>
 			        	</div>
 			        {{/each}}
 		    	</div>
@@ -78,7 +83,7 @@
 </template>
 
 <template name="user_finder_modal">
-	<div class="modal fade row" id="user-finder-modal" tabindex="-1" role="dialog" aria-labelledby="user-finder-ModalLabel" aria-hidden="true">
+	<div class="modal fade " id="user-finder-modal" tabindex="-1" role="dialog" aria-labelledby="user-finder-ModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
@@ -86,16 +91,18 @@
 	        		<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-user' 'Find user'}}</h4>
 	      		</div>
 	    		<div class="modal-body container"><!--content here-->
-	        		<div clas="user-finder-tool ">
-	        			<form action="submit" class="user-finder col-xs-7" id="user-finder-form">
-							<div class="panel panel-group">
-								<div class="form-user-finder">
-									<input type="text" class="form-control" placeholder="{{mf 'user-name' 'User name'}}" id="user-name-f" />
+		        	<div class="panel panel-group">
+		        		<div clas="user-finder-tool panel panel-default">
+		        			<form action="submit" class="user-finder " id="user-finder-form">
+								<div class="">
+									<div class="form-user-finder">
+										<input type="text" class="form-control" placeholder="{{mf 'user-name' 'User name'}}" id="user-name-f" />
+									</div>
 								</div>
-							</div>
-						</form>
+							</form>
+						</div>
+						{{> user_finder}}
 					</div>
-					{{> user_finder}}
 	    		</div>
 			    <div class="modal-footer">
 			    	<input type="button" class="btn btn-default" id="user-finder-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
@@ -107,12 +114,12 @@
 </template>
 
 <template name="user_finder">
-	<div class="users-found">
+	<div class="users-found panel panel-default">
 		{{#each user_found}}
 			<div class="user-found" id="{{_id}}">
 				<h4>{{profile.name}} {{profile.lastname}}<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> </h4>
 				<!--Owner:<label id="owner._id"> {{owner.profile.name}} </label>-->
-				<div class="group row panel panel-default">
+				<div class="group panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a class="panel-group" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>

@@ -112,8 +112,8 @@ chat side menu
 			</div>
 			<div class="panel-collapse collapse out" id="panel-friends">
 				<ul class="nav nav-pills nav-stacked">
-					{{#each myUsersList}}
-						<li><a href="#" class="friends-contacts" id="{{_id}}" >{{name}}</a></li>
+					{{#each contacts}}
+						<li><a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}}</a></li>
 					{{/each}}
 				</ul>
 			</div>
