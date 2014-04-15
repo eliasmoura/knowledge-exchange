@@ -1,0 +1,34 @@
+<head>
+	<title>{{> title}}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	
+
+</body>
+<template name="title">
+	{{pageTitle}}
+</template>
+<template name="layout">
+	<div class="container">
+		<ul class="nav nav-pills nav-justified">
+			<li class="{{activeHome}}" ><a href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
+			<li class="{{activeBlog}}" ><a href="/blog">{{mf 'blog' 'BLOG'}}</a></li>
+			<li class="{{activeChat}}" ><a href="/chat">{{mf 'chat' 'CHAT'}}</a></li>
+			<li class="{{activeNotes}}" ><a href="/notes">{{mf 'notes' 'NOTES'}}</a></li>
+			<li class='dropdown {{activeUser}}'>{{> user}}</li>
+		</ul>
+		<div class="row">
+			<div class="sidebar col-xs-2  hidden-xs panel">
+				{{> yield region='sidebar'}}
+			</div>
+			<div class="page-content col-xs-10">
+				{{> yield }}
+			</div>
+		</div>
+		<div class="footer row">
+			<div class="col-xs-4 col-xs-offset-4">footer</div>
+		</div>
+	</div>
+</template>

@@ -1,0 +1,11 @@
+{
+  "packages": {
+    "event-hooks": {},
+    "jquery-ui": {},
+    "iron-router": {},
+    "bootstrap-3": {},
+    "i18n": {},
+    "messageformat": {},
+    "fast-render": {}
+  }
+}

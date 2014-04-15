@@ -1,0 +1,130 @@
+<template name="user-profile">
+	User info!
+</template>
+
+<template name="user-side">
+	Side bar, User!
+</template>
+
+<template name="user">
+	<div class="signdiv">
+		{{#if user}}
+				<a id="user" class="dropdown-toggle" href="#" data-toggle="dropdown" >
+					{{user.profile.name}}
+					<span class="badge">{{notifications.total}}</span>
+					<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/user/{{user._id}}">{{mf 'profile' 'Profile'}}</a></li>
+					<li><a href="/user/{{user._id}}/messages">
+						{{mf 'messages' 'Messages'}} <span class="badge">{{notifications.newMessages}}</span></a>
+					</li>
+					<li><a href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.total}}</span></a></li>
+					<li><a href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></li>
+				</ul>
+		{{else}}
+			<a href="#" id="login" data-container="body" data-toggle="popover" data-html="true" data-placement="bottom">{{mf 'sign_in' 'Sign in'}}</a>
+			{{#if login}}
+				{{> login_popover}}
+			{{else}}
+				{{> register_form}}
+			{{/if}}
+		{{/if}}
+
+		{{#if notifications}}
+			{{>notification}}
+		{{/if}}
+	</div>
+</template>
+
+
+<template name="notification">
+	<div class="modal fade row" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	    	<div class="modal-content">
+		    	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        	<h4 class="modal-title" id="registerModalLabel">{{mf 'notifications'}}</h4>
+		    	</div>
+		    	<div class="modal-body container"><!--content here-->
+		        	{{#each notifications.friendship}}
+			        	<div class="friend-request">
+			        		<label for="" class="username">{{name}} {{lastname}}:</label>
+			        		<span id="">{{message}} </span>
+			        		<input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept' 'Acept'}}"/>
+			        		<input type="button" class="deny btn btn-default" id="{{_id}}" value="{{mf 'deny' 'Deny'}}" />
+			        	</div>
+			        {{/each}}
+			        {{#each notifications.participation}}
+			        	<div class="friend-request">
+			        		<label for="" class="username">{{user._id}} {{user.profile.lastname}}:</label>
+			        		<span id="">{{group.message}} {{group.type}} </span>
+			        		<input type='button' class="acept btn btn-primary" id="{{group._id}}" value="{{mf 'acept'}}" /><input type="button" class="deny btn btn-default" id="{{group._id}}" value="{{mf 'deny' }}" />
+			        		<input type="text" value="{{group.type}}" class="request-type{{group._id}} hide"/>
+			        	</div>
+			        {{/each}}
+			        {{#each notifications.invitation}}
+			        	<div class="friend-request">
+			        		<label for="" class="group">{{name}}:</label><span id="">{{message}} </span><input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept'}}"/><input type="button" class="deny btn btn-default" id="{{_id}}" value="{{mf 'deny'}}" />
+			        	</div>
+			        {{/each}}
+		    	</div>
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" id="notification_close" data-dismiss="modal">{{mf 'close'}}</button>
+		    	</div>
+		    </div>
+		</div>
+	</div>
+</template>
+
+<template name="user_finder_modal">
+	<div class="modal fade row" id="user-finder-modal" tabindex="-1" role="dialog" aria-labelledby="user-finder-ModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        		<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-user' 'Find user'}}</h4>
+	      		</div>
+	    		<div class="modal-body container"><!--content here-->
+	        		<div clas="user-finder-tool row"> 
+						<form action="submit" class="user-finder col-xs-7" id="user-find-form">
+							<div class="panel panel-group">
+
+								{{> user_finder}}
+								
+							</div>
+						</form>
+					</div>
+	    		</div>
+			    <div class="modal-footer">
+			    	<input type="button" class="btn btn-default" id="user-finder-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
+			        <input type="button" class="btn btn-primary" id="user-finder-btn" value="{{mf 'find'}}" />
+			    </div>
+	    	</div>
+		</div>
+	</div>
+</template>
+
+<template name="user_finder">
+	<div class="form-user-finder">
+		<input type="text" class="form-control" placeholder="{{mf 'user-name' 'User name'}}" id="user-name-f" />
+	</div>
+	<div class="groups">
+		{{#each group}}
+			<div class="group" id="{{_id}}">
+				<h4>{{name}} <span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> </h4>
+				Owner:<label id="owner._id"> {{owner.profile.name}} </label>
+				<div class="group row panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a class="panel-group" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse out" id="panel-group">
+						<p class="group" id="{{_id}}" >	{{details}}</p>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</template>

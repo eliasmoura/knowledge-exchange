@@ -1,0 +1,103 @@
+<template name="login_form">
+	<div class="hide" id="div-login-form">
+		<form class="login-form" id="login-form" action="submit">
+			<div class="input-group input-group-sm">
+				<input type="email" id="login_email" class="form-control" placeholder="{{mf 'email' 'email'}}" />
+				<input type="password" id="login_passwd" class="form-control" placeholder="{{mf 'passwd' 'password'}}" />
+				<span class="input-group-addon ">
+					<button type="submit" id="login-submit-btn" class="btn btn-defaultn"> {{mf 'sign_in' 'Sign in'}}</button>
+					</span>
+			</div>
+		</form>
+		<a href="#" class='fgpasswd row'>{{mf 'forgot_passwd' 'I forgot my password'}}</a>
+		<a href="#" class='newUser row'>{{mf 'create_user' 'Create user'}}</a>
+		{{> register_form}}
+	</div>
+</template>
+
+<template name="login_popover">
+	<div id="login-popover" class="popover fade bottom" style="display: block; top: 39px; left: 706px;">	
+		<div class="arrow"></div>
+		<h3 class="popover-title" style="display: none;"></h3>
+		<div class="popover-content">
+			<form class="login-form" id="login-form" action="submit">
+				<div class="input-group input-group-sm">
+					<input type="email" id="login_email" class="form-control" placeholder="email">
+					<input type="password" id="login_passwd" class="form-control" placeholder="password">
+					<span class="input-group-addon " id="login-submit">
+					<button type="submit" class="btn btn-defaultn"> send</button>
+					</span>
+
+				</div>
+			</form>
+			<a href="#" class="fgpasswd row">I forgot my password</a>
+			<a href="#" class="newUser row">Create user</a>
+			
+		</div>
+	</div>
+</template>
+
+<template name="logoutButton">
+	<div class='logoutdiv'>
+		<input type="button" value="Logout" id="logoutButton" />
+	</div>
+</template>
+
+<template name="register_form">
+	<div class="modal fade row" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="registerModalLabel">{{mf 'sing_up'}}</h4>
+		      </div>
+		      <div class="modal-body container"><!--content here-->
+		        <form id="register_form" action="action">
+					<div class="input-group input-group-sm">
+						<div class="form-group">
+							<label for="name_registerform">{{mf 'name' 'Name'}}:</label>
+							<input type="text" class="form-control" id="name_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="lastname_registerform">{{mf 'lname' 'Last name'}}:</label>
+							<input type="text" class="form-control" id="lastname_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="country_registerform">{{mf 'country' 'Country'}}:</label>
+							<input type="text" class="form-control" id="country_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="city_registerform">{{mf 'city' 'City'}}:</label>
+							<input type="text" class="form-control" id="city_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="native_registerform">{{mf 'native' 'Native Language'}}:</label>
+							<input type="text" class="form-control" id="native_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="learn_registerform">{{mf 'learning' 'Learning Language'}}:</label>
+							<input type="text" class="form-control" id="learn_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="email_registerform">{{mf 'email'}}:</label>
+							<input type="email" class="form-control" id="email_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="password_registerform">{{mf 'passwd'}}:</label>
+							<input type="password" class="form-control" id="passwd_registerform" />
+						</div>
+						<div class="form-group">
+							<label for="passwdcheck_registerform">{{mf 'passwd_check' 'Password check'}}:</label>
+							<input type="password" class="form-control" id="passwdcheck_registerform" />
+						</div>
+					</div>
+				</form>
+		    </div>
+		    <div class="modal-footer">
+		    	<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close' 'Close'}}</button>
+		        <button type="button" class="register-btn btn btn-primary" id="crrbutton_save">{{mf 'sing_up'}}</button>
+		    </div>
+		    </div>
+		  </div>
+		</div>
+</template>
