@@ -64,11 +64,13 @@ Meteor.methods({
 			User_Group.update({_id:row._id}, {$set:{active: false}});
 		});
 	},
-	setUser_group: function(group,user,operation){
+	setUser_group: function(request,operation){
 		if(operation)
-			User_Group.insert({group:group,user:user,owner:false,mod:false,active:false}, 
+			User_Group.insert({group:request.group,user:request.user,owner:false,mod:false,active:false}, 
 				function(error, result){
 					console.log(error);
+					if(!error)
+						GroupRequest.remove({_id:request._id});
 			});	
 		else
 			User_Group.remove({group:group,user:user});
@@ -76,6 +78,7 @@ Meteor.methods({
 	setFriend_active: function(friend){
 		if(!Meteor.user())return "You must be logged!";
 		var user = this.userId;
+		console.log(friend);
 		var privatechat = PrivateChat.findOne({contact:friend,user:user});
 		Meteor.call('setRoom_Non_active');
 		Meteor.call('setGroup_Non_active');
@@ -87,7 +90,7 @@ Meteor.methods({
 			});
 		}
 		else if (!privatechat['active']){
-			PrivateChat.update({_id:privatechat['_id']}, {$set:{active: true}});
+			PrivateChat.update({_id:privatechat['_id']}, {$set:{active: true, new_messages:0}});
 		}	
 	},
 	setUser_relation: function(request,relation,operation){
@@ -173,11 +176,15 @@ Meteor.methods({
 					groupchat:user_group.group,
 					time: Date.now(),
 				});
+				User_Group.find({group:user_group.group, active:false}).forEach(function(row){
+					User_Group.update({_id:row._id},{$inc:{new_messages:1}});
+					console.log('setting inc group');
+				})
 		}	
 		else if (privatechat != undefined){
 			var privatechat_2 = PrivateChat.findOne({user:privatechat.contact, contact:privatechat.user});
 			var privatechats = [privatechat._id, privatechat_2._id];
-			PrivateMessages.insert({
+			var messageiD = PrivateMessages.insert({
 					name: name,
 					lstname: lstname,
 					userid: userid,
@@ -185,6 +192,13 @@ Meteor.methods({
 					chat:privatechats,
 					time: Date.now(),
 				});
+			if (!privatechat.active || !privatechat_2.active){
+				PrivateChat.find({_id:{$in: privatechats}, active:false}).forEach(function(row){
+					PrivateChat.update({_id:row._id},{$inc:{new_messages:1}},{multi:true});
+					console.log('setting inc');
+				})
+								
+			}
 		}
 	},
 	correction: function(correction,explanation,messageId){
@@ -220,52 +234,66 @@ Meteor.methods({
 		Usage.insert({usagefor:usagefor,usage:usage});
 	},
 	participation_request: function(group, message){
-		console.log('request');
-		if (Groups.findOne({_id: group}))
-			GroupRequest.insert({user: Meteor.userId(), group: group, message: message, type: 1});
+		console.log('part request');
+		var group = Groups.findOne({_id: group});
+		if (group)
+			if(!User_Group.findOne({user:this.userId, group:group._id}))
+				if(!GroupRequest.findOne({user:this.userId,group:group._id}))
+					GroupRequest.insert({user: Meteor.userId(), group: group._id, message: message, type: 1});
 		else
 			throw Meteor.Error(1000, "The group you are trying to send a request doesn't exit");
 		//Groups.update({_id:groupId}, {$push:{request:userId}});
 	},
 	group_invite_request: function(user, message, group){
-		if (Meteor.users.findOne({_id: user}))
-			GroupRequest.insert({user: user, group: group, message: message, type: 2});
+		var user = Meteor.users.findOne({_id: user});
+		var group = Groups.findOne({_id: group});
+		if (user)
+			if(!User_Group.findOne({user:user._id, group:group._id}))
+				if(!GroupRequest.findOne({user:user._id,group:group._id}))
+			GroupRequest.insert({user: user._id, group: group._id, message: message, type: 2});
 		else
 			throw Meteor.Error(1000, "The person you are trying to send a request doesn't exit");
 	},
-	find_user: function(user_name){
-		var users = Meteor.users.find( { "profile.name": { $regex: user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
+	find_group_owner: function(group){
+		return Meteor.users.findOne({_id:User_Group.findOne({group:group._id, owner:true}).user}, {fields:{_id:1,profile:1}});
+	},
+	find_user: function(user){
+		var users = null;
+		if(user.user_name)
+			users = Meteor.users.find( { "profile.name": { $regex: user.user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
+		if(user.user_id)
+			users = Meteor.users.find({_id:user.user_id}, {fields:{_id:1,profile:1}});
+		//console.log(users);
+		//console.log(users);
+		if (user.first_user)
+			users = users.fetch()[0];
 		console.log(users);
 		return users;
 	},
 	user_friendship_request: function(user, message){
-		console.log('checking');
+		console.log('friendship request');
 		if (Meteor.users.findOne({_id: user}))
-			
-			UserRequest.insert({user: Meteor.userId(), request_to: user, message: message}, function(error){console.log(error);});
-			console.log('ok?');
-		throw Meteor.Error(1000, "The person you are trying to send a request doesn't exit");
+			if (!UserRequest.findOne({user:Meteor.userId(), request_to:user}))
+				UserRequest.insert({user: Meteor.userId(), request_to: user, message: message}, function(error){console.log(error);});
+		else
+			throw Meteor.Error(1000, "The person you are trying to send a request doesn't exit");
 	},
 	request_handler: function(request,type){
-		console.log('handlerling');
+		console.log('request handler');
 		if (type == 1){
 			console.log('participation');
 			var request = GroupRequest.findOne({_id:request});
-			Meteor.call("setUser_group", request.group,request.user,1);
-			GroupRequest.remove({_id:request._id});
+			Meteor.call("setUser_group", request,1);
 
 		}else if (type == 2){
 			var request = GroupRequest.findOne({_id:request});
-			Meteor.call("setUser_group", request.group,request.user,1);
-			GroupRequest.remove({_id:request._id});
+			Meteor.call("setUser_group", request,1);
+			
 		}else{
 			console.log('friendship');
-			console.log(request +' : ' +type);
 			var request = UserRequest.findOne({_id:request,request_to:this.userId});
-			console.log(request);
 			Meteor.call("setUser_relation",request,1,1);
 		}
-
 	},
 	clean_db: function(){
 		Correction.remove({});

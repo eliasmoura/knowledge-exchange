@@ -6,8 +6,18 @@
 	Side bar, User!
 </template>
 
+<!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+          <li class="divider"></li>
+          <li class="dropdown-header">Dropdown header</li>
+          <li><a href="#">Separated link</a></li>
+          <li><a href="#">One more separated link</a></li>
+        </ul> -->
+
 <template name="user">
-	<div class="signdiv">
 		{{#if user}}
 				<a id="user" class="dropdown-toggle" href="#" data-toggle="dropdown" >
 					{{user.profile.name}}
@@ -19,7 +29,8 @@
 					<li><a href="/user/{{user._id}}/messages">
 						{{mf 'messages' 'Messages'}} <span class="badge">{{notifications.newMessages}}</span></a>
 					</li>
-					<li><a href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.total}}</span></a></li>
+					<li><a href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.request.total}}</span></a></li>
+					<li class="divider"></li>
 					<li><a href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></li>
 				</ul>
 		{{else}}
@@ -31,10 +42,9 @@
 			{{/if}}
 		{{/if}}
 
-		{{#if notifications}}
+		{{#if notifications.request}}
 			{{>notification}}
 		{{/if}}
-	</div>
 </template>
 
 
@@ -47,7 +57,7 @@
 		        	<h4 class="modal-title" id="registerModalLabel">{{mf 'notifications'}}</h4>
 		    	</div>
 		    	<div class="modal-body container"><!--content here-->
-		        	{{#each notifications.friendship}}
+		        	{{#each notifications.request.friendship}}
 			        	<div class="friend-request">
 			        		<label for="" class="username">{{user.profile.name}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{message}} </span>
@@ -56,7 +66,7 @@
 			        		<input type="text" value="{{type.type}}" class="request-type{{request}} hide"/>
 			        	</div>
 			        {{/each}}
-			        {{#each notifications.participation}}
+			        {{#each notifications.request.participation}}
 			        	<div class="friend-request">
 			        		<label for="" class="username">{{user._id}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{group.message}} {{group.type}} </span>
@@ -65,7 +75,7 @@
 			        		<input type="text" value="{{group.type}}" class="request-type{{group._id}} hide"/>
 			        	</div>
 			        {{/each}}
-			        {{#each notifications.invitation}}
+			        {{#each notifications.request.invitation}}
 			        	<div class="friend-request">
 			        		<label for="" class="group">{{name}}:</label><span id="">{{message}} </span>
 			        		<input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept'}}"/>

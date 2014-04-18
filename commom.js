@@ -25,15 +25,18 @@ Router.map( function() {
 	    	var user = Meteor.userId();
 	    	var activeroom = Meteor.subscribe("user-chatroom-active");
 	    	var room = null;
+	    	var corrections = null;
+	    	var user_chatroom_list = Meteor.subscribe("user-chatroom-list");
+	    	var chatroom_list = Meteor.subscribe("chatrooms-list");
 	    	try{
 	    		room = User_Chatroom.find({user:user, active:true}).fetch()[0].room;
 	    		room = Meteor.subscribe("chat-messages", room);
 	    	}catch(e){}
 	    	
 	    	return [
-	    		Meteor.subscribe("chatrooms-list"),
+	    		user_chatroom_list,
 		    	activeroom,
-		    	Meteor.subscribe("user-chatroom-list"),
+		    	chatroom_list,
 		    	room,
 		    	Meteor.subscribe("chat-corrections"),
 		    	Meteor.subscribe("user-groups-list"),
@@ -63,15 +66,6 @@ Router.map( function() {
 	    },
 	    data:
 	    {
-	    	contacts: function(){
-	    		var users_relations = UsersRelations.find({}).fetch();
-	    		var users_relationsArray = new Array();
-	    		users_relations.forEach(function(row){
-	    			users_relationsArray.push(row.contact);
-	    		});
-	    		var users = Meteor.users.find({_id:{$in:users_relationsArray}}).fetch();
-	    		return users;
-	    	},
 	    	roomactive: function(room){
 	    		var room = User_Chatroom.findOne({user:Meteor.userId(), room:room});
 	    		return room.active;
@@ -129,7 +123,41 @@ Router.map( function() {
 					userlist.push({user:Meteor.users.findOne({_id:privatechat.user})});
 					userlist.push({user:Meteor.users.findOne({_id:privatechat.contact})});
 				}
+
 				return userlist;
+	    	},
+	    	contacts: function(){
+	    		var users_relations = UsersRelations.find({}).fetch();
+	    		var users_relationsArray = new Array();
+	    		users_relations.forEach(function(row){
+	    			users_relationsArray.push(row.contact);
+	    		});
+	    		
+	    		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();
+	    		console.log(privatechatnotifications);
+		    	var privatenotificationsArray = {};
+		    	privatechatnotifications.forEach(function(row){
+		    		privatenotificationsArray[row.contact] = row.new_messages;
+		    	});
+
+		    	var users = new Array();
+		    	Meteor.users.find({_id:{$in:users_relationsArray}}).fetch().forEach(function(row){
+		    		row.notification = privatenotificationsArray[row._id];
+		    		users.push(row);
+		    	});
+
+	    		return users;
+	    	},
+	    	chat_notifications: function(){
+	    		console.log('test');
+	    		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();
+	    		console.log(privatechatnotifications);
+		    	var privatenotificationsArray = {};
+		    	privatechatnotifications.forEach(function(row){
+		    		privatenotificationsArray[row.contact] = row.new_messages;
+		    	});
+		    	console.log(privatenotificationsArray);
+		    	return {chat:privatenotificationsArray};
 	    	},
 	    	messages: function(){
 	    		var messages = null;
@@ -154,12 +182,19 @@ Router.map( function() {
 	    		return messages;
 	    	},
 	    	group_rooms:function(){
-	    		var groups = User_Group.find({user: Meteor.userId()}, {fields:{group:1}}).fetch();
+	    		var user_groups = User_Group.find({user: Meteor.userId()}, {fields:{group:1,new_messages:1}}).fetch();
 	    		var groupsArray = new Array();
-	    		groups.forEach(function(row){
+	    		user_groups.forEach(function(row){
 	    			groupsArray.push(row.group);
 	    		});
-	    		groups = Groups.find({_id:{$in: groupsArray}}).fetch();
+
+	    		var groups = new Array();
+	    		Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
+	    			row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
+	    			groups.push(row);
+	    		});
+	    		//console.log(groups);
+
 	    		return groups;
 	    	},
 	    	notifications: function(){
@@ -187,14 +222,16 @@ Router.map( function() {
 		    		userFriendshipRequest.fetch().forEach(function(row){
 		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
 		    		});
-		    	
 
 	    		return {
-	    			participation:participationArray,
-	    			invitation:groupsRequests_Invitation,
-	    			friendship:userArray,
-	    			total:total
-	    		};
+	    			requests:
+	    				{
+	    					participation:participationArray,
+	    					invitation:groupsRequests_Invitation,
+	    					friendship:userArray,
+	    					total:total
+	    				}
+	    			};
 	    	},
 	    	find_user: function(){
 	    		return Session.get('find_user');

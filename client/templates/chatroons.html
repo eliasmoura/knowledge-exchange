@@ -21,22 +21,23 @@
 	</div>
 			{{#if currentUser}}
 				{{#if room}}
-					<div class="chatroon-name row"><h4>{{room.name}}</h4></div>
-					<div class="divchat row">
-						<div class="row">
-							<div class="chat-users col-xs-2" >
-								{{> users_chatroom}}
+						<div class="chatroon-name panel-heading row">
+							<h3 class="panel-title center-block">{{room.name}}</h3>
+						</div>
+						<div class="divchat row" >
+							<div class="">
+								<div class=" chat-users col-xs-2 list-group" >
+									{{> users_chatroom}}
+								</div>
+								<div class="divmessages container col-xs-10" id="chat-messages">
+									{{> chat}}
+								</div>
 							</div>
-							<div class="chat col-xs-10">
-								{{> chat}}
+							<div class="col-xs-10 col-xs-offset-2 chat-input ">
+								
+									{{> chat_input}}
 							</div>
 						</div>
-						<div class="chat-input row">
-							<div class="col-xs-10 col-xs-offset-2">
-								{{> chat_input}}
-							</div>
-						</div>
-					</div>
 				{{else}}
 					erro?
 				{{/if}}
@@ -57,12 +58,11 @@ chat side menu
 -->
 
 <template name="chatrooms_side">
-	<div class="panel-group" id="collapse">
 		<div class="chatrooms row panel panel-default">
 			<div class="panel-heading">
-				<h4 class="panel-title">
+				<h3 class="panel-title">
 					<a class="panel-rooms" data-toggle-to="panel-rooms" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'public_rooms' 'Public chat rooms'}}:</a>
-				</h4>
+				</h3>
 			</div>
 			<div class="panel-collapse collapse in" id="panel-rooms">
 				<ul class="nav nav-pills nav-stacked">
@@ -76,7 +76,7 @@ chat side menu
 			<div class="panel-heading">
 				<h4 class="panel-title">
 					<a class="panel-rooms" data-toggle-to="panel-groups" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'group_chats' 'Group Chat rooms'}}:</a>
-					<span class="btn-group xs">
+					<span class="btn-group-xs">
 						<span id="add-find-chat" class="plus glyphicon glyphicon-plus btn btn-default" title="add/find a chat group"></span>
 					</span>
 					{{#if find_chat_group}}
@@ -88,14 +88,17 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each group_rooms}}
 						<li>
-							<a  href="#" class="chat-group" id="{{_id}}" >{{name}}</a>
-							<span class="chat glyphicon glyphicon-comment"><span class="badge">42</span></span>
-							{{#if requests.total}}
-								<span class="conf btn btn-default" style="background: glyphicon glyphicon-wrench">
-									<span class="badge">{{requests.total}}</span>
-								</span>
-							{{/if}}
-							
+							<a  href="#" class="chat-group" id="{{_id}}" >
+								{{name}}
+								{{#if notification}}
+									<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span>
+								{{/if}}
+								{{#if request.total}}
+									<span class="btn-group-xs">
+										<span class="conf btn btn-default" style="background: glyphicon glyphicon-wrench badge">{{request.total}}</span>
+									</span>
+								{{/if}}
+							</a>
 						</li>
 					{{/each}}
 				</ul>
@@ -110,10 +113,16 @@ chat side menu
 					</span>
 				</h4>
 			</div>
-			<div class="panel-collapse collapse out" id="panel-friends">
+			<div class="panel-collapse collapse in" id="panel-friends">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
-						<li><a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}}</a></li>
+						<li>
+							<a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}} 
+								{{#if notification}}
+									<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span> 
+								{{/if}}
+							</a>
+						</li>
 					{{/each}}
 				</ul>
 			</div>
@@ -125,7 +134,6 @@ chat side menu
 			{{/if}}
 
 		</div>
-	</div>
 </template>
 
 <template name="chatrooms_side_xs">
@@ -185,7 +193,7 @@ chat side menu
 	    		<div class="modal-body container"><!--content here-->
 	        		<div clas="find-creat-tool row"> 
 						<form action="submit" class="group-finder col-xs-7" id="find-create-form">
-							<ul class="nav nav-pills">
+							<ul class="nav nav-tabs nav-justified">
 								<li><a href="#" class="btn btn-default find-create active" id="find">{{mf 'find' 'Find'}}</a></li>
 								<li><a href="#" class="btn btn-default find-create" id="create">{{mf 'create' 'Create'}}</a></li>
 							</ul>
@@ -215,8 +223,13 @@ chat side menu
 	<div class="groups">
 		{{#each group}}
 			<div class="group" id="{{_id}}">
-				<h4>{{name}} <span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> </h4>
-				Owner:<label id="owner._id"> {{owner.profile.name}} </label>
+				<h4>
+					{{name}}
+					{{#if actions.send_request}}
+						<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> 
+					{{/if}}
+				</h4>
+				Owner:<label id="{{owner._id}}" class="username"> {{owner.name}} </label>
 				<div class="group row panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
@@ -231,6 +244,7 @@ chat side menu
 		{{/each}}
 	</div>
 </template>
+
 <template name="create_group">
 	<div class="form-group panel-deafult">
 		<label for="group">{{mf 'name'}}:</label>
@@ -283,22 +297,18 @@ chat side menu
 
 <!-- chat room -->
 <template name="users_chatroom">
-	<div class="chatusers row">
-		<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
-		{{#each chat_users}}
-			<label class="username col-xs-12" id="{{user._id}}">{{user.profile.name}}</label>
-		{{/each}}
-	</div>
+	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
+	{{#each chat_users}}
+		<label class="username col-xs-12 " id="{{user._id}}">{{user.profile.name}}</label>
+	{{/each}}
 </template>
 
 <template name="chat">
-	<div class="divmessages col-xs-12">
+	<div id="testediv">
 		{{#if messages}}
 			{{#each messages}}
-				<div class="message" id="{{_id}}">
-					<label class="username stusername" id="{{userid}}">{{name}}:</label> 
-					{{message}}
-
+				<div class="message list-group-item" id="{{_id}}">
+					<a class="username stusername" href="#" id="{{userid}}">{{name}}: </a>{{message}}
 					{{> messagem_corrected_button}}
 				</div>
 			{{/each}}
@@ -314,9 +324,11 @@ chat side menu
 </template>
 
 <template name="chat_input">
-	<label class="col-xs-12"><div class="col-sm-2 hidden-xs">{{mf 'message' 'Message'}}: </div><textarea id="message" class="col-sm-10 col-xs-12" > </textarea></label>
+	<form action="submit">
+		<br>
+		<p><textarea name="textareamessage" id="message" value="" placeholder="{{mf 'message' 'Message'}}" rows="3" class="form-control" > </textarea></p>
+	</form>
 </template>
-
 
 
 

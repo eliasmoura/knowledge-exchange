@@ -16,7 +16,6 @@
   });**/
 Hooks.init();
 
-
 $('html').click(function(){
 	//console.log('test');
 	//$("[data-toggle=popover]").popover('hide');

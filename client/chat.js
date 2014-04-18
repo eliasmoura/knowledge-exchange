@@ -1,4 +1,9 @@
-
+Template.chatrooms.rendered = function(){
+	console.log('ready');
+	$(window).resize(function(){
+        //$(".divmessages").height($(document).height());
+    });
+}
 Template.chatrooms_side.events = {
 	'click a.chat-room' : function(event, template){
 		var room = event.target.id;
@@ -98,12 +103,21 @@ Template.group_chat_finder.events({
 			if (groupname.length < 4){
 				return false;
 			}
-			var groups = Groups.find( { name: { $regex: groupname, $options: 'i' } } ).fetch();
-			groups.forEach(function(row){
-				var owner = row.owner;
-				row.owner = Meteor.users.findOne({_id:owner});
+			var groups = new Array();
+			Groups.find( { name: { $regex: groupname, $options: 'i' } } ).fetch().forEach(function(row){
+				row.owner = false;
+				row.user = {};
+				Meteor.call('find_group_owner',row, function(error,user){
+					console.log(row.owner);
+					row.owner = {_id:user._id,name:user.profile.name,lastname:user.profile.lastname};
+				});
+				row.actions = {send_request:true};
 
+				if (User_Group.findOne({user:Meteor.userId(),group:row._id}))
+					row.actions.send_request = false;
+				groups.push(row);
 			});
+			console.log(groups);
 			Session.set('groups-found',groups);
 		}else{
 			var groupname = t.find("#group-name-c").value;
@@ -141,10 +155,12 @@ Template.create_group.langs = function(){
 	return Languages.find({},{$sort: {name: +1}});
 }
 Template.find_group.created =function(){
-	Session.set('groups-found', false);
+	//Session.set('groups-found', false);
 }
 Template.find_group.group = function(){
-	return Session.get('groups-found');
+	var groups = Session.get('groups-found');
+	console.log(groups);
+	return groups;
 }
 Template.find_group.events({
 	'click span.send-request': function(event, template){
