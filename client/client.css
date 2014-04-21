@@ -8,19 +8,32 @@
 
 html, body {height: 100%;}
 
-.divmessages#chat-messages
+div.container#chat-messages
 {
-    height:80%;
-    overflow-y:auto;
+    /*height:500px;*/
 }
 .container-fluid, .divchat, #content
 {
     height:100%;
 }
-#testediv
+#testediv, .sidebar
 {
-    height: 80%;
     overflow-y: auto;
+}
+
+.sidebar
+{
+    /*overflow-y:hidden;*/
+}
+.chatroom-menu
+{
+    overflow-y: auto;
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.eot');
+  src: url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 /* body{
     padding: 10px;

@@ -29,20 +29,23 @@
 					<li><a href="/user/{{user._id}}/messages">
 						{{mf 'messages' 'Messages'}} <span class="badge">{{notifications.newMessages}}</span></a>
 					</li>
-					<li><a href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.request.total}}</span></a></li>
+					<li><a href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></li>
 					<li class="divider"></li>
 					<li><a href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></li>
 				</ul>
 		{{else}}
-			<a href="#" id="login" data-container="body" data-toggle="popover" data-html="true" data-placement="bottom">{{mf 'sign_in' 'Sign in'}}</a>
+				<a id="login" class="dropdown-toggle" href="#" data-toggle="dropdown" >
+					{{mf 'sign_in' 'Sign in'}}
+					<span class="caret"></span>
+				</a>
 			{{#if login}}
-				{{> login_popover}}
+				{{> login_form}}
 			{{else}}
 				{{> register_form}}
 			{{/if}}
 		{{/if}}
 
-		{{#if notifications.request}}
+		{{#if notifications.requests}}
 			{{>notification}}
 		{{/if}}
 </template>
@@ -56,8 +59,8 @@
 		        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		        	<h4 class="modal-title" id="registerModalLabel">{{mf 'notifications'}}</h4>
 		    	</div>
-		    	<div class="modal-body container"><!--content here-->
-		        	{{#each notifications.request.friendship}}
+		    	<div class="modal-body"><!--content here-->
+		        	{{#each notifications.requests.friendship}}
 			        	<div class="friend-request">
 			        		<label for="" class="username">{{user.profile.name}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{message}} </span>
@@ -66,7 +69,7 @@
 			        		<input type="text" value="{{type.type}}" class="request-type{{request}} hide"/>
 			        	</div>
 			        {{/each}}
-			        {{#each notifications.request.participation}}
+			        {{#each notifications.requests.participation}}
 			        	<div class="friend-request">
 			        		<label for="" class="username">{{user._id}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{group.message}} {{group.type}} </span>
@@ -75,7 +78,7 @@
 			        		<input type="text" value="{{group.type}}" class="request-type{{group._id}} hide"/>
 			        	</div>
 			        {{/each}}
-			        {{#each notifications.request.invitation}}
+			        {{#each notifications.requests.invitation}}
 			        	<div class="friend-request">
 			        		<label for="" class="group">{{name}}:</label><span id="">{{message}} </span>
 			        		<input type='button' class="acept btn btn-primary" id="{{_id}}" value="{{mf 'acept'}}"/>
@@ -93,15 +96,15 @@
 </template>
 
 <template name="user_finder_modal">
-	<div class="modal fade " id="user-finder-modal" tabindex="-1" role="dialog" aria-labelledby="user-finder-ModalLabel" aria-hidden="true">
+	<div class="modal fade" id="user-finder-modal" tabindex="-1" role="dialog" aria-labelledby="user-finder-ModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	        		<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-user' 'Find user'}}</h4>
 	      		</div>
-	    		<div class="modal-body container"><!--content here-->
-		        	<div class="panel panel-group">
+	    		<div class="modal-body"><!--content here-->
+		        	<div class="panel panel-default">
 		        		<div clas="user-finder-tool panel panel-default">
 		        			<form action="submit" class="user-finder " id="user-finder-form">
 								<div class="">

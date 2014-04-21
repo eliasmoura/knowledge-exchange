@@ -39,14 +39,14 @@ Template.user.events({
 		Session.set("currentUser",Meteor.user());
 		console.log("logged out");
 	},
-	'click a#login': function(e, t){
+	'click #login': function(e, t){
 			console.log('addclass');
-			if ($("#login-popover").attr('class').indexOf("in") != -1)
+			/*if ($("#login-popover").attr('class').indexOf("in") != -1)
 				$("#login-popover").removeClass('in');		
 			else
-				$("#login-popover").addClass('in');
+				$("#login-popover").addClass('in');*/
 	},
-	'click a#notification': function(e, t){
+	'click #notification': function(e, t){
 		$('#notificationModal').modal("toggle");
 		console.log('should show the notification ');
 	}
@@ -59,7 +59,7 @@ Template.login_popover.rendered = function(){
 		});
 		
 }
-Template.login_popover.events = {
+Template.login_form.events = {
 	'submit form.login-form': function(e, t){
 		e.preventDefault();
 		var email = t.find('#login_email').value;
@@ -74,7 +74,6 @@ Template.login_popover.events = {
 		});
 		return false;
 	},
-
 	'click a.newUser': function(e, t){
 		//$('div.login_form').css('display', "none");
 		//$('div.register_form').css('display', 'block');
@@ -112,6 +111,7 @@ Template.register_form.events({
 			if(!error)	{
 				$('#registerModal').modal("toggle");
 			}
+			console.log(error);
 			return "error sign up"
 		})
 		return false;

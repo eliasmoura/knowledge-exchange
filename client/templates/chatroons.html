@@ -1,6 +1,4 @@
 <head>
-	
-
 </head>
 
 <body>
@@ -9,45 +7,45 @@
 </body>
 <template name="chatrooms">
 	<div class="dropdown visible-xs">
-  		<a data-toggle="dropdown" href="#">
-  			Menu
-  			<span class=""></span>
-		    <span class="caret"></span>
-  		</a>
-  		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-  			{{> chatrooms_side}}
-  		</ul>
-  		
+		<a data-toggle="dropdown" href="#">
+			Menu
+			<span class=""></span>
+			<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			{{> chatrooms_side}}
+		</ul>
+
 	</div>
-			{{#if currentUser}}
-				{{#if room}}
-						<div class="chatroon-name panel-heading row">
-							<h3 class="panel-title center-block">{{room.name}}</h3>
-						</div>
-						<div class="divchat row" >
-							<div class="">
-								<div class=" chat-users col-xs-2 list-group" >
-									{{> users_chatroom}}
-								</div>
-								<div class="divmessages container col-xs-10" id="chat-messages">
-									{{> chat}}
-								</div>
-							</div>
-							<div class="col-xs-10 col-xs-offset-2 chat-input ">
-								
-									{{> chat_input}}
-							</div>
-						</div>
-				{{else}}
-					erro?
-				{{/if}}
-			{{else}}
-				<div class="chat col-xs-10 offset-2">
-					{{mf 'noUser-chat' "You aren't logged in. Please, log in to use all the features of the site."}}
-				</div>
-			{{/if}}
+	{{#if currentUser}}
+	{{#if room}}
+	<div class="chatroon-name panel-heading row">
+		<h3 class="panel-title center-block">{{room.name}}</h3>
+	</div>
+	<div class="divchat row" >
+		<div class="">
+			<div class=" chat-users col-xs-2 list-group" >
+				{{> users_chatroom}}
+			</div>
+			<div class="divmessages container col-xs-10" id="chat-messages">
+				{{> chat}}
+			</div>
+		</div>
+		<div class="col-xs-10 col-xs-offset-2 chat-input ">
+
+			{{> chat_input}}
+		</div>
+	</div>
+	{{else}}
+	erro?
+	{{/if}}
+	{{else}}
+	<div class="chat col-xs-10 offset-2">
+		{{mf 'noUser-chat' "You aren't logged in. Please, log in to use all the features of the site."}}
+	</div>
+	{{/if}}
 	{{#if correct}}
-		{{> correctiontools}}
+	{{> correctiontools}}
 	{{/if}}
 </template>
 
@@ -58,56 +56,57 @@ chat side menu
 -->
 
 <template name="chatrooms_side">
-		<div class="chatrooms row panel panel-default">
+	<div class="chatroom-menu row">
+		<div class="chatrooms panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">
-					<a class="panel-rooms" data-toggle-to="panel-rooms" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'public_rooms' 'Public chat rooms'}}:</a>
+					<a class="panel-rooms" data-toggle-to="panel-rooms" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
 				</h3>
 			</div>
 			<div class="panel-collapse collapse in" id="panel-rooms">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each rooms}}
-						<li><a href="#" class="chat-room {{roomactive room=_id}}" id="{{_id}}" >{{name}}</a></li>
+					<li><a href="#" class="chat-room {{roomactive room=_id}}" id="{{_id}}" >{{name}}</a></li>
 					{{/each}}
 				</ul>
 			</div>
 		</div>
-		<div class="chatrooms row panel panel-default">
+		<div class="chatrooms panel panel-default">
 			<div class="panel-heading">
 				<h4 class="panel-title">
-					<a class="panel-rooms" data-toggle-to="panel-groups" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'group_chats' 'Group Chat rooms'}}:</a>
+					<a class="panel-rooms" data-toggle-to="panel-groups" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'group_chats' 'Groups'}}:</a>
 					<span class="btn-group-xs">
 						<span id="add-find-chat" class="plus glyphicon glyphicon-plus btn btn-default" title="add/find a chat group"></span>
 					</span>
 					{{#if find_chat_group}}
-						{{> group_chat_finder}}
+					{{> group_chat_finder}}
 					{{/if}}
 				</h4>
 			</div>
 			<div class="panel-collapse collapse in" id="panel-groups">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each group_rooms}}
-						<li>
-							<a  href="#" class="chat-group" id="{{_id}}" >
-								{{name}}
-								{{#if notification}}
-									<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span>
-								{{/if}}
-								{{#if request.total}}
-									<span class="btn-group-xs">
-										<span class="conf btn btn-default" style="background: glyphicon glyphicon-wrench badge">{{request.total}}</span>
-									</span>
-								{{/if}}
-							</a>
-						</li>
+					<li>
+						<a  href="#" class="chat-group" id="{{_id}}" >
+							{{name}}
+							{{#if notification}}
+							<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span>
+							{{/if}}
+							{{#if request.total}}
+							<span class="btn-group-xs">
+								<span class="conf btn btn-default" style="background: glyphicon glyphicon-wrench badge">{{request.total}}</span>
+							</span>
+							{{/if}}
+						</a>
+					</li>
 					{{/each}}
 				</ul>
 			</div>
 		</div> 
-		<div class="chatrooms row panel panel-default">
+		<div class="chatrooms panel panel-default">
 			<div class="panel-heading">
 				<h4 class="panel-title">
-					<a class="panel-rooms" data-toggle-to="panel-friends" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'friends_contacts' 'Friends/Contacts'}}:</a>
+					<a class="panel-rooms" data-toggle-to="panel-friends" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
 					<span class="btn-group-xs">
 						<span id="add-find-user" class="plus glyphicon glyphicon-plus btn btn-default" title="add/find a contact"></span>
 					</span>
@@ -116,24 +115,24 @@ chat side menu
 			<div class="panel-collapse collapse in" id="panel-friends">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
-						<li>
-							<a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}} 
-								{{#if notification}}
-									<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span> 
-								{{/if}}
-							</a>
-						</li>
+					<li>
+						<a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}} 
+							{{#if notification}}
+							<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span> 
+							{{/if}}
+						</a>
+					</li>
 					{{/each}}
 				</ul>
 			</div>
 			{{#if find_user}}
-				pronto
+			pronto
 
-				{{> user_finder_modal}}
+			{{> user_finder_modal}}
 
 			{{/if}}
-
 		</div>
+	</div>
 </template>
 
 <template name="chatrooms_side_xs">
@@ -147,7 +146,7 @@ chat side menu
 			<div class="panel-collapse collapse in" id="panel-rooms">
 				<ul class="nav nav-pills navebar-inverse nav-stacked">
 					{{#each rooms}}
-						<li><a href="#" class="roombutton" id="{{room}}" >{{room}}</a></li>
+					<li><a href="#" class="roombutton" id="{{room}}" >{{room}}</a></li>
 					{{/each}}
 				</ul>
 			</div>
@@ -160,7 +159,7 @@ chat side menu
 			</div>
 			<div class="panel-collapse collapse in" id="panel-groups">
 				{{#each group_rooms}}
-					<div class=''><input class="roombutton col-xs-12" type="button" value="{{room}}" id="{{room}}" /></div>
+				<div class=''><input class="roombutton col-xs-12" type="button" value="{{room}}" id="{{room}}" /></div>
 				{{/each}}
 			</div>
 		</div>
@@ -172,7 +171,7 @@ chat side menu
 			</div>
 			<div class="panel-collapse collapse out" id="panel-friends">
 				{{#each myUsersList}}
-					<div class=''><label class="usercontacts col-xs-12" id="{{user._id}}"> {{user.name}}</label></div>
+				<div class=''><label class="usercontacts col-xs-12" id="{{user._id}}"> {{user.name}}</label></div>
 				{{/each}}
 			</div>
 		</div>
@@ -183,35 +182,35 @@ chat side menu
 
 <!-- find/create group -->
 <template name="group_chat_finder">
-	<div class="modal fade row" id="group-chat-finder-modal" tabindex="-1" role="dialog" aria-labelledby="group-chat-finder-ModalLabel" aria-hidden="true">
+	<div class="modal fade" id="group-chat-finder-modal" tabindex="-1" role="dialog" aria-labelledby="group-chat-finder-ModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
-	    	<div class="modal-content">
-	      		<div class="modal-header">
-	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        		<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
-	      		</div>
-	    		<div class="modal-body container"><!--content here-->
-	        		<div clas="find-creat-tool row"> 
-						<form action="submit" class="group-finder col-xs-7" id="find-create-form">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
+				</div>
+				<div class="modal-body"><!--content here-->
+					<div clas="find-creat-tool"> 
+						<form action="submit" class="group-finder" id="find-create-form">
 							<ul class="nav nav-tabs nav-justified">
 								<li><a href="#" class="btn btn-default find-create active" id="find">{{mf 'find' 'Find'}}</a></li>
 								<li><a href="#" class="btn btn-default find-create" id="create">{{mf 'create' 'Create'}}</a></li>
 							</ul>
 							<div class="panel panel-group">
 								{{#if find}}
-									{{> find_group}}
+								{{> find_group}}
 								{{else}}
-									{{> create_group}}
+								{{> create_group}}
 								{{/if}}
 							</div>
 						</form>
 					</div>
-	    		</div>
-			    <div class="modal-footer">
-			    	<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-			        <input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
-			    </div>
-	    	</div>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
+					<input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -222,70 +221,80 @@ chat side menu
 	</div>
 	<div class="groups">
 		{{#each group}}
-			<div class="group" id="{{_id}}">
-				<h4>
-					{{name}}
-					{{#if actions.send_request}}
-						<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> 
-					{{/if}}
-				</h4>
-				Owner:<label id="{{owner._id}}" class="username"> {{owner.name}} </label>
-				<div class="group row panel panel-default">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a class="panel-group" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
-						</h4>
-					</div>
-					<div class="panel-collapse collapse out" id="panel-group">
-						<p class="group" id="{{_id}}" >	{{details}}</p>
-					</div>
+		<div class="group" id="{{_id}}">
+			<h4>
+				{{name}}
+				{{#if actions.send_request}}
+				<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> 
+				{{/if}}
+			</h4>
+			Owner:<label id="{{owner._id}}" class="username"> {{owner.name}} </label>
+			<div class="group panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a class="panel-group" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse out" id="panel-group">
+					<p class="group" id="{{_id}}" >	{{details}}</p>
 				</div>
 			</div>
+		</div>
 		{{/each}}
 	</div>
 </template>
 
 <template name="create_group">
 	<div class="form-group panel-deafult">
-		<label for="group">{{mf 'name'}}:</label>
+		<label for="group-name-c">{{mf 'name'}}:</label>
 		<input type="text" class="form-control" placeholder="Group name" id="group-name-c" />
 	</div>
-	<div class="info panel-group">
+	<div class="info panel panel-default">
 		<div class="panel-heading">
-			<h4>{{mf 'details' 'Details'}}</h4>
+			<h4>{{mf 'details' 'Details'}}:</h4>
 		</div>
 		<div class="form-group panel">
-			<label for="info">{{mf 'description' 'Description'}}</label>
 			<div id="info">
 				<label for="type">{{mf 'type' 'Type'}}:</label>
-				<div id="type">
-					<label for="opengroup">{{mf 'open_group' 'Open group'}} </label><input type="radio" name="grouptype" id='opengroup' class='group-type'>
-					<label for="invetegroup">{{mf 'part_request' 'Participation request'}}</label><input type="radio" name="grouptype" id='invetegroup' class='group-type'>
-					<label for="indication">{{mf 'memb_indication' 'Members indicatioin'}}</label><input type="radio" name="grouptype" id='indication' class='group-type'>
-				</div>
-				<label for="genre">{{mf 'group_genre' 'Group Genre'}}</label>
-				<div id="genre">
-					<label for="education">{{mf 'education' 'Education'}} </label><input type="checkbox" name="groupgenre" id='education' class='group-type'>
-					<label for="music">{{mf 'music' 'Music'}}</label><input type="checkbox" name="groupgenre" id='music' class='group-type'>
-					<label for="sports">{{mf 'sports' 'Sports'}}</label><input type="checkbox" name="groupgenre" id='sports' class='group-type'>
-				</div>
-				<input type="text" class="form-control" id="description" placeholder=""  />
-				<div class="form-group panel panel-defaul">
+				<select id="type">
+					<option value="open">{{mf 'open_group' 'Open group'}} </option>
+					<option value="participation">{{mf 'part_request' 'Participation request'}}</option>
+					<option value="indication">{{mf 'memb_indication' 'Members indicatioin'}}</option>
+				</select>
+				<p id="genre">
+					<label for="genre">{{mf 'group_genre' 'Group Genre'}}:</label>
+					<div class="">
+						<label for="education">{{mf 'education' 'Education'}} </label><input type="checkbox" name="groupgenre" id='education' class='group-type'>
+						<label for="music">{{mf 'music' 'Music'}} </label><input type="checkbox" name="groupgenre" id='music' class='group-type'>
+						<label for="sports">{{mf 'sports' 'Sports'}} </label><input type="checkbox" name="groupgenre" id='sports' class='group-type'>
+					</div>
+				</p>
+				<label for="description">{{mf 'description' 'Description'}}:</label>
+				<textarea type="text" class="form-control" id="description" placeholder=""  > </textarea>
+				<div class="form-group panel panel-defaul" id="langs">
 					<label for="lang">{{mf 'allowed_langs' 'Allowed Languages'}}</label>
-					
+					<span class="btn btn-default glyphicon glyphicon-plus" id="morelang"></span>
 					<select name="lang" id="" class="lang">
 						<option value="0">{{mf 'select_one' 'Select One'}}</option>
 						{{#each langs}}
-							<option value="{{_id}}">{{name}}</option>
+						<option value="{{_id}}">{{name}}</option>
 						{{/each}}
 					</select>
 				</div>
 			</div>
-			<label for="invitemembers"></label>
+			
 			<div id="invitemembers">
-				Contacts
-				Friends
-				Find
+				<label for="invitemembers">Invite:</label>
+				<div>
+					{{#each contacts}}
+						<input name="friends" type="checkbox" class="friends-contacts" id="{{_id}}" ><label for="{{_id}}">{{profile.name}}</label>
+					{{/each}}
+				</div>
+				<label for="find">{{mf 'find' 'Find'}}:</label>
+				<form action="submit">
+					<input type="text" value="" placeholder="Name" id="find-user" class="form-control">	
+				</form>
+				
 			</div>
 		</div>
 	</div>
@@ -299,26 +308,26 @@ chat side menu
 <template name="users_chatroom">
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
 	{{#each chat_users}}
-		<label class="username col-xs-12 " id="{{user._id}}">{{user.profile.name}}</label>
+	<label class="username col-xs-12 " id="{{user._id}}">{{user.profile.name}}</label>
 	{{/each}}
 </template>
 
 <template name="chat">
 	<div id="testediv">
 		{{#if messages}}
-			{{#each messages}}
-				<div class="message list-group-item" id="{{_id}}">
-					<a class="username stusername" href="#" id="{{userid}}">{{name}}: </a>{{message}}
-					{{> messagem_corrected_button}}
-				</div>
-			{{/each}}
+		{{#each messages}}
+		<div class="message list-group-item" id="{{_id}}">
+			<a class="username stusername" href="#" id="{{userid}}">{{name}}: </a>{{message}}
+			{{> messagem_corrected_button}}
+		</div>
+		{{/each}}
 		{{/if}}
 	</div>
 </template>
 <template name="messagem_corrected_button">
 	<span class=" btn-group-xs">
 		<button type="button" class="correctionWraper btn btn-default" data-container="body" data-toggle="popover" data-placement="left">
-	  		<span class="glyphicon glyphicon-saved"></span>
+			<span class="glyphicon glyphicon-saved"></span>
 		</button>
 	</span>
 </template>
@@ -326,7 +335,7 @@ chat side menu
 <template name="chat_input">
 	<form action="submit">
 		<br>
-		<p><textarea name="textareamessage" id="message" value="" placeholder="{{mf 'message' 'Message'}}" rows="3" class="form-control" > </textarea></p>
+		<p><textarea name="textareamessage" id="message" value="" placeholder="{{mf 'message' 'Message'}}" rows="2" class="form-control" > </textarea></p>
 	</form>
 </template>
 
@@ -337,62 +346,61 @@ chat side menu
 
 <!-- tools -->
 <template name="correctiontools">
-	
-		<div class="modal fade row" id="correctionModal" tabindex="-1" role="dialog" aria-labelledby="correctionModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        <h4 class="modal-title" id="correctionModalLabel">{{mf 'correction' 'Correction'}}</h4>
-		      </div>
-		      <div class="modal-body container"><!--content here-->
-		        <div clas="corretiontool col-xs-12"> 
-					<h2>Source:</h2>
-					<div class="col-sm-4 panel panel-default">
-						<span class="source" id="{{sourceid}}">{{source.text}}</span>
-					</div>
-					
-					<div class="panel-default panel col-sm-4">
-						<ul class="nav nav-pills row">
-							<li class="{{activeop1}}"><a href="#">op1</a></li>
-							<li class="{{activeOp2}}"><a href="#">op2</a></li>
-							<li class="{{activeOp3}}"><a href="#">op3</a></li>
-							<li class="{{activeOp4}}"><a href="#">op3</a></li>
-							<li class='dropdown {{activeOp5}}'><a href="#">op5</a></li>
-						</ul>
-						<form class="form-correction" role="form">
-							<textarea class="correction form-control" id="{{correctionid}}">{{source.text}}</textarea>
-							<div class="panel panel-default row">
-								<div class="input-group">
-									<span class="input-group-addon">{{mf 'E' 'E'}}</span> 
-									<input class="form-control expl" type="text" placeholder="{{mf 'explanation' 'Explanation'}}"> 
-									<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-								</div>
-								<div class="input-group">
-									<span class="input-group-addon">{{mf 'A' 'A'}}</span> 
-									<input class="form-control alt-input-f" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
-									<input class="form-control alt alt-input-e" type="text" placeholder="{{mf 'alternative' 'Alternative'}}"> 
-									<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-								</div>
-								<div class="input-group">
-									<span class="usage input-group-addon">{{mf 'U' 'U'}}</span> 
-									<input class="form-control usage-input-f" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
-									<input class="form-control usage-input-e" type="text" placeholder="{{mf 'usage' 'Usage'}}" container="body"> 
-									<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-								</div>
-							</div>
-						</form>
-					</div>
-					
+	<div class="modal fade row" id="correctionModal" tabindex="-1" role="dialog" aria-labelledby="correctionModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="correctionModalLabel">{{mf 'correction' 'Correction'}}</h4>
 				</div>
-		    </div>
-		    <div class="modal-footer">
-		    	<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close'}}</button>
-		        <button type="button" class="btn btn-primary" id="crrbutton_save">{{mf 'save-correction' 'Save correction'}}</button>
-		    </div>
-		    </div>
-		  </div>
+				<div class="modal-body container"><!--content here-->
+					<div clas="corretiontool col-xs-12"> 
+						<h2>Source:</h2>
+						<div class="col-sm-4 panel panel-default">
+							<span class="source" id="{{sourceid}}">{{source.text}}</span>
+						</div>
+
+						<div class="panel-default panel col-sm-4">
+							<ul class="nav nav-pills row">
+								<li class="{{activeop1}}"><a href="#">op1</a></li>
+								<li class="{{activeOp2}}"><a href="#">op2</a></li>
+								<li class="{{activeOp3}}"><a href="#">op3</a></li>
+								<li class="{{activeOp4}}"><a href="#">op3</a></li>
+								<li class='dropdown {{activeOp5}}'><a href="#">op5</a></li>
+							</ul>
+							<form class="form-correction" role="form">
+								<textarea class="correction form-control" id="{{correctionid}}">{{source.text}}</textarea>
+								<div class="panel panel-default row">
+									<div class="input-group">
+										<span class="input-group-addon">{{mf 'E' 'E'}}</span> 
+										<input class="form-control expl" type="text" placeholder="{{mf 'explanation' 'Explanation'}}"> 
+										<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
+									</div>
+									<div class="input-group">
+										<span class="input-group-addon">{{mf 'A' 'A'}}</span> 
+										<input class="form-control alt-input-f" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
+										<input class="form-control alt alt-input-e" type="text" placeholder="{{mf 'alternative' 'Alternative'}}"> 
+										<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
+									</div>
+									<div class="input-group">
+										<span class="usage input-group-addon">{{mf 'U' 'U'}}</span> 
+										<input class="form-control usage-input-f" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
+										<input class="form-control usage-input-e" type="text" placeholder="{{mf 'usage' 'Usage'}}" container="body"> 
+										<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
+									</div>
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close'}}</button>
+					<button type="button" class="btn btn-primary" id="crrbutton_save">{{mf 'save-correction' 'Save correction'}}</button>
+				</div>
+			</div>
 		</div>
+	</div>
 </template>
 
 <template name="translationtools">

@@ -8,7 +8,7 @@ Meteor.methods({
 		
 	},
 	sign_up: function(email,passwd,name,lastname){
-		console.log('sign in...');
+		console.log('sign up...');
 		var user = Accounts.createUser(
 		{
 			email:email,
@@ -16,7 +16,8 @@ Meteor.methods({
 			profile: {name:name,
 			lastname:lastname,}
 		});
-		Accounts.setPassword(user._id, passwd);
+		console.log('user : ' + user);
+		Accounts.setPassword(user, passwd);
 		console.log('sign in, ok?');
 	},
 	setRoom_active: function(room){
@@ -93,7 +94,7 @@ Meteor.methods({
 			PrivateChat.update({_id:privatechat['_id']}, {$set:{active: true, new_messages:0}});
 		}	
 	},
-	setUser_relation: function(request,relation,operation){
+	setUser_relation: function(request, relation, operation){
 		console.log('setting relation');
 		if (operation) {
 			console.log('add');
@@ -236,12 +237,14 @@ Meteor.methods({
 	participation_request: function(group, message){
 		console.log('part request');
 		var group = Groups.findOne({_id: group});
+		console.log(group);
 		if (group)
 			if(!User_Group.findOne({user:this.userId, group:group._id}))
 				if(!GroupRequest.findOne({user:this.userId,group:group._id}))
-					GroupRequest.insert({user: Meteor.userId(), group: group._id, message: message, type: 1});
+					group = GroupRequest.insert({user: Meteor.userId(), group: group._id, message: message, type: 1});
 		else
 			throw Meteor.Error(1000, "The group you are trying to send a request doesn't exit");
+		console.log(group);
 		//Groups.update({_id:groupId}, {$push:{request:userId}});
 	},
 	group_invite_request: function(user, message, group){
@@ -307,10 +310,20 @@ Meteor.methods({
 	}
 });
 
-Accounts.onCreateUser(function(error){
-	console.log(error);
-	console.log('errooo');
-});
+/*Accounts.onCreateUser(function(user){
+	console.log('onCreateUser');
+	try{
+		if(user.email){
+			console.log('sign up ok');
+			console.log(user);
+		}
+			
+	}catch(e){
+		console.log('error on sign up:');
+		console.log(e);
+		console.log(user);
+	}
+});*/
 Accounts.onLoginFailure(function(error){
 	console.log(error);
 });

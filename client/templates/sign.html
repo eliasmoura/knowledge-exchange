@@ -1,18 +1,24 @@
 <template name="login_form">
-	<div class="hide" id="div-login-form">
-		<form class="login-form" id="login-form" action="submit">
-			<div class="input-group input-group-sm">
-				<input type="email" id="login_email" class="form-control" placeholder="{{mf 'email' 'email'}}" />
-				<input type="password" id="login_passwd" class="form-control" placeholder="{{mf 'passwd' 'password'}}" />
-				<span class="input-group-addon ">
-					<button type="submit" id="login-submit-btn" class="btn btn-defaultn"> {{mf 'sign_in' 'Sign in'}}</button>
+	<ul class="dropdown-menu" >
+		<li>
+			<form class="login-form" id="login-form" action="submit">
+				<div class="input-group input-group-sm">
+					<div class="input-group input-group-sm">
+					<input type="email" id="login_email" class="form-control" placeholder="email">
+					<input type="password" id="login_passwd" class="form-control" placeholder="password">
+					<span class="input-group-addon " id="login-submit">
+						<button type="submit" class="btn btn-defaultn"> send</button>
 					</span>
-			</div>
-		</form>
-		<a href="#" class='fgpasswd row'>{{mf 'forgot_passwd' 'I forgot my password'}}</a>
-		<a href="#" class='newUser row'>{{mf 'create_user' 'Create user'}}</a>
-		{{> register_form}}
-	</div>
+					</div>
+				</div>
+			</form>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<a href="#" class='fgpasswd row'>{{mf 'forgot_passwd' 'I forgot my password'}}</a>
+			<a href="#" class='newUser row'>{{mf 'create_user' 'Create user'}}</a>
+		</li>
+	</ul>
 </template>
 
 <template name="login_popover">
@@ -95,7 +101,7 @@
 		    </div>
 		    <div class="modal-footer">
 		    	<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close' 'Close'}}</button>
-		        <button type="button" class="register-btn btn btn-primary" id="crrbutton_save">{{mf 'sing_up'}}</button>
+		        <button type="button" class="register-btn btn btn-primary" id="crrbutton_save">{{mf 'sing_up' 'Sign up'}}</button>
 		    </div>
 		    </div>
 		  </div>

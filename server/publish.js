@@ -40,17 +40,8 @@ Meteor.publish("user-list", function(){
 	return Meteor.users.find({},{fields:{_id:1, "profile.name":1,"profile.lastname":1}});
 });
 
-Meteor.publish("privatemessages",function(){
-	var messages = null;
-	var chats = PrivateChat.find({user:this.userId, active:true},{fields:{_id:1}});
-	var chatArray = new Array();
-	chats.fetch().forEach(function(row){
-		chatArray.push(row._id);
-	});
-
-	try{
-		messages = PrivateMessages.find({chat:{$in:chatArray}})
-	}catch(e){}
+Meteor.publish("privatemessages",function(privatechat){
+	messages = PrivateMessages.find({chat:privatechat});
 	return messages;
 })
 
@@ -112,17 +103,13 @@ Meteor.publish("groups-owner", function(){
 	return User_Group.find({owner:true, user:this.userId});
 });
 
-Meteor.publish("user-group-chat", function(){
+Meteor.publish("user-groups", function(group){
+
 	return User_Group.find({user: this.userId});
 })
 
-Meteor.publish("group-chat", function(){
-	var user_group = User_Group.find({user:this.userId}).fetch();
-	var groupArray = [];
-	user_group.forEach(function(row){
-		groupArray.push(row.group);
-	})
-	return GroupChat.find({groupchat:{$in: groupArray}})
+Meteor.publish("group-chat", function(group){
+	return GroupChat.find({groupchat:group});
 })
 
 

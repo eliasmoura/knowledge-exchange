@@ -1,8 +1,23 @@
-Template.chatrooms.rendered = function(){
-	console.log('ready');
-	$(window).resize(function(){
-        //$(".divmessages").height($(document).height());
+Template.chat.rendered = function(){
+    $('body').ready(function(){
+		$("#testediv").css('height',0);
+	    $("#testediv").css('height',$('#layout').height() - $('.chat-input').height() - $('.chat-input').height() *1.1);
     });
+	$(window).resize(function(){
+        $("#testediv").css('height',0);
+        $("#testediv").css('height',$('#layout').height() - $('.chat-input').height() - $('.chat-input').height() *1.1);
+    });
+}
+Template.chatrooms_side.rendered = function(){
+	$('body').ready(function(){
+		$(".sidebar").css('height',0);
+	    $(".sidebar").css('height',$('#layout').height() * 0.8);
+    });
+	$(window).resize(function(){
+        $(".sidebar").css('height',0);
+        $(".sidebar").css('height',$('#layout').height() * 0.8);
+    });
+    // $(".sidebar").scrollable();
 }
 Template.chatrooms_side.events = {
 	'click a.chat-room' : function(event, template){
@@ -130,7 +145,8 @@ Template.group_chat_finder.events({
 					});	
 				}catch(e){}
 				
-				var langs = t.find(".lang");
+				var langs = t.findAll(".lang");
+				console.log(langs);
 				var languages = new Array();
 				langs.each(function(){
 					languages.push($(this).option);
@@ -142,6 +158,14 @@ Template.group_chat_finder.events({
 	},
 	'click input#find-create-btn':function(e,t){
 		$('form#find-create-form').submit();
+	},
+	'click #morelang': function(e, t){
+		var element = t.find('#langs');
+
+		$(element).append('<select name="lang" id="" class="lang">\
+								<option value="0"></option>\
+							</select>');
+							
 	},
 	'keypress input#group-name-f':function(event, template){
 		var group = event.target.value;

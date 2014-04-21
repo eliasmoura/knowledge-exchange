@@ -26,11 +26,31 @@ Router.map( function() {
 	    	var activeroom = Meteor.subscribe("user-chatroom-active");
 	    	var room = null;
 	    	var corrections = null;
+	    	var privatemessages = null;
+	    	var group_chats = null;
+	    	var user_group_list = Meteor.subscribe("user-groups");
 	    	var user_chatroom_list = Meteor.subscribe("user-chatroom-list");
 	    	var chatroom_list = Meteor.subscribe("chatrooms-list");
+	    	var privatechats = Meteor.subscribe("privatechat");
+	    	
+	    	try{
+	    		privatemessages = PrivateChat.findOne({user:user,active:true});
+	    		privatemessages = Meteor.subscribe("privatemessages",privatemessages._id);
+	    	}catch(e){}
 	    	try{
 	    		room = User_Chatroom.find({user:user, active:true}).fetch()[0].room;
 	    		room = Meteor.subscribe("chat-messages", room);
+	    	}catch(e){}
+	    	try{
+	    		corrections = null;
+	    		corrections = Meteor.subscribe("chat-corrections");
+	    	}catch(e){}
+	    	try{
+	    		group_chats = User_Group.findOne({user:user,active:true});
+	    		group_chats = Meteor.subscribe("group-chat", group_chats.group);
+	    	}catch(e){}
+	    	try{
+	    		
 	    	}catch(e){}
 	    	
 	    	return [
@@ -38,17 +58,17 @@ Router.map( function() {
 		    	activeroom,
 		    	chatroom_list,
 		    	room,
-		    	Meteor.subscribe("chat-corrections"),
-		    	Meteor.subscribe("user-groups-list"),
+		    	corrections,
+		    	user_group_list,
 		    	Meteor.subscribe("groups-list"),
-		    	Meteor.subscribe("user-group-chat"),
+		    	group_chats,
 		    	Meteor.subscribe("languages-list"),
 		    	Meteor.subscribe("group-chat"),
 		    	Meteor.subscribe("requests"),
 		    	Meteor.subscribe("user-list"),
 		    	Meteor.subscribe("user-contact"),
-		    	Meteor.subscribe("privatechat"),
-		    	Meteor.subscribe("privatemessages")
+		    	privatechats,
+		    	privatemessages
 	    	];
 	    },
 	    onBeforeAction:function(){
@@ -222,7 +242,7 @@ Router.map( function() {
 		    		userFriendshipRequest.fetch().forEach(function(row){
 		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
 		    		});
-
+		    	console.log(participationArray);
 	    		return {
 	    			requests:
 	    				{

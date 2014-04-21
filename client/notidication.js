@@ -8,3 +8,7 @@ Template.notification.events({
 		Meteor.call("request_handler", request, request_type);
 	}
 });
+
+Template.notification.rendered = function(){
+	// $('#notificationModal').modal("toggle");
+}
