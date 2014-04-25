@@ -82,6 +82,73 @@ Router.map( function() {
 		      
 	    },
 	    onAfterAction:function(){
+	    	var modal_action = Session.get("user_modal_actions");
+			/*, {action:"email",user: user}
+			var = Session.get("user_modal_actions", {action:"add",user: user});
+			var = Session.get("user_modal_actions", {action:"invite",user:user});
+			var = Session.get("user_modal_actions", {action:"profile",user:user});
+			var = Session.get("user_modal_actions", {action:"report",user:user});*/
+			if(modal_action.action =="email"){
+				var user = null;
+				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+					if (users){
+						Session.set("user_modal_actions",{
+							send_email:true,
+							action: "Send email",
+							name:users.profile.name,
+							_id:users._id,
+						});
+					}
+				});
+			}
+			if(modal_action.action =="add"){
+				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+					if (users){
+						Session.set("user_modal_actions",{
+							add:true,
+							action: "Add contact",
+							name:users.profile.name,
+							_id:users._id,
+						});
+					}
+				});
+			}
+			if(modal_action.action =="invite"){
+				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+					if (users){
+						Session.set("user_modal_actions",{
+							group:true,
+							action: "Report user",
+							name:users.profile.name,
+							_id:users._id,
+						});
+					}
+				});
+			}
+			if(modal_action.action =="profile"){
+				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+					if (users){
+						Session.set("user_modal_actions",{
+							profile:true,
+							action: "Report user",
+							name:users.profile.name,
+							_id:users._id,
+						});
+					}
+				});
+			}
+			if(modal_action.action =="report"){
+				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+					if (users){
+						Session.set("user_modal_actions",{
+							report:true,
+							action: "Report user",
+							name:users.profile.name,
+							_id:users._id,
+						});
+					}
+				});
+			}
 	    	
 	    },
 	    data:
@@ -153,8 +220,7 @@ Router.map( function() {
 	    			users_relationsArray.push(row.contact);
 	    		});
 	    		
-	    		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();
-	    		console.log(privatechatnotifications);
+	    		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();;
 		    	var privatenotificationsArray = {};
 		    	privatechatnotifications.forEach(function(row){
 		    		privatenotificationsArray[row.contact] = row.new_messages;
@@ -167,6 +233,9 @@ Router.map( function() {
 		    	});
 
 	    		return users;
+	    	},
+	    	emails_notifications: function(){
+	    		return false;
 	    	},
 	    	chat_notifications: function(){
 	    		console.log('test');
@@ -196,7 +265,6 @@ Router.map( function() {
     			}	
 				else if (privatechat != undefined){
 					messages = PrivateMessages.find({chat:{$in: [privatechat._id]}});
-					console.log('privatechat');
 				}
 	    		
 	    		return messages;
@@ -242,22 +310,29 @@ Router.map( function() {
 		    		userFriendshipRequest.fetch().forEach(function(row){
 		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
 		    		});
-		    	console.log(participationArray);
-	    		return {
-	    			requests:
-	    				{
-	    					participation:participationArray,
-	    					invitation:groupsRequests_Invitation,
-	    					friendship:userArray,
-	    					total:total
-	    				}
-	    			};
+		    	if (total != 0)
+		    		return {
+		    			requests:
+		    				{
+		    					participation:participationArray,
+		    					invitation:groupsRequests_Invitation,
+		    					friendship:userArray,
+		    					total:total
+		    				}
+		    			};
+		    	else return false;
 	    	},
 	    	find_user: function(){
 	    		return Session.get('find_user');
 	    	},
 	    	user_found: function(){
 	    		return Session.get("users_found");
+	    	},
+	    	user_modal:function(){
+    			return Session.get("user_modal_actions");
+	    	},
+	    	add_user:function(){
+	    		return Session.get("add_user");
 	    	},
 	    	activeChat: "active",
 	    	pageTitle: "Chat app"

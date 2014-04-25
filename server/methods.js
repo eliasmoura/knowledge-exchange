@@ -9,15 +9,9 @@ Meteor.methods({
 	},
 	sign_up: function(email,passwd,name,lastname){
 		console.log('sign up...');
-		var user = Accounts.createUser(
-		{
-			email:email,
-			password:passwd,
-			profile: {name:name,
-			lastname:lastname,}
-		});
+		
 		console.log('user : ' + user);
-		Accounts.setPassword(user, passwd);
+		
 		console.log('sign in, ok?');
 	},
 	setRoom_active: function(room){
@@ -270,7 +264,6 @@ Meteor.methods({
 		//console.log(users);
 		if (user.first_user)
 			users = users.fetch()[0];
-		console.log(users);
 		return users;
 	},
 	user_friendship_request: function(user, message){
@@ -310,20 +303,7 @@ Meteor.methods({
 	}
 });
 
-/*Accounts.onCreateUser(function(user){
-	console.log('onCreateUser');
-	try{
-		if(user.email){
-			console.log('sign up ok');
-			console.log(user);
-		}
-			
-	}catch(e){
-		console.log('error on sign up:');
-		console.log(e);
-		console.log(user);
-	}
-});*/
-Accounts.onLoginFailure(function(error){
+
+/*Accounts.onLoginFailure(function(error){
 	console.log(error);
-});
+});*/

@@ -15,6 +15,12 @@
     }
   });**/
 Hooks.init();
+Meteor.startup(function(){
+    Session.set('login', true);
+    Session.set('group-finder', false);
+    Session.set("add_ser",false);
+    Session.set("user_modal_actions",false);
+});
 
 $('html').click(function(){
 	//console.log('test');
@@ -48,34 +54,3 @@ Template.dsdsd.dsds = function(e,t){
 	UsersRelations.insert(
 		{user:"A2EggWM4y9LQKPba6",userrelation:["ddxhhoTQsH9LuafHn","F"]});
 }*/
-
-
-
-
-$(function(){
-    $.contextMenu({
-        selector: '.username', 
-        callback: function(key, options) {
-            if (key == "msg") {
-            	console.log('do this: '+ $(this).attr("id"));
-            }
-        },
-        items: {
-            "msg": {name: "Send Message", icon: "edit"},
-            "friend": {name: "Add as Friend", icon: "cut"},
-            "contact": {name: "Add to Contact", icon: "copy"},
-            "block": {name: "Block", icon: "paste"},
-            "report": {name: "Report Abuse", icon: "delete"},
-            "private": {name: "Private Chat",icon: "tranlate"},
-            "chat": {name: "Invite to Group",icon: "tranlate"},
-            "sep1": "---------",
-            "quit": {name: "Quit", icon: "quit"}
-        },
-        trigger: "left"
-    });
-    
-    $('.username').on('click', function(e){
-        console.log('clicked', this);
-    })
-})
-

@@ -27,7 +27,7 @@
 				<ul class="dropdown-menu">
 					<li><a href="/user/{{user._id}}">{{mf 'profile' 'Profile'}}</a></li>
 					<li><a href="/user/{{user._id}}/messages">
-						{{mf 'messages' 'Messages'}} <span class="badge">{{notifications.newMessages}}</span></a>
+						{{mf 'email' 'Email'}} <span class="badge">{{notifications.newMessages}}</span></a>
 					</li>
 					<li><a href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></li>
 					<li class="divider"></li>
@@ -47,6 +47,12 @@
 
 		{{#if notifications.requests}}
 			{{>notification}}
+		{{/if}}
+		{{#if add_user}}
+		{{> request_friendship}}
+		{{/if}}
+		{{#if user_modal}}
+			{{> user_modal}}
 		{{/if}}
 </template>
 
@@ -145,4 +151,115 @@
 			</div>
 		{{/each}}
 	</div>
+</template>
+
+
+<template name="request_friendship">
+	<div id="request-friendship-modal" class="modal fade modal-request-friendship" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'add-user' 'Add contact'}}</h4>
+			</div>
+		    <div class="modal-content">
+		    	<form action="submit" id="request-friendship-form">
+		    		<textarea name="request-friendship" id="request-friendship-msg" class="form-control" rows="10" placeholder="{{mf 'msg' 'Message'}}"></textarea>
+		    		<div>
+		    			<input type="radio" name="request-friendship-radio" id="request-friendship-check-friend">
+		    			<label for="request-friendship-check-friend">{{mf 'friend' 'Friend'}}</label>
+		    			<input type="radio" name="request-friendship-radio" id="request-friendship-check-contact">
+		    			<label for="request-friendship-check-contact">{{mf 'contact' 'contact'}}</label>
+		    			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-teacher">
+		    			<label for="request-friendship-check-teacher">{{mf 'teacher' 'Teacehr'}}</label>
+		    			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-student">
+		    			<label for="request-friendship-check-student">{{mf 'student' 'Student'}}</label>
+
+		    		</div>
+		    	</form>
+		    </div>
+		     <div class="modal-footer">
+		    	<input type="button" class="btn btn-default" id="request-friendship-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
+		        <input type="button" class="btn btn-primary" id="request-friendship-btn" value="{{mf 'send'}}" />
+		    </div>
+		</div>
+	</div>	
+</template>
+<template name="user_modal">
+	<div id="user-modal" class="modal fade in modal-user" tabindex="-1" role="dialog" aria-labelledby="user-ModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		    	<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="user-ModalLabel">{{user_modal.action}}</h4>
+				</div>
+				<div class="modal-body">
+					{{#if user_modal.add}}
+						{{> user_invite_request}}
+					{{/if}}
+					{{#if user_modal.send_email}}
+						{{> send_email}}
+					{{/if}}
+					{{#if user_modal.report}}
+						{{> report}}
+					{{/if}}
+					{{#if user_modal.group}}
+						{{> group}}
+					{{/if}}
+					{{#if user_modal.profile}}
+						{{> user_profile}}
+					{{/if}}
+				</div>
+				<div class="modal-footer">
+			    	<input type="button" class="btn btn-default" id="request-friendship-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
+			        <input type="button" class="btn btn-primary" id="request-friendship-btn" value="{{mf 'send'}}" />
+			    </div>
+		    </div>
+		</div>
+	</div>	
+</template>
+
+<template name="send_email">
+	<form action="submit" id="send-email-form">
+		{{user_modal.action}}
+		<label for="user-name">{{mf 'to' 'To'}}:</label><input type="text" class="form-control" placeholder="{{mf 'user'}}" name="user-name" value="{{user_modal.name}}" id="{{user_modal._id}}">
+		<label for="modal-text">{{mf 'msg' 'Message'}}:</label>
+		<textarea name="modal-text" id="send-email-msg" class="form-control" rows="10" placeholder="{{mf 'msg'}}"></textarea>
+		<div class="alert alert-danger alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		  <strong>Warning!</strong> Better check yourself, you're not looking too good.
+		</div>
+
+	</form>
+</template>
+<template name="user_invite_request">
+	<form action="submit" id="user-invite-request-form">
+		<label for="user-name">{{mf 'user' 'User'}}:</label><input type="text" class="form-control" name="user-name" placeholder="{{mf 'user'}}" value="{{user_modal.name}}" id="{{user_modal._id}}">
+		<div>
+			<input type="radio" name="request-friendship-radio" id="request-friendship-check-friend">
+			<label for="request-friendship-check-friend">{{mf 'friend' 'Friend'}}</label>
+			<input type="radio" name="request-friendship-radio" id="request-friendship-check-contact">
+			<label for="request-friendship-check-contact">{{mf 'contact' 'contact'}}</label>
+			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-teacher">
+			<label for="request-friendship-check-teacher">{{mf 'teacher' 'Teacehr'}}</label>
+			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-student">
+			<label for="request-friendship-check-student">{{mf 'student' 'Student'}}</label>
+		</div>
+		<label for="modal-text">{{mf 'message' 'Message'}}:</label>
+		<textarea name="modal-text" id="user-modal-msg" class="form-control" rows="10" placeholder="{{mf 'reason'}}"></textarea>
+		<div class="alert alert-danger alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		  <strong>Warning!</strong> Better check yourself, you're not looking too good.
+		</div>
+
+	</form>
+</template>
+<template name="group">
+	
+</template>
+<template name="report">
+	<form action="submit" id="send-email-form">
+		<label for="user-name">{{mf 'report' 'Report'}}:</label><input type="text" class="form-control" name="user-name" placeholder="{{mf 'user'}}" value="{{user_modal.name}}" id="{{user_modal._id}}">
+		<label for="modal-text">{{mf 'reason' 'Reason'}}:</label>
+		<textarea name="modal-text" id="user-modal-msg" class="form-control" rows="10" placeholder="{{mf 'reason'}}"></textarea>
+	</form>
 </template>

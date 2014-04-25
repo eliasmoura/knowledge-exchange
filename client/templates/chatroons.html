@@ -2,7 +2,6 @@
 </head>
 
 <body>
-	
 
 </body>
 <template name="chatrooms">
@@ -18,27 +17,27 @@
 
 	</div>
 	{{#if currentUser}}
-	{{#if room}}
-	<div class="chatroon-name panel-heading row">
-		<h3 class="panel-title center-block">{{room.name}}</h3>
-	</div>
-	<div class="divchat row" >
-		<div class="">
-			<div class=" chat-users col-xs-2 list-group" >
-				{{> users_chatroom}}
-			</div>
-			<div class="divmessages container col-xs-10" id="chat-messages">
-				{{> chat}}
-			</div>
+		{{#if room}}
+		<div class="chatroon-name panel-heading row">
+			<h3 class="panel-title center-block">{{room.name}}</h3>
 		</div>
-		<div class="col-xs-10 col-xs-offset-2 chat-input ">
+		<div class="divchat row" >
+			<div class="">
+				<div class=" chat-users col-xs-2 list-group" >
+					{{> users_chatroom}}
+				</div>
+				<div class="divmessages container col-xs-10" id="chat-messages">
+					{{> chat}}
+				</div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-2 chat-input ">
 
-			{{> chat_input}}
+				{{> chat_input}}
+			</div>
 		</div>
-	</div>
-	{{else}}
-	erro?
-	{{/if}}
+		{{else}}
+		erro?
+		{{/if}}
 	{{else}}
 	<div class="chat col-xs-10 offset-2">
 		{{mf 'noUser-chat' "You aren't logged in. Please, log in to use all the features of the site."}}

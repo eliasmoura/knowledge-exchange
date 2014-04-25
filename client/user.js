@@ -1,7 +1,3 @@
-Meteor.startup(function(){
-	Session.set('login', true);
-	Session.set('group-finder', false);
-});
 
 var trimInput = function(val){
 			return val.replace(/^\s*|\s*$/g, "");
@@ -106,14 +102,21 @@ Template.register_form.events({
 		email = trimInput(email);
 		if (!isValidPassword(passwd)) return false;;
 		/**Validate things**/
-
-		Meteor.call("sign_up",email,passwd,name,lastname,function(error, res){
+		var user = Accounts.createUser(
+		{
+			email:email,
+			password:passwd,
+			profile: {name:name,
+			lastname:lastname,}
+		});
+		/*Meteor.call("sign_up",email,passwd,name,lastname,function(error, res){
 			if(!error)	{
-				$('#registerModal').modal("toggle");
+				
 			}
 			console.log(error);
 			return "error sign up"
-		})
+		})*/
+		$('#registerModal').modal("toggle");
 		return false;
 	}
 });
@@ -136,12 +139,10 @@ Template.user_finder_modal.events({
 			Session.set('users_found',false);
 			return false;
 		}
-		var users = Meteor.call("find_user",user_name,function(error,users){
-			console.log('callback: ' + users);
-			Session.set("users_found", users);
+		Meteor.call("find_user",user_name, function(error,users){
+			if(users)	
+				Session.set("users_found", users);
 		});
-
-		console.log(users);
 	}
 });
 Template.user_finder.events({
@@ -155,4 +156,130 @@ Template.user_finder.events({
 		}
 		else console.log('request not sent');
 	}
+});
+
+Template.user_modal.events({
+	'click #request-friendship-btn': function(e,t){
+		var action = Session.get("user_modal_actions");
+		if (action.send_email) {
+			
+		}
+		if (action.add) {
+			$("#user-invite-request-form").submit();
+		}
+		if (action.report) {
+
+		}
+	}
 })
+Template.send_email.events({
+	'submit #send-email-form': function(e,t){
+		e.preventDefault();
+		var message = t.find("#send-email-msg").text;
+		var userId = Session.get("user_modal_actions")._id;
+		Meteor.call("send_email",userId,message);
+
+	}
+});
+Template.user_invite_request.events({
+	'submit #user-invite-request-form':function(e,t){
+		e.preventDefault();
+		var message = t.find("#user-modal-msg").text;
+		var userId = Session.get("user_modal_actions")._id;
+		Meteor.call("user_friendship_request", userId, message);
+	}
+})
+Template.user_modal.rendered = function(){
+	// $('#user-modal').modal();
+	
+	console.log(Session.get("user_modal_actions"));
+	$("#user-modal").modal();
+	$("#user-modal").on('hidden.bs.modal', function(){
+		Session.set('user_modal_actions', false);
+	})
+}
+
+
+Template.request_friendship.events({
+	'submit #request-friendship-form': function(e,t){
+		e.preventDefault();
+		console.log(Session.get("add_user"));
+		var message = t.find("#request-friendship-msg").value;
+		var user = Session.get("add-user");
+		Meteor.call("user_friendship_request", user, message);
+		$("#request-friendship-modal").modal('hide');
+	},
+	'click #request-friendship-btn': function(e,t){
+		$("#request-friendship-form").submit();
+	}
+});
+Template.request_friendship.rendered = function(){
+	$("#request-friendship-modal").modal("toggle");
+	$("#request-friendship-modal").on('hidden.bs.modal', function(){
+		Session.set('add_user', false);
+
+	})
+}
+
+$(function(){
+    $.contextMenu({
+        selector: '.username',
+        build: function($trigger, e){
+        	var items_menu = {
+  				"profile": {name: "See user profile", icon: "profile"}
+			};
+			var user = UsersRelations.findOne({contact:$trigger.attr("id")});
+			if($trigger.attr("id") != Meteor.userId()){	
+	        	items_menu.email = {name: "Send an email", icon: "email"};
+	        	if (!user)
+	        		items_menu.contact = {name: "Add to Contacts", icon: "contact"};
+	        	else
+	        		items_menu.rcontact = {name: "Remove from Contacts", icon: "remove"};
+	        	items_menu.private = {name: "Private Chat",icon: "chat"};
+	        	items_menu.group = {name: "Invite to a Group",icon: "group"};
+	        	items_menu.sep1 = "---------";
+	        	items_menu.block = {name: "Block user", icon: "block"};
+	        	items_menu.report = {name: "Report Abuse", icon: "report"};
+	        }
+
+        	return {
+        		items: items_menu,
+        		reposion:false,
+        		callback: function(key, options) {
+		            var user = $(this).attr("id");
+		            if (key == "email") {
+		            	Session.set("user_modal_actions", {action:"email",user: user});
+		            }
+		            if(key == "contact"){
+		            	Session.set("user_modal_actions", {action:"add",user: user});
+		            }
+		            if(key == "rcontact"){
+		            	Meteor.call("remove_contact",user);
+		            }
+		            if(key == "group"){
+		            	Session.set("user_modal_actions", {action:"invite",user:user});
+		            }
+		            if(key == "profile"){
+		            	Session.set("user_modal_actions", {action:"profile",user:user});
+		            }
+		            if(key == "report"){
+		            	Session.set("user_modal_actions", {action:"report",user:user});
+		            }
+		            if(key == "block"){
+		            	Meteor.call("block_user",user);
+		            }
+		            if(key == "private"){
+		            	Session.set("private_chat",user);
+		            }
+		        }
+        	}
+        },
+        trigger: "left",
+    });
+    
+    $('.username').on('click', function(e){
+        console.log('clicked', this);
+        
+
+    })
+});

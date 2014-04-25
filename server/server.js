@@ -11,8 +11,27 @@ Meteor.startup(function(){
 	User_Chatroom.remove({});
 	Groups.remove({});
 	Chatrooms.remove({});*/
-	Accounts.config({forbidClientAccountCreation:true});
+	//Accounts.config({forbidClientAccountCreation:true});
 
+});
+
+Accounts.onCreateUser(function(options,user){
+	console.log('onCreateUser');
+	try{
+		console.log('sign up ok');
+		console.log(user);
+		user.profile = options.profile;
+		//Accounts.setPassword(user._id, user.password);
+		Accounts.verifyEmail(user.srp.verifier,function(error){
+			if(error)
+				console.log(error);
+		});
+		return user;
+	}catch(e){
+		console.log('error on sign up:');
+		console.log(e);
+		console.log(user);
+	}
 });
 
 Hooks.onLoggedIn = function (userId) {
