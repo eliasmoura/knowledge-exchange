@@ -46,7 +46,11 @@ Template.post.events = {
         Meteor.call("clean_db");
     }
 }
-
+Template.navbar.events({
+    'click .navigation': function(e,t){
+        $("#navbar-nav").removeClass("in")
+    }
+})
 
 
 /*

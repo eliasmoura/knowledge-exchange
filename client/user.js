@@ -24,6 +24,10 @@ Template.user.login = function(){
 	}
 	return userlist;
 }*/
+Template.notification.destroyed = function(){
+
+	
+}
 Template.user.events({
 	'click input#signButton': function(e,t){
 		//$("div.user").css('display', 'block');
@@ -36,7 +40,7 @@ Template.user.events({
 		console.log("logged out");
 	},
 	'click #login': function(e, t){
-			console.log('addclass');
+			// console.log('addclass');
 			/*if ($("#login-popover").attr('class').indexOf("in") != -1)
 				$("#login-popover").removeClass('in');		
 			else
@@ -91,6 +95,10 @@ Template.register_form.rendered = function(){
 
 Template.register_form.events({
 	'click button.register-btn': function(e, t){
+		
+		return false;
+	},
+	'submit #register_form':function(e,t){
 		e.preventDefault();
 		console.log('register');
 		var name = t.find('#name_registerform').value;
@@ -117,7 +125,6 @@ Template.register_form.events({
 			return "error sign up"
 		})*/
 		$('#registerModal').modal("toggle");
-		return false;
 	}
 });
 
@@ -184,15 +191,23 @@ Template.send_email.events({
 Template.user_invite_request.events({
 	'submit #user-invite-request-form':function(e,t){
 		e.preventDefault();
-		var message = t.find("#user-modal-msg").text;
+		var message = t.find("#user-modal-msg").value;
+		var type = $(".user-form:checked");
+		console.log(type);
 		var userId = Session.get("user_modal_actions")._id;
-		Meteor.call("user_friendship_request", userId, message);
+		Meteor.call("user_friendship_request", userId, message,function(error,result){
+			if(!error){
+				console.log('request sent');
+				$("#user-modal").modal("hide");
+			}
+				
+
+		});
 	}
 })
 Template.user_modal.rendered = function(){
 	// $('#user-modal').modal();
 	
-	console.log(Session.get("user_modal_actions"));
 	$("#user-modal").modal();
 	$("#user-modal").on('hidden.bs.modal', function(){
 		Session.set('user_modal_actions', false);
@@ -203,9 +218,9 @@ Template.user_modal.rendered = function(){
 Template.request_friendship.events({
 	'submit #request-friendship-form': function(e,t){
 		e.preventDefault();
-		console.log(Session.get("add_user"));
 		var message = t.find("#request-friendship-msg").value;
-		var user = Session.get("add-user");
+		var type = $(".user-form:checked");
+		console.log(type);
 		Meteor.call("user_friendship_request", user, message);
 		$("#request-friendship-modal").modal('hide');
 	},
@@ -221,6 +236,17 @@ Template.request_friendship.rendered = function(){
 	})
 }
 
+Template.group.events({
+	'click span.plus': function(e,t){
+		e.preventDefault();
+		var groupId = t.find(".plus").id;
+		var message = "User "+Meteor.user().profile.name+" invited you to joing this group.";
+		var userId = Session.get("user_modal_actions")._id;
+		console.log(groupId +" "+message+" "+userId);
+		Meteor.call("group_invite_request",userId,message,groupId);
+	}
+});
+
 $(function(){
     $.contextMenu({
         selector: '.username',
@@ -233,11 +259,12 @@ $(function(){
 	        	items_menu.email = {name: "Send an email", icon: "email"};
 	        	if (!user)
 	        		items_menu.contact = {name: "Add to Contacts", icon: "contact"};
-	        	else
-	        		items_menu.rcontact = {name: "Remove from Contacts", icon: "remove"};
+	        		
 	        	items_menu.private = {name: "Private Chat",icon: "chat"};
 	        	items_menu.group = {name: "Invite to a Group",icon: "group"};
 	        	items_menu.sep1 = "---------";
+	        	if (items_menu.contact === undefined)
+	        		items_menu.rcontact = {name: "Remove from Contacts", icon: "remove"};
 	        	items_menu.block = {name: "Block user", icon: "block"};
 	        	items_menu.report = {name: "Report Abuse", icon: "report"};
 	        }
@@ -254,7 +281,7 @@ $(function(){
 		            	Session.set("user_modal_actions", {action:"add",user: user});
 		            }
 		            if(key == "rcontact"){
-		            	Meteor.call("remove_contact",user);
+		            	Meteor.call("setUser_relation",{user:user,operation:false});
 		            }
 		            if(key == "group"){
 		            	Session.set("user_modal_actions", {action:"invite",user:user});

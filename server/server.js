@@ -18,14 +18,16 @@ Meteor.startup(function(){
 Accounts.onCreateUser(function(options,user){
 	console.log('onCreateUser');
 	try{
-		console.log('sign up ok');
 		console.log(user);
+		// console.log(user.services.password.srp);
 		user.profile = options.profile;
-		//Accounts.setPassword(user._id, user.password);
-		Accounts.verifyEmail(user.srp.verifier,function(error){
+		user.profile.online = true;
+		// Accounts.setPassword(user._id, user.password);
+		/*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
 			if(error)
 				console.log(error);
-		});
+		});*/
+		console.log('sign up ok');
 		return user;
 	}catch(e){
 		console.log('error on sign up:');

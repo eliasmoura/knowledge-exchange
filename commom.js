@@ -65,6 +65,7 @@ Router.map( function() {
 		    	Meteor.subscribe("languages-list"),
 		    	Meteor.subscribe("group-chat"),
 		    	Meteor.subscribe("requests"),
+		    	Meteor.subscribe("requests-invite"),
 		    	Meteor.subscribe("user-list"),
 		    	Meteor.subscribe("user-contact"),
 		    	privatechats,
@@ -118,7 +119,7 @@ Router.map( function() {
 					if (users){
 						Session.set("user_modal_actions",{
 							group:true,
-							action: "Report user",
+							action: "Invite "+users.profile.name+" to:",
 							name:users.profile.name,
 							_id:users._id,
 						});
@@ -285,6 +286,22 @@ Router.map( function() {
 
 	    		return groups;
 	    	},
+	    	group_manage: function(){
+	    		var user_groups = User_Group.find({user: Meteor.userId(),mod:true}, {fields:{group:1}}).fetch();
+	    		var groupsArray = new Array();
+	    		user_groups.forEach(function(row){
+	    			groupsArray.push(row.group);
+	    		});
+
+	    		var groups = new Array();
+	    		Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
+	    			row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
+	    			groups.push(row);
+	    		});
+	    		//console.log(groups);
+
+	    		return groups;
+	    	},
 	    	notifications: function(){
 	    		var groupsRequests_Participation = GroupRequest.find({type:1});
 	    		var participationArray = new Array();
@@ -303,24 +320,31 @@ Router.map( function() {
 
 	    		if(groupsRequests_Invitation)
 	    			groupsRequests_Invitation.fetch().forEach(function(row){
-	    				invitationsArray.push({user:{_id:row.user}, group:row });
+	    				var group = Groups.findOne({_id:row.group});
+	    				invitationsArray.push({group:group,request:row});
 	    			});
 
 	    		if(userFriendshipRequest)
 		    		userFriendshipRequest.fetch().forEach(function(row){
 		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
 		    		});
-		    	if (total != 0)
+		    	if (total != 0){
+		    		console.log(invitationsArray);
 		    		return {
 		    			requests:
 		    				{
 		    					participation:participationArray,
-		    					invitation:groupsRequests_Invitation,
+		    					invitation:invitationsArray,
 		    					friendship:userArray,
 		    					total:total
 		    				}
-		    			};
-		    	else return false;
+		    			};}
+		    	else {
+		    		console.log('hide');
+		    		$(".modal-backdrop.fade.in").remove();
+		    		$('#notificationModal').modal("hide");
+		    		return false;
+		    	}
 	    	},
 	    	find_user: function(){
 	    		return Session.get('find_user');

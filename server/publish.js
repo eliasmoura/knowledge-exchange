@@ -1,9 +1,9 @@
 
 
 Meteor.publish("requests", function(){
-	var groups = User_Group.find({user:this.userId, owner:true}).fetch();
+	var groups = User_Group.find({user:this.userId, mod:true}).fetch();
 	var groupArray = new Array();
-	var groupsRequests = false;
+	var groupsRequest_participation = false;
 
 	var friendshipRequests = UserRequest.find({request_to: this.userId});
 	var	friends = false;
@@ -14,18 +14,20 @@ Meteor.publish("requests", function(){
 		groups.forEach(function(row){
 			groupArray.push(row.group);
 		});
-		groupsRequests = GroupRequest.find({group:{$in: groupArray}});	
+		groupsRequest_participation = GroupRequest.find({group:{$in: groupArray},type:1});
 	}
-	
 	//console.log(groupsRequests.fetch());
 	
 
 	if (friendshipRequests)
 		response.push(friendshipRequests);
-	if(groupsRequests)
-		response.push(groupsRequests);
+	if(groupsRequest_participation)
+		response.push(groupsRequest_participation);
 	//console.log(response);
 	return response;
+});
+Meteor.publish("requests-invite", function(){
+	return GroupRequest.find({user:this.userId,type:2});
 });
 
 
