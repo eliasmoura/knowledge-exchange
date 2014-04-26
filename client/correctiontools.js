@@ -3,24 +3,11 @@
 Template.messagem_corrected_button.rendered = function(){
 	var element = this.firstNode;
 	var id = $(element).parent().attr('id');
-	var user_chatroom = User_Chatroom.findOne({user:Meteor.userId(), active:true});
-	var user_group = User_Group.findOne({user:Meteor.userId(), active:true});
-	var privatechat = PrivateChat.findOne({user:Meteor.userId(), active:true});
-
-	if (user_chatroom != undefined){
-		var message = Messages.findOne({_id:id});
-	}
-	else if (user_group != undefined){
-		var message = GroupChat.findOne({_id:id});
-	}	
-	else if (privatechat != undefined){
-		var message = PrivateMessages.findOne({_id:id});
-	}
-
+	console.log(id);
 	//console.log("m "+message[0]._id);
 	//console.log(Correction.find({}).fetch() );
 	try{
-		var cmessage = Correction.findOne({message: message._id},{fields:{correction:1,corrector:1}});
+		var cmessage = Correction.findOne({message: id},{fields:{correction:1,corrector:1}});
 		var corrector = Meteor.users.findOne({_id:cmessage.corrector});
 		$(element).removeClass('hide');
 		$(element).popover({

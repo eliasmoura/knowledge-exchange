@@ -67,8 +67,13 @@ Meteor.publish("chatrooms-list", function(){
 Meteor.publish("user-chatroom-active", function(){
 	return User_Chatroom.find({user:this.userId, active:true});
 });
-Meteor.publish("chat-messages", function(roomId){
-	return Messages.find({room:roomId}, {sort: {time: +1}});
+Meteor.publish("chat-messages", function(active_room){
+	if(active_room.type == "public")
+		return Messages.find({room:active_room.room}, {sort: {time: +1}});
+	if(active_room.type == "group")
+		return GroupChat.find({groupchat:active_room.room}, {sort: {time: +1}});
+	if(active_room.type == "privatechat")
+		return PrivateMessages.find({chat:active_room.room}, {sort: {time: +1}});
 });
 
 Meteor.publish("chat-message", function(messageId){
@@ -86,7 +91,7 @@ Meteor.publish("user-groups-list", function(){
 		groups.fetch().forEach(function(row){
 			userGroupsList.push(row.group);
 		});
-	groups = User_Group.find({group: {$in: userGroupsList}});
+	groups = Groups.find({_id: {$in: userGroupsList}});
 	return groups;
 });
 Meteor.publish("groups-list", function(user){
@@ -105,7 +110,7 @@ Meteor.publish("groups-owner", function(){
 	return User_Group.find({owner:true, user:this.userId});
 });
 
-Meteor.publish("user-groups", function(group){
+Meteor.publish("user-groups", function(){
 
 	return User_Group.find({user: this.userId});
 })
@@ -124,28 +129,23 @@ Meteor.publish("correction", function(messageId){
 	return Correction.find({message: messageId},{fields:{correction:1,corretor:1}});
 });
 
-Meteor.publish("chat-corrections", function(){
-	//console.log(messagesId);
-	
-	//console.log(messagesArray);
+Meteor.publish("chat-corrections", function(active_room){
 	var messagesArray = [];
 	var messages = null;
-	var user_chatroom = User_Chatroom.findOne({user:this.userId, active:true});
-	var user_group = User_Group.findOne({user:this.userId, active:true});
-	var privatechat = PrivateChat.findOne({user:this.userId, active:true});
+	
 
-	if (user_chatroom != undefined){
-		messages = Messages.find({room:user_chatroom.room});
+	if (active_room.type == "public"){
+		messages = Messages.find({room:active_room.room});
 		console.log('c_chat');
 	}
-	else if (user_group != undefined){
+	else if (active_room.type == "group"){
 		try{
-		messages = GroupChat.find({groupchat:user_group.group});
+		messages = GroupChat.find({groupchat:active_room.room});
 		}catch(e){console.log(e);}
 		console.log('c_group');
 	}	
-	else if (privatechat != undefined){
-		messages = PrivateMessages.find({chat:privatechat._id});
+	else if (active_room.type == "privatechat"){
+		messages = PrivateMessages.find({chat:active_room.room});
 		console.log('c_privatechat');
 	}
 	if (messages)
@@ -153,16 +153,8 @@ Meteor.publish("chat-corrections", function(){
 		messagesArray.push(row._id);
 	});
 
-	//console.log(messages);
-
-	var corrections = Correction.find({message: {$in:messagesArray}});
-	//console.log(corrections.fetch());
-	/*var correctionsIdArray = new Array();
-	corrections.fetch().forEach(function(row){
-		correctionsIdArray.push(row._id);
-	});
-	corrections = corrections.rewind();
-	this.added('correction',correctionsIdArray.pop() );*/
+	var corrections = Correction.find({room: active_room.room});
+	console.log(Correction.find({room: active_room.room}).fetch());
 	return corrections;
 });
 

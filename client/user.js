@@ -96,7 +96,7 @@ Template.register_form.rendered = function(){
 Template.register_form.events({
 	'click button.register-btn': function(e, t){
 		
-		return false;
+		$("#register_form").submit();
 	},
 	'submit #register_form':function(e,t){
 		e.preventDefault();

@@ -16,19 +16,11 @@ div.container#chat-messages
 {
     height:100%;
 }
-#testediv, .sidebar
+#chat-messages, .sidebar, .sidebar
 {
     overflow-y: auto;
 }
 
-.sidebar
-{
-    /*overflow-y:hidden;*/
-}
-.chatroom-menu
-{
-    overflow-y: auto;
-}
 
 @font-face {
   font-family: 'Glyphicons Halflings';

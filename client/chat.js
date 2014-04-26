@@ -56,7 +56,7 @@ Template.chatrooms_side.events = {
 Template.chatrooms_side_xs.events = {
 	'click a.roombutton' : function(event){
 		var room = event.target.id;
-		$(event.target).popover();
+		// $(event.target).popover();
 		var user = Meteor.userId();
 		Session.set("currentRoom", room);
 		var user_room = User_Chatroom.findOne({room:room, user:user});
@@ -233,15 +233,21 @@ Template.chat_input.events = {
 		}
 	}
 }
-Template.chat.correction = function(){
-
-}
-
 Template.chat.events = {
 	'click button.correctionWraper': function(e,t){
 		//console.log('test');
-		//$('.correctionWraper').popover('hide');
-		//$(e.target).popover('show');
+		var elementClass = $(e.target).attr("class");
+		if(elementClass.indexOf("ok") == -1){
+			$(e.target).popover('show');
+			$(e.target).addClass( "ok")
+		}
+		/*$(e.target).popover({trigger:"manual"});
+		$('.correctionWraper').popover('hide');
+		$(".correctionWraper").on('hidden.bs.popover', function(){
+			$(e.target).popover("show");
+		})*/
+		
+
 		//var button = e.target;
 		
 	}

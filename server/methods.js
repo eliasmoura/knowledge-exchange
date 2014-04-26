@@ -14,6 +14,14 @@ Meteor.methods({
 		
 		console.log('sign in, ok?');
 	},
+	setUser_activeRoom: function(type,roomId){
+		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.active_room":{type:type,room:roomId}}},function(error,docs){
+				if(!error)
+					console.log(docs);
+				else
+					console.log(error);
+			});
+	},
 	setRoom_active: function(room){
 		if(!Meteor.user())return "You must be logged!";
 		var user = this.userId;
@@ -24,10 +32,12 @@ Meteor.methods({
 		if (!user_room){
 			var roomId = Chatrooms.findOne({_id:room})._id;
 			User_Chatroom.insert({room:roomId,user:user,active:true}, function(error, result){
+				Meteor.call("setUser_activeRoom","public",User_Chatroom.findOne({_id:result}));
 			});
 		}
 		else if (!user_room['active']){
 			User_Chatroom.update({_id:user_room['_id']}, {$set:{active: true}});
+			Meteor.call("setUser_activeRoom","public",user_room.room);
 		}	
 	},
 	setRoom_Non_active: function(){
@@ -49,6 +59,7 @@ Meteor.methods({
 			
 		}
 		else if (!user_group['active']){
+			Meteor.call("setUser_activeRoom","group",user_group.group);
 			User_Group.update({_id:user_group['_id']}, {$set:{active: true, new_messages:0}});
 			//console.log(User_Group.findOne({group:group,user:user}));
 		}	
@@ -64,8 +75,11 @@ Meteor.methods({
 			User_Group.insert({group:request.group,user:request.user,owner:false,mod:false,active:false}, 
 				function(error, result){
 					console.log(error);
-					if(!error)
+					if(!error){
 						GroupRequest.remove({_id:request._id});
+						Meteor.call("setUser_activeRoom","group",User_Group.findOne({_id:result}));
+					}
+						
 			});	
 		else
 			User_Group.remove({group:group,user:user});
@@ -82,9 +96,11 @@ Meteor.methods({
 			console.log('inserting PrivateChat');
 			var user_relation = UsersRelations.findOne({contact:friend});
 			var chatId = PrivateChat.insert({user:user,contact:user_relation.contact,active:true,new_messages:0}, function(error, result){
+				Meteor.call("setUser_activeRoom","privatechat",result);
 			});
 		}
 		else if (!privatechat['active']){
+			Meteor.call("setUser_activeRoom","privatechat",privatechat._id);
 			PrivateChat.update({_id:privatechat['_id']}, {$set:{active: true, new_messages:0}});
 		}	
 	},
@@ -142,11 +158,15 @@ Meteor.methods({
 		Meteor.call('setGroup_Non_active');
 		Meteor.call('setFriend_Non_active');
 		User_Group.insert({group:group,user:this.userId,owner:true,mod:true,active:true}, function(error, result){
+			if(!error){
+				Meteor.call("setUser_activeRoom","group",User_Group.findOne({_id:result}));
+			}else
 				console.log(error);
 		});
 		for (var i = 0; i< members.length; i++) {
 			User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
-				console.log(error);
+				if(!error)
+					console.log(error);
 			});	
 		}
 		
@@ -206,28 +226,13 @@ Meteor.methods({
 		}
 	},
 	correction: function(correction,explanation,messageId){
-		var type = null;
-
-		var user_chatroom = User_Chatroom.findOne({user:Meteor.userId(), active:true});
-		var user_group = User_Group.findOne({user:Meteor.userId(), active:true});
-		var privatechat = PrivateChat.findOne({user:Meteor.userId(), active:true});
-
-		if (user_chatroom != undefined){
-			type = 'publicchat';
-		}
-		else if (user_group != undefined){
-			type = 'groupchat';
-		}	
-		else if (privatechat != undefined){
-			type = 'privatechat'
-		}
-
 		Correction.insert({
 			correction:correction,
 			explanation:explanation,
 			corrector:this.userId,
 			message:messageId,
-			chattype:type,
+			chattype:Meteor.user().profile.active_room.type,
+			room:Meteor.user().profile.active_room.room,
 			time: Date.now()
 		});
 	},

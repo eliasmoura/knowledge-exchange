@@ -26,7 +26,7 @@
 				<div class=" chat-users col-xs-2 list-group" >
 					{{> users_chatroom}}
 				</div>
-				<div class="divmessages container col-xs-10" id="chat-messages">
+				<div class="divmessages col-xs-10" id="chat-messages">
 					{{> chat}}
 				</div>
 			</div>
@@ -317,7 +317,14 @@ chat side menu
 		{{#each messages}}
 		<div class="message list-group-item" id="{{_id}}">
 			<a class="username stusername" href="#" id="{{userid}}">{{name}}: </a>{{message}}
-			{{> messagem_corrected_button}}
+			{{#if corrections}}
+				<!-- {{> messagem_corrected_button}} -->
+				<span class=" btn-group-xs">
+					<button id="{{id}}" type="button" class="correctionWraper btn btn-default" data-container="body" data-toggle="popover" data-placement="left" title="Correction" data-content="{{#each corrections}}<div>{{correction}}</div><div>By: {{corrector}}</div>{{/each}}" data-html="true">
+						<span class="glyphicon glyphicon-saved"></span>
+					</button>
+				</span>			
+			{{/if}}
 		</div>
 		{{/each}}
 		{{/if}}
