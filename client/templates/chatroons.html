@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		{{else}}
-		erro?
+		
 		{{/if}}
 	{{else}}
 	<div class="chat col-xs-10 offset-2">
@@ -65,7 +65,9 @@ chat side menu
 			<div class="panel-collapse collapse in" id="panel-rooms">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each rooms}}
-					<li><a href="#" class="chat-room {{roomactive room=_id}}" id="{{_id}}" >{{name}}</a></li>
+					<li class="{{#if active}}active{{/if}}">
+						<a href="#" class="chat-room" id="{{_id}}" >{{name}}</a>
+					</li>
 					{{/each}}
 				</ul>
 			</div>
@@ -85,7 +87,7 @@ chat side menu
 			<div class="panel-collapse collapse in" id="panel-groups">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each group_rooms}}
-					<li>
+					<li class="{{#if active}}active{{/if}}">
 						<a  href="#" class="chat-group" id="{{_id}}" >
 							{{name}}
 							{{#if notification}}
@@ -114,7 +116,7 @@ chat side menu
 			<div class="panel-collapse collapse in" id="panel-friends">
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
-					<li>
+					<li class="{{#if active}}active{{/if}}">
 						<a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}} 
 							{{#if notification}}
 							<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span> 
@@ -125,7 +127,6 @@ chat side menu
 				</ul>
 			</div>
 			{{#if find_user}}
-			pronto
 
 			{{> user_finder_modal}}
 
@@ -133,7 +134,7 @@ chat side menu
 		</div>
 	</div>
 </template>
-
+<!-- 
 <template name="chatrooms_side_xs">
 	<div class="panel-group" id="collapse">
 		<div class="chatrooms row panel panel-default">
@@ -176,7 +177,7 @@ chat side menu
 		</div>
 	</div>
 </template>
-
+ -->
 <!-- side menu's modals -->
 
 <!-- find/create group -->
@@ -436,3 +437,40 @@ profile
 	Object { name="mmm", lastname="nnn"}
 
 -->
+<template name="public_room_finder">
+	<div class="modal fade" id="public-room-finder-modal" tabindex="-1" role="dialog" aria-labelledby="public-room-finder-ModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="public-room-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
+				</div>
+				<div class="modal-body"><!--content here-->
+					<div clas="find-tool"> 
+						<form action="submit" class="public-room-finder" id="public-room-find-form">
+							
+							<div class="panel panel-group">
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Group name" id="group-name-f" />
+								</div>
+								<div class="rooms list-group">
+									<ul class="list-group-item">
+										{{#each rooms}}
+										<li class="{{#if active}}active{{/if}}">
+											<a href="#" class="chat-room" id="{{_id}}" >{{name}}</a><span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> 
+										</li>
+										{{/each}}
+									</ul>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
+					<input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

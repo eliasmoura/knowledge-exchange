@@ -12,6 +12,13 @@ Meteor.startup(function(){
 	Groups.remove({});
 	Chatrooms.remove({});*/
 	//Accounts.config({forbidClientAccountCreation:true});
+	//console.log(Chatrooms.find().count());
+	if (Chatrooms.find().count() == 0){
+		console.log('adding chatrooms');
+		Chatrooms.insert({"name": "Test", details:"A test room"});
+		Chatrooms.insert({"name": "Test2", details:"A test room"});
+	}
+
 
 });
 
@@ -19,14 +26,17 @@ Accounts.onCreateUser(function(options,user){
 	console.log('onCreateUser');
 	try{
 		// console.log(user.services.password.srp);
+		
+		options.profile.online = true;
+    	options.profile.alway = false;
+	    options.profile.active_room = {type:null,room:null};
 		user.profile = options.profile;
-		user.profile.online = true;
 		// Accounts.setPassword(user._id, user.password);
 		/*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
 			if(error)
 				console.log(error);
 		});*/
-		console.log("User created: " + user.profile.name + " " + user.profile.name);
+		console.log("User created: " + user.profile.name + " " + user.profile.lastname);
 		console.log('sign up ok');
 		return user;
 	}catch(e){

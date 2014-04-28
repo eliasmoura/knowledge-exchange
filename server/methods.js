@@ -137,16 +137,16 @@ Meteor.methods({
 	},
 	create_group: function(name,details,languages, members){
 		if (Groups.findOne({name:name})){
-			throw Meteor.Error(1, 'Group already exist');
+			throw new Meteor.Error(1, 'Group already exist');
 			return false;
 		}
 		if (name.length < 3){
-			throw Meteor.Error(2, 'Group name too short');
+			throw new Meteor.Error(2, 'Group name too short');
 			return false;
 		}
 		if (!details || !languages){
 
-			throw Meteor.Error(1, 'All fields are obrigatório');
+			throw new Meteor.Error(1, 'All fields are obrigatório');
 			return false;
 		}
 		group = Groups.insert({
@@ -159,7 +159,8 @@ Meteor.methods({
 		Meteor.call('setFriend_Non_active');
 		User_Group.insert({group:group,user:this.userId,owner:true,mod:true,active:true}, function(error, result){
 			if(!error){
-				Meteor.call("setUser_activeRoom","group",User_Group.findOne({_id:result}));
+				console.log('Group ' + Groups.findOne({_id:group}).name + " created by " + Meteor.user().profile.name);
+				Meteor.call("setUser_activeRoom","group",group);
 			}else
 				console.log(error);
 		});
@@ -175,29 +176,30 @@ Meteor.methods({
 	send_message: function(message){
 		var name = Meteor.user().profile.name;
 		var lstname = Meteor.user().profile.lastname;
+		var room = Meteor.user().profile.active_room;
 		var userid = this.userId;
 
 		var user_chatroom = User_Chatroom.findOne({user:this.userId, active:true});
 		var user_group = User_Group.findOne({user:this.userId, active:true});
-		var privatechat = PrivateChat.findOne({user:this.userId, active:true});
+		
 
-		if (user_chatroom != undefined){
+		if (room.type == "public"){
 			Messages.insert({
 					name: name,
 					lstname: lstname,
 					userid: userid,
 					message: message,
-					room:user_chatroom.room,
+					room:room.room,
 					time: Date.now(),
 				});
 		}
-		else if (user_group != undefined){
+		else if (room.type == "group" ){
 			GroupChat.insert({
 					name: name,
 					lstname: lstname,
 					userid: userid,
 					message: message,
-					groupchat:user_group.group,
+					groupchat:room.room,
 					time: Date.now(),
 				});
 				User_Group.find({group:user_group.group, active:false}).forEach(function(row){
@@ -205,7 +207,8 @@ Meteor.methods({
 					console.log('setting inc group');
 				})
 		}	
-		else if (privatechat != undefined){
+		else if (room.type == "privatechat"){
+			var privatechat = PrivateChat.findOne({_id:room.room});
 			var privatechat_2 = PrivateChat.findOne({user:privatechat.contact, contact:privatechat.user});
 			var privatechats = [privatechat._id, privatechat_2._id];
 			var messageiD = PrivateMessages.insert({
@@ -305,6 +308,28 @@ Meteor.methods({
 			var request = UserRequest.findOne({_id:request,request_to:this.userId});
 			Meteor.call("setUser_relation",{request:request,relation:1,operation:1});
 		}
+	},
+	find: function(search){
+		var result = null;
+		check(search, Object);
+
+		if (search.user != undefined){
+			if(search.user.name)
+				result = Meteor.users.find( { "profile.name": { $regex: search.user.name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
+			if(search.user._id)
+				result = Meteor.users.findOne({_id:search.user._id}, {fields:{_id:1,profile:1}});
+		}else if (search.group  != undefined){
+			if(search.group.name)
+				result = Groups.find( { name: { $regex: search.group.name, $options: 'i' } }).fetch();
+			if(search.group._Id)
+				result = Groups.findOne({_id:search.group._id});
+		}else if (search.any != undefined){
+			var groupsResults = Groups.find( { name: { $regex: search.group.name, $options: 'i' } }).fetch();
+			var usersResults = Meteor.users.find( { "profile.name": { $regex: user.user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
+			result = {groups:groupsResults, users:usersResults};
+		}
+		
+		return result;
 	},
 	clean_db: function(){
 		Correction.remove({});

@@ -23,13 +23,13 @@ Router.map( function() {
 		fastRender: true,
 	    waitOn: function(){
 	    	return [
-	    		Meteor.subscribe("chat-messages", Meteor.user().profile.active_room),
-	    		Meteor.subscribe("user-groups"),
 	    		Meteor.subscribe("chatrooms-list"),
 	    		Meteor.subscribe("user-chatroom-list"),
 	    		Meteor.subscribe("privatechat"),
+	    		Meteor.subscribe("chat-messages", Meteor.user().profile.active_room),
 		    	Meteor.subscribe("chat-corrections",Meteor.user().profile.active_room),
-		    	Meteor.subscribe("user-groups-list"),
+		    	Meteor.subscribe("user-groups"),
+		    	Meteor.subscribe("user-groups-list", User_Group.find({user:Meteor.userId()}).fetch()),
 		    	Meteor.subscribe("languages-list"),
 		    	Meteor.subscribe("requests"),
 		    	Meteor.subscribe("requests-invite"),
@@ -38,13 +38,13 @@ Router.map( function() {
 	    	];
 	    },
 	    onBeforeAction:function(){
-	    	/*if (!Meteor.user()) {
+	    	if (!Meteor.user()) {
 		        // render the login template but keep the url in the browser the same
 		        this.render('notFound');
 
 		        // stop the rest of the before hooks and the action function 
 		        this.pause();
-		      }*/
+		      }
 		      
 	    },
 	    onAfterAction:function(){
@@ -114,12 +114,18 @@ Router.map( function() {
 	    },
 	    data:
 	    {
-	    	roomactive: function(room){
-	    		var room = User_Chatroom.findOne({user:Meteor.userId(), room:room});
-	    		return room.active;
-	    	},
 	    	rooms: function(){
-	    		return Chatrooms.find({}, {sort: {name: +1}}).fetch();
+	    		// console.log(Chatrooms.find({}, {sort: {name: +1}}).fetch());
+	    		var rooms = Chatrooms.find({}, {sort: {name: +1}}).fetch();
+	    		// console.log(rooms);
+	    		var roomsArray = new Array();
+	    		rooms.forEach(function(row){
+	    			var userRom = User_Chatroom.findOne({room:row._id,user:Meteor.userId()});
+	    			if (userRom != undefined)
+	    				row.active = userRom.active;
+	    			roomsArray.push(row);
+	    		})
+	    		return roomsArray;
 	    	},
 	    	room: function(){
 	    		try{
@@ -138,8 +144,8 @@ Router.map( function() {
     				}
 	    			return room;
 	    		}catch (e){
-	    			//console.log(e);
-	    			//return 'none';
+	    			console.log(e);
+	    			return false;
 	    		}
 	    	},
 	    	chat_users: function(){
@@ -176,22 +182,30 @@ Router.map( function() {
 	    		var users_relations = UsersRelations.find({}).fetch();
 	    		var users_relationsArray = new Array();
 	    		users_relations.forEach(function(row){
-	    			users_relationsArray.push(row.contact);
+	    			var privatechat = PrivateChat.findOne({contact:row.contact});
+	    			var user = Meteor.users.findOne({_id:row.contact});
+	    			try{
+		    			user.notification = privatechat.new_messages;
+		    			user.active = privatechat.active;
+	    			}catch(e){}
+	    			users_relationsArray.push(user);
 	    		});
-	    		
+	    		/*
 	    		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();;
 		    	var privatenotificationsArray = {};
+		    	console.log(privatechatnotifications);
 		    	privatechatnotifications.forEach(function(row){
+
 		    		privatenotificationsArray[row.contact] = row.new_messages;
 		    	});
-
+		    	// console.log(privatenotificationsArray);
 		    	var users = new Array();
 		    	Meteor.users.find({_id:{$in:users_relationsArray}}).fetch().forEach(function(row){
 		    		row.notification = privatenotificationsArray[row._id];
 		    		users.push(row);
-		    	});
+		    	});*/
 
-	    		return users;
+	    		return users_relationsArray;
 	    	},
 	    	emails_notifications: function(){
 	    		return false;
@@ -240,20 +254,30 @@ Router.map( function() {
 	    		return messagesArray;
 	    	},
 	    	group_rooms:function(){
-	    		var user_groups = User_Group.find({user: Meteor.userId()}, {fields:{group:1,new_messages:1}}).fetch();
+	    		var user_groups = User_Group.find({user: Meteor.userId()}).fetch();
+	    		// console.log(user_groups);
 	    		var groupsArray = new Array();
+	    		// var groups = new Array();
 	    		user_groups.forEach(function(row){
-	    			groupsArray.push(row.group);
+	    			// console.log(row);
+	    			var group = Groups.findOne({_id:row.group});
+	    			// console.log(group);
+	    			if(group != undefined){
+	    				group.notification = row.new_messages;
+		    			group.active = row.active;
+		    			// console.log(group);
+		    			groupsArray.push(group);
+	    			}
 	    		});
 
-	    		var groups = new Array();
-	    		Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
+	    		
+	    		/*Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
 	    			row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
 	    			groups.push(row);
-	    		});
+	    		});*/
 	    		//console.log(groups);
-
-	    		return groups;
+	    		//console.log(groupsArray);
+	    		return groupsArray;
 	    	},
 	    	group_manage: function(){
 	    		var user_groups = User_Group.find({user: Meteor.userId(),mod:true}, {fields:{group:1}}).fetch();

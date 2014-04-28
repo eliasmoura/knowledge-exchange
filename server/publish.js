@@ -51,23 +51,29 @@ Meteor.publish("privatemessages",function(privatechat){
 
 Meteor.publish("user-chatroom-list", function(){
 	var chatrooms = User_Chatroom.find({user:this.userId});
-	var userChatroomsList = new Array();
+	/*var userChatroomsList = new Array();
 	if (chatrooms) 
 		chatrooms.fetch().forEach(function(row){
 			userChatroomsList.push(row.room);
 		});
-	chatrooms = User_Chatroom.find({room:{$in:userChatroomsList}});
+	chatrooms = User_Chatroom.find({room:{$in:userChatroomsList}});*/
 	return chatrooms;
 });
 
 Meteor.publish("chatrooms-list", function(){
+	//console.log(Chatrooms.find().fetch());
 	return Chatrooms.find({});
 });
 
 Meteor.publish("user-chatroom-active", function(){
 	return User_Chatroom.find({user:this.userId, active:true});
 });
+
 Meteor.publish("chat-messages", function(active_room){
+	if(active_room.type == null){
+		console.log('no room active');
+		return Messages.find({room:active_room.room}, {sort: {time: +1}})
+	}
 	if(active_room.type == "public")
 		return Messages.find({room:active_room.room}, {sort: {time: +1}});
 	if(active_room.type == "group")
@@ -76,22 +82,19 @@ Meteor.publish("chat-messages", function(active_room){
 		return PrivateMessages.find({chat:active_room.room}, {sort: {time: +1}});
 });
 
-Meteor.publish("chat-message", function(messageId){
-	return Messages.find({_id: {$in:messageId}});
-});
 
 
 
 
-
-Meteor.publish("user-groups-list", function(){
-	var groups = User_Group.find({user:this.userId});
+Meteor.publish("user-groups-list", function(groups){
+	// var groups = User_Group.find({user:this.userId});
 	var userGroupsList = new Array();
 	if (groups)
-		groups.fetch().forEach(function(row){
+		groups.forEach(function(row){
 			userGroupsList.push(row.group);
 		});
 	groups = Groups.find({_id: {$in: userGroupsList}});
+	// console.log(Groups.find({_id: {$in: userGroupsList}}).fetch());
 	return groups;
 });
 Meteor.publish("groups-list", function(user){
@@ -132,29 +135,32 @@ Meteor.publish("correction", function(messageId){
 Meteor.publish("chat-corrections", function(active_room){
 	var messagesArray = [];
 	var messages = null;
-	
+	if (active_room.type != null)
+	{
+		/*if (active_room.type == "public"){
+			messages = Messages.find({room:active_room.room});
+			console.log('c_chat');
+		}
+		else if (active_room.type == "group"){
+			try{
+			messages = GroupChat.find({groupchat:active_room.room});
+			}catch(e){console.log(e);}
+			console.log('c_group');
+		}	
+		else if (active_room.type == "privatechat"){
+			messages = PrivateMessages.find({chat:active_room.room});
+			console.log('c_privatechat');
+		}
+		if (messages)
+		messages.forEach(function(row){
+			messagesArray.push(row._id);
+		});*/
 
-	if (active_room.type == "public"){
-		messages = Messages.find({room:active_room.room});
-		console.log('c_chat');
+		var corrections = Correction.find({room: active_room.room});
+	}else{
+		console.log("no room active")
+		return Correction.find({room: active_room.room});
 	}
-	else if (active_room.type == "group"){
-		try{
-		messages = GroupChat.find({groupchat:active_room.room});
-		}catch(e){console.log(e);}
-		console.log('c_group');
-	}	
-	else if (active_room.type == "privatechat"){
-		messages = PrivateMessages.find({chat:active_room.room});
-		console.log('c_privatechat');
-	}
-	if (messages)
-	messages.forEach(function(row){
-		messagesArray.push(row._id);
-	});
-
-	var corrections = Correction.find({room: active_room.room});
-	console.log(Correction.find({room: active_room.room}).fetch());
 	return corrections;
 });
 
