@@ -20,6 +20,22 @@ div.container#chat-messages
 {
     overflow-y: auto;
 }
+.online
+{
+    color: #18CE16;
+}
+.offline
+{
+    color:#7E7C7C;
+}
+.alway
+{
+    color: #F2974C;
+}
+.busy
+{
+    color: #BB0019;
+}
 
 
 /* @font-face {
@@ -124,6 +140,7 @@ div.chatroon-name{
 .context-menu-item {
     -moz-user-select: none;
     /*background-color: #EEEEEE;*/
+    display: block;
     padding: 2px 2px 2px 24px;
     position: relative;
     min-width: 100px;

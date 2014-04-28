@@ -77,7 +77,7 @@ chat side menu
 				<h4 class="panel-title">
 					<a class="panel-rooms" data-toggle-to="panel-groups" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'group_chats' 'Groups'}}:</a>
 					<span class="btn-group-xs">
-						<span id="add-find-chat" class="plus glyphicon glyphicon-plus btn btn-default" title="add/find a chat group"></span>
+						<span id="add-find-chat" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-find-group' 'Add/Find a chat group'}}"></span>
 					</span>
 					{{#if find_chat_group}}
 					{{> group_chat_finder}}
@@ -90,6 +90,9 @@ chat side menu
 					<li class="{{#if active}}active{{/if}}">
 						<a  href="#" class="chat-group" id="{{_id}}" >
 							{{name}}
+							<span class="btn-group-xs">
+								<span class="group glyphicon glyphicon-cog btn btn-default navbar-right" title="{{mf 'manage-group' 'Group managenment'}}"> </span>
+							</span>
 							{{#if notification}}
 							<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span>
 							{{/if}}
@@ -117,7 +120,9 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
 					<li class="{{#if active}}active{{/if}}">
-						<a href="#" class="friends-contacts" id="{{_id}}" >{{profile.name}} 
+						<a href="#" class="friends-contacts {{#if profile.online}}online{{else}}offline{{/if}} {{#if profile.alway}}alway{{/if}}" id="{{_id}}" >
+							<span class="user glyphicon glyphicon-user"> </span>
+							{{profile.name}} 
 							{{#if notification}}
 							<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span> 
 							{{/if}}
@@ -308,7 +313,9 @@ chat side menu
 <template name="users_chatroom">
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
 	{{#each chat_users}}
-	<label class="username col-xs-12 " id="{{user._id}}">{{user.profile.name}}</label>
+	<label class="username col-xs-12 " id="{{_id}}">
+		<span class="user glyphicon glyphicon-user {{#if profile.online}}online{{else}}offline{{/if}} {{#if profile.alway}}alway{{/if}}"> </span> {{profile.name}}
+	</label>
 	{{/each}}
 </template>
 

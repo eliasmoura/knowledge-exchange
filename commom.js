@@ -87,12 +87,12 @@ Router.map( function() {
 				});
 			}
 			if(modal_action.action =="profile"){
-				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
 						Session.set("user_modal_actions",{
 							profile:true,
-							action: "Report user",
-							name:users.profile.name,
+							action: users.profile.name + " " +users.profile.lastname,
+							user:users.profile,
 							_id:users._id,
 						});
 					}
@@ -110,6 +110,7 @@ Router.map( function() {
 					}
 				});
 			}
+			
 	    	
 	    },
 	    data:
@@ -151,32 +152,22 @@ Router.map( function() {
 	    	chat_users: function(){
 	    		var room = Meteor.user().profile.active_room;
     			var userlist = new Array();
+    			Deps.autorun(function(){
+    				var result = Meteor.call("user_list", room,function(error,result){
+    					if(!error){
+    						//userlist.push(result);
+    						//console.log(userlist);
+    						// if(room.type == "public")
+    						// 	result = result.sort({"profile.online":1,"profile.name":1}).fetch();
+    						Session.set("chat_users", result);
+    						//return result;
+    					}
+    				});
+    			})
 
-
-    			if (room.type == "public"){
-    				// console.log(User_Chatroom.find({room:room.room}).fetch());
-    				User_Chatroom.find({room:room.room, active:true},
-						{sort: {time: -1}}).fetch().forEach(function(row){
-							userlist.push({user:Meteor.users.findOne({_id:row['user']})});
-					});	
-    			}
-    			else if (room.type == "group"){
-
-    				User_Group.find({group:room.room, active:true})
-    					.fetch()
-    					.forEach(function(row){
-							userlist.push({user:Meteor.users.findOne({_id:row['user']})});
-					});	
-    			}	
-				else if (room.type == "privatechat"){
-					var user  = PrivateChat.findOne({_id:room.room}).contact;
-					user = Meteor.users.findOne({_id:user});
-					userlist.push({user:Meteor.user()});
-					userlist.push({user:user});
-				}
 				/*console.log(userlist);
 				console.log(room);*/
-				return userlist;
+				return Session.get("chat_users");
 	    	},
 	    	contacts: function(){
 	    		var users_relations = UsersRelations.find({}).fetch();
@@ -308,7 +299,15 @@ Router.map( function() {
 
 	    		if(groupsRequests_Participation)
 		    		groupsRequests_Participation.fetch().forEach(function(row){
-		    			participationArray.push({user:{_id:row.user}, group:row });
+		    			Meteor.call("find",{user:{_id:row.user}}, function(error,result){
+		    				if(!error){
+		    					
+		    					Session.set("participationArray", result);
+		    					//console.log(participationArray);
+		    				}
+		    			});
+		    			participationArray.push({user:Session.get("participationArray"), group:row });
+		    			
 		    		});
 
 	    		if(groupsRequests_Invitation)
@@ -322,7 +321,7 @@ Router.map( function() {
 		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
 		    		});
 		    	if (total != 0){
-		    		console.log(invitationsArray);
+		    		// console.log(invitationsArray);
 		    		return {
 		    			requests:
 		    				{

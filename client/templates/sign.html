@@ -69,6 +69,10 @@
 							<input type="text" class="form-control" id="lastname_registerform" />
 						</div>
 						<div class="form-group">
+							<label for="birthday_registerform">{{mf 'birthday' 'Birthday'}}:</label>
+							<input type="date" class="form-control" id="birthday_registerform" />
+						</div>
+						<div class="form-group">
 							<label for="country_registerform">{{mf 'country' 'Country'}}:</label>
 							<input type="text" class="form-control" id="country_registerform" />
 						</div>
@@ -77,12 +81,24 @@
 							<input type="text" class="form-control" id="city_registerform" />
 						</div>
 						<div class="form-group">
-							<label for="native_registerform">{{mf 'native' 'Native Language'}}:</label>
-							<input type="text" class="form-control" id="native_registerform" />
+							<label for="native_registerform">{{mf 'native' 'Native Language'}}: </label>
+							<select name="native_registerform" id="native_registerform">
+								{{#each lang_list}}
+									<option value="{{lang}}">{{lang}}</option>
+								{{/each}}
+							</select>
 						</div>
 						<div class="form-group">
-							<label for="learn_registerform">{{mf 'learning' 'Learning Language'}}:</label>
-							<input type="text" class="form-control" id="learn_registerform" />
+							<label for="learn_registerform">{{mf 'learning' 'Learning Language'}}: </label>
+							<span class="btn-group-xs">
+								<span id="add-more-languages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
+							</span>
+							<select name="learn_registerform" class="learning-language">
+								<option value="0">{{mf 'select' 'Select'}}</option>
+								{{#each lang_list}}
+									<option value="{{lang}}">{{lang}}</option>
+								{{/each}}
+							</select>
 						</div>
 						<div class="form-group">
 							<label for="email_registerform">{{mf 'email'}}:</label>
@@ -101,7 +117,7 @@
 		    </div>
 		    <div class="modal-footer">
 		    	<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close' 'Close'}}</button>
-		        <button type="button" class="register-btn btn btn-primary" id="crrbutton_save">{{mf 'sing_up' 'Sign up'}}</button>
+		        <button type="button" class="register-btn btn btn-primary" id="register-btn">{{mf 'sing_up' 'Sign up'}}</button>
 		    </div>
 		    </div>
 		  </div>

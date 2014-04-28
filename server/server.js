@@ -48,9 +48,9 @@ Accounts.onCreateUser(function(options,user){
 Hooks.onLoggedIn = function (userId) {
     // this runs right after a user logs in, on the client or server
     var user = OnlineUsers.findOne({user:userId});
-    Meteor.users.update({_id:Meteor.userId()},{$set:{online:true}});
-    Meteor.users.update({_id:Meteor.userId()},{$set:{alway:false}});
-    console.log("User: " + Meteor.user().profile.name + " logged in");
+    Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":true}});
+    Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+    console.log("User: " + Meteor.user().profile.name + " logged in. Status: " + Meteor.user().profile.online);
     if (user != undefined ) {
     	OnlineUsers.insert({
 			user:userId
@@ -59,28 +59,30 @@ Hooks.onLoggedIn = function (userId) {
 }
 Hooks.onLoggedOut = function (userId) {
     // this runs right after a user logs out, on the client or server
-	Meteor.users.update({_id:Meteor.userId()},{$set:{online:true}});
-	Meteor.users.update({_id:Meteor.userId()},{$set:{alway:false}});
-	console.log("User: " + Meteor.user().profile.name + " logged out");
-    Meteor.call('setRoom_Non_active');
+	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
+	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+	console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.online);
+    /*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
-	Meteor.call('setFriend_Non_active');
+	Meteor.call('setFriend_Non_active');*/
 }
 
 Hooks.onCloseSession = function (userId) {
-	Meteor.users.update({_id:Meteor.userId()},{$set:{online:true}});
-	console.log("User: " + Meteor.user().profile.name + " closed the session");
-	Meteor.call('setRoom_Non_active');
+	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
+	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+	console.log("User: " + Meteor.user().profile.name + " closed the session. Status: " + Meteor.user().profile.online);
+	/*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
-	Meteor.call('setFriend_Non_active');
+	Meteor.call('setFriend_Non_active');*/
 }
 
 Hooks.onGainFocus = function () {
-	Meteor.users.update({_id:Meteor.userId()},{$set:{alway:false}});
+	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
 }
 
 Hooks.onLoseFocus = function () {
-	Meteor.users.update({_id:Meteor.userId()},{$set:{alway:false}});
+	console.log('lose focus');
+	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":true}});
 }
 
 Hooks.onDeleteUser = function () {

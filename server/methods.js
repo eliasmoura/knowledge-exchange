@@ -16,8 +16,8 @@ Meteor.methods({
 	},
 	setUser_activeRoom: function(type,roomId){
 		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.active_room":{type:type,room:roomId}}},function(error,docs){
-				if(!error)
-					console.log(docs);
+				if(!error);
+					// console.log(docs);
 				else
 					console.log(error);
 			});
@@ -87,7 +87,7 @@ Meteor.methods({
 	setFriend_active: function(friend){
 		if(!Meteor.user())return "You must be logged!";
 		var user = this.userId;
-		console.log(friend);
+		//console.log(friend);
 		var privatechat = PrivateChat.findOne({contact:friend,user:user});
 		Meteor.call('setRoom_Non_active');
 		Meteor.call('setGroup_Non_active');
@@ -179,10 +179,6 @@ Meteor.methods({
 		var room = Meteor.user().profile.active_room;
 		var userid = this.userId;
 
-		var user_chatroom = User_Chatroom.findOne({user:this.userId, active:true});
-		var user_group = User_Group.findOne({user:this.userId, active:true});
-		
-
 		if (room.type == "public"){
 			Messages.insert({
 					name: name,
@@ -202,7 +198,7 @@ Meteor.methods({
 					groupchat:room.room,
 					time: Date.now(),
 				});
-				User_Group.find({group:user_group.group, active:false}).forEach(function(row){
+				User_Group.find({group:room.room, active:false}).forEach(function(row){
 					User_Group.update({_id:row._id},{$inc:{new_messages:1}});
 					console.log('setting inc group');
 				})
@@ -323,6 +319,15 @@ Meteor.methods({
 				result = Groups.find( { name: { $regex: search.group.name, $options: 'i' } }).fetch();
 			if(search.group._Id)
 				result = Groups.findOne({_id:search.group._id});
+			
+			result.forEach(function(group){
+				group.owner = Meteor.users.findOne({_id:User_Group.findOne({group:group._id, owner:true}).user}, {fields:{_id:1,profile:1}});	
+				group.actions = {send_request:true};
+				if (User_Group.findOne({user:Meteor.userId(),group:group._id}))
+					group.actions.send_request = false;
+			})
+			// console.log(result);
+
 		}else if (search.any != undefined){
 			var groupsResults = Groups.find( { name: { $regex: search.group.name, $options: 'i' } }).fetch();
 			var usersResults = Meteor.users.find( { "profile.name": { $regex: user.user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
@@ -330,6 +335,38 @@ Meteor.methods({
 		}
 		
 		return result;
+	},
+	user_list: function(room){
+		check(room, Object)
+		var userList =  new Array();
+		if (room.type == "public"){
+			//console.log("searching room");
+			User_Chatroom.find({room:room.room, active:true}).forEach(function(row){
+				//console.log(row);
+				userList.push(row.user);
+			});
+			userList = Meteor.users.find({_id:{$in: userList}}, 
+				{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}},
+				{sort:{"profile.online":-1,"profile.name":-1}}).fetch();
+		}else if (room.type == "group"){
+			User_Group.find({group:room.room})
+				.fetch()
+				.forEach(function(row){
+					userList.push(row.user);
+			});	
+				userList = Meteor.users.find({_id:{$in: userList}}, 
+					{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}},
+					{sort:{"profile.online":-1,"profile.name":-1}
+				}).fetch();
+		}	
+		else if (room.type == "privatechat"){
+			var user  = PrivateChat.findOne({_id:room.room}).contact;
+			user = Meteor.users.findOne({_id:user}, {fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}});
+			userList.push(Meteor.user());
+			userList.push(user);
+		}
+		// console.log(userList);
+		return userList;
 	},
 	clean_db: function(){
 		Correction.remove({});

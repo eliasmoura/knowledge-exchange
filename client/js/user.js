@@ -35,6 +35,8 @@ Template.user.events({
 	},
 	'click a#logoutButton': function(){
 		console.log("logging out");
+		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
+		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
 		Meteor.logout();
 		Session.set("currentUser",Meteor.user());
 		console.log("logged out");
@@ -88,11 +90,19 @@ Template.login_form.events = {
 }
 Template.register_form.rendered = function(){
 	$('#registerModal').modal("toggle");
-	$('#registerModal').on("hidden.bs.modal", function(){
+	/*$('#registerModal').on("hidden.bs.modal", function(){
 			Session.set('login', true);
-	});
+	});*/
 }
 
+Template.register_form.destroyed = function(){
+	$('#registerModal').modal("hide");
+	//$('.modal-backdrop').destroy();
+	Session.set('first-login', true);
+}
+Template.user.first_login = function(){
+	return Session.get("first-login");
+}
 Template.register_form.events({
 	'click button.register-btn': function(e, t){
 		
@@ -106,6 +116,18 @@ Template.register_form.events({
 		var email = t.find('#email_registerform').value;
 		var passwdch = t.find('#passwdcheck_registerform').value;
 		var passwd = t.find('#passwd_registerform').value;
+		var country = t.find('#country_registerform').value;
+		var city = t.find('#city_registerform').value;
+		var nativeLang = t.find('#native_registerform option:selected').text;
+		var lernginlanguages = t.findAll('.learning-language option:selected');
+		var langs = new Array();
+
+		if (lernginlanguages.length > 1)
+			lernginlanguages.forEach(function(){
+				langs.push({lang:$(this).text()});
+			});
+		else
+			langs = {lang:lernginlanguages[0].text};
 
 		email = trimInput(email);
 		if (!isValidPassword(passwd)) return false;;
@@ -114,8 +136,15 @@ Template.register_form.events({
 		{
 			email:email,
 			password:passwd,
-			profile: {name:name,
-			lastname:lastname,}
+			profile: 
+			{
+				name:name,
+				lastname:lastname,
+				country:country,
+				city:city,
+				nativelang:nativeLang,
+				learninglanguages:langs
+			}
 		});
 		/*Meteor.call("sign_up",email,passwd,name,lastname,function(error, res){
 			if(!error)	{
@@ -124,7 +153,7 @@ Template.register_form.events({
 			console.log(error);
 			return "error sign up"
 		})*/
-		$('#registerModal').modal("toggle");
+		$('#registerModal').modal("hide");
 	}
 });
 
@@ -255,21 +284,21 @@ $(function(){
         selector: '.username',
         build: function($trigger, e){
         	var items_menu = {
-  				"profile": {name: "See user profile", icon: "profile"}
+  				"profile": {name: " Profile", icon: "profile glyphicon glyphicon-user"}
 			};
 			var user = UsersRelations.findOne({contact:$trigger.attr("id")});
 			if($trigger.attr("id") != Meteor.userId()){	
-	        	items_menu.email = {name: "Send an email", icon: "email"};
+	        	items_menu.email = {name: " Email", icon: "email  glyphicon glyphicon-envelope"};
 	        	if (!user)
-	        		items_menu.contact = {name: "Add to Contacts", icon: "contact"};
+	        		items_menu.contact = {name: " Add to Contacts", icon: "contact glyphicon glyphicon-plus"};
 	        		
-	        	items_menu.private = {name: "Private Chat",icon: "chat"};
-	        	items_menu.group = {name: "Invite to a Group",icon: "group"};
+	        	items_menu.private = {name: " Chat",icon: "chat glyphicon glyphicon-comment"};
+	        	items_menu.group = {name: " Invite to a Group",icon: "group"};
 	        	items_menu.sep1 = "---------";
 	        	if (items_menu.contact === undefined)
-	        		items_menu.rcontact = {name: "Remove from Contacts", icon: "remove"};
-	        	items_menu.block = {name: "Block user", icon: "block"};
-	        	items_menu.report = {name: "Report Abuse", icon: "report"};
+	        		items_menu.rcontact = {name: " Remove Contact", icon: "remove glyphicon glyphicon-remove"};
+	        	items_menu.block = {name: " Block user", icon: "block-user glyphicon glyphicon-remove-sign"};
+	        	items_menu.report = {name: " Report Abuse", icon: "report-user glyphicon glyphicon-flag"};
 	        }
 
         	return {

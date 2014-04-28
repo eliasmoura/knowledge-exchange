@@ -118,7 +118,7 @@ Template.group_chat_finder.events({
 			if (groupname.length < 4){
 				return false;
 			}
-			var groups = new Array();
+			/*var groups = new Array();
 			Groups.find( { name: { $regex: groupname, $options: 'i' } } ).fetch().forEach(function(row){
 				row.owner = false;
 				row.user = {};
@@ -131,9 +131,15 @@ Template.group_chat_finder.events({
 				if (User_Group.findOne({user:Meteor.userId(),group:row._id}))
 					row.actions.send_request = false;
 				groups.push(row);
-			});
-			console.log(groups);
-			Session.set('groups-found',groups);
+			});*/
+			Meteor.call("find", {group:{name:groupname}}, function(error,result){
+				if(!error){
+					//console.log(result);
+					Session.set('groups-found',result);		
+				}
+			})
+			// console.log(groups);
+			
 		}else{
 			var groupname = t.find("#group-name-c").value;
 			if(groupname != ""){
@@ -183,20 +189,22 @@ Template.find_group.created =function(){
 }
 Template.find_group.group = function(){
 	var groups = Session.get('groups-found');
-	console.log(groups);
+	//console.log(groups);
 	return groups;
 }
 Template.find_group.events({
 	'click span.send-request': function(event, template){
 		var groupId = event.target.id;
 		console.log('prepering the request');
-		var group = Groups.findOne({_id:groupId});
 		var message = 'Some thing to say :)';
-		if (group){
-			Meteor.call("participation_request", group._id, message);
-			console.log('request sent');
-		}
-		else console.log('request not sent');
+		Meteor.call("participation_request", groupId, message,function(error,result){
+			if(!error)
+				console.log('request sent');
+			else
+				console.log('request not sent');
+		});
+		
+		
 	}
 });
 /*
@@ -266,14 +274,14 @@ $(function(){
             }
         },
         items: {
-            "edit": {name: "Edit", icon: "edit"},
-            "cut": {name: "Cut", icon: "cut"},
-            "copy": {name: "Copy", icon: "copy"},
-            "paste": {name: "Paste", icon: "paste"},
-            "delete": {name: "Delete", icon: "delete"},
-            "correction": {name: "Correction",icon: "correction"},
-            "sep1": "---------",
-            "quit": {name: "Quit", icon: "quit"}
+            "edit": {name: " Edit", icon: "edit glyphicon glyphicon-pencil"},
+            // "cut": {name: "Cut", icon: "cut"},
+            "copy": {name: " Copy", icon: "copy"},
+            // "paste": {name: "Paste", icon: "paste"},
+            "delete": {name: " Delete", icon: "delete glyphicon glyphicon-trash"},
+            "correction": {name: " Correction",icon: "correction glyphicon glyphicon-ok"},
+            // "sep1": "---------",
+            // "quit": {name: "Quit", icon: "quit"}
         }
     });
     
