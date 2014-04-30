@@ -2,8 +2,8 @@
 
 ##CHAT
 *Public chat
-	..*enter
-	..*send messages
+  ..*enter
+  ..*send messages
 
 
 
