@@ -14,8 +14,13 @@
       Session.set('displayMessage', null);
     }
   });**/
-Hooks.init();
 Meteor.startup(function(){
+    Hooks.init({updateFocus:3000});
+    if(Meteor.user())
+        Session.set('locale', 'en');
+    else
+        Session.set('locale', 'en');
+    
     Session.set('login', true);
     Session.set('group-finder', false);
     Session.set("add_ser",false);
@@ -51,6 +56,15 @@ Template.navbar.events({
         $("#navbar-nav").removeClass("in")
     }
 })
+
+Hooks.onGainFocus = function () {
+    Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+}
+
+Hooks.onLoseFocus = function () {
+    console.log('lose focus');
+    Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":true}});
+}
 
 UI.registerHelper(
     "lang_list", function(){

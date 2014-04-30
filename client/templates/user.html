@@ -141,17 +141,54 @@
 <template name="user_finder">
 	<div class="users-found panel panel-default">
 		{{#each user_found}}
-			<div class="user-found" id="{{_id}}">
-				<h4>{{profile.name}} {{profile.lastname}}<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> </h4>
-				<!--Owner:<label id="owner._id"> {{owner.profile.name}} </label>-->
-				<div class="group panel panel-default">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a class="panel-group" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
-						</h4>
-					</div>
-					<div class="panel-collapse collapse out" id="panel-group">
-						<p class="group" id="{{_id}}" >	{{details}}</p>
+			<div class="user-found panel panel-defaul" id="{{_id}}">
+				<div class="panel-heading">
+					<h4 class="panel-title">{{profile.name}} {{profile.lastname}}
+						<span class="btn-group-xs">
+							<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}" title="{{mf 'invite-friendship' 'Sen a friendship request'}}"></span> 
+						</span>
+					</h4>
+					<!--Owner:<label id="owner._id"> {{owner.profile.name}} </label>-->	
+				</div>
+				<div class="panel-body">
+					<div class="user panel panel-info">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse out" id="panel-group">
+								<div class="panel panel-info">
+									<div class="panel-heading"> {{mf 'user-info' 'User basic info'}}:</div>
+									<div class="panel-body">
+										<div class="col-xs-6 col-md-3">
+										    <a href="#" class="thumbnail">
+										    	<img data-src="holder.js/300x200" alt="">
+										    </a>
+										</div>
+										<div>
+										<a href="www.google.com.br/#q={{user_modal.user.city}}">{{user.city}}</a>, <a href="www.google.com.br/#q={{user.country}}">{{user.country}}</a>
+
+										<label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <span>{{user.birthday}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-info">
+								<div class="panel-heading"> {{mf 'user-languages' 'User languages info'}}:</div>
+								<div class="panel-body">
+									<label for="know">{{mf 'know' 'Know'}}:</label>
+									<div class="know">
+										<div><a href="www.google.com.br/#q={{user.nativelang}}">{{user.nativelang}}</a></div>
+									</div>
+									<label for="learning">{{mf 'learning' 'Learning'}}:</label>
+									<div class="learning">
+										{{#each user.learninglanguages}}
+										<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a></div>
+										{{/each}}
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -176,7 +213,7 @@
 		    			<input type="radio" name="request-friendship-radio" id="request-friendship-check-contact">
 		    			<label for="request-friendship-check-contact">{{mf 'contact' 'contact'}}</label>
 		    			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-teacher">
-		    			<label for="request-friendship-check-teacher">{{mf 'teacher' 'Teacehr'}}</label>
+		    			<label for="request-friendship-check-teacher">{{mf 'teacher' 'Teacher'}}</label>
 		    			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-student">
 		    			<label for="request-friendship-check-student">{{mf 'student' 'Student'}}</label>
 
@@ -238,14 +275,14 @@
 </template>
 <template name="user_invite_request">
 	<form action="submit" id="user-invite-request-form">
-		<label for="user-name">{{mf 'user' 'User'}}:</label><input type="text" class="form-control" name="user-name" placeholder="{{mf 'user'}}" value="{{user_modal.name}}" id="{{user_modal._id}}">
+		<label for="user-name">{{mf 'user' 'User'}}:</label><input type="text" class="form-control" name="user-name" placeholder="{{mf 'user'}}" value="{{user_modal.user.name}} {{user_modal.user.lastname}}" id="{{user_modal._id}}">
 		<div>
 			<input type="radio" name="request-friendship-radio" id="request-friendship-check-friend" class="user-form">
 			<label for="request-friendship-check-friend">{{mf 'friend' 'Friend'}}</label>
 			<input type="radio" name="request-friendship-radio" id="request-friendship-check-contact" class="user-form">
 			<label for="request-friendship-check-contact">{{mf 'contact' 'contact'}}</label>
 			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-teacher" class="user-form">
-			<label for="request-friendship-check-teacher">{{mf 'teacher' 'Teacehr'}}</label>
+			<label for="request-friendship-check-teacher">{{mf 'teacher' 'Teacher'}}</label>
 			<input type="checkbox" name="request-friendship-check" id="request-friendship-check-student" class="user-form">
 			<label for="request-friendship-check-student">{{mf 'student' 'Student'}}</label>
 		</div>

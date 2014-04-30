@@ -42,8 +42,8 @@ mfPkg.addNative(
     "file": "./client/templates/chatroons.html",
     "line": 80,
     "template": "chatrooms",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "manage-group": {
     "key": "manage-group",
@@ -51,8 +51,8 @@ mfPkg.addNative(
     "file": "./client/templates/chatroons.html",
     "line": 94,
     "template": "chatrooms",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "friends_contacts": {
     "key": "friends_contacts",
@@ -94,7 +94,7 @@ mfPkg.addNative(
     "key": "details",
     "text": "Details",
     "file": "./client/templates/user.html",
-    "line": 147,
+    "line": 157,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -211,7 +211,7 @@ mfPkg.addNative(
     "key": "message",
     "text": "Message",
     "file": "./client/templates/user.html",
-    "line": 250,
+    "line": 289,
     "template": "user-profile",
     "ctime": 1397014212330,
     "mtime": 1397014212330
@@ -369,11 +369,20 @@ mfPkg.addNative(
     "ctime": 1396799101552,
     "mtime": 1396799101552
   },
+  "birthday": {
+    "key": "birthday",
+    "text": "Birthday",
+    "file": "./client/templates/user.html",
+    "line": 334,
+    "template": "user-profile",
+    "ctime": 1398734903623,
+    "mtime": 1398734903623
+  },
   "country": {
     "key": "country",
     "text": "Country",
     "file": "./client/templates/sign.html",
-    "line": 72,
+    "line": 76,
     "template": "login_form",
     "ctime": 1396799101552,
     "mtime": 1396799101552
@@ -382,7 +391,7 @@ mfPkg.addNative(
     "key": "city",
     "text": "City",
     "file": "./client/templates/sign.html",
-    "line": 76,
+    "line": 80,
     "template": "login_form",
     "ctime": 1396799101552,
     "mtime": 1396799101552
@@ -391,25 +400,43 @@ mfPkg.addNative(
     "key": "native",
     "text": "Native Language",
     "file": "./client/templates/sign.html",
-    "line": 80,
+    "line": 84,
     "template": "login_form",
     "ctime": 1396799101552,
     "mtime": 1396799101552
   },
-  "learning": {
-    "key": "learning",
+  "learning-language": {
+    "key": "learning-language",
     "text": "Learning Language",
     "file": "./client/templates/sign.html",
-    "line": 88,
+    "line": 92,
     "template": "login_form",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
+    "mtime": 1398735089360,
+    "ctime": 1398735089360
+  },
+  "add-more-languages": {
+    "key": "add-more-languages",
+    "text": "Add more lnaguages",
+    "file": "./client/templates/sign.html",
+    "line": 94,
+    "template": "login_form",
+    "ctime": 1398734903623,
+    "mtime": 1398734903623
+  },
+  "select": {
+    "key": "select",
+    "text": "Select",
+    "file": "./client/templates/sign.html",
+    "line": 97,
+    "template": "login_form",
+    "ctime": 1398734903623,
+    "mtime": 1398734903623
   },
   "passwd_check": {
     "key": "passwd_check",
     "text": "Password check",
     "file": "./client/templates/sign.html",
-    "line": 100,
+    "line": 112,
     "template": "login_form",
     "ctime": 1396799101552,
     "mtime": 1396799101552
@@ -418,7 +445,7 @@ mfPkg.addNative(
     "key": "close",
     "text": "Close",
     "file": "./client/templates/sign.html",
-    "line": 107,
+    "line": 119,
     "template": "login_form",
     "ctime": 1396799101552,
     "mtime": 1396799101552
@@ -427,7 +454,7 @@ mfPkg.addNative(
     "key": "sing_up",
     "text": "Sign up",
     "file": "./client/templates/sign.html",
-    "line": 108,
+    "line": 120,
     "template": "login_form",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -472,7 +499,7 @@ mfPkg.addNative(
     "key": "sign_in",
     "text": "Sign in",
     "file": "./client/templates/user.html",
-    "line": 38,
+    "line": 41,
     "template": "user-profile",
     "ctime": 1396799101552,
     "mtime": 1396799101552
@@ -481,16 +508,16 @@ mfPkg.addNative(
     "key": "friendship-request",
     "text": "User friendship request",
     "file": "./client/templates/user.html",
-    "line": 69,
+    "line": 72,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "acept": {
     "key": "acept",
     "text": "Acept",
     "file": "./client/templates/user.html",
-    "line": 74,
+    "line": 77,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -499,7 +526,7 @@ mfPkg.addNative(
     "key": "deny",
     "text": "Deny",
     "file": "./client/templates/user.html",
-    "line": 75,
+    "line": 78,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -508,25 +535,25 @@ mfPkg.addNative(
     "key": "participation-request",
     "text": "Group participation request",
     "file": "./client/templates/user.html",
-    "line": 79,
+    "line": 82,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "invitation-request": {
     "key": "invitation-request",
     "text": "Group participation invitation request",
     "file": "./client/templates/user.html",
-    "line": 89,
+    "line": 92,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "find-user": {
     "key": "find-user",
     "text": "Find user",
     "file": "./client/templates/user.html",
-    "line": 113,
+    "line": 116,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -535,16 +562,61 @@ mfPkg.addNative(
     "key": "user-name",
     "text": "User name",
     "file": "./client/templates/user.html",
-    "line": 121,
+    "line": 124,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
+  },
+  "invite-friendship": {
+    "key": "invite-friendship",
+    "text": "Sen a friendship request",
+    "file": "./client/templates/user.html",
+    "line": 148,
+    "template": "user-profile",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "user-info": {
+    "key": "user-info",
+    "text": "User basic info",
+    "file": "./client/templates/user.html",
+    "line": 324,
+    "template": "user-profile",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "user-languages": {
+    "key": "user-languages",
+    "text": "User languages info",
+    "file": "./client/templates/user.html",
+    "line": 339,
+    "template": "user-profile",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "know": {
+    "key": "know",
+    "text": "Know",
+    "file": "./client/templates/user.html",
+    "line": 341,
+    "template": "user-profile",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "learning": {
+    "key": "learning",
+    "text": "Learning",
+    "file": "./client/templates/user.html",
+    "line": 345,
+    "template": "user-profile",
+    "ctime": 1396799101552,
+    "mtime": 1398734903623
   },
   "add-user": {
     "key": "add-user",
     "text": "Add contact",
     "file": "./client/templates/user.html",
-    "line": 165,
+    "line": 205,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -553,7 +625,7 @@ mfPkg.addNative(
     "key": "msg",
     "text": "Message",
     "file": "./client/templates/user.html",
-    "line": 228,
+    "line": 267,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341711355
@@ -562,7 +634,7 @@ mfPkg.addNative(
     "key": "friend",
     "text": "Friend",
     "file": "./client/templates/user.html",
-    "line": 242,
+    "line": 281,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -571,25 +643,25 @@ mfPkg.addNative(
     "key": "contact",
     "text": "contact",
     "file": "./client/templates/user.html",
-    "line": 244,
+    "line": 283,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
   },
   "teacher": {
     "key": "teacher",
-    "text": "Teacehr",
+    "text": "Teacher",
     "file": "./client/templates/user.html",
-    "line": 246,
+    "line": 285,
     "template": "user-profile",
     "ctime": 1398341669193,
-    "mtime": 1398341669193
+    "mtime": 1398734903624
   },
   "student": {
     "key": "student",
     "text": "Student",
     "file": "./client/templates/user.html",
-    "line": 248,
+    "line": 287,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -598,43 +670,43 @@ mfPkg.addNative(
     "key": "to",
     "text": "To",
     "file": "./client/templates/user.html",
-    "line": 227,
+    "line": 266,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "user": {
     "key": "user",
     "text": "User",
     "file": "./client/templates/user.html",
-    "line": 239,
+    "line": 278,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "groups": {
     "key": "groups",
     "text": "Groups",
     "file": "./client/templates/user.html",
-    "line": 261,
+    "line": 300,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "invite_to_group": {
     "key": "invite_to_group",
     "text": "Invite the user for this group",
     "file": "./client/templates/user.html",
-    "line": 266,
+    "line": 305,
     "template": "user-profile",
-    "mtime": 1398707194597,
-    "ctime": 1398707194597
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
   },
   "report": {
     "key": "report",
     "text": "Report",
     "file": "./client/templates/user.html",
-    "line": 277,
+    "line": 316,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -643,10 +715,19 @@ mfPkg.addNative(
     "key": "reason",
     "text": "Reason",
     "file": "./client/templates/user.html",
-    "line": 278,
+    "line": 317,
     "template": "user-profile",
     "ctime": 1398341669193,
     "mtime": 1398341669193
+  },
+  "user-description": {
+    "key": "user-description",
+    "text": "User description",
+    "file": "./client/templates/user.html",
+    "line": 355,
+    "template": "user-profile",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
   },
   "messages": {
     "key": "messages",
@@ -655,7 +736,7 @@ mfPkg.addNative(
     "line": 30,
     "template": "user-profile",
     "ctime": 1396799101552,
-    "mtime": 1398707194597,
+    "mtime": 1398735089360,
     "removed": true
   },
   "passwd": {
@@ -665,7 +746,7 @@ mfPkg.addNative(
     "line": 96,
     "template": "title",
     "ctime": 1396799101552,
-    "mtime": 1398707194598,
+    "mtime": 1398735089360,
     "removed": true
   },
   "sign_up": {
@@ -675,7 +756,7 @@ mfPkg.addNative(
     "line": 148,
     "template": "title",
     "ctime": 1396799101552,
-    "mtime": 1398707194598,
+    "mtime": 1398735089360,
     "removed": true
   },
   "public_roons": {
@@ -685,11 +766,11 @@ mfPkg.addNative(
     "line": 147,
     "template": "chatroons",
     "ctime": 1396790754391,
-    "mtime": 1398707194598,
+    "mtime": 1398735089360,
     "removed": true
   }
 }, 
 {
-  "extractedAt": 1398707194598,
-  "updatedAt": 1398707194598
+  "extractedAt": 1398735089360,
+  "updatedAt": 1398735089360
 });

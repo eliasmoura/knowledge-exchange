@@ -263,6 +263,7 @@ Template.chat.events = {
 
 $(function(){
     $.contextMenu({
+    	trigger: "left",
         selector: '.message', 
         callback: function(key, options) {
             if (key == "correction") {

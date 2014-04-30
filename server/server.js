@@ -50,7 +50,7 @@ Hooks.onLoggedIn = function (userId) {
     var user = OnlineUsers.findOne({user:userId});
     Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":true}});
     Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
-    console.log("User: " + Meteor.user().profile.name + " logged in. Status: " + Meteor.user().profile.online);
+    console.log("User: " + Meteor.user().profile.name + " logged in. Online: " + Meteor.user().profile.online);
     if (user != undefined ) {
     	OnlineUsers.insert({
 			user:userId
@@ -61,7 +61,7 @@ Hooks.onLoggedOut = function (userId) {
     // this runs right after a user logs out, on the client or server
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
-	console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.online);
+	console.log("User: " + Meteor.user().profile.name + " logged out. Online: " + Meteor.user().profile.online);
     /*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
 	Meteor.call('setFriend_Non_active');*/
@@ -70,19 +70,10 @@ Hooks.onLoggedOut = function (userId) {
 Hooks.onCloseSession = function (userId) {
 	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
 	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
-	console.log("User: " + Meteor.user().profile.name + " closed the session. Status: " + Meteor.user().profile.online);
+	console.log("User: " + Meteor.user().profile.name + " closed the session. Online: " + Meteor.user().profile.online);
 	/*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
 	Meteor.call('setFriend_Non_active');*/
-}
-
-Hooks.onGainFocus = function () {
-	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
-}
-
-Hooks.onLoseFocus = function () {
-	console.log('lose focus');
-	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":true}});
 }
 
 Hooks.onDeleteUser = function () {

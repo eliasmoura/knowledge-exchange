@@ -63,15 +63,16 @@ Router.map( function() {
 				});
 			}
 			if(modal_action.action =="add"){
-				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
 						Session.set("user_modal_actions",{
 							add:true,
 							action: "Add contact",
-							name:users.profile.name,
-							_id:users._id,
+							user:users.profile,
+							_id:users._id
 						});
-					}
+					}else
+						console.log('error while trying to send a friendship request');
 				});
 			}
 			if(modal_action.action =="invite"){

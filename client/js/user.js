@@ -189,11 +189,22 @@ Template.user_finder.events({
 		var userId = e.target.id;
 		console.log('prepering the request');
 		var message = 'Some thing to say :)';
-		if (userId){
+		Meteor.call("find",{user:{_id:userId}},function(error,users){
+			if (users){
+				Session.set("user_modal_actions",{
+					add:true,
+					action: "Add contact",
+					user:users.profile,
+					_id:users._id,
+				});
+			}else
+				console.log('error while trying to send a friendship request');
+		});
+		/*if (userId){
 			Meteor.call("user_friendship_request", userId, message);
 			console.log('request sent');
 		}
-		else console.log('request not sent');
+		else console.log('request not sent');*/
 	}
 });
 

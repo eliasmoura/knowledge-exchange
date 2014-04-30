@@ -345,7 +345,7 @@ Meteor.methods({
 				//console.log(row);
 				userList.push(row.user);
 			});
-			userList = Meteor.users.find({_id:{$in: userList}}, 
+			userList = Meteor.users.find({_id:{$in: userList}, "profile.online":true}, 
 				{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}},
 				{sort:{"profile.online":-1,"profile.name":-1}}).fetch();
 		}else if (room.type == "group"){
