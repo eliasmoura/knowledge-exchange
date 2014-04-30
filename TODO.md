@@ -1,9 +1,9 @@
 #Site
 
 ##CHAT
-*Public chat
-  ..*enter.
-  ..*send messages.
+  ..*Public chat.
+    ..*enter.
+    ..*send messages.
 
 
 
