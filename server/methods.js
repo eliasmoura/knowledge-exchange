@@ -346,7 +346,7 @@ Meteor.methods({
 				userList.push(row.user);
 			});
 			userList = Meteor.users.find({_id:{$in: userList}, "profile.online":true}, 
-				{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}},
+				{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.status":1,"profile.alway":1}},
 				{sort:{"profile.online":-1,"profile.name":-1}}).fetch();
 		}else if (room.type == "group"){
 			User_Group.find({group:room.room})
@@ -355,13 +355,13 @@ Meteor.methods({
 					userList.push(row.user);
 			});	
 				userList = Meteor.users.find({_id:{$in: userList}}, 
-					{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}},
+					{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.status":1,"profile.alway":1}},
 					{sort:{"profile.online":-1,"profile.name":-1}
 				}).fetch();
 		}	
 		else if (room.type == "privatechat"){
 			var user  = PrivateChat.findOne({_id:room.room}).contact;
-			user = Meteor.users.findOne({_id:user}, {fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.online":1,"profile.alway":1}});
+			user = Meteor.users.findOne({_id:user}, {fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.status":1,"profile.alway":1}});
 			userList.push(Meteor.user());
 			userList.push(user);
 		}

@@ -35,8 +35,7 @@ Template.user.events({
 	},
 	'click a#logoutButton': function(){
 		console.log("logging out");
-		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
-		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
 		Meteor.logout();
 		Session.set("currentUser",Meteor.user());
 		console.log("logged out");
@@ -51,6 +50,10 @@ Template.user.events({
 	'click #notification': function(e, t){
 		$('#notificationModal').modal("toggle");
 		console.log('should show the notification ');
+	},
+	'click #userstatus': function(e,t){
+		e.preventDefault();
+		e.stopPropagation();
 	}
 });
 

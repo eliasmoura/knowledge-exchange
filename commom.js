@@ -51,7 +51,7 @@ Router.map( function() {
 	    	var modal_action = Session.get("user_modal_actions");
 			if(modal_action.action =="email"){
 				var user = null;
-				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
 						Session.set("user_modal_actions",{
 							send_email:true,
@@ -76,7 +76,7 @@ Router.map( function() {
 				});
 			}
 			if(modal_action.action =="invite"){
-				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
 						Session.set("user_modal_actions",{
 							group:true,
@@ -100,7 +100,7 @@ Router.map( function() {
 				});
 			}
 			if(modal_action.action =="report"){
-				Meteor.call("find_user",{user_id:modal_action.user,first_user:true},function(error,users){
+				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
 						Session.set("user_modal_actions",{
 							report:true,

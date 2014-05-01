@@ -16,12 +16,16 @@
   });**/
 Meteor.startup(function(){
     Hooks.init({updateFocus:3000});
-    if(Meteor.user())
-        Session.set('locale', 'en');
+    if(Meteor.user()){
+        Session.set('login', true);
+        if(Meteor.user().profile.site_lang)
+            Session.set('locale', Meteor.user().profile.site_lang);
+        else
+            Session.set('locale', 'en_US');
+    }
     else
-        Session.set('locale', 'en');
+        Session.set('locale', 'en_US');
     
-    Session.set('login', true);
     Session.set('group-finder', false);
     Session.set("add_ser",false);
     Session.set("user_modal_actions",false);
@@ -38,13 +42,14 @@ Template.post.events = {
         //mfPkg.setLocale='pt_BR';
         //mfPkg.setLocale('pt_BR');
         Session.set('locale', 'pt_BR');
+        Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.default_status":status}});
         
     },
     'click input.toen': function(e,t){
         var element = e.target;
         //mfPkg.setLocale='pt_BR';
         //mfPkg.setLocale('pt_BR');
-        Session.set('locale', 'en');
+        Session.set('locale', 'en_US');
         
     },
     'click input.clean': function(e,t){
@@ -58,12 +63,14 @@ Template.navbar.events({
 })
 
 Hooks.onGainFocus = function () {
-    Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+    if(Meteor.user().profile.default_status == "online")
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
 }
 
 Hooks.onLoseFocus = function () {
     console.log('lose focus');
-    Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":true}});
+    if(Meteor.user().profile.default_status == "online")
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"alway"}});
 }
 
 UI.registerHelper(

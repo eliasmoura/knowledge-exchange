@@ -120,7 +120,7 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
 					<li class="{{#if active}}active{{/if}}">
-						<a href="#" class="friends-contacts {{#if profile.online}}online{{else}}offline{{/if}} {{#if profile.alway}}alway{{/if}}" id="{{_id}}" >
+						<a href="#" class="friends-contacts {{profile.status}}" id="{{_id}}" >
 							<span class="user glyphicon glyphicon-user"> </span>
 							{{profile.name}} 
 							{{#if notification}}
@@ -314,7 +314,7 @@ chat side menu
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
 	{{#each chat_users}}
 	<label class="username col-xs-12 " id="{{_id}}">
-		<span class="user glyphicon glyphicon-user {{#if profile.online}}online{{else}}offline{{/if}} {{#if profile.alway}}alway{{/if}}"> </span> {{profile.name}}
+		<span class="user glyphicon glyphicon-user {{profile.status}}" title="{{profile.status}}"> </span> {{profile.name}}
 	</label>
 	{{/each}}
 </template>
