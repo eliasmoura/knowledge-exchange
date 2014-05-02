@@ -2,50 +2,102 @@
 
 ##CHAT
 
-* Public chat.
-    - [x] enter chat room.
+* Public chat:
+    - [x] enter chat room;
+    - [x] see chat rooms list;
 
-* Group chat.
-	- [ ] find group.
-	- [ ] create group.
-		+ [ ] validate group name.
-		+ [ ] invite users.
-		+ [ ] check mandatory fields.
-		+ [ ] 
-	- [ ] send participation requests.
-	- [ ] send invitation requests.
-	- [ ] receive requests.
-	- [ ] accept requests.
-	- [ ] deny requests.
-	- [ ] see group users list.
-	- [ ] moderate group.
+* Group chat:
+	- [x] find group;
+	- [ ] create group;
+		+ [x] validate group name;
+		+ [x] invite users;
+		+ [ ] check mandatory fields;
+	- [x] send participation requests;
+	- [x] send invitation requests;
+	- [x] receive requests;
+	- [x] accept requests;
+	- [ ] deny requests;
+	- [x] see group users list;
+	- [ ] see user's groups lists;
+	- [ ] moderate group;
 
-* General chat functionalities.
-	- [ ] send messages.
-	- [ ] see messages.
-	- [ ] see user list.
-    - [ ] see chat rooms list.
-    - [ ] see user's groups lists.
-    - [ ] see user's contacts list.
-    - [ ] show users status (on line, away, busy, off line)
+* General chat functionalities:
+	- [x] send messages;
+	- [x] see messages;
+	- [x] see user list;
+    - [x] see user's contacts list;
+    - [x] show users status (on line, away, busy, off line);
+    - [ ] set user status  (on line, away, busy);
 
 
 ##BLOG
 
 ##HOME
 
-##CORRECTION
+##CORRECTION TOOLS
+- [x] select text for correction;
+- [ ] word definition;
+- [ ] expression definition;
+- [ ] word/expression definition;
+- [ ] edit the copy of the targeted text;
+- [ ] tool missing letters, words, phrases;
+- [ ] tool word/phrase position change;
+- [ ] tool unnecessary word/phrase;
+- [ ] explanation/comments;
+- [ ] save correction as flash cards;
+
+* Correction information:
+- [ ] text ID;
+- [ ] owner;
+- [ ] correction;
+- [ ] corrector;
+
 
 ##General
-	- [ ] block user.
+* Users relationship:
+	- [ ] find users;
+		+ [x] by name:
+		+ [ ] nationalities;
+		+ [ ] native language;
+		+ [ ] known language;
+		+ [ ] learning language;
+		+ [ ] interests;
+	- [x] send friendship requests;
+	- [x] set user relationship(friend, contact, teacher, student)
+	- [x] receive requests;
+	- [x] accept requests;
+	- [ ] deny requests;
+	- [x] remove users from contacts list;
+	- [ ] block users;
+	- [ ] send emails;
+	- [ ] receive emails;
+	- [x] see user's profile;
+	- [ ] report user;
 
-* Users relationship
-	- [ ] find users.
-		+ [ ] advanced search:
-			- [ ] 
-	- [ ] send friendship requests.
-	- [ ] set user relationship(friend, contact, teacher, student)
-	- [ ] receive requests.
-	- [ ] accept requests.
-	- [ ] deny requests.
-	- [ ] remove users from contacts list.
+* User information:
+	- [x] name;
+	- [x] last name;
+	- [ ] birthday;
+	- [x] country;
+	- [x] city;
+	- [x] native language;
+	- [ ] learning languages;
+	- [x] known languages;
+	- [ ] languages fluency;
+	- [x] description;
+	- [ ] gender;
+	- [ ] interests;
+	- [x] email;
+	- [x] password;
+	- [ ] photo;
+	- [ ] occupation;
+
+* Group information:
+	- [x] name;
+	- [ ] short name;
+	- [x] description;
+	- [ ] languages allowed;
+	- [ ] interests(group subjects focus);
+	- [x] owner;
+	- [x] moderators;
+	- [x] participants;
