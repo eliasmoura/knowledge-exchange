@@ -264,7 +264,7 @@
 
 <template name="send_email">
 	<form action="submit" id="send-email-form">
-		<label for="user-name">{{mf 'to' 'To'}}:</label><input type="text" class="form-control" placeholder="{{mf 'user'}}" name="user-name" value="{{user_modal.name}}" id="{{user_modal._id}}">
+		<label for="user-name">{{mf 'to' 'To'}}:</label><input type="text" class="form-control emailto" placeholder="{{mf 'user'}}" name="user-name" value="{{user_modal.name}}" id="{{user_modal._id}}">
 		<label for="modal-text">{{mf 'msg' 'Message'}}:</label>
 		<textarea name="modal-text" id="send-email-msg" class="form-control" rows="10" placeholder="{{mf 'msg'}}"></textarea>
 		<div class="alert alert-danger alert-dismissable">
@@ -313,8 +313,8 @@
 	
 </template>
 <template name="report">
-	<form action="submit" id="send-email-form">
-		<label for="user-name">{{mf 'report' 'Report'}}:</label><input type="text" class="form-control" name="user-name" placeholder="{{mf 'user'}}" value="{{user_modal.name}}" id="{{user_modal._id}}">
+	<form action="submit" id="report-user-form">
+		<label for="user-name">{{mf 'report' 'Report'}}:</label><input type="text" class="form-control report-user" name="user-name" placeholder="{{mf 'user'}}" value="{{user_modal.name}}" id="{{user_modal._id}}">
 		<label for="modal-text">{{mf 'reason' 'Reason'}}:</label>
 		<textarea name="modal-text" id="user-modal-msg" class="form-control" rows="10" placeholder="{{mf 'reason'}}"></textarea>
 	</form>

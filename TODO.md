@@ -47,10 +47,10 @@
 - [ ] save correction as flash cards;
 
 * Correction information:
-- [ ] text ID;
-- [ ] owner;
-- [ ] correction;
-- [ ] corrector;
+	- [ ] text ID;
+	- [ ] owner;
+	- [ ] correction;
+	- [ ] corrector;
 
 
 ##General

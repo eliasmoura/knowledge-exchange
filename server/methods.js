@@ -224,6 +224,37 @@ Meteor.methods({
 			}
 		}
 	},
+	send_email:function(args){
+		check(args, Object);
+		var user = Meteor.users.findOne({_id:args.emailto})._id;
+		Email.insert({emailto:user,emailfrom:Meteor.userId(),message:args.message,isnew:true,date:Date.now()});
+	},
+	report_user:function(args){
+		check(args, Object);
+		var userId = Meteor.users.findOne({_id:args.emailto})._id;
+		var context = Meteor.user().context;
+		if(context === "chatrooms"){
+			var room = Meteor.user().profile.active_room;
+
+			if (room.type == "public"){
+				context = Messages.find({room:room.room});
+			}
+			else if (room.type == "group" ){
+				context = GroupChat.find({groupchat:room.room});
+			}	
+			else if (room.type == "privatechat"){
+				var privatechat = PrivateChat.findOne({_id:room.room});
+				var privatechat_2 = PrivateChat.findOne({user:privatechat.contact, contact:privatechat.user});
+				var privatechats = [privatechat._id, privatechat_2._id];
+				context = PrivateMessages.find({chat:privatechats});
+			}
+		}else if (context === "blog"){
+			
+		}
+			
+
+		Report.insert({user:user, reason:args.reason,context:context});
+	},
 	correction: function(correction,explanation,messageId){
 		Correction.insert({
 			correction:correction,

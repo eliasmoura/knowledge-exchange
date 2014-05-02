@@ -12,6 +12,17 @@ Router.map( function() {
 		yieldTemplates: {
       					'home-side': {to: 'sidebar'}
 	    },
+	    onBeforeAction:function(){
+	    	if (!Meteor.user()) {
+		        // render the login template but keep the url in the browser the same
+		        this.render('notFound');
+
+		        // stop the rest of the before hooks and the action function 
+		        this.pause();
+		      }else{
+		      // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"home"}});
+		      }
+	    },
 	    data:{activeHome: "active",
 	    	  pageTitle: "Home"}
 	});
@@ -44,7 +55,13 @@ Router.map( function() {
 
 		        // stop the rest of the before hooks and the action function 
 		        this.pause();
+		      }else{
+		      	/*var isso = Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"chatrooms"}}, function(error,doc){
+		      		console.log(error);
+		      	});
+		      	console.log(isso);*/
 		      }
+		      
 		      
 	    },
 	    onAfterAction:function(){
@@ -365,6 +382,17 @@ Router.map( function() {
 		yieldTemplates: {
       		'blog-side': {to: 'sidebar'}
 	    },
+	    onBeforeAction:function(){
+	    	if (!Meteor.user()) {
+		        // render the login template but keep the url in the browser the same
+		        this.render('notFound');
+
+		        // stop the rest of the before hooks and the action function 
+		        this.pause();
+		      }else{
+		      // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"blog"}});
+		      }
+	    },
 	    data:{activeBlog: "active",
 	    	pageTitle: "Blog"
 	    }
@@ -374,6 +402,17 @@ Router.map( function() {
 		yieldTemplates:{
 			'user-side': {to: 'sidebar'}
 		},
+		onBeforeAction:function(){
+	    	if (!Meteor.user()) {
+		        // render the login template but keep the url in the browser the same
+		        this.render('notFound');
+
+		        // stop the rest of the before hooks and the action function 
+		        this.pause();
+		      }else{
+		      // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"user"}});
+		      }
+	    },
 		data:{
 
 		}

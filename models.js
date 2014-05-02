@@ -27,3 +27,5 @@ Correction = new Meteor.Collection('correction');
 Usage = new Meteor.Collection('usage');
 Explanation = new Meteor.Collection('explanation');
 Alternative = new Meteor.Collection('alternative');
+
+Email = new Meteor.Collection('email');

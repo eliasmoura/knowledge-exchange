@@ -215,22 +215,48 @@ Template.user_modal.events({
 	'click #request-friendship-btn': function(e,t){
 		var action = Session.get("user_modal_actions");
 		if (action.send_email) {
-			
+			$("#send-email-form").submit();
 		}
 		if (action.add) {
 			$("#user-invite-request-form").submit();
 		}
 		if (action.report) {
-
+			$("#report-user-form").submit()
 		}
 	}
 })
 Template.send_email.events({
 	'submit #send-email-form': function(e,t){
 		e.preventDefault();
-		var message = t.find("#send-email-msg").text;
+		var emailto = Session.get("user_modal_actions")._id;
+		var message = t.find("#send-email-msg").value;
+		if(message.length < 2)
+			return false;
+		Meteor.call("send_email",{emailto:emailto,message:message},function(error,result){
+			if(!error){
+				console.log("email sent");
+				$("#user-modal").modal("hide");
+				Session.set("user_modal_actions", false);
+			}else console.log(error);
+		});
+
+	}
+});
+Template.report.events({
+	'submit #report-user-form': function(e,t){
+		e.preventDefault();
+		var reason = t.find("#user-modal-msg").text;
 		var userId = Session.get("user_modal_actions")._id;
-		Meteor.call("send_email",userId,message);
+		var context = Session.get("user_modal_actions").context;
+		if(reason.length < 2)
+			return false;
+		Meteor.call("report_user",{user:userId,reason:reason},function(error,result){
+			if(!error){
+				console.log("email sent");
+				$("#user-modal").modal("hide");
+				Session.set("user_modal_actions", false);
+			}else console.log(error);
+		});
 
 	}
 });
@@ -245,6 +271,7 @@ Template.user_invite_request.events({
 			if(!error){
 				console.log('request sent');
 				$("#user-modal").modal("hide");
+				Session.set("user_modal_actions", false);
 			}
 				
 
