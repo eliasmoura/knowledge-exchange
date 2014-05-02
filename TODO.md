@@ -9,9 +9,9 @@
 * Group chat:
 	- [x] find group;
 	- [ ] create group;
-		+ [x] validate group name;
-		+ [x] invite users;
-		+ [ ] check mandatory fields;
+		- [x] validate group name;
+		- [x] invite users;
+		- [ ] check mandatory fields;
 	- [x] send participation requests;
 	- [x] send invitation requests;
 	- [x] receive requests;
