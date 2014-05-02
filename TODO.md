@@ -8,7 +8,7 @@
 
 * Group chat:
 	- [x] find group;
-	- [ ] create group;
+	- create group;
 		- [x] validate group name;
 		- [x] invite users;
 		- [ ] check mandatory fields;
@@ -55,13 +55,13 @@
 
 ##General
 * Users relationship:
-	- [ ] find users;
-		+ [x] by name:
-		+ [ ] nationalities;
-		+ [ ] native language;
-		+ [ ] known language;
-		+ [ ] learning language;
-		+ [ ] interests;
+	- find users;
+		- [x] by name:
+		- [ ] nationalities;
+		- [ ] native language;
+		- [ ] known language;
+		- [ ] learning language;
+		- [ ] interests;
 	- [x] send friendship requests;
 	- [x] set user relationship(friend, contact, teacher, student)
 	- [x] receive requests;
