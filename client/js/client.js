@@ -70,7 +70,7 @@ Hooks.onGainFocus = function () {
 Hooks.onLoseFocus = function () {
     console.log('lose focus');
     if(Meteor.user().profile.default_status == "online")
-        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"alway"}});
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"away"}});
 }
 
 UI.registerHelper(

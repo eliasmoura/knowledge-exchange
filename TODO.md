@@ -1,9 +1,11 @@
 #Site
 
 ##CHAT
-  ..*Public chat.
-    ..*enter.
-    ..*send messages.
+
+* Public chat.
+    - [x] enter chatroom.
+    - [x] send messages.
+
 
 
 

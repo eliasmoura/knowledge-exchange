@@ -29,8 +29,9 @@ Accounts.onCreateUser(function(options,user){
 		// console.log(user.services.password.srp);
 		
 		options.profile.online = true;
-    	options.profile.alway = false;
+    	options.profile.away = false;
 	    options.profile.active_room = {type:null,room:null};
+	    options.profile.default_status = "online";
 		user.profile = options.profile;
 		// Accounts.setPassword(user._id, user.password);
 		/*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
@@ -55,7 +56,7 @@ Hooks.onLoggedIn = function (userId) {
 Hooks.onLoggedOut = function (userId) {
     // this runs right after a user logs out, on the client or server
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
-	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.alway":false}});
+	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.away":false}});
 	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
 	console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.status);
     /*Meteor.call('setRoom_Non_active');
