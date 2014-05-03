@@ -30,15 +30,17 @@ Accounts.onCreateUser(function(options,user){
 		
 		options.profile.online = true;
     	options.profile.away = false;
-	    options.profile.active_room = {type:null,room:null};
+	    options.profile.active_room = {type:"none",room:"none"};
 	    options.profile.default_status = "online";
+	    options.profile.status = "online";
 		user.profile = options.profile;
 		// Accounts.setPassword(user._id, user.password);
 		/*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
 			if(error)
 				console.log(error);
 		});*/
-		console.log("User created: " + user.profile.name + " " + user.profile.lastname);
+		console.log("User created:");
+		console.log(user.profile);
 		console.log('sign up ok');
 		return user;
 	}catch(e){
@@ -57,6 +59,7 @@ Hooks.onLoggedOut = function (userId) {
     // this runs right after a user logs out, on the client or server
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.away":false}});
+	if(Meteor.user())
 	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
 	console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.status);
     /*Meteor.call('setRoom_Non_active');
@@ -65,8 +68,10 @@ Hooks.onLoggedOut = function (userId) {
 }
 
 Hooks.onCloseSession = function (userId) {
-	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
-	console.log("User: " + Meteor.user().profile.name + " closed the session. Status: " + Meteor.user().profile.status);
+	if(Meteor.user()){
+		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
+		console.log("User: " + Meteor.user().profile.name + " closed the session. Status: " + Meteor.user().profile.status);	
+	}
 	/*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
 	Meteor.call('setFriend_Non_active');*/

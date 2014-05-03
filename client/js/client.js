@@ -27,6 +27,7 @@ Meteor.startup(function(){
         Session.set('locale', 'en_US');
     
     Session.set('group-finder', false);
+    Session.set("login",true);
     Session.set("add_ser",false);
     Session.set("user_modal_actions",false);
 });
@@ -63,13 +64,13 @@ Template.navbar.events({
 })
 
 Hooks.onGainFocus = function () {
-    if(Meteor.user().profile.default_status == "online")
+    if(Meteor.user() && Meteor.user().profile.default_status == "online")
         Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
 }
 
 Hooks.onLoseFocus = function () {
     console.log('lose focus');
-    if(Meteor.user().profile.default_status == "online")
+    if(Meteor.user() && Meteor.user().profile.default_status == "online")
         Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"away"}});
 }
 

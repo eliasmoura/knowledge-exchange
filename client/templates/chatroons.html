@@ -368,13 +368,15 @@ chat side menu
 					<h4 class="modal-title" id="correctionModalLabel">{{mf 'correction' 'Correction'}}</h4>
 				</div>
 				<div class="modal-body"><!--content here-->
-					<div clas="corretiontool col-xs-12"> 
-						<h2>Source:</h2>
-						<div class="col-sm-4 panel panel-default">
-							<span class="source" id="{{sourceid}}">{{source.text}}</span>
+					<div clas="corretiontool "> 
+						<div class=" panel panel-default">
+						<div class="panel-heading"><h2 class="panel-title">Source:</h2></div>
+						<div class="panel-body">
+							<div class="source" id="{{sourceid}} " row="4">{{source.text}}</div>
+						</div>
 						</div>
 
-						<div class="panel-default panel col-sm-4">
+						<div class="panel-default panel ">
 							<ul class="nav nav-pills row">
 								<li class="{{activeop1}}"><a href="#">op1</a></li>
 								<li class="{{activeOp2}}"><a href="#">op2</a></li>
@@ -384,7 +386,7 @@ chat side menu
 							</ul>
 							<form class="form-correction" role="form">
 								<textarea class="correction form-control" id="{{correctionid}}">{{source.text}}</textarea>
-								<div class="panel panel-default row">
+								<div class="panel panel-default ">
 									<div class="input-group">
 										<span class="input-group-addon">{{mf 'E' 'E'}}</span> 
 										<input class="form-control expl" type="text" placeholder="{{mf 'explanation' 'Explanation'}}"> 

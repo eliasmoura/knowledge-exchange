@@ -62,7 +62,7 @@
 	      <ul class="nav navbar-nav">
 	        <li class="{{activeHome}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
 			<li class="{{activeBlog}}" ><a class="navigation" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
-			<li class="{{activeChat}}" ><a class="navigation" href="/chat">{{mf 'chat' 'CHAT'}}</a></li>
+			<li class="{{activeChat}}" ><a class="navigation" href="/chat">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
 			<li class="{{activeNotes}}" ><a class="navigation" href="/notes">{{mf 'notes' 'NOTES'}}</a></li>
 	      </ul>
 	      <form class="navbar-form navbar-left" role="search">

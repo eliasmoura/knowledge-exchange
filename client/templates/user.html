@@ -28,7 +28,7 @@
 			<ul class="dropdown-menu">
 				<li><a class="navigation" href="/user/{{user._id}}">{{mf 'profile' 'Profile'}}</a></li>
 				<li><a class="navigation" href="/user/{{user._id}}/messages">
-					{{mf 'email' 'Email'}} <span class="badge">{{notifications.newMessages}}</span></a>
+					{{mf 'email' 'Email'}} <span class="badge">{{notifications.newemails}}</span></a>
 				</li>
 				<li><a class="navigation" href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></li>
 				<li class="divider"></li>
@@ -52,9 +52,11 @@
 		{{#if notifications.requests}}
 			{{>notification}}
 		{{/if}}
+		
 		{{#if add_user}}
-		{{> request_friendship}}
+			{{> request_friendship}}
 		{{/if}}
+		
 		{{#if user_modal}}
 			{{> user_modal}}
 		{{/if}}
@@ -359,4 +361,8 @@
 		</div>
 	</div>
 	{{/with}}
+</template>
+
+<template name="additional_info">
+	
 </template>

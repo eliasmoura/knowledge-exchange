@@ -38,6 +38,7 @@ Template.chatrooms_side.events = {
 	'click a.panel-rooms': function(e,t){
 		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
 		e.stopPropagation();
+		e.preventDefault();
 		console.log('collapse');
 
 	},
@@ -263,13 +264,16 @@ Template.chat.events = {
 
 $(function(){
     $.contextMenu({
-    	trigger: "left",
+    	trigger: "right",
         selector: '.message', 
         callback: function(key, options) {
+        	console.log("correction");
+        	console.log($(this));
             if (key == "correction") {
             	var text = $(this).contents().filter(
             		function(){return this.nodeType === 3;}).text();
             	Session.set("correct", true);
+            	$('#correctionModal').modal("show");
             	Session.set("correctionSource", {messageId:$(this).attr("id"),text:text});
             	//$('#correctionModal').modal("show");
             }

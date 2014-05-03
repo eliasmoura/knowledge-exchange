@@ -33,6 +33,8 @@ Router.map( function() {
 	    },
 		fastRender: true,
 	    waitOn: function(){
+	    	
+	    	if(Meteor.user())
 	    	return [
 	    		Meteor.subscribe("chatrooms-list"),
 	    		Meteor.subscribe("user-chatroom-list"),
@@ -46,15 +48,17 @@ Router.map( function() {
 		    	Meteor.subscribe("requests-invite"),
 		    	Meteor.subscribe("user-list"),
 		    	Meteor.subscribe("user-contact"),
+		    	Meteor.subscribe("emails-received"),
+		    	Meteor.subscribe("emails-sent")
 	    	];
 	    },
 	    onBeforeAction:function(){
 	    	if (!Meteor.user()) {
 		        // render the login template but keep the url in the browser the same
-		        this.render('notFound');
+		        // this.render('notFound');
 
 		        // stop the rest of the before hooks and the action function 
-		        this.pause();
+		        // this.pause();
 		      }else{
 		      	/*var isso = Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"chatrooms"}}, function(error,doc){
 		      		console.log(error);
@@ -168,10 +172,8 @@ Router.map( function() {
 	    		}
 	    	},
 	    	chat_users: function(){
-	    		var room = Meteor.user().profile.active_room;
-    			var userlist = new Array();
     			Deps.autorun(function(){
-    				var result = Meteor.call("user_list", room,function(error,result){
+    				Meteor.call("user_list", Meteor.user().profile.active_room,function(error,result){
     					if(!error){
     						//userlist.push(result);
     						//console.log(userlist);
@@ -219,17 +221,7 @@ Router.map( function() {
 	    	emails_notifications: function(){
 	    		return false;
 	    	},
-	    	chat_notifications: function(){
-	    		console.log('test');
-	    		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();
-	    		console.log(privatechatnotifications);
-		    	var privatenotificationsArray = {};
-		    	privatechatnotifications.forEach(function(row){
-		    		privatenotificationsArray[row.contact] = row.new_messages;
-		    	});
-		    	console.log(privatenotificationsArray);
-		    	return {chat:privatenotificationsArray};
-	    	},
+	    	
 	    	messages: function(){
 	    		var messages = Meteor.user().profile.active_room;
     			var messagesArray = new Array();
@@ -304,58 +296,7 @@ Router.map( function() {
 
 	    		return groups;
 	    	},
-	    	notifications: function(){
-	    		var groupsRequests_Participation = GroupRequest.find({type:1});
-	    		var participationArray = new Array();
-	    		var groupsRequests_Invitation = GroupRequest.find({type:2});
-	    		var invitationsArray = new Array();
-
-	    		var userFriendshipRequest = UserRequest.find({});
-	    		var userArray = new Array();
-	    		
-	    		var total = groupsRequests_Invitation.count() + groupsRequests_Participation.count() + userFriendshipRequest.count();
-
-	    		if(groupsRequests_Participation)
-		    		groupsRequests_Participation.fetch().forEach(function(row){
-		    			Meteor.call("find",{user:{_id:row.user}}, function(error,result){
-		    				if(!error){
-		    					
-		    					Session.set("participationArray", result);
-		    					//console.log(participationArray);
-		    				}
-		    			});
-		    			participationArray.push({user:Session.get("participationArray"), group:row });
-		    			
-		    		});
-
-	    		if(groupsRequests_Invitation)
-	    			groupsRequests_Invitation.fetch().forEach(function(row){
-	    				var group = Groups.findOne({_id:row.group});
-	    				invitationsArray.push({group:group,request:row});
-	    			});
-
-	    		if(userFriendshipRequest)
-		    		userFriendshipRequest.fetch().forEach(function(row){
-		    			userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
-		    		});
-		    	if (total != 0){
-		    		// console.log(invitationsArray);
-		    		return {
-		    			requests:
-		    				{
-		    					participation:participationArray,
-		    					invitation:invitationsArray,
-		    					friendship:userArray,
-		    					total:total
-		    				}
-		    			};}
-		    	else {
-		    		// console.log('hide');
-		    		$(".modal-backdrop.fade.in").remove();
-		    		$('#notificationModal').modal("hide");
-		    		return false;
-		    	}
-	    	},
+	    	
 	    	find_user: function(){
 	    		return Session.get('find_user');
 	    	},
@@ -368,6 +309,7 @@ Router.map( function() {
 	    	add_user:function(){
 	    		return Session.get("add_user");
 	    	},
+	    	
 	    	activeChat: "active",
 	    	pageTitle: "Chat app"
 	    	//myUsersList: function(){//var users = UsersRelations.find({user:Session.get('currentUser')._id});
@@ -422,3 +364,86 @@ Router.map( function() {
 
 
 mfPkg.init('en', {});
+
+UI.registerHelper("user",function(){return Meteor.user()});
+UI.registerHelper("notifications", 
+	function(){
+		var groupsRequests_Participation = GroupRequest.find({type:1});
+		var participationArray = new Array();
+		var groupsRequests_Invitation = GroupRequest.find({type:2});
+		var invitationsArray = new Array();
+
+		var userFriendshipRequest = UserRequest.find({});
+		var userArray = new Array();
+		
+		var totalRequest = groupsRequests_Invitation.count() + groupsRequests_Participation.count() + userFriendshipRequest.count();
+
+		var emails =  Email.find({emailto:Meteor.userId(),isnew:true}).count();
+		// console.log(emails);
+
+		if(groupsRequests_Participation)
+			groupsRequests_Participation.fetch().forEach(function(row){
+				Meteor.call("find",{user:{_id:row.user}}, function(error,result){
+					if(!error){
+						
+						Session.set("participationArray", result);
+						//console.log(participationArray);
+					}
+				});
+				participationArray.push({user:Session.get("participationArray"), group:row });
+				
+			});
+
+		if(groupsRequests_Invitation)
+			groupsRequests_Invitation.fetch().forEach(function(row){
+				var group = Groups.findOne({_id:row.group});
+				invitationsArray.push({group:group,request:row});
+			});
+
+		if(userFriendshipRequest)
+			userFriendshipRequest.fetch().forEach(function(row){
+				userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
+			});
+		var total = totalRequest + emails;
+		
+		if(emails == 0) emails = false;
+		if(total == 0) total = false;
+		if (totalRequest == 0) totalRequest = false;
+		
+		return {
+			requests:
+				{
+					participation:participationArray,
+					invitation:invitationsArray,
+					friendship:userArray,
+					total:totalRequest
+				},
+			newemails:emails,
+			total:total
+			};
+		
+	}
+);
+UI.registerHelper("chat_notifications",
+	function(){
+		// console.log('test');
+		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();
+		// console.log(privatechatnotifications);
+    	/*var privatenotificationsArray = {};
+    	privatechatnotifications.forEach(function(row){
+    		privatenotificationsArray[row.contact] = row.new_messages;
+    	});
+    	console.log(privatenotificationsArray);*/
+    	var user_groups = User_Group.find({user: Meteor.userId()}).fetch();
+		// console.log(user_groups);
+		var groupsArray = 0;
+		// var groups = new Array();
+		user_groups.forEach(function(row){
+			if(row.new_messages > 0);
+    			groupsArray = groupsArray +1;
+		});
+    	return privatechatnotifications.length + groupsArray;
+	}
+);
+UI.registerHelper();
+UI.registerHelper();

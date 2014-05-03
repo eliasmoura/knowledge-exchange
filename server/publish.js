@@ -70,9 +70,11 @@ Meteor.publish("user-chatroom-active", function(){
 });
 
 Meteor.publish("chat-messages", function(active_room){
-	if(active_room.type == null){
+	// console.log(active_room);
+	var isso = active_room.type;
+	if(active_room.type == "none"){
 		console.log('no room active');
-		return Messages.find({room:active_room.room}, {sort: {time: +1}})
+		return Messages.find({room:null}, {sort: {time: +1}})
 	}
 	if(active_room.type == "public")
 		return Messages.find({room:active_room.room}, {sort: {time: +1}});
@@ -135,6 +137,7 @@ Meteor.publish("correction", function(messageId){
 Meteor.publish("chat-corrections", function(active_room){
 	var messagesArray = [];
 	var messages = null;
+	return Correction.find({room: null});
 	if (active_room.type != null)
 	{
 		/*if (active_room.type == "public"){
@@ -159,11 +162,19 @@ Meteor.publish("chat-corrections", function(active_room){
 		var corrections = Correction.find({room: active_room.room});
 	}else{
 		console.log("no room active")
-		return Correction.find({room: active_room.room});
+		return Correction.find({room: null});
 	}
 	return corrections;
 });
 
 Meteor.publish("usage", function(usagefor){
 	return Usage.find({usagefor:usagefor});
+});
+
+
+Meteor.publish("emails-sent", function(){
+	return Email.find({emailfrom:this.userId});
+});
+Meteor.publish("emails-received", function(){
+	return Email.find({emailto:this.userId});
 });

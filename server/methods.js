@@ -16,28 +16,45 @@ Meteor.methods({
 	},
 	setUser_activeRoom: function(type,roomId){
 		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.active_room":{type:type,room:roomId}}},function(error,docs){
-				if(!error);
-					// console.log(docs);
-				else
+				if(!error){
+					// console.log("activeRoom: " + docs);
+					// console.log(Meteor.user().profile.active_room);
+				}
+					
+				else{
+					console.log("activeRoom");
 					console.log(error);
+				}
+					
 			});
 	},
-	setRoom_active: function(room){
+	setRoom_active: function(roomId){
 		if(!Meteor.user())return "You must be logged!";
 		var user = this.userId;
-		var user_room = User_Chatroom.findOne({room:room,user:user});
+		var user_room = User_Chatroom.findOne({room:roomId,user:user});
 		Meteor.call('setRoom_Non_active');
 		Meteor.call('setGroup_Non_active');
 		Meteor.call('setFriend_Non_active');
-		if (!user_room){
-			var roomId = Chatrooms.findOne({_id:room})._id;
-			User_Chatroom.insert({room:roomId,user:user,active:true}, function(error, result){
-				Meteor.call("setUser_activeRoom","public",User_Chatroom.findOne({_id:result}));
-			});
+		if (user_room == undefined){
+			if(Chatrooms.findOne({_id:roomId})._id)
+				User_Chatroom.insert({room:roomId,user:user,active:true}, function(error, result){
+					if(!error){
+						var room = User_Chatroom.findOne({_id:result}).room;
+						// console.log("room: " + room + "  result " + result);
+						Meteor.call("setUser_activeRoom","public",room);
+					}
+						
+					else{ 
+						console.log(error);
+						console.log(result);
+					}
+				});
 		}
 		else if (!user_room['active']){
-			User_Chatroom.update({_id:user_room['_id']}, {$set:{active: true}});
-			Meteor.call("setUser_activeRoom","public",user_room.room);
+			User_Chatroom.update({_id:user_room._id}, {$set:{active: true}}, function(error,doc){
+				Meteor.call("setUser_activeRoom","public",user_room.room);
+			});
+			
 		}	
 	},
 	setRoom_Non_active: function(){
@@ -376,9 +393,9 @@ Meteor.methods({
 				//console.log(row);
 				userList.push(row.user);
 			});
-			userList = Meteor.users.find({_id:{$in: userList}, "profile.online":true}, 
+			userList = Meteor.users.find({_id:{$in: userList}, "profile.status":{$in:["online","away","busy"]}}, 
 				{fields:{_id:1,"profile.name":1,"profile.lastname":1,"profile.status":1,"profile.alway":1}},
-				{sort:{"profile.online":-1,"profile.name":-1}}).fetch();
+				{sort:{"profile.status":1,"profile.name":-1}}).fetch();
 		}else if (room.type == "group"){
 			User_Group.find({group:room.room})
 				.fetch()

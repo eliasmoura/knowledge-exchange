@@ -9,10 +9,6 @@ var isValidPassword = function(val, field) {
 		return false;
 	}
 }
-Template.user.user = function(){
-	var user = Meteor.user();
-	return user;
-}
 Template.user.login = function(){
 	return Session.get("login");
 }
@@ -93,9 +89,9 @@ Template.login_form.events = {
 }
 Template.register_form.rendered = function(){
 	$('#registerModal').modal("toggle");
-	/*$('#registerModal').on("hidden.bs.modal", function(){
+	$('#registerModal').on("hidden.bs.modal", function(){
 			Session.set('login', true);
-	});*/
+	});
 }
 
 Template.register_form.destroyed = function(){

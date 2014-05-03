@@ -3,6 +3,8 @@
 Template.messagem_corrected_button.rendered = function(){
 	var element = this.firstNode;
 	var id = $(element).parent().attr('id');
+	e.stopPropagation();
+	e.preventDefault();
 	console.log(id);
 	//console.log("m "+message[0]._id);
 	//console.log(Correction.find({}).fetch() );
