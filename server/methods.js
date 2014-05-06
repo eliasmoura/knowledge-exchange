@@ -425,6 +425,10 @@ Meteor.methods({
 		// console.log(userList);
 		return userList;
 	},
+	set_userStatus: function(status){
+		Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.status":status}});
+		Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.default_status":status}});
+	},
 	clean_db: function(){
 		Correction.remove({});
 		Corrections.remove({});

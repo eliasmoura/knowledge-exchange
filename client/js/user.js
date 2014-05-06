@@ -50,8 +50,40 @@ Template.user.events({
 	'click #userstatus': function(e,t){
 		e.preventDefault();
 		e.stopPropagation();
+		
+		var elementClass = $(e.target).attr("class");
+		if(elementClass.indexOf("ok") == -1){
+			var status = "<div><a href='#' class='setuserstatus' id='online'><span class='online glyphicon glyphicon-user' ></span> "+mf('online',null,'Online')+"</a></div>"+
+						 "<div><a href='#' class='setuserstatus' id='away'><span class='away glyphicon glyphicon-user'></span> "+mf('away',null,'Away')+"</a></div>"+
+						 "<div><a href='#' class='setuserstatus' id='busy'><span class='busy glyphicon glyphicon-user'></span> "+mf('busy',null,'Busy')+"</a></div>";
+			$(e.target).popover({
+				html: true,
+				title: "<h4>Set status:</h4>",
+				content:status,
+				placement: 'bottom'
+			});
+			$(e.target).popover('show');
+			$(e.target).addClass( "ok")
+			$(".popover").on("click",".setuserstatus", function(){
+					console.log('test');
+					// $(this).preventDefault();
+					// $(this).stopPropagation();
+					console.log('set user status');
+					var pop = $("#userstatus");
+					var status = $(this).attr("id");
+					Meteor.call("set_userStatus",status);
+					$(pop).popover('hide');
+			});
+		}
+	},
+	'click .setuserstatus': function(e,t){
+		
+
 	}
+
 });
+
+
 
 Template.login_popover.rendered = function(){
 		$(".popover").popover({

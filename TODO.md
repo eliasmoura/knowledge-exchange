@@ -16,9 +16,9 @@
 	- [x] send invitation requests;
 	- [x] receive requests;
 	- [x] accept requests;
-	- [ ] deny requests;
-	- [x] see group users list;
-	- [ ] see user's groups lists;
+	- [x] deny requests;
+	- [x] see group's users list;
+	- [x] see user's groups lists;
 	- [ ] moderate group;
 
 * General chat functionalities:
@@ -66,7 +66,7 @@
 	- [x] set user relationship(friend, contact, teacher, student)
 	- [x] receive requests;
 	- [x] accept requests;
-	- [ ] deny requests;
+	- [x] deny requests;
 	- [x] remove users from contacts list;
 	- [ ] block users;
 	- [x] send emails;

@@ -20,7 +20,7 @@
 <template name="user">
 		{{#if user}}
 			<a id="user" class="dropdown-toggle" href="#" data-toggle="dropdown" >
-				<span class="glyphicon glyphicon-user {{user.profile.status}}" id="userstatus"></span>
+				<span class="glyphicon glyphicon-user {{user.profile.status}}" id="userstatus" data-container="body" data-toggle="popover" data-placement="botton" data-html="true"></span>
 				{{user.profile.name}}
 				<span class="badge">{{notifications.total}}</span>
 				<span class="caret"></span>
