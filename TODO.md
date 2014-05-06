@@ -2,7 +2,7 @@
 
 ##CHAT
 
- ###Public chat:
+* Public chat:
     - [x] enter chat room;
     - [x] see chat rooms list;
 
@@ -83,8 +83,8 @@
 	- [x] native language;
 	- [x] learning languages;
 	- [x] known languages;
-	- [x] languages fluency;
-	- [x] description;
+	- [ ] languages fluency;
+	- [ ] description;
 	- [x] gender;
 	- [x] interests;
 	- [x] email;

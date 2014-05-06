@@ -338,10 +338,10 @@ Meteor.methods({
 		else
 			throw Meteor.Error(1000, "The person you are trying to send a request doesn't exit");
 	},
-	request_handler: function(request,type){
+	request_handler: function(args){
 		console.log('request handler');
 		if (args.type == 1){
-			var request = GroupRequest.findOne({_id:request});
+			var request = GroupRequest.findOne({_id:args.request});
 			if(args.action == 1)
 				Meteor.call("setUser_group", request,1);
 			else
@@ -349,13 +349,13 @@ Meteor.methods({
 
 		}else if (args.type == 2){
 			console.log('group invite');
-			var request = GroupRequest.findOne({_id:request});
+			var request = GroupRequest.findOne({_id:args.request});
 			if(args.action == 1)
 				Meteor.call("setUser_group", request,1);
 			else
 				GroupRequest.remove({_id:request._id});
 		}else{
-			var request = UserRequest.findOne({_id:request,request_to:this.userId});
+			var request = UserRequest.findOne({_id:args.request,request_to:this.userId});
 			if(args.action == 1)
 				Meteor.call("setUser_relation",{request:request,relation:1,operation:1});
 			else
