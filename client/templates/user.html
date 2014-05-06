@@ -332,32 +332,31 @@
 				    </a>
 				</div>
 				<div>
-				<a href="www.google.com.br/#q={{user_modal.user.city}}">{{user.city}}</a>, <a href="www.google.com.br/#q={{user.country}}">{{user.country}}</a>
+					<a href="www.google.com.br/#q={{this.user.city}}">{{this.user.city}}</a>, <a href="www.google.com.br/#q={{this.user.country}}">{{this.user.country}}</a>
 
-				<label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <span>{{user.birthday}}</span>
+					<label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <span>{{this.user.birthday}}</span>
+				</div>
 			</div>
 		</div>
-	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading"> {{mf 'user-languages' 'User languages info'}}:</div>
 		<div class="panel-body">
 			<label for="know">{{mf 'know' 'Know'}}:</label>
 			<div class="know">
-				<div><a href="www.google.com.br/#q={{user.nativelang}}">{{user.nativelang}}</a></div>
+				<div><a href="www.google.com.br/#q={{this.user.nativelang}}">{{this.user.nativelang}}</a></div>
 			</div>
 			<label for="learning">{{mf 'learning' 'Learning'}}:</label>
 			<div class="learning">
-				{{#each user.learninglanguages}}
-				<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a></div>
+				{{#each this.user.learninglanguages}}
+					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a></div>
 				{{/each}}
 			</div>
 		</div>
 	</div>		
-
 	<div class="panel panel-info">
 		<div class="panel-heading"> {{mf 'user-description' 'User description'}}:</div>
 		<div class="panel-body">
-			{{user.description}}
+			{{this.user.description}}
 		</div>
 	</div>
 	{{/with}}

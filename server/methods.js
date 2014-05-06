@@ -340,17 +340,26 @@ Meteor.methods({
 	},
 	request_handler: function(request,type){
 		console.log('request handler');
-		if (type == 1){
+		if (args.type == 1){
 			var request = GroupRequest.findOne({_id:request});
-			Meteor.call("setUser_group", request,1);
+			if(args.action == 1)
+				Meteor.call("setUser_group", request,1);
+			else
+				GroupRequest.remove({_id:request._id});
 
-		}else if (type == 2){
+		}else if (args.type == 2){
 			console.log('group invite');
 			var request = GroupRequest.findOne({_id:request});
-			Meteor.call("setUser_group", request,1);
+			if(args.action == 1)
+				Meteor.call("setUser_group", request,1);
+			else
+				GroupRequest.remove({_id:request._id});
 		}else{
 			var request = UserRequest.findOne({_id:request,request_to:this.userId});
-			Meteor.call("setUser_relation",{request:request,relation:1,operation:1});
+			if(args.action == 1)
+				Meteor.call("setUser_relation",{request:request,relation:1,operation:1});
+			else
+				UserRequest.remove({_id:request._id});
 		}
 	},
 	find: function(search){

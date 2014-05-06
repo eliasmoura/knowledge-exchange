@@ -2,7 +2,7 @@
 
 ##CHAT
 
-* Public chat:
+ ###Public chat:
     - [x] enter chat room;
     - [x] see chat rooms list;
 
@@ -47,10 +47,10 @@
 - [ ] save correction as flash cards;
 
 * Correction information:
-	- [ ] text ID;
-	- [ ] owner;
-	- [ ] correction;
-	- [ ] corrector;
+	- [x] text ID;
+	- [x] owner;
+	- [x] correction;
+	- [x] corrector;
 
 
 ##General
@@ -69,7 +69,7 @@
 	- [ ] deny requests;
 	- [x] remove users from contacts list;
 	- [ ] block users;
-	- [ ] send emails;
+	- [x] send emails;
 	- [ ] receive emails;
 	- [x] see user's profile;
 	- [ ] report user;
@@ -77,16 +77,16 @@
 * User information:
 	- [x] name;
 	- [x] last name;
-	- [ ] birthday;
+	- [x] birthday;
 	- [x] country;
 	- [x] city;
 	- [x] native language;
-	- [ ] learning languages;
+	- [x] learning languages;
 	- [x] known languages;
-	- [ ] languages fluency;
+	- [x] languages fluency;
 	- [x] description;
-	- [ ] gender;
-	- [ ] interests;
+	- [x] gender;
+	- [x] interests;
 	- [x] email;
 	- [x] password;
 	- [ ] photo;

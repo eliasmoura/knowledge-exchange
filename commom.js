@@ -99,6 +99,7 @@ Router.map( function() {
 			if(modal_action.action =="invite"){
 				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
+
 						Session.set("user_modal_actions",{
 							group:true,
 							action: "Invite "+users.profile.name+" to:",
@@ -111,6 +112,7 @@ Router.map( function() {
 			if(modal_action.action =="profile"){
 				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
+						console.log(users);
 						Session.set("user_modal_actions",{
 							profile:true,
 							action: users.profile.name + " " +users.profile.lastname,
