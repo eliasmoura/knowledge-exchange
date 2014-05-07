@@ -112,7 +112,7 @@ Router.map( function() {
 			if(modal_action.action =="profile"){
 				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
-						console.log(users);
+						// console.log(users);
 						Session.set("user_modal_actions",{
 							profile:true,
 							action: users.profile.name + " " +users.profile.lastname,
@@ -239,20 +239,25 @@ Router.map( function() {
 				else if (messages.type == "privatechat"){
 					messages = PrivateMessages.find({chat:{$in: [messages.room]}});
 				}
+				// console.log(Meteor.user().profile.blocked_users);
+				// console.log(Meteor.user().profile.blocked_users.indexOf(row.userid));
 				try{
 		    		messages.forEach(function(row){
-		    			var corrections = Correction.find({message:row._id});
-		    			row.corrections = [];
-		    			corrections.forEach(function(crow){
-		    				crow.corrector = Meteor.users.findOne({_id:crow.corrector},{fields:{"profile.name":1}}).profile.name;
-		    				//console.log(crow.correction);
-		    				//crow.text = crow.correction;
-		    				row.corrections.push(crow);
-		    			})
-		    			messagesArray.push(row);
-		    			//console.log(row);
+		    			// if(Meteor.user().profile.blocked_users != undefined)
+		    			if (Meteor.user().profile.blocked_users.indexOf(row.userid) == -1) {
+		    				var corrections = Correction.find({message:row._id});
+			    			row.corrections = [];
+			    			corrections.forEach(function(crow){
+			    				crow.corrector = Meteor.users.findOne({_id:crow.corrector},{fields:{"profile.name":1}}).profile.name;
+			    				//console.log(crow.correction);
+			    				//crow.text = crow.correction;
+			    				row.corrections.push(crow);
+			    			})
+			    			messagesArray.push(row);
+			    			//console.log(row);
+		    			}
 		    		})
-		    	}catch(e){}
+		    	}catch(e){console.log(e);}
 	    		// console.log(messagesArray);
 	    		return messagesArray;
 	    	},

@@ -60,12 +60,12 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="navbar-nav">
 	      <ul class="nav navbar-nav">
-	        <li class="{{activeHome}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
-			<li class="{{activeBlog}}" ><a class="navigation" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
+	        <li class="{{activeHome}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
+			<li class="{{activeBlog}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
 			<li class="{{activeChat}}" ><a class="navigation" href="/chat">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
-			<li class="{{activeNotes}}" ><a class="navigation" href="/notes">{{mf 'notes' 'NOTES'}}</a></li>
+			<li class="{{activeNotes}} disabled" tile="{{mf 'under-construction' 'Under development'}}"  ><a class="navigation" href="/notes">{{mf 'notes' 'NOTES'}}</a></li>
 	      </ul>
-	      <form class="navbar-form navbar-left" role="search">
+	      <form class="navbar-form navbar-left disabled" tile="{{mf 'under-construction' 'Under development'}}" role="search">
 	        <div class="form-group">
 	          <input type="text" class="form-control" placeholder="Search">
 	        </div>

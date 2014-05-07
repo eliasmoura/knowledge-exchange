@@ -27,7 +27,7 @@
 	- [x] see user list;
     - [x] see user's contacts list;
     - [x] show users status (on line, away, busy, off line);
-    - [ ] set user status  (on line, away, busy);
+    - [x] set user status  (on line, away, busy);
 
 
 ##BLOG
@@ -96,8 +96,8 @@
 	- [x] name;
 	- [ ] short name;
 	- [x] description;
-	- [ ] languages allowed;
-	- [ ] interests(group subjects focus);
+	- [x] languages allowed;
+	- [x] interests(group subjects focus);
 	- [x] owner;
 	- [x] moderators;
 	- [x] participants;

@@ -43,6 +43,19 @@ Template.user.events({
 			else
 				$("#login-popover").addClass('in');*/
 	},
+	'click #profile': function(e,t){
+		Session.set("user_modal_actions",{
+			profile:true,
+			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
+			user:Meteor.user().profile,
+			_id:Meteor.user()._id,
+		});
+	},
+	'click #email': function(e,t){
+		// console.log('emails click');
+		Session.set("emails", true);
+		// console.log(Session.get("emails"));
+	},
 	'click #notification': function(e, t){
 		$('#notificationModal').modal("toggle");
 		console.log('should show the notification ');
@@ -65,20 +78,16 @@ Template.user.events({
 			$(e.target).popover('show');
 			$(e.target).addClass( "ok")
 			$(".popover").on("click",".setuserstatus", function(){
-					console.log('test');
+					// console.log('test');
 					// $(this).preventDefault();
 					// $(this).stopPropagation();
-					console.log('set user status');
+					// console.log('set user status');
 					var pop = $("#userstatus");
 					var status = $(this).attr("id");
 					Meteor.call("set_userStatus",status);
 					$(pop).popover('hide');
 			});
 		}
-	},
-	'click .setuserstatus': function(e,t){
-		
-
 	}
 
 });
@@ -218,108 +227,7 @@ Template.register_form.events({
 	},
 	'click #add-more-languages': function(e,t){
 		console.log('add lang');
-		var langs = [
-            {lang:mf("akan",null,"Akan")},
-            {lang:mf("amharic",null,"Amharic")},
-            {lang:mf("arabic",null,"Arabic")},
-            {lang:mf("assamese",null,"Assamese")},
-            {lang:mf("awadhi",null,"Awadhi")},
-            {lang:mf("azerbaijani",null,"Azerbaijani")},
-            {lang:mf("balochi",null,"Balochi")},
-            {lang:mf("belarusian",null,"Belarusian")},
-            {lang:mf("bengali",null,"Bengali")},
-            {lang:mf("bhojpuri",null,"Bhojpuri")},
-            {lang:mf("burmese",null,"Burmese")},
-            {lang:mf("cantonese",null,"Cantonese")},
-            {lang:mf("cebuano",null,"Cebuano")},
-            {lang:mf("chewa",null,"Chewa")},
-            {lang:mf("chhattisgarhi",null,"Chhattisgarhi")},
-            {lang:mf("chittagonian",null,"Chittagonian")},
-            {lang:mf("czech",null,"Czech")},
-            {lang:mf("deccan",null,"Deccan")},
-            {lang:mf("dhundhari",null,"Dhundhari")},
-            {lang:mf("dutch",null,"Dutch")},
-            {lang:mf("english",null,"English")},
-            {lang:mf("french",null,"French")},
-            {lang:mf("fula",null,"Fula")},
-            {lang:mf("gan",null,"Gan")},
-            {lang:mf("german",null,"German")},
-            {lang:mf("greek",null,"Greek")},
-            {lang:mf("gujarati",null,"Gujarati")},
-            {lang:mf("haitian creole",null,"Haitian Creole")},
-            {lang:mf("hakka",null,"Hakka")},
-            {lang:mf("haryanvi",null,"Haryanvi")},
-            {lang:mf("hausa",null,"Hausa")},
-            {lang:mf("hiligaynon",null,"Hiligaynon")},
-            {lang:mf("hindi",null,"Hindi")},
-            {lang:mf("hmong",null,"Hmong")},
-            {lang:mf("hungarian",null,"Hungarian")},
-            {lang:mf("igbo",null,"Igbo")},
-            {lang:mf("ilokano",null,"Ilokano")},
-            {lang:mf("italian",null,"Italian")},
-            {lang:mf("japanese",null,"Japanese")},
-            {lang:mf("javanese",null,"Javanese")},
-            {lang:mf("jin",null,"Jin")},
-            {lang:mf("kannada",null,"Kannada")},
-            {lang:mf("kazakh",null,"Kazakh")},
-            {lang:mf("khmer",null,"Khmer")},
-            {lang:mf("kinyarwanda",null,"Kinyarwanda")},
-            {lang:mf("kirundi",null,"Kirundi")},
-            {lang:mf("konkani",null,"Konkani")},
-            {lang:mf("korean",null,"Korean")},
-            {lang:mf("kurdish",null,"Kurdish")},
-            {lang:mf("madurese",null,"Madurese")},
-            {lang:mf("magahi",null,"Magahi")},
-            {lang:mf("maithili",null,"Maithili")},
-            {lang:mf("malagasy",null,"Malagasy")},
-            {lang:mf("malay/indonesian",null,"Malay/Indonesian")},
-            {lang:mf("malayalam",null,"Malayalam")},
-            {lang:mf("mandarin",null,"Mandarin")},
-            {lang:mf("marathi",null,"Marathi")},
-            {lang:mf("marwari",null,"Marwari")},
-            {lang:mf("min bei",null,"Min Bei")},
-            {lang:mf("min dong",null,"Min Dong")},
-            {lang:mf("min nan",null,"Min Nan")},
-            {lang:mf("mossi",null,"Mossi")},
-            {lang:mf("nepali",null,"Nepali")},
-            {lang:mf("oriya",null,"Oriya")},
-            {lang:mf("oromo",null,"Oromo")},
-            {lang:mf("pashto",null,"Pashto")},
-            {lang:mf("persian",null,"Persian")},
-            {lang:mf("polish",null,"Polish")},
-            {lang:mf("portuguese",null,"Portuguese")},
-            {lang:mf("punjabi",null,"Punjabi")},
-            {lang:mf("quechua",null,"Quechua")},
-            {lang:mf("romanian",null,"Romanian")},
-            {lang:mf("russian",null,"Russian")},
-            {lang:mf("saraiki",null,"Saraiki")},
-            {lang:mf("serbo-croatian",null,"Serbo-Croatian")},
-            {lang:mf("shona",null,"Shona")},
-            {lang:mf("sindhi",null,"Sindhi")},
-            {lang:mf("sinhalese",null,"Sinhalese")},
-            {lang:mf("somali",null,"Somali")},
-            {lang:mf("spanish",null,"Spanish")},
-            {lang:mf("sundanese",null,"Sundanese")},
-            {lang:mf("swahili",null,"Swahili")},
-            {lang:mf("swedish",null,"Swedish")},
-            {lang:mf("sylheti",null,"Sylheti")},
-            {lang:mf("tagalog",null,"Tagalog")},
-            {lang:mf("tamil",null,"Tamil")},
-            {lang:mf("telugu",null,"Telugu")},
-            {lang:mf("thai",null,"Thai")},
-            {lang:mf("turkish",null,"Turkish")},
-            {lang:mf("ukrainian",null,"Ukrainian")},
-            {lang:mf("urdu",null,"Urdu")},
-            {lang:mf("uyghur",null,"Uyghur")},
-            {lang:mf("uzbek",null,"Uzbek")},
-            {lang:mf("vietnamese",null,"Vietnamese")},
-            {lang:mf("wu",null,"Wu")},
-            {lang:mf("xhosa",null,"Xhosa")},
-            {lang:mf("xiang",null,"Xiang")},
-            {lang:mf("yoruba",null,"Yoruba")},
-            {lang:mf("zhuang",null,"Zhuang")},
-            {lang:mf("zulu",null,"Zulu")},
-        ];
+		var langs = Session.get("langs");
         var element = t.find('#learninglanguages');
         var html = '<select name="lang" id="" class="learninglanguage">\
         						<option value="0">'+ mf('select',null,'Select One')+'</option>';
@@ -331,108 +239,7 @@ Template.register_form.events({
 	},
 	'click #add-more-knownlanguages': function(e,t){
 		console.log('add lang');
-		var langs = [
-            {lang:mf("akan",null,"Akan")},
-            {lang:mf("amharic",null,"Amharic")},
-            {lang:mf("arabic",null,"Arabic")},
-            {lang:mf("assamese",null,"Assamese")},
-            {lang:mf("awadhi",null,"Awadhi")},
-            {lang:mf("azerbaijani",null,"Azerbaijani")},
-            {lang:mf("balochi",null,"Balochi")},
-            {lang:mf("belarusian",null,"Belarusian")},
-            {lang:mf("bengali",null,"Bengali")},
-            {lang:mf("bhojpuri",null,"Bhojpuri")},
-            {lang:mf("burmese",null,"Burmese")},
-            {lang:mf("cantonese",null,"Cantonese")},
-            {lang:mf("cebuano",null,"Cebuano")},
-            {lang:mf("chewa",null,"Chewa")},
-            {lang:mf("chhattisgarhi",null,"Chhattisgarhi")},
-            {lang:mf("chittagonian",null,"Chittagonian")},
-            {lang:mf("czech",null,"Czech")},
-            {lang:mf("deccan",null,"Deccan")},
-            {lang:mf("dhundhari",null,"Dhundhari")},
-            {lang:mf("dutch",null,"Dutch")},
-            {lang:mf("english",null,"English")},
-            {lang:mf("french",null,"French")},
-            {lang:mf("fula",null,"Fula")},
-            {lang:mf("gan",null,"Gan")},
-            {lang:mf("german",null,"German")},
-            {lang:mf("greek",null,"Greek")},
-            {lang:mf("gujarati",null,"Gujarati")},
-            {lang:mf("haitian creole",null,"Haitian Creole")},
-            {lang:mf("hakka",null,"Hakka")},
-            {lang:mf("haryanvi",null,"Haryanvi")},
-            {lang:mf("hausa",null,"Hausa")},
-            {lang:mf("hiligaynon",null,"Hiligaynon")},
-            {lang:mf("hindi",null,"Hindi")},
-            {lang:mf("hmong",null,"Hmong")},
-            {lang:mf("hungarian",null,"Hungarian")},
-            {lang:mf("igbo",null,"Igbo")},
-            {lang:mf("ilokano",null,"Ilokano")},
-            {lang:mf("italian",null,"Italian")},
-            {lang:mf("japanese",null,"Japanese")},
-            {lang:mf("javanese",null,"Javanese")},
-            {lang:mf("jin",null,"Jin")},
-            {lang:mf("kannada",null,"Kannada")},
-            {lang:mf("kazakh",null,"Kazakh")},
-            {lang:mf("khmer",null,"Khmer")},
-            {lang:mf("kinyarwanda",null,"Kinyarwanda")},
-            {lang:mf("kirundi",null,"Kirundi")},
-            {lang:mf("konkani",null,"Konkani")},
-            {lang:mf("korean",null,"Korean")},
-            {lang:mf("kurdish",null,"Kurdish")},
-            {lang:mf("madurese",null,"Madurese")},
-            {lang:mf("magahi",null,"Magahi")},
-            {lang:mf("maithili",null,"Maithili")},
-            {lang:mf("malagasy",null,"Malagasy")},
-            {lang:mf("malay/indonesian",null,"Malay/Indonesian")},
-            {lang:mf("malayalam",null,"Malayalam")},
-            {lang:mf("mandarin",null,"Mandarin")},
-            {lang:mf("marathi",null,"Marathi")},
-            {lang:mf("marwari",null,"Marwari")},
-            {lang:mf("min bei",null,"Min Bei")},
-            {lang:mf("min dong",null,"Min Dong")},
-            {lang:mf("min nan",null,"Min Nan")},
-            {lang:mf("mossi",null,"Mossi")},
-            {lang:mf("nepali",null,"Nepali")},
-            {lang:mf("oriya",null,"Oriya")},
-            {lang:mf("oromo",null,"Oromo")},
-            {lang:mf("pashto",null,"Pashto")},
-            {lang:mf("persian",null,"Persian")},
-            {lang:mf("polish",null,"Polish")},
-            {lang:mf("portuguese",null,"Portuguese")},
-            {lang:mf("punjabi",null,"Punjabi")},
-            {lang:mf("quechua",null,"Quechua")},
-            {lang:mf("romanian",null,"Romanian")},
-            {lang:mf("russian",null,"Russian")},
-            {lang:mf("saraiki",null,"Saraiki")},
-            {lang:mf("serbo-croatian",null,"Serbo-Croatian")},
-            {lang:mf("shona",null,"Shona")},
-            {lang:mf("sindhi",null,"Sindhi")},
-            {lang:mf("sinhalese",null,"Sinhalese")},
-            {lang:mf("somali",null,"Somali")},
-            {lang:mf("spanish",null,"Spanish")},
-            {lang:mf("sundanese",null,"Sundanese")},
-            {lang:mf("swahili",null,"Swahili")},
-            {lang:mf("swedish",null,"Swedish")},
-            {lang:mf("sylheti",null,"Sylheti")},
-            {lang:mf("tagalog",null,"Tagalog")},
-            {lang:mf("tamil",null,"Tamil")},
-            {lang:mf("telugu",null,"Telugu")},
-            {lang:mf("thai",null,"Thai")},
-            {lang:mf("turkish",null,"Turkish")},
-            {lang:mf("ukrainian",null,"Ukrainian")},
-            {lang:mf("urdu",null,"Urdu")},
-            {lang:mf("uyghur",null,"Uyghur")},
-            {lang:mf("uzbek",null,"Uzbek")},
-            {lang:mf("vietnamese",null,"Vietnamese")},
-            {lang:mf("wu",null,"Wu")},
-            {lang:mf("xhosa",null,"Xhosa")},
-            {lang:mf("xiang",null,"Xiang")},
-            {lang:mf("yoruba",null,"Yoruba")},
-            {lang:mf("zhuang",null,"Zhuang")},
-            {lang:mf("zulu",null,"Zulu")},
-        ];
+		var langs = Session.get("langs");
         var element = t.find('#knownlanguages');
         var html = '<select name="lang" id="" class="knownlanguage">\
         						<option value="0">'+ mf('select',null,'Select One')+'</option>';
@@ -443,6 +250,17 @@ Template.register_form.events({
         $(element).append(html);
 	}
 });
+
+/*
+	User finder
+*/
+Template.user_finder.rendered = function(){
+	console.log('add user');
+	$('#user-finder-modal').modal();
+	$("#user-finder-modal").on('hidden.bs.modal', function(){
+		Session.set('user-finder', false);
+	})
+}
 
 
 Template.user_finder_modal.rendered = function(){
@@ -509,23 +327,7 @@ Template.user_modal.events({
 		}
 	}
 })
-Template.send_email.events({
-	'submit #send-email-form': function(e,t){
-		e.preventDefault();
-		var emailto = Session.get("user_modal_actions")._id;
-		var message = t.find("#send-email-msg").value;
-		if(message.length < 2)
-			return false;
-		Meteor.call("send_email",{emailto:emailto,message:message},function(error,result){
-			if(!error){
-				console.log("email sent");
-				$("#user-modal").modal("hide");
-				Session.set("user_modal_actions", false);
-			}else console.log(error);
-		});
 
-	}
-});
 Template.report.events({
 	'submit #report-user-form': function(e,t){
 		e.preventDefault();

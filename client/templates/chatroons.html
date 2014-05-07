@@ -19,7 +19,7 @@
 	{{#if currentUser}}
 		{{#if room}}
 		<div class="chatroon-name panel-heading row">
-			<h3 class="panel-title center-block">{{room.name}}</h3>
+			<h3 class="panel-title center-block pager">{{room.name}}</h3>
 		</div>
 		<div class="divchat row" >
 			<div class="">
@@ -66,7 +66,7 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each rooms}}
 					<li class="{{#if active}}active{{/if}}">
-						<a href="#" class="chat-room" id="{{_id}}" >{{name}}</a>
+						<a href="#" class="chat-room pager" id="{{_id}}" >{{name}}</a>
 					</li>
 					{{/each}}
 				</ul>
@@ -88,7 +88,7 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each group_rooms}}
 					<li class="{{#if active}}active{{/if}}">
-						<a  href="#" class="chat-group" id="{{_id}}" >
+						<a  href="#" class="chat-group pager" id="{{_id}}" >
 							{{name}}
 							<span class="btn-group-xs">
 								<span class="group glyphicon glyphicon-cog btn btn-default navbar-right" title="{{mf 'manage-group' 'Group managenment'}}"> </span>
@@ -120,7 +120,7 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
 					<li class="{{#if active}}active{{/if}}">
-						<a href="#" class="friends-contacts {{profile.status}}" id="{{_id}}" >
+						<a href="#" class="friends-contacts {{profile.status}} pager" id="{{_id}}" >
 							<span class="user glyphicon glyphicon-user"> </span>
 							{{profile.name}} 
 							{{#if notification}}
@@ -185,125 +185,6 @@ chat side menu
  -->
 <!-- side menu's modals -->
 
-<!-- find/create group -->
-<template name="group_chat_finder">
-	<div class="modal fade" id="group-chat-finder-modal" tabindex="-1" role="dialog" aria-labelledby="group-chat-finder-ModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
-				</div>
-				<div class="modal-body"><!--content here-->
-					<div clas="find-creat-tool"> 
-						<form action="submit" class="group-finder" id="find-create-form">
-							<ul class="nav nav-tabs nav-justified">
-								<li><a href="#" class="btn btn-default find-create active" id="find">{{mf 'find' 'Find'}}</a></li>
-								<li><a href="#" class="btn btn-default find-create" id="create">{{mf 'create' 'Create'}}</a></li>
-							</ul>
-							<div class="panel panel-group">
-								{{#if find}}
-								{{> find_group}}
-								{{else}}
-								{{> create_group}}
-								{{/if}}
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-					<input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-
-<template name="find_group">
-	<div class="form-group">
-		<input type="text" class="form-control" placeholder="Group name" id="group-name-f" />
-	</div>
-	<div class="groups">
-		{{#each group}}
-		<div class="group" id="{{_id}}">
-			<h4>
-				{{name}}
-				{{#if actions.send_request}}
-				<span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> 
-				{{/if}}
-			</h4>
-			Owner:<label id="{{owner._id}}" class="username"> {{owner.name}} </label>
-			<div class="group panel panel-default">
-				<div class="panel-heading">
-					<h4 class="panel-title">
-						<a class="panel-group" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
-					</h4>
-				</div>
-				<div class="panel-collapse collapse out" id="panel-group">
-					<p class="group" id="{{_id}}" >	{{details}}</p>
-				</div>
-			</div>
-		</div>
-		{{/each}}
-	</div>
-</template>
-
-<template name="create_group">
-	<div class="form-group panel-deafult">
-		<label for="group-name-c">{{mf 'name'}}:</label>
-		<input type="text" class="form-control" placeholder="Group name" id="group-name-c" />
-	</div>
-	<div class="info panel panel-default">
-		<div class="panel-heading">
-			<h4>{{mf 'details' 'Details'}}:</h4>
-		</div>
-		<div class="form-group panel">
-			<div id="info">
-				<label for="type">{{mf 'type' 'Type'}}:</label>
-				<select id="type">
-					<option value="open">{{mf 'open_group' 'Open group'}} </option>
-					<option value="participation">{{mf 'part_request' 'Participation request'}}</option>
-					<option value="indication">{{mf 'memb_indication' 'Members indicatioin'}}</option>
-				</select>
-				<p id="genre">
-					<label for="genre">{{mf 'group_genre' 'Group Genre'}}:</label>
-					<div class="">
-						<label for="education">{{mf 'education' 'Education'}} </label><input type="checkbox" name="groupgenre" id='education' class='group-type'>
-						<label for="music">{{mf 'music' 'Music'}} </label><input type="checkbox" name="groupgenre" id='music' class='group-type'>
-						<label for="sports">{{mf 'sports' 'Sports'}} </label><input type="checkbox" name="groupgenre" id='sports' class='group-type'>
-					</div>
-				</p>
-				<label for="description">{{mf 'description' 'Description'}}:</label>
-				<textarea type="text" class="form-control" id="description" placeholder=""  > </textarea>
-				<div class="form-group panel panel-defaul" id="langs">
-					<label for="lang">{{mf 'allowed_langs' 'Allowed Languages'}}</label>
-					<span class="btn btn-default glyphicon glyphicon-plus" id="morelang"></span>
-					<select name="lang" id="" class="lang">
-						<option value="0">{{mf 'select_one' 'Select One'}}</option>
-						{{#each langs}}
-						<option value="{{_id}}">{{name}}</option>
-						{{/each}}
-					</select>
-				</div>
-			</div>
-			
-			<div id="invitemembers">
-				<label for="invitemembers">Invite:</label>
-				<div>
-					{{#each contacts}}
-						<input name="friends" type="checkbox" class="friends-contacts" id="{{_id}}" ><label for="{{_id}}">{{profile.name}}</label>
-					{{/each}}
-				</div>
-				<label for="find">{{mf 'find' 'Find'}}:</label>
-				<form action="submit">
-					<input type="text" value="" placeholder="Name" id="find-user" class="form-control">	
-				</form>
-				
-			</div>
-		</div>
-	</div>
-</template>
 
 
 <!-- user finder -->

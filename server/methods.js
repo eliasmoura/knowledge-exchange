@@ -246,6 +246,37 @@ Meteor.methods({
 		var user = Meteor.users.findOne({_id:args.emailto})._id;
 		Email.insert({emailto:user,emailfrom:Meteor.userId(),message:args.message,isnew:true,date:Date.now()});
 	},
+	get_emails: function(){
+		var emails_sent = Email.find({emailfrom:Meteor.userId()}, {sort:{date:-1}});
+		var emails_received = Email.find({emailto:Meteor.userId()}, {sort:{date:-1}});
+
+		if(emails_sent.count() == 0){
+			emails_sent = false;
+		}
+		else{
+			emails_sent = emails_sent.fetch();
+			var emailArray = new Array();
+			emails_sent.forEach(function(row){
+				row.user = Meteor.users.findOne({_id:row.emailto});
+				emailArray.push(row);
+			})
+			emails_sent = emailArray;
+		}
+
+		if(emails_received.count() == 0){
+			emails_received = false;
+		}
+		else{
+			emails_received = emails_received.fetch();
+			var emailArray = new Array();
+			emails_received.forEach(function(row){
+				row.user = Meteor.users.findOne({_id:row.emailfrom});
+				emailArray.push(row);
+			})
+			emails_received = emailArray;
+		}
+		return {sent:emails_sent,received:emails_received};
+	},
 	report_user:function(args){
 		check(args, Object);
 		var userId = Meteor.users.findOne({_id:args.emailto})._id;
@@ -382,6 +413,8 @@ Meteor.methods({
 				group.actions = {send_request:true};
 				if (User_Group.findOne({user:Meteor.userId(),group:group._id}))
 					group.actions.send_request = false;
+				if (GroupRequest.findOne({user:Meteor.userId(),group:group._id}))
+					group.actions.send_request = false;
 			})
 			// console.log(result);
 
@@ -390,12 +423,13 @@ Meteor.methods({
 			var usersResults = Meteor.users.find( { "profile.name": { $regex: user.user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
 			result = {groups:groupsResults, users:usersResults};
 		}
-		
+		console.log(result);
 		return result;
 	},
 	user_list: function(room){
 		check(room, Object)
 		var userList =  new Array();
+		var userListReturn = new Array();
 		if (room.type == "public"){
 			//console.log("searching room");
 			User_Chatroom.find({room:room.room, active:true}).forEach(function(row){
@@ -423,11 +457,29 @@ Meteor.methods({
 			userList.push(user);
 		}
 		// console.log(userList);
-		return userList;
+		var blocked_users = Meteor.user().profile.blocked_users;//Meteor.users.findOne({_id:Meteor.userId(), "profile.blocked_users": {$in:userList}});
+		//  if (blocked_users != undefined)
+		// console.log(userListReturn);
+
+		if (blocked_users != undefined)
+			userList.forEach(function(row){
+				if (blocked_users.indexOf(row._id) != -1) {
+					row.profile.isblocked = true;
+				}else{
+					row.isblocked = false;
+				}
+				userListReturn.push(row);
+			});
+
+		return userListReturn;
 	},
 	set_userStatus: function(status){
-		Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.status":status}});
-		Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.default_status":status}});
+		Meteor.users.update({_id:Meteor.userId()}, 
+			{$set:{"profile.status":status,"profile.default_status":status}});
+	},
+	block_user: function(user){
+		check(user, String);
+		Meteor.users.update({_id:Meteor.userId()}, {$push:{"profile.blocked_users":user}});
 	},
 	clean_db: function(){
 		Correction.remove({});

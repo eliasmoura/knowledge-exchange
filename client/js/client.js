@@ -30,53 +30,7 @@ Meteor.startup(function(){
     Session.set("login",true);
     Session.set("add_ser",false);
     Session.set("user_modal_actions",false);
-});
-
-$('html').click(function(){
-	//console.log('test');
-	//$("[data-toggle=popover]").popover('hide');
-})
-
-Template.post.events = {
-	'click input.topt': function(e,t){
-        var element = e.target;
-        //mfPkg.setLocale='pt_BR';
-        //mfPkg.setLocale('pt_BR');
-        Session.set('locale', 'pt_BR');
-        Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.default_status":status}});
-        
-    },
-    'click input.toen': function(e,t){
-        var element = e.target;
-        //mfPkg.setLocale='pt_BR';
-        //mfPkg.setLocale('pt_BR');
-        Session.set('locale', 'en_US');
-        
-    },
-    'click input.clean': function(e,t){
-        Meteor.call("clean_db");
-    }
-}
-Template.navbar.events({
-    'click .navigation': function(e,t){
-        $("#navbar-nav").removeClass("in")
-    }
-})
-
-Hooks.onGainFocus = function () {
-    if(Meteor.user() && Meteor.user().profile.default_status == "online")
-        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
-}
-
-Hooks.onLoseFocus = function () {
-    console.log('lose focus');
-    if(Meteor.user() && Meteor.user().profile.default_status == "online")
-        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"away"}});
-}
-
-UI.registerHelper(
-    "lang_list", function(){
-        return [
+    Session.set("langs",[
             {lang:mf("akan",null,"Akan")},
             {lang:mf("amharic",null,"Amharic")},
             {lang:mf("arabic",null,"Arabic")},
@@ -177,7 +131,54 @@ UI.registerHelper(
             {lang:mf("yoruba",null,"Yoruba")},
             {lang:mf("zhuang",null,"Zhuang")},
             {lang:mf("zulu",null,"Zulu")},
-        ]
+        ]);
+});
+
+$('html').click(function(){
+	//console.log('test');
+	//$("[data-toggle=popover]").popover('hide');
+})
+
+Template.post.events = {
+	'click input.topt': function(e,t){
+        var element = e.target;
+        //mfPkg.setLocale='pt_BR';
+        //mfPkg.setLocale('pt_BR');
+        Session.set('locale', 'pt_BR');
+        Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.default_status":status}});
+        
+    },
+    'click input.toen': function(e,t){
+        var element = e.target;
+        //mfPkg.setLocale='pt_BR';
+        //mfPkg.setLocale('pt_BR');
+        Session.set('locale', 'en_US');
+        
+    },
+    'click input.clean': function(e,t){
+        Meteor.call("clean_db");
+    }
+}
+Template.navbar.events({
+    'click .navigation': function(e,t){
+        $("#navbar-nav").removeClass("in")
+    }
+})
+
+Hooks.onGainFocus = function () {
+    if(Meteor.user() && Meteor.user().profile.default_status == "online")
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
+}
+
+Hooks.onLoseFocus = function () {
+    console.log('lose focus');
+    if(Meteor.user() && Meteor.user().profile.default_status == "online")
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"away"}});
+}
+
+UI.registerHelper(
+    "lang_list", function(){
+        return Session.get("langs");
     }
 )
 /*
