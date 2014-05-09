@@ -8,11 +8,11 @@
 				</div>
 				<div class="modal-body"><!--content here-->
 					<div clas="emails"> 
-						<form action="submit" class="group-finder" id="find-create-form">
+						<!-- <form action="submit" class="group-finder" id="find-create-form"> -->
 							<ul class="nav nav-tabs nav-justified">
-								<li><a href="#" class="btn btn-default email active" id="sent">{{mf 'sent' 'Sent'}}</a></li>
-								<li><a href="#" class="btn btn-default email" id="received">{{mf 'received' 'Received'}}</a></li>
-								<li><a href="#" class="btn btn-default email disabled" id="send">{{mf 'send' 'Send'}}</a></li>
+								<li><a href="#" class="btn btn-default email {{email.sent}}" id="sent">{{mf 'sent' 'Sent'}}</a></li>
+								<li><a href="#" class="btn btn-default email {{email.received}}" id="received">{{mf 'received' 'Received'}}</a></li>
+								<li><a href="#" class="btn btn-default email {{email.send}}" id="send">{{mf 'send' 'Send'}}</a></li>
 							</ul>
 							<div class="">
 								{{#if email.sent}}
@@ -25,7 +25,7 @@
 									{{> send_email}}
 								{{/if}}
 							</div>
-						</form>
+						<!-- </form> -->
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -48,8 +48,9 @@
 					    </a>
 					</div>
 					<a href="#" class="username" id="{{this.user._id}}">{{this.user.profile.name}}</a>
+					<a href="#" class="subject" data-toggle="collapse" data-toggle-to="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
 				</div>
-				<div class="panel body">
+				<div class="panel-body panel-collapse collapse" id="{{_id}}">
 					{{message}}
 				</div>
 			</div>
@@ -59,9 +60,12 @@
 	{{/if}}
 </template>
 
-<template name="send_emails">
+<template name="send_email">
 	<form action="submit" id="send-email-form">
-		<label for="user-name">{{mf 'to' 'To'}}:</label><input type="text" class="form-control emailto" placeholder="{{mf 'user'}}" name="user-name" value="{{user_modal.name}}" id="{{user_modal._id}}">
+		<label for="user-name">{{mf 'to' 'To'}}:</label>
+		<input type="text" class="form-control emailto" placeholder="{{mf 'user'}}" name="user-name" value="{{email.user.profile.name}}" id="{{email.user._id}}">
+		<label for="subject">{{mf 'subject' 'Subject'}}:</label>
+		<input type="text" class="form-control subject" placeholder="{{mf 'subject'}}" name="subject">
 		<label for="modal-text">{{mf 'msg' 'Message'}}:</label>
 		<textarea name="modal-text" id="send-email-msg" class="form-control" rows="10" placeholder="{{mf 'msg'}}"></textarea>
 		<div class="alert alert-danger alert-dismissable">

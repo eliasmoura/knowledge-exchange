@@ -65,11 +65,11 @@
 			<li class="{{activeChat}}" ><a class="navigation" href="/chat">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
 			<li class="{{activeNotes}} disabled" tile="{{mf 'under-construction' 'Under development'}}"  ><a class="navigation" href="/notes">{{mf 'notes' 'NOTES'}}</a></li>
 	      </ul>
-	      <form class="navbar-form navbar-left disabled" tile="{{mf 'under-construction' 'Under development'}}" role="search">
+	      <form class="navbar-form navbar-left" disabled="disabled" tile="{{mf 'under-construction' 'Under development'}}" role="search">
 	        <div class="form-group">
-	          <input type="text" class="form-control" placeholder="Search">
+	          <input type="text" class="form-control" disabled="disabled" placeholder="Search">
 	        </div>
-	        <button type="submit" class="btn btn-default">Submit</button>
+	        <button type="submit" class="btn btn-default" disabled="disabled">Submit</button>
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">
 	    	<li class='dropdown {{activeUser}}'>{{> user}}</li>

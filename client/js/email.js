@@ -1,5 +1,5 @@
-Template.emails.email = function(){ return Session.get("emails");}
-Template.user.email = function(){ return Session.get("emails");}
+// Template.emails.email = function(){ return Session.get("emails");}
+// Template.user.email = function(){ return Session.get("emails");}
 
 Template.sent_emails.emails = function(){ 
 	var action = Session.get("emails");
@@ -12,12 +12,23 @@ Template.sent_emails.emails = function(){
 }
 
 Template.emails.rendered = function(){
-	console.log('emails');
-	Session.set("emails", {sent:true});
+	// console.log('emails');
+	var element = Session.get("emails")
+	if (element.sent){
+			Session.set("emails", {sent:"active"});
+			$("#send-btn").addClass("hide disabled");
+		}else if (element.received){
+			Session.set("emails", {received:"active"});
+			$("#send-btn").addClass("hide disabled");
+		}else if (element.send){
+			Session.set("emails", {send:"active"});
+			$("#send-btn").removeClass("hide disabled");
+			$("#send-btn").val(mf("send",null,"Send"));
+		}
 	$('#emails-modal').modal('toggle');
 	$("#emails-modal").on('hidden.bs.modal', function(){
 		Session.set('emails', false);
-		Session.set('emails_sent', false);
+		Session.set('emailsd', false);
 	})
 }
 Template.emails.events({
@@ -28,13 +39,14 @@ Template.emails.events({
 		$(element).addClass('active');
 
 		if (element.id == "sent"){
-			Session.set("emails", {sent:true});
+			Session.set("emails", {sent:"active"});
 			$("#send-btn").addClass("hide disabled");
 		}else if (element.id == "received"){
-			Session.set("emails", {received:true});
+			Session.set("emails", {received:"active"});
 			$("#send-btn").addClass("hide disabled");
 		}else if (element.id == "send"){
-			Session.set("emails", {send:true});
+			Session.set("emails", {send:"active"});
+			$("#send-btn").removeClass("hide disabled");
 			$("#send-btn").val(mf("send",null,"Send"));
 		}
 	},
@@ -89,8 +101,8 @@ Template.emails.events({
 			$('#group-chat-finder-modal').modal('hide');
 		}
 	},
-	'click input#find-create-btn':function(e,t){
-		$('form#find-create-form').submit();
+	'click input#send-btn':function(e,t){
+		$('form#send-email-form').submit();
 	},
 	'click #morelang': function(e, t){
 		var element = t.find('#langs');
@@ -114,66 +126,28 @@ Template.emails.events({
 		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
 	}
 });
-
-Template.create_group.langs = function(){
-	return Languages.find({},{$sort: {name: +1}});
-}
-Template.find_group.created =function(){
-	//Session.set('groups-found', false);
-}
-Template.find_group.group = function(){
-	var groups = Session.get('groups-found');
-	//console.log(groups);
-	return groups;
-}
-Template.find_group.events({
-	'click span.send-request': function(event, template){
-		var groupId = event.target.id;
-		console.log('prepering the request');
-		var message = 'Some thing to say :)';
-		Meteor.call("participation_request", groupId, message,function(error,result){
-			if(!error)
-				console.log('request sent');
-			else
-				console.log('request not sent');
-		});
-		
-		
-	}
-});
-
-Template.send_emails.events({
-	'submit #send-email-form': function(e,t){
-		e.preventDefault();
-		var emailto = Session.get("user_modal_actions")._id;
-		var message = t.find("#send-email-msg").value;
-		if(message.length < 2)
-			return false;
-		Meteor.call("send_email",{emailto:emailto,message:message},function(error,result){
-			if(!error){
-				console.log("email sent");
-				$("#user-modal").modal("hide");
-				Session.set("user_modal_actions", false);
-			}else console.log(error);
-		});
-
-	}
-});
-
 Template.send_email.events({
 	'submit #send-email-form': function(e,t){
 		e.preventDefault();
-		var emailto = Session.get("user_modal_actions")._id;
+		var emailto = t.find(".emailto").id;
 		var message = t.find("#send-email-msg").value;
-		if(message.length < 2)
-			return false;
-		Meteor.call("send_email",{emailto:emailto,message:message},function(error,result){
-			if(!error){
-				console.log("email sent");
-				$("#user-modal").modal("hide");
-				Session.set("user_modal_actions", false);
-			}else console.log(error);
-		});
-
+		var subject = t.find(".subject").value;
+		if(message.length > 2)
+			Meteor.call("send_email",{emailto:emailto,subject:subject,message:message},function(error,result){
+				if(!error){
+					console.log("email sent");
+					Session.set("emails", {sent:"active"});
+				}else console.log(error);
+			});
 	}
 });
+
+Template.sent_emails.events({
+	'click .subject': function(e,t){
+		e.preventDefault();
+		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
+		console.log('collapse');
+	}
+});
+
+UI.registerHelper("email", function(){ return Session.get("emails");});

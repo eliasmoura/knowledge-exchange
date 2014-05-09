@@ -70,16 +70,15 @@ Router.map( function() {
 	    },
 	    onAfterAction:function(){
 	    	var modal_action = Session.get("user_modal_actions");
-			if(modal_action.action =="email"){
+			if(Session.get("emails").send != undefined){
 				var user = null;
-				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
+				Meteor.call("find",{user:{_id:Session.get("emails").user}},function(error,users){
 					if (users){
-						Session.set("user_modal_actions",{
-							send_email:true,
-							action: "Send email",
-							name:users.profile.name,
-							_id:users._id,
+						Session.set("emails",{
+							send:"active",
+							user:users
 						});
+						// console.log(Session.get("emails"));
 					}
 				});
 			}
@@ -189,6 +188,7 @@ Router.map( function() {
 
 				/*console.log(userlist);
 				console.log(room);*/
+				//console.log(Session.get("chat_users"));
 				return Session.get("chat_users");
 	    	},
 	    	contacts: function(){
@@ -241,10 +241,13 @@ Router.map( function() {
 				}
 				// console.log(Meteor.user().profile.blocked_users);
 				// console.log(Meteor.user().profile.blocked_users.indexOf(row.userid));
+				var blocked_users = Meteor.user().profile.blocked_users;
 				try{
 		    		messages.forEach(function(row){
-		    			// if(Meteor.user().profile.blocked_users != undefined)
-		    			if (Meteor.user().profile.blocked_users.indexOf(row.userid) == -1) {
+		    			if( blocked_users == undefined)
+		    				blocked_users = [];
+		    			// console.log(blocked_users);
+		    			if (blocked_users.indexOf(row.userid) == -1) {
 		    				var corrections = Correction.find({message:row._id});
 			    			row.corrections = [];
 			    			corrections.forEach(function(crow){

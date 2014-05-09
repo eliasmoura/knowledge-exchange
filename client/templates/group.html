@@ -55,9 +55,9 @@
 			<div class="group panel-body">
 				<div class="panel panel-default">
 					<h4 class="panel-heading">
-						<a class="panel-title groupdatails" data-toggle-to="panel-group" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
+						<a class="panel-title groupdatails" data-toggle-to="d{{_id}}" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
 					</h4>
-					<div class="panel-body collapse out" id="panel-group">
+					<div class="panel-body collapse out" id="d{{_id}}">
 						<p class="group" id="{{_id}}" >	{{details}}</p>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 						</div>
 					</p>
 					<label for="description">{{mf 'description' 'Description'}}:</label>
-					<textarea type="text" class="form-control" id="description" placeholder=""  > </textarea>
+					<textarea type="text" class="form-control" rows="10" id="description" placeholder=""  > </textarea>
 					<div class="form-group" id="langs">
 						<label for="lang">{{mf 'allowed_langs' 'Allowed Languages'}}</label>
 						<span class="btn btn-default glyphicon glyphicon-plus" id="morelang"></span>
@@ -137,9 +137,9 @@
 							<input name="friends" type="checkbox" class="friends-contacts" id="{{_id}}" ><label for="{{_id}}">{{profile.name}}</label>
 						{{/each}}
 					</div>
-					<label for="find">{{mf 'find' 'Find'}}:</label>
-					<form action="submit">
-						<input type="text" value="" placeholder="Name" id="find-user" class="form-control">	
+					<form action="submit" class="sisabled">
+						<label for="find" disabled="disabled">{{mf 'find' 'Find'}}:</label>
+						<input type="text" value="" placeholder="Name" id="find-user" class="form-control" disabled="disabled">	
 					</form>
 					
 				</div>

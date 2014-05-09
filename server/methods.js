@@ -244,7 +244,14 @@ Meteor.methods({
 	send_email:function(args){
 		check(args, Object);
 		var user = Meteor.users.findOne({_id:args.emailto})._id;
-		Email.insert({emailto:user,emailfrom:Meteor.userId(),message:args.message,isnew:true,date:Date.now()});
+		Email.insert({emailto:user,emailfrom:Meteor.userId(),subject:args.subject,message:args.message,isnew:true,date:Date.now()},function(error,id){
+			if (!error)
+			{
+				console.log('email sent: ' + id);
+			}
+			else
+				console.log(error);
+		});
 	},
 	get_emails: function(){
 		var emails_sent = Email.find({emailfrom:Meteor.userId()}, {sort:{date:-1}});
@@ -423,7 +430,7 @@ Meteor.methods({
 			var usersResults = Meteor.users.find( { "profile.name": { $regex: user.user_name, $options: 'i' } }, {fields:{_id:1,profile:1}} ).fetch();
 			result = {groups:groupsResults, users:usersResults};
 		}
-		console.log(result);
+		// console.log(result);
 		return result;
 	},
 	user_list: function(room){
@@ -460,7 +467,6 @@ Meteor.methods({
 		var blocked_users = Meteor.user().profile.blocked_users;//Meteor.users.findOne({_id:Meteor.userId(), "profile.blocked_users": {$in:userList}});
 		//  if (blocked_users != undefined)
 		// console.log(userListReturn);
-
 		if (blocked_users != undefined)
 			userList.forEach(function(row){
 				if (blocked_users.indexOf(row._id) != -1) {
@@ -470,7 +476,9 @@ Meteor.methods({
 				}
 				userListReturn.push(row);
 			});
-
+		else
+			userListReturn = userList;
+		
 		return userListReturn;
 	},
 	set_userStatus: function(status){

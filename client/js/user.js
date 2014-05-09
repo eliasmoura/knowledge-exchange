@@ -53,7 +53,7 @@ Template.user.events({
 	},
 	'click #email': function(e,t){
 		// console.log('emails click');
-		Session.set("emails", true);
+		Session.set("emails", {sent:"active"});
 		// console.log(Session.get("emails"));
 	},
 	'click #notification': function(e, t){
@@ -434,7 +434,8 @@ $(function(){
         		callback: function(key, options) {
 		            var user = $(this).attr("id");
 		            if (key == "email") {
-		            	Session.set("user_modal_actions", {action:"email",user: user});
+		            	// Session.set("user_modal_actions", {action:"email",user: user});
+		            	Session.set("emails", {send:"active", user: user});
 		            }
 		            if(key == "contact"){
 		            	Session.set("user_modal_actions", {action:"add",user: user});
