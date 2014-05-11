@@ -402,7 +402,7 @@ Template.group.events({
 		var message = "User "+Meteor.user().profile.name+" invited you to joing this group.";
 		var userId = Session.get("user_modal_actions")._id;
 		console.log(userId +" "+message+" "+groupId);
-		Meteor.call("group_invite_request",userId,message,groupId);
+		Meteor.call("group_invite_request",{user:userId,message:message,group:groupId});
 	}
 });
 

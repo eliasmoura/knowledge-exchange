@@ -17,19 +17,24 @@ Template.group_chat_finder.events({
 		$(element).addClass('active');
 		if (element.id == "find"){
 			Session.set("find-group", true);
-			$("#find-create-btn").val("Find");
+			$("#find-create-btn").val(mf("find",null,"Find"));
 			
 		}else{
 			Session.set("find-group", false);
-			$("#find-create-btn").val("Create");
+			$("#find-create-btn").val(mf("create",null,"Create"));
 		}
 	},
 	'submit form#find-create-form': function(e,t){
 		e.preventDefault();
 		if(Session.get('find-group')){
 			var groupname = t.find('#group-name-f').value;
-			if (groupname.length < 4){
-				return false;
+			if (groupname.length > 4){
+				Meteor.call("find", {group:{name:groupname}}, function(error,result){
+					if(!error){
+						//console.log(result);
+						Session.set('groups-found',result);		
+					}
+				});
 			}
 			/*var groups = new Array();
 			Groups.find( { name: { $regex: groupname, $options: 'i' } } ).fetch().forEach(function(row){
@@ -45,22 +50,17 @@ Template.group_chat_finder.events({
 					row.actions.send_request = false;
 				groups.push(row);
 			});*/
-			Meteor.call("find", {group:{name:groupname}}, function(error,result){
-				if(!error){
-					//console.log(result);
-					Session.set('groups-found',result);		
-				}
-			})
+			
 			// console.log(groups);
 			
 		}else{
 			var groupname = t.find("#group-name-c").value;
 			if(groupname != ""){
-				var details = t.find("#description").value;
+				var description = t.find("#description").value;
 				var members = new Array();
 				try{
-					t.find(".member").each(function(){
-					members.push(this.value);
+					t.find(".friends-contacts:checked").each(function(){
+					members.push(this.id);
 					});	
 				}catch(e){}
 				
@@ -70,7 +70,21 @@ Template.group_chat_finder.events({
 				langs.each(function(){
 					languages.push($(this).option);
 				});
-				Meteor.call("create_group", groupname,details,languages, members);
+				var groupType = t.find("#type option:selected").value;
+				var groupFocus = t.findAll("[name='groupgenre]:checked");
+				var groupFocusArray = new Array();
+				groupFocus.forEach(function(){
+					groupFocusArray.push(this.value);
+				});
+
+				if(t.find("[name='invite-message']:checked").value != "default")
+					var message = t.find("#invite-message").value;
+				else
+					var message = "default";
+
+				Meteor.call("create_group", {name:groupname,description:description,
+					languages:languages, invite:members,group_type:groupType,
+					group_focus:groupFocusArray,message:message});
 			}
 			$('#group-chat-finder-modal').modal('hide');
 		}

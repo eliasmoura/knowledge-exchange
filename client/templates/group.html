@@ -137,6 +137,11 @@
 							<input name="friends" type="checkbox" class="friends-contacts" id="{{_id}}" ><label for="{{_id}}">{{profile.name}}</label>
 						{{/each}}
 					</div>
+					<div class="invite-message">
+						<label for="default">Default</label><input value="default" type="radio" name="invite-message">
+						<label for="custom">Custom</label><input value="custom" type="radio" name="invite-message">
+						<textarea name="message" class="form-control" id="invite-message" rows="10" placeholder="{{mf 'default-group-invite-message' 'Hi, check out this group, I think you\'ll like it.'}}"></textarea>
+					</div>
 					<form action="submit" class="sisabled">
 						<label for="find" disabled="disabled">{{mf 'find' 'Find'}}:</label>
 						<input type="text" value="" placeholder="Name" id="find-user" class="form-control" disabled="disabled">	

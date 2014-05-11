@@ -152,24 +152,27 @@ Meteor.methods({
 			PrivateChat.update({_id:row._id}, {$set:{active: false}});
 		});
 	},
-	create_group: function(name,details,languages, members){
-		if (Groups.findOne({name:name})){
+	create_group: function(args){
+		name,details,languages, members
+		if (Groups.findOne({name:args.name})){
 			throw new Meteor.Error(1, 'Group already exist');
 			return false;
 		}
-		if (name.length < 3){
+		if (args.name.length < 3){
 			throw new Meteor.Error(2, 'Group name too short');
 			return false;
 		}
-		if (!details || !languages){
+		if (!args.details || !args.languages){
 
-			throw new Meteor.Error(1, 'All fields are obrigatório');
+			throw new Meteor.Error(1, 'All fields are mandatory');
 			return false;
 		}
 		group = Groups.insert({
-					name:name,
-					details:details,
-					languages:languages,
+					name:args.name,
+					descriptiion:args.descriptiion,
+					languages:args.languages,
+					focus:args.group_focus,
+					type:args.group_type
 				});
 		Meteor.call('setRoom_Non_active');
 		Meteor.call('setGroup_Non_active');
@@ -182,10 +185,11 @@ Meteor.methods({
 				console.log(error);
 		});
 		for (var i = 0; i< members.length; i++) {
-			User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
+			group_invite_request({group:group,user:members[i],message:args.message});
+			/*User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
 				if(!error)
 					console.log(error);
-			});	
+			});	*/
 		}
 		
 
@@ -340,16 +344,16 @@ Meteor.methods({
 		console.log(group);
 		//Groups.update({_id:groupId}, {$push:{request:userId}});
 	},
-	group_invite_request: function(user, message, group){
-		var user = Meteor.users.findOne({_id: user});
-		var group = Groups.findOne({_id: group});
+	group_invite_request: function(args){
+		var user = Meteor.users.findOne({_id:args.user});
+		var group = Groups.findOne({_id: args.group});
 		console.log(user);
 		console.log(group);
 		console.log(message);
 		if (user)
 			if(!User_Group.findOne({user:user._id, group:group._id}))
 				if(!GroupRequest.findOne({user:user._id,group:group._id}))
-					GroupRequest.insert({user: user._id, group: group._id, message: message, type: 2});
+					GroupRequest.insert({user: user._id, group: group._id, message: args.message, type: 2});
 		else
 			throw new Meteor.Error(1000, "The person you are trying to send a request doesn't exit");
 	},

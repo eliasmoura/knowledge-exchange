@@ -6,7 +6,7 @@ Router.configure({
 });
 
 Router.map( function() {
-	this.route('home', {
+	/*this.route('home', {
 		path:'/',
 		template: 'home',
 		yieldTemplates: {
@@ -25,7 +25,7 @@ Router.map( function() {
 	    },
 	    data:{activeHome: "active",
 	    	  pageTitle: "Home"}
-	});
+	});*/
 	this.route('chatrooms', {path:'/chat',
 		template: 'chatrooms',
 		yieldTemplates: {
@@ -329,7 +329,7 @@ Router.map( function() {
 	    	  						  //return true;}
 		}
 	});
-	this.route('blog', {path:'/blog',
+	/*this.route('blog', {path:'/blog',
 		template: 'blog',
 		yieldTemplates: {
       		'blog-side': {to: 'sidebar'}
@@ -368,7 +368,7 @@ Router.map( function() {
 		data:{
 
 		}
-	});
+	});*/
 	this.route('logo');
 });
 

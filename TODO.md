@@ -68,9 +68,9 @@
 	- [x] accept requests;
 	- [x] deny requests;
 	- [x] remove users from contacts list;
-	- [ ] block users;
+	- [x] block users;
 	- [x] send emails;
-	- [ ] receive emails;
+	- [x] receive emails*;
 	- [x] see user's profile;
 	- [ ] report user;
 
