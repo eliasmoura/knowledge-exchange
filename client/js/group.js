@@ -55,6 +55,7 @@ Template.group_chat_finder.events({
 			
 		}else{
 			var groupname = t.find("#group-name-c").value;
+			
 			if(groupname != ""){
 				var description = t.find("#description").value;
 				var members = new Array();
@@ -81,15 +82,16 @@ Template.group_chat_finder.events({
 					var message = t.find("#invite-message").value;
 				else
 					var message = "default";
-
+				
 				Meteor.call("create_group", {name:groupname,description:description,
 					languages:languages, invite:members,group_type:groupType,
 					group_focus:groupFocusArray,message:message});
+				$('#group-chat-finder-modal').modal('hide');
 			}
-			$('#group-chat-finder-modal').modal('hide');
 		}
 	},
 	'click input#find-create-btn':function(e,t){
+		
 		$('form#find-create-form').submit();
 	},
 	'click #morelang': function(e, t){
@@ -117,6 +119,48 @@ Template.group_chat_finder.events({
 
 Template.create_group.langs = function(){
 	return Languages.find({},{$sort: {name: +1}});
+}
+Template.create_group.rendered = function(){
+		/*$('#find-create-form').bootstrapValidator({
+	        message: 'This value is not valid',
+	        feedbackIcons: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        fields: {
+	            name: {
+	                message: 'The name is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The name is required and cannot be empty'
+	                    },
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9_]+$/,
+	                        message: 'The group name can only consist of alphabetical, number and underscore'
+	                    }
+	                }
+	            },
+	            description: {
+	                message: 'The description is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The description is required and cannot be empty'
+	                    }
+	                }
+	            },
+	            email: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The email is required and cannot be empty'
+	                    },
+	                    emailAddress: {
+	                        message: 'The input is not a valid email address'
+	                    }
+	                }
+	            }
+	        }
+	    });*/
 }
 Template.find_group.created =function(){
 	//Session.set('groups-found', false);

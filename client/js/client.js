@@ -22,6 +22,7 @@ Meteor.startup(function(){
             Session.set('locale', Meteor.user().profile.site_lang);
         else
             Session.set('locale', 'en_US');
+        document.title = "My site";
     }
     else
         Session.set('locale', 'en_US');

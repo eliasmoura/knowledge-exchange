@@ -129,7 +129,9 @@ Template.chat.events = {
 		
 	}
 }
-
+Template.chat.rendered = function(){
+	document.title = "Chat - My site";
+}
 $(function(){
     $.contextMenu({
     	trigger: "right",
