@@ -110,6 +110,7 @@ Template.chat_input.events = {
 		}
 	}
 }
+
 Template.chat.events = {
 	'click button.correctionWraper': function(e,t){
 		//console.log('test');
