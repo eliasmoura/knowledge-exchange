@@ -3,7 +3,6 @@
   "description": "a knowledge exchange site",
   "version": "0.0.1",
   "engines": {
-    "npm": "1.4.x",
     "node": "0.10.x"
   },
     "dependencies": {
