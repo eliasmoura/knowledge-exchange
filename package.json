@@ -2,7 +2,10 @@
     "name": "mixedlang",
     "version": "0.5.0",
     "engines": {
-        "node": "0.10.20"
+        "node": "0.10.28"
+    },
+    "dependencies": {
+        "npm": "1.4.9"
     },
     "scripts": {
         "install": "mv node_modules public/node_modules"
