@@ -11,7 +11,7 @@ accounts-base
 jquery
 event-hooks
 jquery-ui
-meteor-jQuery-ContextMenu
+meteor-JQuery-ContextMenu
 iron-router
 bootstrap-3
 i18n

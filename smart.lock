@@ -61,7 +61,7 @@
         "tag": "v0.0.7",
         "commit": "921a944815e06ece8ce4ded180e9d2e9e31f6000"
       },
-      "meteor-JQuery-ContextMenu":{
+      "meteor-jQuery-contextMenu":{
       "git": "https://github.com/michaelbishop/meteor-jQuery-contextMenu.git",
       "tag": "1.6.5",
       "commit": "de3cbfb941c06466fb0968699470043a3795e73b"
