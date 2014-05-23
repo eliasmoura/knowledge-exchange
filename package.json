@@ -6,6 +6,5 @@
     "node": "0.10.x"
   },
     "dependencies": {
-      "headers": "0.0.21"
   }
 }
