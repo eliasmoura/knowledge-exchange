@@ -3,10 +3,10 @@
   "description": "a knowledge exchange site",
   "version": "0.0.1",
   "engines": {
+    "npm": "1.4.x",
     "node": "0.10.x"
   },
     "dependencies": {
-      "npm": "1.4.x",
       "event-hooks": "1.4.3",
       "jquery-ui": "1.9.2",
       "iron-router": "0.7.1",
