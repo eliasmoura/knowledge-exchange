@@ -63,7 +63,7 @@
       },
       "jQuery-contextMenu": {
         "git": "https://github.com/medialize/jQuery-contextMenu.git",
-        "tag": "1.6.5",
+        "tag": "v1.6.5",
         "coomit": "c7a8c9fff8170fb65d887c1aed741684001d8c7d"
       }
     }
