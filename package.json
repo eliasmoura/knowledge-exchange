@@ -4,6 +4,9 @@
     "engines": {
         "node": "0.10.28"
     },
+    "dependencies": {
+        "node": "0.10.28"
+    },
     "scripts": {
         "install": "mv node_modules public/node_modules"
     }
