@@ -38,13 +38,13 @@
       },
       "messageformat": {
         "git": "https://github.com/gadicohen/meteor-messageformat.git",
-        "tag": "v0.0.27",
-        "commit": "336dd8d46ddac68903f604be181a77bbeda78bbc"
+        "tag": "v0.0.29",
+        "commit": "8815980e797e4bb65372c811b5f51954761e3133"
       },
       "fast-render": {
         "git": "https://github.com/arunoda/meteor-fast-render.git",
-        "tag": "v0.2.2",
-        "commit": "2a7298d72a84b85e989ec2cc9300bbea7c159eb8"
+        "tag": "v0.2.5",
+        "commit": "93e2fb334e55fbe9b5ebb2a2e65964018658f43e"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
@@ -60,6 +60,11 @@
         "git": "https://github.com/gadicc/meteor-inject-initial.git",
         "tag": "v0.0.7",
         "commit": "921a944815e06ece8ce4ded180e9d2e9e31f6000"
+      },
+      "jQuery-contextMenu": {
+        "git": "https://github.com/medialize/jQuery-contextMenu.git",
+        "tag": "1.6.5",
+        "coomit": "c7a8c9fff8170fb65d887c1aed741684001d8c7d"
       }
     }
   }
