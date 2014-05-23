@@ -6,7 +6,6 @@
     "node": "0.10.x"
   },
     "dependencies": {
-      "headers": "0.0.21",
-      "inject-initial": "0.0.7"
+      "headers": "0.0.21"
   }
 }
