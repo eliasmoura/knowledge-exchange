@@ -2,7 +2,7 @@
     "name": "mixedlang",
     "version": "0.5.0",
     "engines": {
-        "node": "0.6.x"
+        "node": "0.10.28"
     },
     "dependencies": {
         "bcrypt": "0.5.0"
