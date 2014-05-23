@@ -7,12 +7,7 @@
   },
     "dependencies": {
       "event-hooks": "1.4.3",
-      "jquery-ui": "1.9.2",
-      "iron-router": "0.7.1",
-      "bootstrap-3": "3.1.1-1",
       "messageformat": "0.0.27",
-      "fast-render": "0.2.2",
-      "blaze-layout": "0.2.4",
       "headers": "0.0.21",
       "inject-initial": "0.0.7"
   }
