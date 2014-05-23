@@ -6,6 +6,5 @@
     "node": "0.10.x"
   },
     "dependencies": {
-        "meteor": "0.8.1"
   }
 }
