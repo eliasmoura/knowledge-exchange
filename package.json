@@ -1,14 +1,8 @@
 {
-    "name": "mixedlang",
-    "version": "0.5.0",
-    "engines": {
-        "node": "0.10.x",
-        "npm": "1.4.x"
-    },
-    "dependencies": {
-        "bcrypt": "0.5.0"
-    },
-    "scripts": {
-        "install": "mv node_modules public/node_modules"
-    }
+  "name": "mixedlang",
+  "description": "a knowledge exchange site",
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.10.x"
+  }
 }
