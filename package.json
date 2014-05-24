@@ -6,6 +6,5 @@
     "node": "0.10.x"
   },
     "dependencies": {
-	"npm": "1.4.x"
   }
 }
