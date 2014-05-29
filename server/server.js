@@ -14,7 +14,7 @@ Meteor.startup(function(){
 	//Accounts.config({forbidClientAccountCreation:true});
 	//console.log(Chatrooms.find().count());
 	if (Chatrooms.find().count() == 0){
-		Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
+		//Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
 		console.log('adding chatrooms');
 		Chatrooms.insert({"name": "Test", details:"A test room"});
 		Chatrooms.insert({"name": "Test2", details:"A test room"});
