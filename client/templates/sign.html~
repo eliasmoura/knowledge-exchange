@@ -16,7 +16,7 @@
 		</li>
 		<li class="divider"></li>
 		<li>
-			<a href="#" class='reset row'>{{mf 'reset_password' 'Reset my password'}}</a>
+			<a href="#" class='fgpasswd row'>{{mf 'reset_password' 'Reset my password'}}</a>
 			<a href="#" class='newUser row'>{{mf 'create_user' 'Create user'}}</a>
 		</li>
 		{{#if reset_passwd}}

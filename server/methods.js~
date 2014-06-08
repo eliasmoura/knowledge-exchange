@@ -493,8 +493,8 @@ Meteor.methods({
 		check(user, String);
 		Meteor.users.update({_id:Meteor.userId()}, {$push:{"profile.blocked_users":user}});
 	},
-    reset_passwd: function(email){
-        Accounts.sendResetPasswordEmail(Meteor.users.findOne({"emails.address":email}));
+    reset_passwd: function(){
+        Accounts.sendResetPasswordEmail(Meteor.userId());
     },
 	clean_db: function(){
 		Correction.remove({});

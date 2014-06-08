@@ -24,7 +24,7 @@ Meteor.startup(function(){
 });
 
 Accounts.onCreateUser(function(options,user){
-	console.log('Creationg user');
+	console.log('onCreateUser');
 	try{
 		// console.log(user.services.password.srp);
 		

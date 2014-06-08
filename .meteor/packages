@@ -11,7 +11,6 @@ accounts-base
 jquery
 event-hooks
 jquery-ui
-meteor-JQuery-ContextMenu
 iron-router
 bootstrap-3
 i18n
@@ -32,3 +31,7 @@ underscore
 random
 ejson
 standard-app-packages
+meteor-jQuery-contextMenu
+coffeescript
+kadira
+email

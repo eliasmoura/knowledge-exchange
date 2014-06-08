@@ -337,7 +337,7 @@ Template.reset.events({
     'submit #reset-passwd': function(event,template){
         event.preventDefault();
         event.stopPropagation();
-        var email = template.find("input.form-control").value;
+        var email = template.find("input.form-control");
         console.log('reset acount');
         console.log(email);
         /*Meteor.call('reset_passwd',email,function(error,result){

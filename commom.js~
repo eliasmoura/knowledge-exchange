@@ -242,7 +242,7 @@ Router.map( function() {
 				// console.log(Meteor.user().profile.blocked_users);
 				// console.log(Meteor.user().profile.blocked_users.indexOf(row.userid));
 				var blocked_users = Meteor.user().profile.blocked_users;
-				if (messages.count()){
+				if messages.count(){
 		    		messages.forEach(function(row){
 		    			if( blocked_users == undefined)
 		    				blocked_users = [];

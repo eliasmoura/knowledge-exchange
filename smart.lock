@@ -9,7 +9,7 @@
       "i18n": {},
       "messageformat": {},
       "fast-render": {},
-      "meteor-JQuery-ContextMenu": {}
+      "kadira": {}
     },
     "packages": {
       "event-hooks": {
@@ -47,6 +47,11 @@
         "tag": "v0.2.5",
         "commit": "93e2fb334e55fbe9b5ebb2a2e65964018658f43e"
       },
+      "kadira": {
+        "git": "https://github.com/meteorhacks/kadira.git",
+        "tag": "v2.1.4",
+        "commit": "c564bcd390af097af890a18ee4d4df7bdbc659dc"
+      },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "tag": "v0.2.4",
@@ -61,11 +66,6 @@
         "git": "https://github.com/gadicc/meteor-inject-initial.git",
         "tag": "v0.0.7",
         "commit": "921a944815e06ece8ce4ded180e9d2e9e31f6000"
-      },
-      "meteor-JQuery-ContextMenu":{
-      "git": "https://github.com/michaelbishop/meteor-jQuery-contextMenu.git",
-      "tag": "1.6.5",
-      "commit": "de3cbfb941c06466fb0968699470043a3795e73b"
       }
     }
   }

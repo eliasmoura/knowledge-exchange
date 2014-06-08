@@ -379,7 +379,7 @@
             <div class='panel-heading'> {{mf 'reset-passwd' 'Reset password'}}:</div>
             <div class='panel-body'>
                 <label for='email'>{{mf 'email-info' 'Enter your account email'}}:</label>
-                <input type='text' name='email' class='form-control'/>
+                <input type='email' name='email' class='form-control'/>
             </div>
         </div>
     </form>
