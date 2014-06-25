@@ -187,7 +187,7 @@ Meteor.methods({
 				console.log(error);
 		});
 		for (var i = 0; i< args.members.length; i++) {
-			group_invite_request({group:group,user:args.members[i],message:args.message});
+			group_invite_request({group:group,user:args.member[i],message:args.message});
 			/*User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
 				if(!error)
 					console.log(error);
