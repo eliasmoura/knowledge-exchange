@@ -371,6 +371,50 @@
 	</div>
 	{{/with}}
 </template>
+<template name="user_profile_edit">
+	{{#with user_modal}}
+		<div class="panel panel-info">
+			<div class="panel-heading"> {{mf 'user-info' 'User basic info'}}:</div>
+			<div class="panel-body">
+				<div class="col-xs-6 col-md-3">
+				    <a href="#" id="change_pic" class="thumbnail">
+				    	<img data-src="holder.js/300x200" alt="">
+				    </a>
+				</div>
+				<div>
+                    <label for="city">{{mf 'city' 'City'}}:</label><input value="{{this.user.city}}">
+                    <label for="country">{{mf 'country' 'Country'}}:</label><input id="country" value="{{this.user.country}}">
+
+                        <label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <input id="birthday" value="{{this.user.birthday}}">
+				</div>
+			</div>
+		</div>
+	<div class="panel panel-info">
+		<div class="panel-heading"> {{mf 'user-languages' 'User languages info'}}:</div>
+		<div class="panel-body">
+			<label for="know">{{mf 'know' 'Know'}}:</label>
+			<div class="know">
+                <div><label for="native">{{mf 'native-lang' 'Native Language'}}:</label><input class="form-control" value='{{this.user.nativelang}}' >{{this.user.nativelang}}</a> ({{mf 'native' 'Native'}})</div>
+				{{#each this.user.knownlanguages}}
+					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a> ({{mf 'fluent' 'Fluent'}})</div>
+				{{/each}}
+			</div>
+			<label for="learning">{{mf 'learning' 'Learning'}}:</label>
+			<div class="learning">
+				{{#each this.user.learninglanguages}}
+					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a></div>
+				{{/each}}
+			</div>
+		</div>
+	</div>		
+	<div class="panel panel-info">
+		<div class="panel-heading"> {{mf 'user-description' 'User description'}}:</div>
+		<div class="panel-body">
+			{{this.user.description}}
+		</div>
+	</div>
+	{{/with}}
+</template>
 
 <template name="reset">
     {{#with user_modal}}
@@ -379,7 +423,7 @@
             <div class='panel-heading'> {{mf 'reset-passwd' 'Reset password'}}:</div>
             <div class='panel-body'>
                 <label for='email'>{{mf 'email-info' 'Enter your account email'}}:</label>
-                <input type='email' name='email' class='form-control'/>
+                <input type='text' name='email' class='form-control'/>
             </div>
         </div>
     </form>

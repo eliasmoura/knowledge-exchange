@@ -153,7 +153,7 @@ Meteor.methods({
 		});
 	},
 	create_group: function(args){
-		name,details,languages, members
+		var group;
 		if (Groups.findOne({name:args.name})){
 			throw new Meteor.Error(1, 'Group already exist');
 			return false;
@@ -162,18 +162,20 @@ Meteor.methods({
 			throw new Meteor.Error(2, 'Group name too short');
 			return false;
 		}
-		if (!args.details || !args.languages){
+		/*if (!args.details || !args.languages){
 
 			throw new Meteor.Error(1, 'All fields are mandatory');
 			return false;
-		}
+		}*/
+        console.log("Creating group "+args.name);
 		group = Groups.insert({
 					name:args.name,
-					descriptiion:args.descriptiion,
+					description:args.description,
 					languages:args.languages,
 					focus:args.group_focus,
 					type:args.group_type
 				});
+        console.log("Group created");
 		Meteor.call('setRoom_Non_active');
 		Meteor.call('setGroup_Non_active');
 		Meteor.call('setFriend_Non_active');
@@ -184,8 +186,8 @@ Meteor.methods({
 			}else
 				console.log(error);
 		});
-		for (var i = 0; i< members.length; i++) {
-			group_invite_request({group:group,user:members[i],message:args.message});
+		for (var i = 0; i< args.members.length; i++) {
+			group_invite_request({group:group,user:args.members[i],message:args.message});
 			/*User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
 				if(!error)
 					console.log(error);

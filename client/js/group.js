@@ -68,11 +68,11 @@ Template.group_chat_finder.events({
 				var langs = t.findAll(".lang");
 				console.log(langs);
 				var languages = new Array();
-				langs.each(function(){
+				langs.forEach(function(){
 					languages.push($(this).option);
 				});
 				var groupType = t.find("#type option:selected").value;
-				var groupFocus = t.findAll("[name='groupgenre]:checked");
+				var groupFocus = t.findAll(".group-type:checked");
 				var groupFocusArray = new Array();
 				groupFocus.forEach(function(){
 					groupFocusArray.push(this.value);

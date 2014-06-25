@@ -8,8 +8,7 @@
       "bootstrap-3": {},
       "i18n": {},
       "messageformat": {},
-      "fast-render": {},
-      "kadira": {}
+      "fast-render": {}
     },
     "packages": {
       "event-hooks": {
@@ -39,18 +38,13 @@
       },
       "messageformat": {
         "git": "https://github.com/gadicohen/meteor-messageformat.git",
-        "tag": "v0.0.29",
-        "commit": "8815980e797e4bb65372c811b5f51954761e3133"
+        "tag": "v0.0.31",
+        "commit": "e94ccccd3b6f94c0a60695636ec79c68da9ca5c4"
       },
       "fast-render": {
         "git": "https://github.com/arunoda/meteor-fast-render.git",
-        "tag": "v0.2.5",
-        "commit": "93e2fb334e55fbe9b5ebb2a2e65964018658f43e"
-      },
-      "kadira": {
-        "git": "https://github.com/meteorhacks/kadira.git",
-        "tag": "v2.1.4",
-        "commit": "c564bcd390af097af890a18ee4d4df7bdbc659dc"
+        "tag": "v0.2.8",
+        "commit": "149984b1aff3a5642a270aff9bd9006872c8302e"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
@@ -59,13 +53,13 @@
       },
       "headers": {
         "git": "https://github.com/gadicohen/meteor-headers.git",
-        "tag": "v0.0.21",
-        "commit": "569a50eb334cc1ab324d0721411f48f1cc75ec24"
+        "tag": "v0.0.23",
+        "commit": "f7c9a01c12b08f4bf4cd9965f60cf72cf9a62d87"
       },
       "inject-initial": {
         "git": "https://github.com/gadicc/meteor-inject-initial.git",
-        "tag": "v0.0.7",
-        "commit": "921a944815e06ece8ce4ded180e9d2e9e31f6000"
+        "tag": "v0.0.8",
+        "commit": "90f2fbcc5b4bc17fa4d4535f47813e31d86033b4"
       }
     }
   }
