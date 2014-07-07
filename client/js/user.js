@@ -44,11 +44,15 @@ Template.user.events({
 				$("#login-popover").addClass('in');*/
 	},
 	'click #profile': function(e,t){
+        console.log("profile");
 		Session.set("user_modal_actions",{
 			profile:true,
 			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
 			user:Meteor.user().profile,
 			_id:Meteor.user()._id,
+            profile_bar:true,
+            info:true,
+            currentUser:true
 		});
 	},
 	'click #email': function(e,t){
@@ -331,7 +335,49 @@ Template.user_modal.events({
         if (action.reset){
             $('#reset-passwd-form').submit();
         }
-	}
+	},
+    'click .profile-navbar': function(event,template){
+        event.preventDefault();
+        var target = event.target;
+        template.findAll(".profile-navbar").forEach(function(node){
+            $(node).parent().removeClass("active");
+        })
+        $(target).parent().addClass("active");
+        var user_modal = Session.get("user_modal_actions");
+        user_modal.info = false;
+        user_modal.security = false;
+        user_modal.friends = false;
+        if (target.id == "info"){
+            user_modal.info = true;
+        }else if (target.id == "security"){
+            user_modal.security = true;
+        }else if (target.id == "friends"){
+            user_modal.friends = true;
+        }
+        user_modal.user_navbar = target.id;
+        Session.set("user_modal_actions", user_modal);
+        //console.log(user_modal);
+        
+    }
+})
+Template.user_profile.events({
+    'click #edit-profile': function(event, template){
+        event.preventDefault();
+        var user_modal = Session.get("user_modal_actions");
+        user_modal.edit_profile = true;
+        Session.set("user_modal_actions",user_modal);
+    }
+})
+Template.user_profile_edit.events({
+    'click #send': function(event, template){
+        event.preventDefault();
+    },
+    'click #close': function(event, template){
+        Session.set("user_modal_actions", false);
+    }
+})
+Template.user_friends.events({
+  
 })
 Template.reset.events({
     'submit #reset-passwd': function(event,template){

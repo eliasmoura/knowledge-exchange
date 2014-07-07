@@ -44,11 +44,15 @@ Template.user.events({
 				$("#login-popover").addClass('in');*/
 	},
 	'click #profile': function(e,t){
+        console.log("profile");
 		Session.set("user_modal_actions",{
 			profile:true,
 			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
 			user:Meteor.user().profile,
 			_id:Meteor.user()._id,
+            profile_bar:true,
+            info:true,
+            currentUser:true
 		});
 	},
 	'click #email': function(e,t){
@@ -331,13 +335,58 @@ Template.user_modal.events({
         if (action.reset){
             $('#reset-passwd-form').submit();
         }
-	}
+	},
+    'click .profile-navbar': function(event,template){
+        event.preventDefault();
+        var target = event.target;
+        template.findAll(".profile-navbar").forEach(function(node){
+            $(node).parent().removeClass("active");
+        })
+        $(target).parent().addClass("active");
+        var user_modal = Session.get("user_modal_actions");
+        if (target.id == "info"){
+            user_modal.info = true;
+            user_modal.security = false;
+            user_modal.friends = false;
+        }else if (target.id == "security"){
+            user_modal.info = false;
+            user_modal.security = true;
+            user_modal.friends = false;
+        }else if (target.id == "friends"){
+            user_modal.info = false;
+            user_modal.security = false;
+            user_modal.friends = true;
+        }
+        user_modal.user_navbar = target.id;
+        Session.set("user_modal_actions", user_modal);
+        //console.log(user_modal);
+        
+    }
+})
+Template.user_profile.events({
+    'click #edit-profile': function(event, template){
+        event.preventDefault();
+        var user_modal = Session.get("user_modal_actions");
+        user_modal.edit_profile = true;
+        Session.set("user_modal_actions",user_modal);
+    }
+})
+Template.user_profile_edit.events({
+    'click #send': function(event, template){
+        event.preventDefault();
+    },
+    'click #close': function(event, template){
+        Session.set("user_modal_actions", false);
+    }
+})
+Template.user_friends.events({
+  
 })
 Template.reset.events({
     'submit #reset-passwd': function(event,template){
         event.preventDefault();
         event.stopPropagation();
-        var email = template.find("input.form-control");
+        var email = template.find("input.form-control").value;
         console.log('reset acount');
         console.log(email);
         /*Meteor.call('reset_passwd',email,function(error,result){

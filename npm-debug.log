@@ -1,0 +1,84 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/bin/npm', 'install', 'kadira' ]
+2 info using npm@1.4.16
+3 info using node@v0.10.29
+4 verbose readDependencies using package.json deps
+5 verbose cache add [ 'kadira', null ]
+6 verbose cache add name=undefined spec="kadira" args=["kadira",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'kadira',
+7 verbose parsed url   path: 'kadira',
+7 verbose parsed url   href: 'kadira' }
+8 silly lockFile 859ab197-kadira kadira
+9 verbose lock kadira /home/kotto/.npm/859ab197-kadira.lock
+10 silly lockFile 859ab197-kadira kadira
+11 silly lockFile 859ab197-kadira kadira
+12 verbose addNamed [ 'kadira', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile 53c1ca74-kadira kadira@
+15 verbose lock kadira@ /home/kotto/.npm/53c1ca74-kadira.lock
+16 silly addNameRange { name: 'kadira', range: '*', hasData: false }
+17 verbose request where is /kadira
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id 092976a01e014df3
+20 verbose url raw /kadira
+21 verbose url resolving [ 'https://registry.npmjs.org/', './kadira' ]
+22 verbose url resolved https://registry.npmjs.org/kadira
+23 verbose request where is https://registry.npmjs.org/kadira
+24 info trying registry request attempt 1 at 08:53:26
+25 http GET https://registry.npmjs.org/kadira
+26 http 404 https://registry.npmjs.org/kadira
+27 verbose headers { date: 'Tue, 01 Jul 2014 16:53:47 GMT',
+27 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+27 verbose headers   'content-type': 'application/json',
+27 verbose headers   'cache-control': 'max-age=0',
+27 verbose headers   'content-length': '52',
+27 verbose headers   'accept-ranges': 'bytes',
+27 verbose headers   via: '1.1 varnish',
+27 verbose headers   age: '0',
+27 verbose headers   'x-served-by': 'cache-iad2124-IAD',
+27 verbose headers   'x-cache': 'MISS',
+27 verbose headers   'x-cache-hits': '0',
+27 verbose headers   'x-timer': 'S1404233627.048489,VS0,VE14',
+27 verbose headers   'keep-alive': 'timeout=10, max=50',
+27 verbose headers   connection: 'Keep-Alive' }
+28 silly registry.get cb [ 404,
+28 silly registry.get   { date: 'Tue, 01 Jul 2014 16:53:47 GMT',
+28 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+28 silly registry.get     'content-type': 'application/json',
+28 silly registry.get     'cache-control': 'max-age=0',
+28 silly registry.get     'content-length': '52',
+28 silly registry.get     'accept-ranges': 'bytes',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     age: '0',
+28 silly registry.get     'x-served-by': 'cache-iad2124-IAD',
+28 silly registry.get     'x-cache': 'MISS',
+28 silly registry.get     'x-cache-hits': '0',
+28 silly registry.get     'x-timer': 'S1404233627.048489,VS0,VE14',
+28 silly registry.get     'keep-alive': 'timeout=10, max=50',
+28 silly registry.get     connection: 'Keep-Alive' } ]
+29 silly lockFile 53c1ca74-kadira kadira@
+30 silly lockFile 53c1ca74-kadira kadira@
+31 error 404 404 Not Found: kadira
+31 error 404
+31 error 404 'kadira' is not in the npm registry.
+31 error 404 You should bug the author to publish it
+31 error 404 It was specified as a dependency of 'mixedlang'
+31 error 404
+31 error 404 Note that you can also install from a
+31 error 404 tarball, folder, or http url, or git url.
+32 error System Linux 3.15.1-1-ARCH
+33 error command "node" "/usr/bin/npm" "install" "kadira"
+34 error cwd /home/kotto/projects/meteor/chatapp
+35 error node -v v0.10.29
+36 error npm -v 1.4.16
+37 error code E404
+38 verbose exit [ 1, true ]

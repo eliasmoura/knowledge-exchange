@@ -111,12 +111,19 @@ Router.map( function() {
 			if(modal_action.action =="profile"){
 				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
 					if (users){
+                        var currentUser = false;
+                        if (Meteor.userId() === users._id)
+                           currentUser = true; 
+                        //console.log(currentUser);
 						// console.log(users);
 						Session.set("user_modal_actions",{
 							profile:true,
 							action: users.profile.name + " " +users.profile.lastname,
 							user:users.profile,
 							_id:users._id,
+                            profile_bar:true,
+                            info:true,
+                            currentUser:currentUser
 						});
 					}
 				});
@@ -455,5 +462,9 @@ UI.registerHelper("chat_notifications",
     	return privatechatnotifications.length + groupsArray;
 	}
 );
-UI.registerHelper();
+UI.registerHelper("edit_profile",
+    function(){
+        return Session.get("edit_profile");
+    }
+);
 UI.registerHelper();

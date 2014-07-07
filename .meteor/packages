@@ -31,6 +31,6 @@ underscore
 random
 ejson
 standard-app-packages
+email
 meteor-jQuery-contextMenu
 coffeescript
-email

@@ -5,6 +5,9 @@ translate
 
 #vim temp files
 *.swp
-*~
+*.*~
 *.un~
+
+#node files
+*.log
 

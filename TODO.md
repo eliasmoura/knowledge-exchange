@@ -83,7 +83,7 @@
 	- [x] native language;
 	- [x] learning languages;
 	- [x] known languages;
-	- [ ] languages fluency;
+	- [x] languages fluency;
 	- [ ] description;
 	- [x] gender;
 	- [x] interests;
@@ -91,6 +91,8 @@
 	- [x] password;
 	- [ ] photo;
 	- [ ] occupation;
+    - [x] edit*;
+    - [ ] set privacy;
 
 * Group information:
 	- [x] name;
@@ -101,3 +103,4 @@
 	- [x] owner;
 	- [x] moderators;
 	- [x] participants;
+    - [ ] edit;

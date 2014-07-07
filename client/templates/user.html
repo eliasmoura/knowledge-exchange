@@ -256,7 +256,22 @@
 						{{> group}}
 					{{/if}}
 					{{#if user_modal.profile}}
-						{{> user_profile}}
+                        {{#if user_modal.currentUser}}
+                        <ul class="nav nav-tabs nav-justified" id="profile-navbar"> 
+                            <li id="" class="active"><a href="#" class="profile-navbar" id="info">{{mf 'info' 'Info'}}</a></li>
+                            <li id=""><a href="#" class="profile-navbar" id="security">{{mf 'security' 'Security'}}</a></li>
+                            <li id=""><a href="#" class="profile-navbar" id="friends">{{mf 'friends' 'Friends'}}</a></li>
+                        </ul>
+                        {{/if}}
+                        {{#if user_modal.info}}
+                            {{> user_profile}}
+                        {{/if}}
+                        {{#if user_modal.security}}
+                            {{> user_security}}
+                        {{/if}}
+                        {{#if user_modal.friends}}
+                            {{> user_friends}}
+                        {{/if}}
 					{{/if}}
                     {{#if user_modal.reset}}
                         {{> reset}}
@@ -264,7 +279,9 @@
 				</div>
 				<div class="modal-footer">
 			    	<input type="button" class="btn btn-default" id="request-friendship-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
+                    {{#if user_modal.edit_profile}}
 			        <input type="button" class="btn btn-primary" id="request-friendship-btn" value="{{mf 'send'}}" />
+                    {{/if}}
 			    </div>
 		    </div>
 		</div>
@@ -329,8 +346,14 @@
 	</form>
 </template>
 <template name="user_profile">
+    {{#if user_modal.edit_profile}}
+        {{> user_profile_edit}}
+    {{else}}
 	{{#with user_modal}}
-		<div class="panel panel-info">
+        {{#if this.currentUser}}
+            <a href="#" id="edit-profile">{{mf 'edit-info' 'Edit info'}}</a>
+        {{/if}}
+    		<div class="panel panel-info">
 			<div class="panel-heading"> {{mf 'user-info' 'User basic info'}}:</div>
 			<div class="panel-body">
 				<div class="col-xs-6 col-md-3">
@@ -370,6 +393,7 @@
 		</div>
 	</div>
 	{{/with}}
+    {{/if}}
 </template>
 <template name="user_profile_edit">
 	{{#with user_modal}}
@@ -382,30 +406,32 @@
 				    </a>
 				</div>
 				<div>
-                    <label for="city">{{mf 'city' 'City'}}:</label><input value="{{this.user.city}}">
-                    <label for="country">{{mf 'country' 'Country'}}:</label><input id="country" value="{{this.user.country}}">
+                    <label for="city">{{mf 'city' 'City'}}:</label><input id="city" value="{{this.user.city}}" class="form-control">
+                    <label for="country">{{mf 'country' 'Country'}}:</label><input id="country" value="{{this.user.country}}" class="form-control">
 
-                        <label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <input id="birthday" value="{{this.user.birthday}}">
+                        <label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <input id="birthday" value="{{this.user.birthday}}" class="form-control">
 				</div>
 			</div>
 		</div>
 	<div class="panel panel-info">
 		<div class="panel-heading"> {{mf 'user-languages' 'User languages info'}}:</div>
 		<div class="panel-body">
-			<label for="know">{{mf 'know' 'Know'}}:</label>
 			<div class="know">
                 <div>
                     <label for="native">{{mf 'native-lang' 'Native Language'}}:</label>
                     <input class="form-control" value='{{this.user.nativelang}}' >
                 </div>
-				{{#each this.user.knownlanguages}}
-					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a> ({{mf 'fluent' 'Fluent'}})</div>
-				{{/each}}
+                <div>
+                    <label for="fluent">{{mf 'fluent' 'Fluent'}}:</label>
+                    {{#each this.user.knownlanguages}}
+                    <input class="form-control fluent" value="{{lang}}">
+                    {{/each}}
+                </div>
 			</div>
 			<label for="learning">{{mf 'learning' 'Learning'}}:</label>
 			<div class="learning">
 				{{#each this.user.learninglanguages}}
-					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a></div>
+					<input class="form-control lerning" value="{{lang}}">
 				{{/each}}
 			</div>
 		</div>
@@ -413,12 +439,32 @@
 	<div class="panel panel-info">
 		<div class="panel-heading"> {{mf 'user-description' 'User description'}}:</div>
 		<div class="panel-body">
-			{{this.user.description}}
+            <textarea class="user-description form-control" rows="10" placeholder="Tell us about yourself." id="description">{{this.user.description}}</textarea>
 		</div>
 	</div>
 	{{/with}}
 </template>
+<template name="user_friends">
+    <div>
+        {{#each user_modal.user.friends}}
+        <div>
+            <a href="#" class="username stusername">{{name}} {{lastname}}</a>
+            <div class="langs">
+                <a href="#" id="native">{{native}}</a>
+                {{#each knownlangs}}
+                    <a href="#" class="known">{{lang}}</a>
+                {{/each}}
+                {{#each learninglangs}}
+                    <a href="#" class="learning">{{lang}}</a>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</template>
+<template name="user_security">
 
+</template>
 <template name="reset">
     {{#with user_modal}}
     <form id='reset-passwd'>
