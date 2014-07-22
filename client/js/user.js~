@@ -381,7 +381,7 @@ Template.user_profile_edit.events({
         user.profile.country = template.find("#country").value;
         user.profile.birthday = template.find("#birthday").value;
         user.profile.description = template.find("#description").value;
-        user.profile.nativelang = template.find(".native option:selected");
+        user.profile.nativelang = template.find(".native option:selected").value;
         var knownlanguages = template.findAll(".knownlanguage");
         var learninglanguages = template.findAll(".learninglanguage");
         var interests = template.findAll(".interests");
