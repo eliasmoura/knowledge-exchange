@@ -1,0 +1,11 @@
+{
+  "name": "mixedlang",
+  "description": "a knowledge exchange site",
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.10.x"
+  },
+    "dependencies": {
+	"npm": "1.4.x"
+  }
+}
