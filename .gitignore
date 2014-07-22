@@ -1,13 +1,20 @@
 #packages
 .meteor/*.un~
 packages
-translate
-
-#vim temp files
-*.swp
-*.*~
-*.un~
 
 #node files
 *.log
+# Created by http://www.gitignore.io
 
+ ### vim ###
+ [._]*.s[a-w][a-z]
+ [._]s[a-w][a-z]
+ *.un~
+ Session.vim
+ .netrwhist
+ *~
+
+
+ ### Meteor ###
+ .meteor/local
+ .meteor/meteorite

@@ -246,9 +246,11 @@ Router.map( function() {
 				else if (messages.type == "privatechat"){
 					messages = PrivateMessages.find({chat:{$in: [messages.room]}});
 				}
+                else messages = false;
 				// console.log(Meteor.user().profile.blocked_users);
 				// console.log(Meteor.user().profile.blocked_users.indexOf(row.userid));
 				var blocked_users = Meteor.user().profile.blocked_users;
+                if (messages)
 				if (messages.count()){
 		    		messages.forEach(function(row){
 		    			if( blocked_users == undefined)
@@ -467,4 +469,38 @@ UI.registerHelper("edit_profile",
         return Session.get("edit_profile");
     }
 );
+UI.registerHelper('langs_selected',
+    function(){
+        var returnArray = new Array();
+        var langs = Session.get("langs");
+        var fluent_langs = Meteor.user().profile.knownlanguages;
+        var learning_langs = Meteor.user().profile.learninglanguages;
+        var fluent_length = fluent_langs.length - 1;
+        var learning_length = learning_langs.length -1;
+        for (var i = 0; i < langs.length; i++){
+            if (Meteor.user().profile.nativelang == langs[i]){
+                returnArray.push({lang:langs[i], native:true});
+            }
+            else returnArray.push({lang:langs[i], native:false});
+        }
+        for (var f = fluent_length;f >= 0; f--)
+            for (var i = 0; i < langs.length;i++){
+                if (fluent_langs[f]==langs[i])
+                {
+                    returnArray[i].fluent=true;
+                }
+                else returnArray[i].fluent=false;
+            }
+        for (var l = learning_length; l >= 0; l--)
+            for (var i = 0; i < langs.length;i++){
+                if (learning_langs[l]== langs[i])
+                {
+                    returnArray[i].learning = true;
+                }
+                else returnArray[i].learning = false;
+            }
+        return returnArray;
+    }
+);
+UI.registerHelper();
 UI.registerHelper();

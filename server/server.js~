@@ -61,10 +61,8 @@ Hooks.onLoggedOut = function (userId) {
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
 	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.away":false}});
 	if(Meteor.user())
-    {
 	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
 	console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.status);
-    }
     /*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
 	Meteor.call('setFriend_Non_active');*/

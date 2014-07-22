@@ -139,11 +139,12 @@ Template.register_form.rendered = function(){
 	$('#registerModal').modal("toggle");
 	$('#registerModal').on("hidden.bs.modal", function(){
 			Session.set('login', true);
+            Session.set("first-login", true);
 	});
 }
 
 Template.register_form.destroyed = function(){
-	$('#registerModal').modal("hide");
+	//$('#registerModal').modal("hide");
 	//$('.modal-backdrop').destroy();
 	Session.set('first-login', true);
 }
@@ -157,55 +158,46 @@ Template.register_form.events({
 	},
 	'submit #register_form':function(e,t){
 		e.preventDefault();
-		console.log('register');
 		var name = t.find('#name_registerform').value;
 		var lastname = t.find('#lastname_registerform').value;
 		var gender = t.find('.gender:checked').value;
-		var interests = t.findAll('[name=interests]:checked');
+		var interests = t.findAll('[name="interests"]:checked');
 		var birthday = t.find('#birthday_registerform').value;
 		var email = t.find('#email_registerform').value;
 		var passwdch = t.find('#passwdcheck_registerform').value;
 		var passwd = t.find('#passwd_registerform').value;
 		var country = t.find('#country_registerform').value;
 		var city = t.find('#city_registerform').value;
-		var nativeLang = t.find('#native_registerform option:selected').text;
-		var lernginlanguages = t.findAll('.learning-language option:selected');
-		var knowlanguages = t.findAll('.knownlanguage option:selected');
+		var nativeLang = t.find('#native_registerform option:selected').value;
+		var learninglanguages = t.findAll('.learning-language');
+		var knownlanguage = t.findAll('.knownlanguage');
 
 		var langs = new Array();
 
-		if (lernginlanguages.length > 1)
-			lernginlanguages.forEach(function(){
-				var lang = $(this).text();
-				if (lang != 0)
-				langs.push({lang:lang});
-			});
-		else
-			langs = [{lang:lernginlanguages[0].text}];
-
+        if (learninglanguages.length > 0)
+            for (var j = 0; j < learninglanguages.length; j++)
+            for (var i = 0; i < learninglanguages[j].length; i++){
+                if (learninglanguages[j][i].selected)
+                    langs.push(learninglanguages[j][i].value);
+            }
 		var knownlangs = new Array();
 
-		if (knowlanguages.length > 1)
-			knowlanguages.each(function(){
-				var lang = $(this).text();
-				if (lang != 0)
-					knownlangs.push({lang:lang});
-			});
-		else
-			knownlangs = [{lang:lernginlanguages[0].text}];
-
+		if (knownlanguage.length > 0)
+            for (var j = 0; j < knownlanguage.length; j++)
+                for (var i = 0; i < knownlanguage[j].length; i++){
+                    if (knownlanguage[j][i].selected){
+                        knownlangs.push(knownlanguage[j][i].value);
+                    }
+                }
 		var interestsArray = new Array();
-		if(interests.length > 1)
-			interests.each(function(){
-				interestsArray.push({interest:$(this).attr("value")});
-			});
-		else
-			interestsArray = [{interests:interests[0].attr("value")}];
-
+		if(interests.length > 0)
+            for (var i = 0; i < interests.length; i++){
+                interestsArray.push(interests[i].value);
+            }
 		email = trimInput(email);
-		if (!isValidPassword(passwd)) return false;;
 		/**Validate things**/
-		var user = Accounts.createUser(
+        console.log("going?");
+		var user =
 		{
 			email:email,
 			password:passwd,
@@ -222,7 +214,9 @@ Template.register_form.events({
 				knownlanguages:knownlangs,
 				interests:interestsArray
 			}
-		});
+		};
+        console.log(user);
+        Accounts.createUser(user);
 		/*Meteor.call("sign_up",email,passwd,name,lastname,function(error, res){
 			if(!error)	{
 				
@@ -230,7 +224,12 @@ Template.register_form.events({
 			console.log(error);
 			return "error sign up"
 		})*/
-		$('#registerModal').modal("hide");
+	//	$('#registerModal').modal("hide");
+        //$('.modal-backdrop').destroy();
+        console.log("done!!");
+        Session.set("currentUser", Meteor.user());
+        Session.set('first-login', true);
+     //   $('#registerModal').modal("hide");
 	},
 	'click #add-more-languages': function(e,t){
 		console.log('add lang');
@@ -344,23 +343,26 @@ Template.user_modal.events({
         })
         $(target).parent().addClass("active");
         var user_modal = Session.get("user_modal_actions");
+        user_modal.info = false;
+        user_modal.security = false;
+        user_modal.friends = false;
         if (target.id == "info"){
             user_modal.info = true;
-            user_modal.security = false;
-            user_modal.friends = false;
         }else if (target.id == "security"){
-            user_modal.info = false;
             user_modal.security = true;
-            user_modal.friends = false;
         }else if (target.id == "friends"){
-            user_modal.info = false;
-            user_modal.security = false;
             user_modal.friends = true;
         }
         user_modal.user_navbar = target.id;
         Session.set("user_modal_actions", user_modal);
         //console.log(user_modal);
         
+    },
+    'click #request-friendship-btn': function(event, template){
+        event.preventDefault();
+        if (Session.get("user_modal_actions").edit_profile){
+            $("#edit-profile").submit();
+        }
     }
 })
 Template.user_profile.events({
@@ -372,8 +374,47 @@ Template.user_profile.events({
     }
 })
 Template.user_profile_edit.events({
-    'click #send': function(event, template){
+    'submit #edit-profile': function(event, template){
         event.preventDefault();
+        var user = Meteor.user();
+        user.profile.city = template.find("#city").value;
+        user.profile.country = template.find("#country").value;
+        user.profile.birthday = template.find("#birthday").value;
+        user.profile.description = template.find("#description").value;
+        user.profile.nativelang = template.find(".native option:selected");
+        var knownlanguages = template.findAll(".knownlanguage");
+        var learninglanguages = template.findAll(".learninglanguage");
+        var interests = template.findAll(".interests");
+        var knownlangsArray = new Array();
+        var learninglangsArray = new Array();
+
+        if (learninglanguages.length > 0)
+            for (var j = 0; j < learninglanguages.length; j++)
+            for (var i = 0; i < learninglanguages[j].length; i++){
+                if (learninglanguages[j][i].selected)
+                    learninglangsArray.push(learninglanguages[j][i].value);
+            }
+
+		if (knownlanguages.length > 0)
+            for (var j = 0; j < knownlanguages.length; j++)
+                for (var i = 0; i < knownlanguages[j].length; i++){
+                    if (knownlanguages[j][i].selected){
+                        knownlangsArray.push(knownlanguages[j][i].value);
+                    }
+                }
+		var interestsArray = new Array();
+		if(interests.length > 0)
+            for (var i = 0; i < interests.length; i++){
+                interestsArray.push(interests[i].value);
+            }
+        user.profile.knownlanguages = knownlangsArray;
+        user.profile.learninglanguages = learninglangsArray;
+
+        Meteor.users.update({_id:Meteor.userId()},{$set:{profile:user.profile}});
+        var userModal = Session.get("user_modal_actions");
+        userModal.user = Meteor.user().profile;
+        userModal.edit_profile = false;
+        Session.set("user_modal_actions", userModal);
     },
     'click #close': function(event, template){
         Session.set("user_modal_actions", false);

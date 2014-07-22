@@ -375,17 +375,25 @@
 			<div class="know">
 				<div><a href='www.google.com.br/#q={{this.user.nativelang}}' target='_blank'>{{this.user.nativelang}}</a> ({{mf 'native' 'Native'}})</div>
 				{{#each this.user.knownlanguages}}
-					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a> ({{mf 'fluent' 'Fluent'}})</div>
+					<div><a href="www.google.com.br/#q={{this}}">{{this}}</a> ({{mf 'fluent' 'Fluent'}})</div>
 				{{/each}}
 			</div>
 			<label for="learning">{{mf 'learning' 'Learning'}}:</label>
 			<div class="learning">
 				{{#each this.user.learninglanguages}}
-					<div><a href="www.google.com.br/#q={{lang}}">{{lang}}</a></div>
+					<div><a href="www.google.com.br/#q={{this}}">{{this}}</a></div>
 				{{/each}}
 			</div>
 		</div>
-	</div>		
+	</div>
+    <div class="panel panel-info interests">
+        <div class="panel-heading">{{mf 'interests' 'Interests'}}</div>
+        <div class="panel-body">
+            {{#each this.user.interests}}
+            <span>{{this}}, </span> 
+            {{/each}}
+        </div>
+    </div>
 	<div class="panel panel-info">
 		<div class="panel-heading"> {{mf 'user-description' 'User description'}}:</div>
 		<div class="panel-body">
@@ -397,6 +405,7 @@
 </template>
 <template name="user_profile_edit">
 	{{#with user_modal}}
+    <form id="edit-profile">
 		<div class="panel panel-info">
 			<div class="panel-heading"> {{mf 'user-info' 'User basic info'}}:</div>
 			<div class="panel-body">
@@ -417,23 +426,37 @@
 		<div class="panel-heading"> {{mf 'user-languages' 'User languages info'}}:</div>
 		<div class="panel-body">
 			<div class="know">
-                <div>
-                    <label for="native">{{mf 'native-lang' 'Native Language'}}:</label>
-                    <input class="form-control" value='{{this.user.nativelang}}' >
-                </div>
-                <div>
-                    <label for="fluent">{{mf 'fluent' 'Fluent'}}:</label>
+                <div class="form-group" id="knownlanguages">
+                    <label for="knowlanguage">{{mf 'know-language' "I'm fluent in"}}: </label>
+                    <span class="btn-group-xs">
+                        <span id="add-more-knownlanguages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
+                    </span>
                     {{#each this.user.knownlanguages}}
-                    <input class="form-control fluent" value="{{lang}}">
+                    <br />
+                    <select name="knowlanguage" class="knownlanguage">
+                        <option value="0">{{mf 'select' 'Select One'}}</option>
+                            {{#each langs_selected}}
+                            <option value="{{this.lang}}" selected="{{#if this.fluent}}selected{{/if}}">{{this.lang}}</option>
+                            {{/each}}
+                    </select>
                     {{/each}}
                 </div>
 			</div>
-			<label for="learning">{{mf 'learning' 'Learning'}}:</label>
-			<div class="learning">
-				{{#each this.user.learninglanguages}}
-					<input class="form-control lerning" value="{{lang}}">
-				{{/each}}
-			</div>
+            <div class="form-group" id="learning">
+                <label for="learning">{{mf 'learning-languages' "I'm learning"}}: </label>
+                <span class="btn-group-xs">
+                    <span id="add-more-learning" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
+                </span>
+                {{#each this.user.learninglanguages}}
+                <br />
+                <select name="learninglanguage" class="learninglanguage">
+                    <option value="0">{{mf 'select' 'Select One'}}</option>
+                        {{#each langs_selected}}
+                        <option value="{{this.lang}}" selected="{{#if this.learning}}selected{{/if}}">{{this.lang}}</option>
+                        {{/each}}
+                </select>
+                {{/each}}
+            </div>
 		</div>
 	</div>		
 	<div class="panel panel-info">
@@ -442,6 +465,7 @@
             <textarea class="user-description form-control" rows="10" placeholder="Tell us about yourself." id="description">{{this.user.description}}</textarea>
 		</div>
 	</div>
+    </form>
 	{{/with}}
 </template>
 <template name="user_friends">
@@ -469,7 +493,7 @@
     {{#with user_modal}}
     <form id='reset-passwd'>
         <div class='panel panel-info'>
-            <div class='panel-heading'> {{mf 'reset-passwd' 'Reset password'}}:</div>
+            <div class='panel-heading'> {{mf 'reset-passwd' 'Reset my password'}}:</div>
             <div class='panel-body'>
                 <label for='email'>{{mf 'email-info' 'Enter your account email'}}:</label>
                 <input type='text' name='email' class='form-control'/>
