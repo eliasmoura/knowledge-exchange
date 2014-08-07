@@ -102,7 +102,56 @@ Template.chat_input.events = {
 			//var room = User_Chatroom.findOne({active:true, user:Meteor.userId()}).room;
 			//Meteor.call("send_message",message);
 			if (message.value != ''){
-				Meteor.call("send_message", message.value);
+				//Meteor.call("send_message", message.value);
+                var name = Meteor.user().profile.name;
+                var lstname = Meteor.user().profile.lastname;
+                var room = Meteor.user().profile.active_room;
+                var userid = Meteor.userId();
+
+                if (room.type == "public"){
+                    Messages.insert({
+                            name: name,
+                            lstname: lstname,
+                            userid: userid,
+                            message: message.value,
+                            room:room.room,
+                            time: Date.now(),
+                        });
+                }
+                else if (room.type == "group" ){
+                    GroupChat.insert({
+                            name: name,
+                            lstname: lstname,
+                            userid: userid,
+                            message: message.value,
+                            groupchat:room.room,
+                            time: Date.now(),
+                        });
+                        User_Group.find({group:room.room, active:false}).forEach(function(row){
+                            User_Group.update({_id:row._id},{$inc:{new_messages:1}});
+                            console.log('setting inc group');
+                        })
+                }	
+                else if (room.type == "privatechat"){
+                    var privatechat = PrivateChat.findOne({_id:room.room});
+                    var privatechat_2 = PrivateChat.findOne({user:privatechat.contact, contact:privatechat.user});
+                    var privatechats = [privatechat._id, privatechat_2._id];
+                    var messageiD = PrivateMessages.insert({
+                            name: name,
+                            lstname: lstname,
+                            userid: userid,
+                            message: message.value,
+                            chat:privatechats,
+                            time: Date.now(),
+                        });
+                    if (!privatechat.active || !privatechat_2.active){
+                        PrivateChat.find({_id:{$in: privatechats}, active:false}).forEach(function(row){
+                            PrivateChat.update({_id:row._id},{$inc:{new_messages:1}},{multi:true});
+                            console.log('setting inc');
+                        })
+                                        
+                    }
+                }
 
 				document.getElementById('message').value = '';
 				message.value = '';

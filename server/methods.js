@@ -152,7 +152,7 @@ Meteor.methods({
 			PrivateChat.update({_id:row._id}, {$set:{active: false}});
 		});
 	},
-	create_group: function(args){
+	create_group: function(args){//client side
 		var group;
 		if (Groups.findOne({name:args.name})){
 			throw new Meteor.Error(1, 'Group already exist');
@@ -196,7 +196,7 @@ Meteor.methods({
 		
 
 	},
-	send_message: function(message){
+	send_message: function(message){//client side
 		var name = Meteor.user().profile.name;
 		var lstname = Meteor.user().profile.lastname;
 		var room = Meteor.user().profile.active_room;

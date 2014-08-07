@@ -6,6 +6,7 @@
     "bootstrap-3": {},
     "i18n": {},
     "messageformat": {},
-    "fast-render": {}
+    "fast-render": {},
+    "kadira": {}
   }
 }

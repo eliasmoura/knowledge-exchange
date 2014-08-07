@@ -458,7 +458,7 @@ UI.registerHelper("chat_notifications",
 		var groupsArray = 0;
 		// var groups = new Array();
 		user_groups.forEach(function(row){
-			if(row.new_messages > 0);
+			if(row.new_messages > 0)
     			groupsArray = groupsArray +1;
 		});
     	return privatechatnotifications.length + groupsArray;
@@ -469,36 +469,74 @@ UI.registerHelper("edit_profile",
         return Session.get("edit_profile");
     }
 );
+Handlebars.registerHelper("selected", function(lang,learnglang){
+    console.log(lang);
+    console.log(learnglang);
+});
+UI.registerHelper("knownlanguages",function(){
+    //console.log("select");
+    //console.log(lang);
+    //console.log(learninglangs);
+        var userLangs = Meteor.user().profile.knownlanguages;
+    for (var i = 0; i < userLangs.length; i++){
+        if (lang == userLangs[i]){
+            console.log("isSelected");
+            return "selected";
+        }
+    }
+    
+});
 UI.registerHelper('langs_selected',
-    function(){
+    function(lang){
         var returnArray = new Array();
         var langs = Session.get("langs");
         var fluent_langs = Meteor.user().profile.knownlanguages;
         var learning_langs = Meteor.user().profile.learninglanguages;
-        var fluent_length = fluent_langs.length - 1;
-        var learning_length = learning_langs.length -1;
+        var fluent_length = fluent_langs.length;
+        var learning_length = learning_langs.length;
+        returnArray.native = new Array();
         for (var i = 0; i < langs.length; i++){
             if (Meteor.user().profile.nativelang == langs[i]){
-                returnArray.push({lang:langs[i], native:true});
+                returnArray.native.push({lang:langs[i], native:"selected"});
             }
-            else returnArray.push({lang:langs[i], native:false});
+            else returnArray.native.push({lang:langs[i], native:null});
         }
-        for (var f = fluent_length;f >= 0; f--)
-            for (var i = 0; i < langs.length;i++){
+
+        returnArray.fluent = new Array();
+        for (var f = 0;f < fluent_length; f++)
+        {
+             var fluent = new Array();
+             var removable = false;
+             if(fluent_length > 1){
+                removable = true;
+             }
+             for (var i = 0; i < langs.length;i++){
                 if (fluent_langs[f]==langs[i])
                 {
-                    returnArray[i].fluent=true;
+                    fluent.push({lang:langs[i],fluent:"selected"});
                 }
-                else returnArray[i].fluent=false;
+                else fluent.push({lang:langs[i],fluent:null});
             }
-        for (var l = learning_length; l >= 0; l--)
+            returnArray.fluent.push({fluent:fluent,removable:removable});
+        }
+            
+        returnArray.learning = new Array();
+        for (var l = 0; l < learning_length; l++)
+        {
+            var learning =  new Array();
+            var removable = false;
+             if(learning_length > 1){
+                removable = true;
+             }
             for (var i = 0; i < langs.length;i++){
                 if (learning_langs[l]== langs[i])
                 {
-                    returnArray[i].learning = true;
+                    learning.push({lang:langs[i],learning:"selected"});
                 }
-                else returnArray[i].learning = false;
+                else learning.push({lang:langs[i],learning:null});
             }
+            returnArray.learning.push({learning:learning,removable:removable});
+        }
         return returnArray;
     }
 );

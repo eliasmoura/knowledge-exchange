@@ -44,7 +44,7 @@ Template.user.events({
 				$("#login-popover").addClass('in');*/
 	},
 	'click #profile': function(e,t){
-        console.log("profile");
+        //console.log("profile");
 		Session.set("user_modal_actions",{
 			profile:true,
 			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
@@ -136,7 +136,10 @@ Template.login_form.events = {
     }
 }
 Template.register_form.rendered = function(){
-	$('#registerModal').modal("toggle");
+	$('#registerModal').modal("show");
+    $("#registermodal").on("shown.bs.modal", function(){
+        $('#name_registerform').focus();
+    });
 	$('#registerModal').on("hidden.bs.modal", function(){
 			Session.set('login', true);
             Session.set("first-login", true);
@@ -145,7 +148,7 @@ Template.register_form.rendered = function(){
 
 Template.register_form.destroyed = function(){
 	//$('#registerModal').modal("hide");
-	//$('.modal-backdrop').destroy();
+	$('.modal-backdrop').destroy();
 	Session.set('first-login', true);
 }
 Template.user.first_login = function(){
@@ -224,33 +227,30 @@ Template.register_form.events({
 			console.log(error);
 			return "error sign up"
 		})*/
-	//	$('#registerModal').modal("hide");
+		$('#registerModal').modal("hide");
         //$('.modal-backdrop').destroy();
         console.log("done!!");
-        Session.set("currentUser", Meteor.user());
         Session.set('first-login', true);
      //   $('#registerModal').modal("hide");
 	},
 	'click #add-more-languages': function(e,t){
-		console.log('add lang');
 		var langs = Session.get("langs");
         var element = t.find('#learninglanguages');
         var html = '<select name="lang" id="" class="learninglanguage">\
         						<option value="0">'+ mf('select',null,'Select One')+'</option>';
 		for (var i = 0; i < langs.length; i++) {
-			html = html + '<option value="'+langs[i].lang+'">'+langs[i].lang+'</option>';
+			html = html + '<option value="'+langs[i]+'">'+langs[i]+'</option>';
 		}
 		html = html + '</select>';
         $(element).append(html);
 	},
 	'click #add-more-knownlanguages': function(e,t){
-		console.log('add lang');
 		var langs = Session.get("langs");
         var element = t.find('#knownlanguages');
         var html = '<select name="lang" id="" class="knownlanguage">\
         						<option value="0">'+ mf('select',null,'Select One')+'</option>';
 		for (var i = 0; i < langs.length; i++) {
-			html = html + '<option value="'+langs[i].lang+'">'+langs[i].lang+'</option>';
+			html = html + '<option value="'+langs[i]+'">'+langs[i]+'</option>';
 		}
 		html = html + '</select>';
         $(element).append(html);
@@ -392,14 +392,18 @@ Template.user_profile_edit.events({
             for (var j = 0; j < learninglanguages.length; j++)
             for (var i = 0; i < learninglanguages[j].length; i++){
                 if (learninglanguages[j][i].selected)
-                    learninglangsArray.push(learninglanguages[j][i].value);
+                {
+                    if(learninglanguages[j][i].value !=0)
+                        learninglangsArray.push(learninglanguages[j][i].value);
+                }
             }
 
 		if (knownlanguages.length > 0)
             for (var j = 0; j < knownlanguages.length; j++)
                 for (var i = 0; i < knownlanguages[j].length; i++){
                     if (knownlanguages[j][i].selected){
-                        knownlangsArray.push(knownlanguages[j][i].value);
+                        if(knownlanguages[j][i].value != 0)
+                            knownlangsArray.push(knownlanguages[j][i].value);
                     }
                 }
 		var interestsArray = new Array();
@@ -410,7 +414,12 @@ Template.user_profile_edit.events({
         user.profile.knownlanguages = knownlangsArray;
         user.profile.learninglanguages = learninglangsArray;
 
-        Meteor.users.update({_id:Meteor.userId()},{$set:{profile:user.profile}});
+        Meteor.users.update({_id:Meteor.userId()},{$set:{profile:user.profile}},function(errors,doc){
+            if(errors){
+                console.log("Sorry, it seems your request failed to be process. Log info:");
+                console.log(errors);
+            }
+        });
         var userModal = Session.get("user_modal_actions");
         userModal.user = Meteor.user().profile;
         userModal.edit_profile = false;
@@ -418,8 +427,63 @@ Template.user_profile_edit.events({
     },
     'click #close': function(event, template){
         Session.set("user_modal_actions", false);
+    },
+	'click .plus': function(event,template){
+		var langs = Session.get("langs");
+        if(event.target.parentNode.parentNode.id == "knownlanguages"){
+            var element = template.find("#knownlanguages");
+            var selectClass = "knownlanguage";
+        } else {
+            var element = template.find('#learninglanguages');
+            var selectClass = "learninglanguage";
+        }
+        var html = '<select name="lang" id="" class="'+selectClass+'">\
+        						<option value="0">'+ mf('select',null,'Select One')+'</option>';
+		for (var i = 0; i < langs.length; i++) {
+			html = html + '<option value="'+langs[i]+'">'+langs[i]+'</option>';
+		}
+		html = html + '</select>';
+        $(element).append(html);
+	},
+    'click .remove': function (event, template){
+        var select = $(event.target).prev()[0];
+        var langSelected = null;
+        for (var i = 0; i < select.length; i++){
+            if (select[i].selected){
+                langSelected = select[i].value;
+            }
+        }
+        if($(select).hasClass("knownlanguage"))
+            Meteor.users.update({_id:Meteor.userId()},{$pull:{"profile.knownlanguages":langSelected}});
+        else
+            Meteor.users.update({_id:Meteor.userId()},{$pull:{"profile.learninglanguages":langSelected}});
     }
-})
+});
+Template.user_profile_edit.helpers({
+    'learninglanguages': function(lang){
+        console.log(lang);
+        var returnArray = new Array();
+        var langs = Session.get("langs");
+        var learning_langs = Meteor.user().profile.learninglanguages;
+        var learning_length = learning_langs.length -1;
+        for (var l = learning_length; l >= 0; l--){
+            var langArray = new Array();
+            for (var i = 0; i < langs.length;i++){
+                if (learning_langs[l]== langs[i])
+                {
+                    langArray.push({learning:"selected",lang:langs[i]});
+                }
+                else langArray.push({learning:false,lang:langs[i]});
+            }
+            console.log(langArray);
+            returnArray.push(langArray);
+        }
+        console.log(returnArray);
+        return returnArray;
+    }
+});
+
+
 Template.user_friends.events({
   
 })

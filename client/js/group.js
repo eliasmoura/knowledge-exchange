@@ -13,7 +13,6 @@ Template.group_chat_finder.events({
 	'click a.find-create': function(e,t){
 		var element = e.target;
 		$('.find-create').removeClass("active");
-		console.log(element.id );
 		$(element).addClass('active');
 		if (element.id == "find"){
 			Session.set("find-group", true);
@@ -66,7 +65,6 @@ Template.group_chat_finder.events({
 				}catch(e){}
 				
 				var langs = t.findAll(".lang");
-				console.log(langs);
 				var languages = new Array();
 				langs.forEach(function(){
 					languages.push($(this).option);
@@ -83,9 +81,53 @@ Template.group_chat_finder.events({
 				else
 					var message = "default";
 				
-				Meteor.call("create_group", {name:groupname,description:description,
+				/*Meteor.call("create_group", {name:groupname,description:description,
 					languages:languages, invite:members,group_type:groupType,
-					group_focus:groupFocusArray,message:message});
+					group_focus:groupFocusArray,message:message});*/
+
+                var group = {name:groupname,description:description,
+					languages:languages, group_type:groupType,
+					group_focus:groupFocusArray};
+                if (Groups.findOne({name:group.name})){
+                    throw new Meteor.Error(1, 'Group already exist');
+                    return false;
+                }
+                if (group.name.length < 3){
+                    throw new Meteor.Error(2, 'Group name too short');
+                    return false;
+                }
+                /*if (!args.details || !args.languages){
+
+                    throw new Meteor.Error(1, 'All fields are mandatory');
+                    return false;
+                }*/
+                group = Groups.insert({
+                            name:group.name,
+                            description:group.description,
+                            languages:group.languages,
+                            focus:group.group_focus,
+                            type:group.group_type
+                        }, function(error, result){
+                            User_Group.insert({group:group,user:Meteor.userId(),owner:true,mod:true,active:true}, function(error, result){
+                                if(!error){
+                                    console.log('Group ' + Groups.findOne({_id:group}).name + " created by " + Meteor.user().profile.name);
+                                    Meteor.call("setUser_activeRoom","group",group);
+                                }else
+                                    console.log(error);
+                            });
+                            for (var i = 0; i< members.length; i++) {
+                                group_invite_request({group:group,user:member[i],message:message});
+                                /*User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
+                                    if(!error)
+                                        console.log(error);
+                                    });*/
+                            }
+                        }
+                    );
+                console.log("Group created");
+                Meteor.call('setRoom_Non_active');
+                Meteor.call('setGroup_Non_active');
+                Meteor.call('setFriend_Non_active');
 				$('#group-chat-finder-modal').modal('hide');
 			}
 		}
@@ -97,12 +139,12 @@ Template.group_chat_finder.events({
 	'click #morelang': function(e, t){
 		var element = t.find('#langs');
 		var langs = Session.get("langs");
-        var html = '<select name="lang" id="" class="lang">\
+        var html = '<div><select name="lang" id="" class="lang form-control">\
 					<option value="0">'+ mf('select',null,'Select One')+'</option>';
 		for (var i = 0; i < langs.length; i++) {
-			html = html+'<option value="'+langs[i].lang+'">'+langs[i].lang+'</option>';
+			html = html+'<option value="'+langs[i]+'">'+langs[i]+'</option>';
 		}
-		html = html + '</select>';
+		html = html + '</select></div>';
         $(element).append(html);
 							
 	},

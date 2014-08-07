@@ -88,7 +88,7 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each group_rooms}}
 					<li class="{{#if active}}active{{/if}}">
-						<a  href="#" class="chat-group pager" id="{{_id}}" >
+						<a  href="#" class="chat-group" id="{{_id}}" >
 							{{name}}
 							<span class="btn-group-xs">
 								<span class="group glyphicon glyphicon-cog btn btn-default navbar-right" title="{{mf 'manage-group' 'Group managenment'}}"> </span>
@@ -205,7 +205,7 @@ chat side menu
 		{{#if messages}}
 		{{#each messages}}
 		<div class="message list-group-item" id="{{_id}}">
-			<a class="username stusername" href="#" id="{{userid}}">{{name}}: </a>{{message}}
+			<a class="username" href="#" id="{{userid}}">{{name}}: </a>{{message}}
 			{{#if corrections}}
 				<!-- {{> messagem_corrected_button}} -->
 				<span class=" btn-group-xs">

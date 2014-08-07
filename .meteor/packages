@@ -13,7 +13,6 @@ event-hooks
 jquery-ui
 iron-router
 bootstrap-3
-i18n
 messageformat
 fast-render
 meteor
@@ -32,5 +31,6 @@ random
 ejson
 standard-app-packages
 email
-meteor-jQuery-contextMenu
+jquery-contextmenu
 coffeescript
+kadira

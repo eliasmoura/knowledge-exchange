@@ -236,13 +236,13 @@
 </template>
 <template name="user_modal">
 	<div id="user-modal" class="modal fade in modal-user" tabindex="-1" role="dialog" aria-labelledby="user-ModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
-		    <div class="modal-content">
+		<div class="modal-dialog modal-lg">
+		    <div class="modal-content container">
 		    	<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="user-ModalLabel">{{user_modal.action}}</h4>
 				</div>
-				<div class="modal-body row">
+				<div class="modal-body">
 					{{#if user_modal.add}}
 						{{> user_invite_request}}
 					{{/if}}
@@ -418,7 +418,7 @@
                     <label for="city">{{mf 'city' 'City'}}:</label><input id="city" value="{{this.user.city}}" class="form-control">
                     <label for="country">{{mf 'country' 'Country'}}:</label><input id="country" value="{{this.user.country}}" class="form-control">
 
-                        <label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <input id="birthday" value="{{this.user.birthday}}" class="form-control">
+                        <label for="birthday">{{mf 'birthday' 'Birthday'}}:</label> <input type="date" id="birthday" value="{{this.user.birthday}}" class="form-control">
 				</div>
 			</div>
 		</div>
@@ -428,7 +428,7 @@
 			<div class="know">
                     <select name="native" class="native">
                         <option value="0">{{mf 'select' 'Select One'}}</option>
-                            {{#each langs_selected}}
+                            {{#each langs_selected.native}}
                             <option value="{{this.lang}}" selected="{{#if this.native}}selected{{/if}}">{{this.lang}}</option>
                             {{/each}}
                     </select>
@@ -438,30 +438,36 @@
                     <span class="btn-group-xs">
                         <span id="add-more-knownlanguages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
                     </span>
-                    {{#each this.user.knownlanguages}}
+                    {{#each langs_selected.fluent}}
                     <br />
                     <select name="knowlanguage" class="knownlanguage">
                         <option value="0">{{mf 'select' 'Select One'}}</option>
-                            {{#each langs_selected}}
-                            <option value="{{this.lang}}" selected="{{#if this.fluent}}selected{{/if}}">{{this.lang}}</option>
+                            {{#each this.fluent}}
+                            <option value="{{lang}}" selected="{{#if fluent}}selected{{/if}}">{{lang}}</option>
                             {{/each}}
                     </select>
+                    {{#if this.removable}}
+                        <button class="remove glyphicon glyphicon-minus" title="Remove this lang entry"></button>
+                    {{/if}}
                     {{/each}}
                 </div>
 			</div>
-            <div class="form-group" id="learning">
+            <div class="form-group" id="learninglanguages">
                 <label for="learning">{{mf 'learning-languages' "I'm learning"}}: </label>
                 <span class="btn-group-xs">
                     <span id="add-more-learning" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
                 </span>
-                {{#each this.user.learninglanguages}}
-                <br />
-                <select name="learninglanguage" class="learninglanguage">
-                    <option value="0">{{mf 'select' 'Select One'}}</option>
-                        {{#each langs_selected}}
-                        <option value="{{this.lang}}" selected="{{#if this.learning}}selected{{/if}}">{{this.lang}}</option>
-                        {{/each}}
-                </select>
+                {{#each langs_selected.learning}}
+                    <br />
+                    <select name="learninglanguage" class="learninglanguage">
+                        <option value="0">{{mf 'select' 'Select One'}}</option>
+                            {{#each this.learning}}
+                            <option value="{{lang}}" selected="{{#if learning}}seleceted{{/if}}">{{lang}}</option>
+                            {{/each}}
+                    </select>
+                    {{#if this.removable}}
+                        <button class="remove glyphicon glyphicon-minus" title="Remove this lang entry"></button>
+                    {{/if}}
                 {{/each}}
             </div>
 		</div>
@@ -483,10 +489,10 @@
             <div class="langs">
                 <a href="#" id="native">{{native}}</a>
                 {{#each knownlangs}}
-                    <a href="#" class="known">{{lang}}</a>
+                    <a href="#" class="known">{{this}}</a>
                 {{/each}}
                 {{#each learninglangs}}
-                    <a href="#" class="learning">{{lang}}</a>
+                    <a href="#" class="learning">{{this}}</a>
                 {{/each}}
             </div>
         </div>
