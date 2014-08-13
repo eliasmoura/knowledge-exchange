@@ -299,22 +299,7 @@ Router.map( function() {
 	    		//console.log(groupsArray);
 	    		return groupsArray;
 	    	},
-	    	group_manage: function(){
-	    		var user_groups = User_Group.find({user: Meteor.userId(),mod:true}, {fields:{group:1}}).fetch();
-	    		var groupsArray = new Array();
-	    		user_groups.forEach(function(row){
-	    			groupsArray.push(row.group);
-	    		});
 
-	    		var groups = new Array();
-	    		Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
-	    			row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
-	    			groups.push(row);
-	    		});
-	    		//console.log(groups);
-
-	    		return groups;
-	    	},
 	    	
 	    	find_user: function(){
 	    		return Session.get('find_user');
@@ -538,6 +523,29 @@ UI.registerHelper('langs_selected',
             returnArray.learning.push({learning:learning,removable:removable});
         }
         return returnArray;
+    }
+);
+UI.registerHelper("group_management",
+    function(){
+        var user_groups = User_Group.find({user: Meteor.userId(),mod:true}, {fields:{group:1}}).fetch();
+        var groupsArray = new Array();
+        user_groups.forEach(function(row){
+            groupsArray.push(row.group);
+        });
+
+        var groups = new Array();
+        Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
+            row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
+            groups.push(row);
+        });
+        //console.log(groups);
+
+        return groups;
+    }
+);
+UI.registerHelper("group_handler",
+    function (){
+    return Session.get("group_handler")
     }
 );
 UI.registerHelper();

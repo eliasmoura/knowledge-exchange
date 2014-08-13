@@ -43,11 +43,22 @@ Template.chatrooms_side.events = {
 
 	},
 	'click span#add-find-chat': function(e,t){
-		Session.set("group-finder", true);
-		Session.set("find-create-group", true)
+        var group_handler = Session.get("group_handler");
+        if(!group_handler)
+        {
+            group_handler = {} ;
+            group_handler.create = {data:false};
+            group_handler.find = {}
+            group_handler.find.active = true;
+            group_handler.find.data = false;
+            group_handler.management = {data:false};
+        }
+        group_handler.active = true;
+		Session.set("group_handler", group_handler);
+		//Session.set("find-create-group", true)
 	},
 	'click span.conf':function(e,t){
-		Session.set('group-conf', e.target.id);
+		Session.set('group_handler', {management:e.target.id});
 	},
 	'click span#add-find-user': function(e,t){
 		Session.set("find_user", true);

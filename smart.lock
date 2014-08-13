@@ -9,7 +9,8 @@
       "i18n": {},
       "messageformat": {},
       "fast-render": {},
-      "kadira": {}
+      "kadira": {},
+      "jqBootstrapValidation": {}
     },
     "packages": {
       "event-hooks": {
@@ -24,8 +25,8 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.8.1",
-        "commit": "74e867557fd9cb81173e048e5f81cf4a0a1160a8"
+        "tag": "v0.8.2",
+        "commit": "05415a8891ea87a00fb1e2388585f2ca5a38e0da"
       },
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
@@ -39,18 +40,23 @@
       },
       "messageformat": {
         "git": "https://github.com/gadicohen/meteor-messageformat.git",
-        "tag": "v0.0.33",
-        "commit": "9152409d83d402bf796df812f63af5ee0977ae2b"
+        "tag": "v0.0.35",
+        "commit": "7d8cb06274a67df875af09a733f578055bf1932e"
       },
       "fast-render": {
         "git": "https://github.com/arunoda/meteor-fast-render.git",
-        "tag": "v0.2.8",
-        "commit": "149984b1aff3a5642a270aff9bd9006872c8302e"
+        "tag": "v1.0.0",
+        "commit": "acbc04982025fe78cebb8865b5a04689741d4b0b"
       },
       "kadira": {
         "git": "https://github.com/meteorhacks/kadira.git",
-        "tag": "v2.4.9",
-        "commit": "8bb902989917522822a0897117672ae858c23427"
+        "tag": "v2.4.12",
+        "commit": "08c1f65bec94094f17f5df3ebd65cfcc298e5368"
+      },
+      "jqBootstrapValidation": {
+        "git": "https://github.com/wahyuaw/meteor-jqBootstrapValidation.git",
+        "tag": "v0.0.1",
+        "commit": "66a91f82b8a8a955e639357ebf895f3256f0df16"
       },
       "iron-layout": {
         "git": "https://github.com/EventedMind/iron-layout.git",
@@ -81,11 +87,6 @@
         "git": "https://github.com/gadicc/meteor-inject-initial.git",
         "tag": "v0.0.8",
         "commit": "90f2fbcc5b4bc17fa4d4535f47813e31d86033b4"
-      },
-      "jquery-contextmenu":{
-        "git": "https://github.com/michaelbishop/meteor-jQuery-contextMenu.git",
-        "tag": "v1.6.5",
-        "commit": "de3cbfb941c06466fb0968699470043a3795e73b"
       }
     }
   }

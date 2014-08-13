@@ -279,7 +279,8 @@
 				</div>
 				<div class="modal-footer">
 			    	<input type="button" class="btn btn-default" id="request-friendship-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
-                    {{#if user_modal.edit_profile}}
+                    {{#if user_modal.info}}
+                    {{else}}
 			        <input type="button" class="btn btn-primary" id="request-friendship-btn" value="{{mf 'send'}}" />
                     {{/if}}
 			    </div>

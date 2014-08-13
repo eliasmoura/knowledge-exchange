@@ -1,15 +1,50 @@
 // Template.emails.email = function(){ return Session.get("emails");}
 // Template.user.email = function(){ return Session.get("emails");}
 
-Template.sent_emails.emails = function(){ 
+UI.registerHelper("email", function(){ return Session.get("emails");});
+UI.registerHelper("emails",
+function(){ 
 	var action = Session.get("emails");
 	if(action.sent || action.received){
-		Meteor.call("get_emails",function(error,emails){
+		/*Meteor.call("get_emails",function(error,emails){
 			Session.set("emailsd",emails);
 		});
-	}
+	}*/
+        var emails_sent = Email.find({emailfrom:Meteor.userId()}, {sort:{date:-1}});
+        var emails_received = Email.find({emailto:Meteor.userId()}, {sort:{date:-1}});
+
+        if(emails_sent.count() == 0){
+            emails_sent = false;
+        }
+        else{
+            emails_sent = emails_sent.fetch();
+            var emailArray = new Array();
+            emails_sent.forEach(function(row){
+                row.user = Meteor.users.findOne({_id:row.emailto});
+                emailArray.push(row);
+            })
+            emails_sent = emailArray;
+        }
+
+        if(emails_received.count() == 0){
+            emails_received = false;
+        }
+        else{
+            emails_received = emails_received.fetch();
+            var emailArray = new Array();
+            emails_received.forEach(function(row){
+                row.user = Meteor.users.findOne({_id:row.emailfrom});
+                emailArray.push(row);
+            })
+            emails_received = emailArray;
+        }
+        
+
+        Session.set("emailsd",{sent:emails_sent,received:emails_received});
+    }
 	return Session.get("emailsd");
 }
+);
 
 Template.emails.rendered = function(){
 	// console.log('emails');
@@ -146,8 +181,12 @@ Template.sent_emails.events({
 	'click .subject': function(e,t){
 		e.preventDefault();
 		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
-		console.log('collapse');
 	}
 });
-
-UI.registerHelper("email", function(){ return Session.get("emails");});
+Template.received_emails.events({
+	'click .subject': function(e,t){
+		e.preventDefault();
+		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
+        Email.update({_id:$(e.target).attr('data-toggle-to')}, {$set:{isnew:false}});
+	}
+});

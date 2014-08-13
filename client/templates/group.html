@@ -1,58 +1,33 @@
 <!-- find/create group -->
 <template name="group_handler">
-	<div class="modal fade" id="group-handlre-modal" tabindex="-1" role="dialog" aria-labelledby="group-handler-ModalLabel" aria-hidden="true">
+	<div class="modal fade in" id="group-handler-modal" tabindex="-1" role="dialog" aria-labelledby="group-handler-ModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content container">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="group-chat-finder-ModalLabel"></h4>
+					<h4 class="modal-title" id="group-handler-ModalLabel"></h4>
 				</div>
 				<div class="modal-body"><!--content here-->
 					<div class="group-handler"> 
-                            {{#if find}}
+                        <ul class="nav nav-tabs nav-justified">
+                            <li><a href="#" class="btn btn-default find-create active" id="find">{{mf 'find' 'Find'}}</a></li>
+                            <li><a href="#" class="btn btn-default find-create" id="create">{{mf 'create' 'Create'}}</a></li>
+                            <li><a href="#" class="btn btn-default managemente" id="management">{{mf 'manage' 'Management'}}</a></li>
+                        </ul>
+                        {{#if group_handler.management.active}}
+                            {{> group_management}}
+                        {{/if}}
+                        {{#if group_handler.find.active}}
                             {{> find_group}}
-                            {{else}}
+                        {{/if}}
+                        {{#if group_handler.create.active}}
                             {{> create_group}}
-                            {{/if}}
+                        {{/if}}
                     </div>
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-					<input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-
-<template name="group_chat_finder">
-	<div class="modal fade" id="group-chat-finder-modal" tabindex="-1" role="dialog" aria-labelledby="group-chat-finder-ModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content container">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="group-chat-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
-				</div>
-				<div class="modal-body"><!--content here-->
-					<div clas="find-creat-tool"> 
-						<form action="submit" class="group-finder" id="find-create-form">
-							<ul class="nav nav-tabs nav-justified">
-								<li><a href="#" class="btn btn-default find-create active" id="find">{{mf 'find' 'Find'}}</a></li>
-								<li><a href="#" class="btn btn-default find-create" id="create">{{mf 'create' 'Create'}}</a></li>
-							</ul>
-							<div class="panel panel-group">
-								{{#if find}}
-								{{> find_group}}
-								{{else}}
-								{{> create_group}}
-								{{/if}}
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-					<input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
+					<input type="button" class="btn btn-primary" id="handler-btn" value="{{mf 'find'}}" />
 				</div>
 			</div>
 		</div>
@@ -60,96 +35,99 @@
 </template>
 
 <template name="find_group">
-	<div class="form-group">
-		<input type="text" class="form-control" placeholder="Group name" id="group-name-f" />
-	</div>
-	<div class="groups">
-		{{#each group}}
-		<div class="group panel panel-info" id="{{_id}}">
-			<div class="panel-heading">
-				<h4>
-					{{name}}
-					{{#if actions.send_request}}
-						<span class="btn-group-xs">
-							<button class="send-request plus glyphicon glyphicon-plus btn btn-default pull-left" id="{{_id}}"></button> 
-						</span>
-					{{/if}}
-				</h4>
-				Owner: <label id="{{owner._id}}" class="username">{{owner.profile.name}} {{owner.profile.lastname}}</label>
-			</div>
-			<div class="group panel-body">
-				<div class="panel panel-default">
-					<h4 class="panel-heading">
-						<a class="panel-title groupdatails" data-toggle-to="d{{_id}}" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
-					</h4>
-					<div class="panel-body collapse out" id="d{{_id}}">
-						<p class="group" id="{{_id}}" >	{{details}}</p>
-					</div>
-				</div>
-			</div>
-		</div>
-		{{/each}}
-	</div>
+    <form class="find_group" id="find_group">
+        <div class="form-group control-group controls">
+            <input type="text" class="form-control" placeholder="Group name" id="group-name-f" required >
+            <p class="help-block"></p>
+        </div>
+    </form>
+    <div class="groups">
+        {{#each group}}
+        <div class="group panel panel-info" id="{{_id}}">
+            <div class="panel-heading">
+                <h4>
+                    {{name}}
+                    {{#if actions.send_request}}
+                        <span class="btn-group-xs">
+                            <button class="send-request plus glyphicon glyphicon-plus btn btn-default pull-left" id="{{_id}}"></button> 
+                        </span>
+                    {{/if}}
+                </h4>
+                Owner: <label id="{{owner._id}}" class="username">{{owner.profile.name}} {{owner.profile.lastname}}</label>
+            </div>
+            <div class="group panel-body">
+                <div class="panel panel-default row">
+                    <div class="panel-heading">
+                        <a class="panel-title groupdatails" data-toggle-to="d{{_id}}" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
+                    </div>
+                    <div class="panel-body collapse out" id="d{{_id}}">
+                        <p class="group" id="{{_id}}" >	{{description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
 </template>
 
 <template name="create_group">
-	<div class="panel panel-info">
-		<div class="panel-heading">{{mf 'group-info' 'Group information'}}:</div>
-		<div class="panel-body">
-		<div class="form-group row">
-			<label for="group-name-c">{{mf 'name'}}:<sup>*</sup></label>
-			<input type="text" name="name" class="form-control" placeholder="Group name" id="group-name-c" />
-		</div>
-		<div class="info row">
-			<div class="form-group ">
-				<div id="info">
-					<div class="">
-						<label for="type" class="">{{mf 'type' 'Type'}}:<sup>*</sup></label>
-						<select id="type" class="form-control">
-							<option value="none">{{mf 'select-one' 'Select one'}} </option>
-							<option value="open">{{mf 'open_group' 'Open group'}} </option>
-							<option value="participation">{{mf 'part_request' 'Participation request'}}</option>
-							<option value="indication">{{mf 'memb_indication' 'Members indicatioin'}}</option>
-						</select>
-					</div>
-					<p id="genre">
-						<div class="form-group panel panel-default">
-							<div class="panel-heading">{{mf 'groupgenre' 'Group genre'}}:</div>
-							<div class="panel-body">
-							<label for="music">{{mf 'music' 'Music'}}</label>
-							<input type="checkbox" class="group-type " name='groupgenre' id="music" value="Music" />
-							<label for="sports">{{mf 'sports' 'Sports'}}</label>
-							<input type="checkbox" class="group-type " name='groupgenre' id="sports" value="Sports" />
-							<label for="Literature">{{mf 'literature' 'Literature'}}</label>
-							<input type="checkbox" class="group-type " name='groupgenre' id="literature" value="Literature" />
-							<label for="video-games">{{mf 'video-games' 'Video games'}}</label>
-							<input type="checkbox" class="group-type " name='groupgenre' id="video-games" value="Video Games" />
-							<label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
-							<input type="checkbox" class="group-type" name='groupgenre' id="tv-shows" value="T.V. Shows" />
-							<label for="movies">{{mf 'movies' 'Movies'}}</label>
-							<input type="checkbox" class="group-type" name='groupgenre' id="movies" value="Movies" />
-							<label for="languages">{{mf 'languages' 'Languages'}}</label>
-							<input type="checkbox" class="group-type" name='groupgenre' id="languages" value="Languages" />
-							<label for="education">{{mf 'education' 'Education'}}</label>
-							<input type="checkbox" class="group-type" name='groupgenre' id="education" value="Education" />
-							<label for="teaching">{{mf 'teaching' 'Teaching'}}</label>
-							<input type="checkbox" class="group-type" name='groupgenre' id="teaching" value="Teaching" />
-							<label for="travel">{{mf 'travel' 'Travel abroad'}}</label>
-							<input type="checkbox" class="group-type" name='groupgenre' id="travel" value="Travel abroad" />
-							</div>
-						</div>
-					</p>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">{{mf 'description' 'Description'}}:<sup>*</sup></div>
-                        <textarea type="text" class="form-control" rows="10" id="description" placeholder=""  > </textarea>
-                    </div>
-					<div class="form-group panel panel-default" id="">
-						<div class="panel-heading">{{mf 'allowed_langs' 'Allowed Languages'}}:<sup>*</sup>
-                            <span class="btn btn-default btn-sm glyphicon glyphicon-plus" id="morelang"></span>
+    <form class="create_group" id="create_group">
+        <div class="panel panel-info control-group">
+            <div class="panel-heading">{{mf 'group-info' 'Group information'}}:</div>
+            <div class="panel-body">
+                <label for="group-name-c">{{mf 'name'}}:<sup>*</sup></label>
+                <input type="text" name="name" required min="3" class="form-control" placeholder="Group name" id="group-name-c" />
+                <p class="help-block">{{mf 'name-3-length' 'The name should be at least 3 character'}}</p>
+            <div class="info">
+                        <div class="controls" id="">
+                            <label for="type" class="control-label">{{mf 'type' 'Type'}}:<sup>*</sup></label>
+                            <select id="type" class="form-control" required>
+                                <option value="none">{{mf 'select-one' 'Select one'}} </option>
+                                <option value="open">{{mf 'open_group' 'Open group'}} </option>
+                                <option value="participation">{{mf 'part_request' 'Participation request'}}</option>
+                                <option value="indication">{{mf 'memb_indication' 'Members indicatioin'}}</option>
+                            </select>
+                            <p class="help-block"></p>
                         </div>
-                        <div class="panel-body" id="langs">
-                            <div>
-                                <select name="lang" id="" class="lang form-control">
+                        <div class="form-group panel panel-default controls">
+                            <div class="panel-heading control-label">{{mf 'groupgenre' 'Group genre'}}:</div>
+                            <div class="panel-body controls">
+                                <label for="music">{{mf 'music' 'Music'}}</label>
+                                <input type="checkbox" class="group-type " name='groupgenre' id="music" value="Music" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="sports">{{mf 'sports' 'Sports'}}</label>
+                                <input type="checkbox" class="group-type " name='groupgenre' id="sports" value="Sports" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="Literature">{{mf 'literature' 'Literature'}}</label>
+                                <input type="checkbox" class="group-type " name='groupgenre' id="literature" value="Literature" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="video-games">{{mf 'video-games' 'Video games'}}</label>
+                                <input type="checkbox" class="group-type " name='groupgenre' id="video-games" value="Video Games" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
+                                <input type="checkbox" class="group-type" name='groupgenre' id="tv-shows" value="T.V. Shows" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="movies">{{mf 'movies' 'Movies'}}</label>
+                                <input type="checkbox" class="group-type" name='groupgenre' id="movies" value="Movies" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="languages">{{mf 'languages' 'Languages'}}</label>
+                                <input type="checkbox" class="group-type" name='groupgenre' id="languages" value="Languages" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="education">{{mf 'education' 'Education'}}</label>
+                                <input type="checkbox" class="group-type" name='groupgenre' id="education" value="Education" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="teaching">{{mf 'teaching' 'Teaching'}}</label>
+                                <input type="checkbox" class="group-type" name='groupgenre' id="teaching" value="Teaching" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                <label for="travel">{{mf 'travel' 'Travel abroad'}}</label>
+                                <input type="checkbox" class="group-type" name='groupgenre' id="travel" value="Travel abroad" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                            </div>
+                            <p class="help-block"></p>
+                        </div>
+                        <div class="panel panel-default " id="alert_groupdescription">
+                            <div class="panel-heading control-label">{{mf 'description' 'Description'}}:<sup>*</sup></div>
+                            <div class="panel-body controls">
+                                <textarea type="text" required class="form-control" rows="10" id="description" placeholder=""  > </textarea>
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                        <div class="form-group panel panel-default" id="">
+                            <div class="panel-heading control-label">{{mf 'allowed_langs' 'Allowed Languages'}}:<sup>*</sup>
+                                <span class="btn btn-default btn-sm glyphicon glyphicon-plus" id="morelang"></span>
+                            </div>
+                            <div class="panel-body controls" id="alert_grouplangs">
+                                <select name="lang" id="" class="lang form-control" required >
                                     <option value="0">{{mf 'select_one' 'Select One'}}</option>
                                     {{#each lang_list}}
                                         <option value="{{this}}">{{this}}</option>
@@ -157,30 +135,32 @@
                                 </select>
                             </div>
                         </div>
-					</div>
-				</div>
-				
-				<div id="invitemembers" class="panel panel-default">
-                    <div class="invitemembers panel-heading">{{mf 'invite-users' 'Invite users'}}:</div>
-                    <div class="panel-body">
-                        <div>
-                            {{#each contacts}}
-                                <input name="friends" type="checkbox" class="friends-contacts" id="{{_id}}" ><label for="{{_id}}">{{profile.name}}</label>
-                            {{/each}}
-                        </div>
-                        <form action="submit" class="sisabled">
-                            <label for="find" disabled="disabled">{{mf 'find' 'Find'}}:</label>
-                            <input type="text" value="" placeholder="Name" id="find-user" class="form-control" disabled="disabled">	
-                        </form>
-                        <div class="invite-message">
-                            <label for="default">Default</label><input value="default" type="radio" name="invite-message">
-                            <label for="custom">Custom</label><input value="custom" type="radio" name="invite-message">
-                            <textarea name="message" class="form-control" id="invite-message" rows="10" placeholder="{{mf 'default-group-invite-message' 'Hi, check out this group, I think you\'ll like it.'}}"></textarea>
+                    </div>
+                    
+                    <div id="" class="panel panel-default ">
+                        <div class="invitemembers panel-heading">{{mf 'invite-users' 'Invite users'}}:</div>
+                        <div class="panel-body">
+                            <div>
+                                <label >{{mf 'Contacts' 'Contacts'}}:</label>
+                                {{#each contacts}}
+                                    <input name="friends" type="checkbox" class="friends-contacts" id="{{_id}}" ><label for="{{_id}}">{{profile.name}}</label>
+                                {{/each}}
+                            </div>
+                            <form action="submit" class="sisabled">
+                                <label for="find" disabled="disabled">{{mf 'find' 'Find'}}:</label>
+                                <input type="text" value="" placeholder="Name" id="find-user" class="form-control" disabled="disabled">	
+                            </form>
+                            <div class="invite-message">
+                                <label for="default">Default</label><input value="default" type="radio" name="invite-message">
+                                <label for="custom">Custom</label><input value="custom" type="radio" name="invite-message">
+                                <textarea name="message" class="form-control" id="invite-message" rows="10" placeholder="{{mf 'default-group-invite-message' 'Hi, check out this group, I think you\'ll like it.'}}"></textarea>
+                            </div>
                         </div>
                     </div>
-				</div>
-			</div>
-		</div>	
-		</div>
-	</div>
+            </div>
+        </div>
+    </form>
+</template>
+<template name="group_management">
+    
 </template>

@@ -105,6 +105,9 @@ chat side menu
 					</li>
 					{{/each}}
 				</ul>
+                {{#if group_handler.active}}
+                    {{> group_handler}}
+                {{/if}}
 			</div>
 		</div> 
 		<div class="chatrooms panel panel-default">
