@@ -1,5 +1,5 @@
 #packages
-.meteor/*.un~
+.meteor/*.un\~
 packages
 
 #node files
@@ -9,10 +9,10 @@ packages
  ### vim ###
  [._]*.s[a-w][a-z]
  [._]s[a-w][a-z]
- *.un~
+ *.un\~
  Session.vim
  .netrwhist
- *~
+ *\~
 
 
  ### Meteor ###
