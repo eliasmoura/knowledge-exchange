@@ -15,8 +15,12 @@
 /fast-render
 /meteor-JQuery-ContextMenu
 /kadira
+<<<<<<< HEAD
 /iron-layout
 /iron-core
 /iron-dynamic-template
 /jquery-contextmenu
 /jqBootstrapValidation
+=======
+/meteor-jQuery-contextmenu
+>>>>>>> f63063485ae110bcfd5c9f17a5993bec79b784fc

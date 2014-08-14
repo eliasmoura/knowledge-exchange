@@ -31,7 +31,11 @@ random
 ejson
 standard-app-packages
 email
+<<<<<<< HEAD
 jquery-contextmenu
+=======
+meteor-jQuery-contextmenu
+>>>>>>> f63063485ae110bcfd5c9f17a5993bec79b784fc
 coffeescript
 kadira
 jqBootstrapValidation

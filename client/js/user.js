@@ -44,7 +44,6 @@ Template.user.events({
 				$("#login-popover").addClass('in');*/
 	},
 	'click #profile': function(e,t){
-        //console.log("profile");
 		Session.set("user_modal_actions",{
 			profile:true,
 			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
