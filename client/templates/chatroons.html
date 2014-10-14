@@ -5,17 +5,6 @@
 
 </body>
 <template name="chatrooms">
-	<!-- <div class="dropdown visible-xs">
-		<a data-toggle="dropdown" href="#">
-			Menu
-			<span class=""></span>
-			<span class="caret"></span>
-		</a>
-		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			{{> chatrooms_side}}
-		</ul>
-
-	</div> -->
 	{{#if currentUser}}
 		{{#if room}}
 		<div class="chatroon-name panel-heading row">
@@ -76,9 +65,11 @@ chat side menu
 			<div class="panel-heading">
 				<h4 class="panel-title">
 					<a class="panel-rooms" data-toggle-to="panel-groups" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'group_chats' 'Groups'}}:</a>
+                    {{#if user}}
 					<span class="btn-group-xs">
 						<span id="add-find-chat" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-find-group' 'Add/Find a chat group'}}"></span>
 					</span>
+                    {{/if}}
 					{{#if find_chat_group}}
 					{{> group_chat_finder}}
 					{{/if}}
@@ -115,7 +106,9 @@ chat side menu
 				<h4 class="panel-title">
 					<a class="panel-rooms" data-toggle-to="panel-friends" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
 					<span class="btn-group-xs">
+                        {{#if user}}
 						<span id="add-find-user" class="plus glyphicon glyphicon-plus btn btn-default" title="add/find a contact"></span>
+                        {{/if}}
 					</span>
 				</h4>
 			</div>
@@ -142,56 +135,6 @@ chat side menu
 		</div>
 	</div>
 </template>
-<!-- 
-<template name="chatrooms_side_xs">
-	<div class="panel-group" id="collapse">
-		<div class="chatrooms row panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title">
-					<a class="menu-handle" data-toggle="collapse" data-parent="#accordion" href="#panel-rooms">Public chat rooms:</a>
-				</h4>
-			</div>
-			<div class="panel-collapse collapse in" id="panel-rooms">
-				<ul class="nav nav-pills navebar-inverse nav-stacked">
-					{{#each rooms}}
-					<li><a href="#" class="roombutton" id="{{room}}" >{{room}}</a></li>
-					{{/each}}
-				</ul>
-			</div>
-		</div>
-		<div class="chatrooms row panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title">
-					<a class="menu-handle" data-toggle="collapse" data-parent="#accordion" href="#panel-groups">Group Chat rooms:</a>
-				</h4>
-			</div>
-			<div class="panel-collapse collapse in" id="panel-groups">
-				{{#each group_rooms}}
-				<div class=''><input class="roombutton col-xs-12" type="button" value="{{room}}" id="{{room}}" /></div>
-				{{/each}}
-			</div>
-		</div>
-		<div class="chatrooms row panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title">
-					<a class="menu-handle" data-toggle="collapse" data-parent="#accordion" href="#panel-friends">Friends/Contacts:</a>
-				</h4>
-			</div>
-			<div class="panel-collapse collapse out" id="panel-friends">
-				{{#each myUsersList}}
-				<div class=''><label class="usercontacts col-xs-12" id="{{user._id}}"> {{user.name}}</label></div>
-				{{/each}}
-			</div>
-		</div>
-	</div>
-</template>
- -->
-<!-- side menu's modals -->
-
-
-
-<!-- user finder -->
-
 
 <!-- chat room -->
 <template name="users_chatroom">

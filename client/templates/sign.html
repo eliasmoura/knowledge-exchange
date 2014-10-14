@@ -1,28 +1,32 @@
 <template name="login_form">
-	<ul class="dropdown-menu" >
-		<li>
-			<form class="login-form" id="login-form" action="submit">
-				<div class="input-group input-group-sm">
-					<div class="input-group input-group-sm">
-					<input type="email" id="login_email" class="form-control" placeholder="email">
-					<input type="password" id="login_passwd" class="form-control" placeholder="password">
-					<!-- <span class="input-group-addon " id="login-submit"> -->
-						
-					<!-- </span> -->
-					</div>
-					<button type="submit" class="form-control btn btn-primary"> {{mf 'enter' 'Enter'}}</button>
-				</div>
-			</form>
-		</li>
-		<li class="divider"></li>
-		<li>
-			<a href="#" class='reset row'>{{mf 'reset_password' 'Reset my password'}}</a>
-			<a href="#" class='newUser row'>{{mf 'create_user' 'Create user'}}</a>
-		</li>
-		{{#if reset_passwd}}
-			{{> reset_passwd}}
-		{{/if}}
-	</ul>
+    <a id="login" class="dropdown-toggle" href="#" data-toggle="dropdown" >
+        {{mf 'sign-in' 'Sign in'}}
+        <span class="caret"></span>
+    </a>
+    {{#if login}}
+        <ul class="dropdown-menu dropdown-menu-right" role="menu" >
+            <li role="presentation">
+                <form class="login-form" id="login-form" action="submit">
+                    <div  tabindex="-1" class="input-group input-group-sm">
+                        <div class="input-group input-group-sm">
+                        <input type="email" id="login_email" class="form-control" placeholder="email">
+                        <input type="password" id="login_passwd" class="form-control" placeholder="password">
+                        </div>
+                        <button type="submit" class="form-control btn btn-primary"> {{mf 'enter' 'Enter'}}</button>
+                    </div>
+                </form>
+            </li>
+            <li role="presentation" >
+                <a href="#"  tabindex="-1" class='navigation reset'>{{mf 'reset_password' 'Reset my password'}}</a>
+                <a href="#" tabindex="-1" class='navigation newUser'>{{mf 'create_user' 'Create user'}}</a>
+            </li>
+            {{#if reset_passwd}}
+                {{> reset_passwd}}
+            {{/if}}
+        </ul>
+    {{else}}
+        {{> register_form}}
+    {{/if}}
 </template>
 
 <template name="reset_passwd">
@@ -48,28 +52,6 @@
 	</div>
 </template>
 
-<template name="login_popover">
-	<div id="login-popover" class="popover fade bottom" style="display: block; top: 39px; left: 706px;">	
-		<div class="arrow"></div>
-		<h3 class="popover-title" style="display: none;"></h3>
-		<div class="popover-content">
-			<form class="login-form" id="login-form" action="submit">
-				<div class="input-group input-group-sm">
-					<input type="email" id="login_email" class="form-control" placeholder="email">
-					<input type="password" id="login_passwd" class="form-control" placeholder="password">
-					<!-- <span class="input-group-addon " id="login-submit"> -->
-						<button type="submit" class="input-group-addon btn btn-defaultn"> {{mf 'enter' 'Enter'}}</button>
-					<!-- </span> -->
-
-				</div>
-			</form>
-			<a href="#" class="fgpasswd row">I forgot my password</a>
-			<a href="#" class="newUser row">Create user</a>
-			
-		</div>
-	</div>
-</template>
-
 <template name="logoutButton">
 	<div class='logoutdiv'>
 		<input type="button" value="Logout" id="logoutButton" />
@@ -78,52 +60,63 @@
 
 <template name="register_form">
 	<div class="modal fade row" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
+		  <div class="modal-dialog modal-lg">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		        <h4 class="modal-title" id="registerModalLabel">{{mf 'sing_up' 'Sign up'}}</h4>
 		      </div>
 		      <div class="modal-body"><!--content here-->
-		        <form id="register_form" action="submit">
+		        <form id="register_form" action="">
 					<div class="input-group input-group-sm">
 						<div class="panel panel-info">
 							<div class="panel-heading">{{mf 'basic-info' 'Basic Information'}}:</div>
-							<div class="panel-body">
-								<div class="form-group">
+							<div class="panel-body control-group">
+                                <div class="form-group control-group error">
 									<label for="name_registerform">{{mf 'name' 'Name'}}:</label>
-									<input type="text" class="form-control" id="name_registerform" />
+                                    <div class="controls">
+                                    <input required autofocus="autofocus" data-validation-required-message="{{mf 'enter-firstname' 'Enter your firstname here.'}}" type="text" class="form-control" id="name_registerform" />
+            <p class="help-block"></p>
+                                    </div>
 								</div>
-								<div class="form-group">
+								<div class="form-group control-group error">
 									<label for="lastname_registerform">{{mf 'lname' 'Last name'}}:</label>
-									<input type="text" class="form-control" id="lastname_registerform" />
+                                    <div class="controls">
+									<input  required type="text" class="form-control" id="lastname_registerform" />
+            <p class="help-block"></p>
+                                    </div>
 								</div>
-								<div class="form-group">
+								<div class="form-group controls">
 									<label for="birthday_registerform">{{mf 'birthday' 'Birthday'}}:</label>
-									<input type="date" class="form-control" id="birthday_registerform" />
+									<input type="date"  required class="form-control" id="birthday_registerform" />
+            <p class="help-block"></p>
 								</div>
-								<div class="form-group">
+								<div class="form-group controls">
+            <p class="help-block"></p>
 									<label for="masculine_gender">{{mf 'masculine' 'Masculine'}}</label>
-									<input type="radio" name="gender" class="gender" value="Masculine" id="masculine_gender" />
+									<input type="radio" name="gender"  required class="gender" value="Masculine" id="masculine_gender" />
 									<label for="feminine_gender">{{mf 'feminine' 'Feminine'}}</label>
-									<input type="radio" name="gender" class="gender" value="Feminine" id="feminine_gender"/>
+									<input type="radio" name="gender"  required class="gender" value="Feminine" id="feminine_gender"/>
 								</div>
-								<div class="form-group">
+								<div class="form-group controls">
 									<label for="country_registerform">{{mf 'country' 'Country'}}:</label>
-									<input type="text" class="form-control" id="country_registerform" />
+									<input type="text" class="form-control"  required id="country_registerform" />
+            <p class="help-block"></p>
 								</div>
-								<div class="form-group">
+								<div class="form-group controls">
 									<label for="city_registerform">{{mf 'city' 'City'}}:</label>
-									<input type="text" class="form-control" id="city_registerform" />
+									<input type="text" class="form-control" id="city_registerform" required  />
+            <p class="help-block"></p>
 								</div>
-								<div class="form-group">
+								<div class="form-group controls">
 									<label for="native_registerform">{{mf 'native-lang' 'Native Language'}}: </label>
-									<select name="native_registerform" id="native_registerform">
+									<select name="native_registerform" class="form-control"  id="native_registerform" required >
 										<option value="0">{{mf 'select' 'Select One'}}</option>
 										{{#each lang_list}}
 											<option value="{{this}}">{{this}}</option>
 										{{/each}}
 									</select>
+            <p class="help-block"></p>
 								</div>
 							</div>
 						</div>
@@ -137,7 +130,7 @@
 									<span class="btn-group-xs">
 										<span id="add-more-knownlanguages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
 									</span>
-									<select name="knowlanguages" class="knownlanguage">
+									<select name="knowlanguages" class="knownlanguage" required >
 										<option value="0">{{mf 'select' 'Select One'}}</option>
 										{{#each lang_list}}
 											<option value="{{this}}">{{this}}</option>
@@ -152,7 +145,7 @@
 									<span class="btn-group-xs">
 										<span id="add-more-languages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
 									</span>
-									<select name="learn_registerform" class="learning-language">
+									<select name="learn_registerform" class="learning-language" required >
 										<option value="0">{{mf 'select' 'Select One'}}</option>
 										{{#each lang_list}}
 											<option value="{{this}}">{{this}}</option>
@@ -198,15 +191,19 @@
 							<div class="panel-body">
 								<div class="form-group">
 									<label for="email_registerform">{{mf 'email' 'Email'}}:</label>
-									<input type="email" class="form-control" id="email_registerform" />
+									<input type="email" class="form-control" id="email_registerform" required  />
+                                </div>
+                                <div class="form-group">
+                                    <label for="emailcheck_registerform">{{mf 'check-email' 'Confirme email'}}:</label>
+                                    <input type="email" class="form-control" id="emailcheck_registerform" data-validation-matches-match="email" data-validation-matches-message="{{mf 'must-match' 'Must match email address entered above'}}"  />
 								</div>
 								<div class="form-group">
 									<label for="password_registerform">{{mf 'passwd' 'Password'}}:</label>
-									<input type="password" class="form-control" id="passwd_registerform" />
+									<input type="password" class="form-control" id="passwd_registerform" required  />
 								</div>
 								<div class="form-group">
 									<label for="passwdcheck_registerform">{{mf 'passwd_check' 'Password check'}}:</label>
-									<input type="password" class="form-control" id="passwdcheck_registerform" />
+									<input type="password" class="form-control" id="passwdcheck_registerform" required  />
 								</div>
 							</div>
 						</div>

@@ -9,7 +9,7 @@ var isValidPassword = function(val, field) {
 		return false;
 	}
 }
-Template.user.login = function(){
+Template.login_form.login = function(){
 	return Session.get("login");
 }
 /*Template.userlist.userlist = function(){
@@ -29,6 +29,10 @@ Template.user.events({
 		//$("div.user").css('display', 'block');
 		//$("input#signButton").css('display','none');
 	},
+    'click a#user': function(event, template){
+        event.stopPropagation();
+        $('.dropdown-toggle').dropdown("toggle");
+    },
 	'click a#logoutButton': function(){
 		console.log("logging out");
 		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
@@ -36,12 +40,9 @@ Template.user.events({
 		Session.set("currentUser",Meteor.user());
 		console.log("logged out");
 	},
-	'click #login': function(e, t){
+	'click #signin': function(e, t){
 			// console.log('addclass');
-			/*if ($("#login-popover").attr('class').indexOf("in") != -1)
-				$("#login-popover").removeClass('in');		
-			else
-				$("#login-popover").addClass('in');*/
+        Session.set("login", false);
 	},
 	'click #profile': function(e,t){
 		Session.set("user_modal_actions",{
@@ -95,16 +96,11 @@ Template.user.events({
 
 });
 
-
-
-Template.login_popover.rendered = function(){
-		$(".popover").popover({
-			//html:true,
-			//content:$('div#div-login-form').html()
-		});
-		
-}
 Template.login_form.events = {
+    'click a#login': function(event, template){
+        event.stopPropagation();
+        $('.dropdown-toggle').dropdown("toggle");
+    },
 	'submit form.login-form': function(e, t){
 		e.preventDefault();
 		var email = t.find('#login_email').value;
@@ -138,16 +134,18 @@ Template.register_form.rendered = function(){
 	$('#registerModal').modal("show");
     $("#registermodal").on("shown.bs.modal", function(){
         $('#name_registerform').focus();
+        $(this.find("#name_registerform")).attr("autofocus", "autofocus");
     });
 	$('#registerModal').on("hidden.bs.modal", function(){
 			Session.set('login', true);
             Session.set("first-login", true);
 	});
+        //$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 }
 
 Template.register_form.destroyed = function(){
 	//$('#registerModal').modal("hide");
-	$('.modal-backdrop').destroy();
+	//$('.modal-backdrop').destroy();
 	Session.set('first-login', true);
 }
 Template.user.first_login = function(){
@@ -162,7 +160,7 @@ Template.register_form.events({
 		e.preventDefault();
 		var name = t.find('#name_registerform').value;
 		var lastname = t.find('#lastname_registerform').value;
-		var gender = t.find('.gender:checked').value;
+		var gender = t.find('.gender:checked');
 		var interests = t.findAll('[name="interests"]:checked');
 		var birthday = t.find('#birthday_registerform').value;
 		var email = t.find('#email_registerform').value;
@@ -173,32 +171,64 @@ Template.register_form.events({
 		var nativeLang = t.find('#native_registerform option:selected').value;
 		var learninglanguages = t.findAll('.learning-language');
 		var knownlanguage = t.findAll('.knownlanguage');
+        var error = new Array();
+
+        if (!name)
+            error.Name = mf('name-404', null, 'Name not defined');
+
+        if (!lastname)
+            error.Lastname = mf('lastname-404', null, 'Lastname not defined');
+
+        if (!birthday)
+            error.Bithday = mf('birthday-404', null, 'Birthday not defined');
+
+        if (!passwd)
+            error.Password = mf('passwd-404', null, 'Password not defined');
+
+        if(gender)
+            gender = gender.value;
+        else 
+            error.gender = mf("not-defined", null, "Gender not defined");
 
 		var langs = new Array();
 
-        if (learninglanguages.length > 0)
+        if (learninglanguages.length > 0){
             for (var j = 0; j < learninglanguages.length; j++)
             for (var i = 0; i < learninglanguages[j].length; i++){
-                if (learninglanguages[j][i].selected)
+                if (learninglanguages[j][i].selected && learninglanguages[j][i].value != 0)
                     langs.push(learninglanguages[j][i].value);
             }
+        } 
+        if(langs.length == 0)
+            error.learninglanguages = mf("learning-404", null, "Learning languages not defined");
+
 		var knownlangs = new Array();
 
-		if (knownlanguage.length > 0)
+		if (knownlanguage.length > 0){
             for (var j = 0; j < knownlanguage.length; j++)
                 for (var i = 0; i < knownlanguage[j].length; i++){
-                    if (knownlanguage[j][i].selected){
+                    if (knownlanguage[j][i].selected && knownlanguage[j][i].value != 0){
                         knownlangs.push(knownlanguage[j][i].value);
                     }
                 }
+        }
+        if (knownlangs.length == 0)
+            error.knownlanguages = mf("known-404", null, "Known languages not defined");
+
 		var interestsArray = new Array();
-		if(interests.length > 0)
+		if(interests.length > 0){
             for (var i = 0; i < interests.length; i++){
                 interestsArray.push(interests[i].value);
             }
-		email = trimInput(email);
+        }else
+            error.interests = mf("interest-404", null, "Interests not defined");
+
+        if (email){
+            email = trimInput(email);
+        }else
+            error.email = mf("email-404", null, "Email not defined");
+
 		/**Validate things**/
-        console.log("going?");
 		var user =
 		{
 			email:email,
@@ -217,19 +247,34 @@ Template.register_form.events({
 				interests:interestsArray
 			}
 		};
-        console.log(user);
-        Accounts.createUser(user);
-		/*Meteor.call("sign_up",email,passwd,name,lastname,function(error, res){
-			if(!error)	{
-				
-			}
-			console.log(error);
-			return "error sign up"
-		})*/
-		$('#registerModal').modal("hide");
-        //$('.modal-backdrop').destroy();
-        console.log("done!!");
-        Session.set('first-login', true);
+        if(!error.length)
+        Accounts.createUser(user, function(error){
+            if(!error){
+                $('#registerModal').modal("hide");
+                //$('.modal-backdrop').destroy();
+                console.log("done!!");
+                Session.set('first-login', true);
+
+            }else{
+                console.log(error);
+            }
+        });
+        else{
+            var errorMsg = mf("signin-error",null,"The following fields contain errors, please check them and try again.");
+            console.log(error.length);
+            var errorOutput = "";
+            for (var i in error){
+                errorOutput += i+": "+error[i]+"<br />";
+            }
+            var alert = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\
+                  <strong>Warning!</strong> <br />'+errorMsg+'<br />'+errorOutput+'\
+                </div>';
+            console.log(errorOutput);
+            var form = t.find("#register_form");
+            $(form).append(alert);
+        }
+
      //   $('#registerModal').modal("hide");
 	},
 	'click #add-more-languages': function(e,t){
@@ -584,8 +629,33 @@ Template.group.events({
 		Meteor.call("group_invite_request",{user:userId,message:message,group:groupId});
 	}
 });
-
-$(function(){
+var menu = [{
+        name: 'create',
+        //img: 'images/create.png',
+        title: 'create button',
+        fun: function () {
+                    alert('i am add button');
+        }
+                            
+    }, {
+        name: 'update',
+        //img: 'images/update.png',
+        title: 'update button',
+        fun: function () {
+                    alert('i am update button');
+        }
+                            
+    }, {
+        name: 'delete',
+        //img: 'images/delete.png',
+        title: 'create button',
+        fun: function () {
+                    alert('i am add button');
+        }
+                            
+    }];
+$('.username').contextMenu(menu);
+/*$(function(){
     $.contextMenu({
         selector: '.username',
         build: function($trigger, e){
@@ -594,16 +664,21 @@ $(function(){
 			};
 			var user = UsersRelations.findOne({contact:$trigger.attr("id")});
 			if($trigger.attr("id") != Meteor.userId()){	
-	        	items_menu.email = {name: " Email", icon: "email  glyphicon glyphicon-envelope"};
-	        	if (!user)
-	        		items_menu.contact = {name: " Add to Contacts", icon: "contact glyphicon glyphicon-plus"};
-	        		
-	        	items_menu.private = {name: " Chat",icon: "chat glyphicon glyphicon-comment"};
-	        	items_menu.group = {name: " Invite to a Group",icon: "group"};
-	        	items_menu.sep1 = "---------";
-	        	if (items_menu.contact === undefined)
-	        		items_menu.rcontact = {name: " Remove Contact", icon: "remove glyphicon glyphicon-remove"};
-	        	items_menu.block = {name: " Block user", icon: "block-user glyphicon glyphicon-remove-sign"};
+                if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":$trigger.attr("id")}).fetch().length == 0){
+
+                    items_menu.email = {name: " Email", icon: "email  glyphicon glyphicon-envelope"};
+                    if (!user)
+                        items_menu.contact = {name: " Add to Contacts", icon: "contact glyphicon glyphicon-plus"};
+                        
+                    items_menu.private = {name: " Chat",icon: "chat glyphicon glyphicon-comment"};
+                    items_menu.group = {name: " Invite to a Group",icon: "group"};
+                    items_menu.sep1 = "---------";
+                    if (items_menu.contact === undefined)
+                        items_menu.rcontact = {name: " Remove Contact", icon: "remove glyphicon glyphicon-remove"};
+                    items_menu.block = {name: " Block user", icon: "block-user glyphicon glyphicon-remove-sign"};
+
+                }else
+                    items_menu.unblock = {name: "Unblock user", icon: "unblock_user glyphicon glpyphicon-user"};
 	        	items_menu.report = {name: " Report Abuse", icon: "report-user glyphicon glyphicon-flag"};
 	        }
 
@@ -632,8 +707,12 @@ $(function(){
 		            	Session.set("user_modal_actions", {action:"report",user:user});
 		            }
 		            if(key == "block"){
-		            	Meteor.call("block_user",user);
+                        if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":$trigger.attr("id")}).fetch().length == 0)
+                            Meteor.users.update({_id:Meteor.userId()}, {$pull:{"profile.blocked_users":user}});
 		            }
+                    if(key == "unblock"){
+                        Meteor.users.update({_id:Meteor.userId()}, {$pull:{"profile.blocked_users":user}});
+                    }
 		            if(key == "private"){
 		            	Session.set("private_chat",user);
 		            }
@@ -648,4 +727,4 @@ $(function(){
         
 
     })
-});
+});*/

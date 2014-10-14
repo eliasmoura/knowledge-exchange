@@ -49,6 +49,7 @@
                     <div class="media-heading">
 					<a href="#" class="username" id="{{this.user._id}}">{{this.user.profile.name}}</a>
 					<a href="#" class="subject" data-toggle="collapse" data-toggle-to="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
+                    <button class="close btn-close btn-remove glyph glyphicon-minus" id="{{_id}}"></button>
 				</div>
 				<div class="panel-body panel-collapse collapse" id="{{_id}}">
 					{{message}}
@@ -88,6 +89,7 @@
                 <div class="media-heading">
                     <a href="#" class="username" id="{{this.user._id}}">{{this.user.profile.name}}</a>
 					<a href="#" class="subject" data-toggle="collapse" data-toggle-to="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
+                    <button class="close btn-close btn-remove glyph glyphicon-minus" id="{{_id}}"></button>
                 </div>
                 <div class="panel body panel-collapse collapse" id="{{_id}}">
                     {{message}}

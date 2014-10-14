@@ -98,8 +98,149 @@ Template.chatrooms_side.requests = function(){
 	return requests;
 }
 
+var menu = [{
+        name: 'Profile',
+        //img: 'images/create.png',
+        title: 'create button',
+        fun: function (user) {
+            console.log(user);
+            Session.set("user_modal_actions", {action:"profile", user:user});
+        }
+                            
+    }, {
+        name: 'Email',
+        //img: 'images/update.png',
+        title: 'update button',
+        onOpen: function(data, event){
+            console.log(data);
+        },
+        fun: function () {
+               // console.log($(this).parent().parent().parent());
+        }
+                            
+    }, {
+        name: 'Add to Contacts',
+        //img: 'images/delete.png',
+        title: 'create button',
+        fun: function () {
+                    alert('i am add button');
+        }
+                            
+    }, {
+        name: "Chat",
+        //img: "",
+        title: "Invite to private chat",
+        fun: function (){}
+    }, {
+        name: "Invite to a Group",
+        //img: "",
+        title: "Invite user to a Group",
+        fun: function(){}
+    }, {
+        name: "Remove",
+        //img: "",
+        title: "Remove contact",
+        fun: function(){}
+    }, {
+        name: "block",
+        //img: "",
+        title: "Block user",
+        fun: function(){}
 
+    }, {
+        name: "Report",
+        //img: "",
+        title: "Report user",
+        fun: function(){}
+    }
+    
+];
 
+Template.users_chatroom.events = {
+    'click .username': function(event, template){
+        var menu = [{
+                name: 'Profile',
+                //img: 'images/create.png',
+                title: 'create button',
+                fun: function (user) {
+                    console.log(user);
+                    Session.set("user_modal_actions", {action:"profile",user: user});
+                }
+                                    
+            }          
+        ];
+        console.log(Meteor.userId());
+        console.log(event.target.id);
+        if(Meteor.userId() != event.target.id){
+           //if(Meteor.user().profile.blocked_users.indexOf(event.target.id) != -1){
+            if(!Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":{$in: [event.target.id]}}).count()){
+               menu = menu.concat([
+                   {
+                        name: 'Email',
+                        //img: 'images/update.png',
+                        title: 'Send an Email',
+                        fun: function () {
+                               // console.log($(this).parent().parent().parent());
+                        }
+                                            
+                    }]);
+                if (!UsersRelations.findOne({contact:event.target.id})){
+                    menu = menu.concat([{
+                        name: 'Add to Contacts',
+                        //img: 'images/delete.png',
+                        title: 'Add user to your Contacts',
+                        fun: function () {
+                                    alert('i am add button');
+                        }
+                                            
+                    }]);
+                }else{
+                    menu = menu.concat([
+                    {
+                        name: "Remove",
+                        //img: "",
+                        title: "Remove user from your Contacts",
+                        fun: function(){}
+                    }, {
+                        name: "Chat",
+                        //img: "",
+                        title: "Invite user to a private chat",
+                        fun: function (){}
+                    }, {
+                        name: "Group",
+                        //img: "",
+                        title: "Invite user to a Group",
+                        fun: function(){}
+                    }, {
+                        name: "block",
+                        //img: "",
+                        title: "Block user",
+                        fun: function(){}
+
+                    }, {
+                        name: "Report",
+                        //img: "",
+                        title: "Report user",
+                        fun: function(){}
+                    }
+                ]);
+                }
+                
+           }else {
+            menu = menu.concat([{name:"Umblock",
+                //img: "",
+                title:"Umblock user",
+                fun:function(){}}]);
+           }
+        }
+        menu = $(event.target).contextMenu('menu',menu,{containment:window});
+        console.log(menu);
+    }
+}
+
+/*Template.users_chatroom.rendered = function() {
+    $(".username").contextMenu(menu);
+}*/
 
 /*
 	Chat functions
@@ -193,7 +334,7 @@ Template.chat.events = {
 Template.chat.rendered = function(){
 	document.title = "Chat - My site";
 }
-$(function(){
+/*$(function(){
     $.contextMenu({
     	trigger: "right",
         selector: '.message', 
@@ -227,7 +368,7 @@ $(function(){
 })
 Template.chatrooms.correct = function(e,t){
 	return Session.get("correct");
-}
+}*/
 
 /*$(document).click(function(e) {
     // Check for click on the popup itself

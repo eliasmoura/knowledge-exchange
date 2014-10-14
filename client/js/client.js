@@ -15,7 +15,7 @@
     }
   });**/
 Meteor.startup(function(){
-    Hooks.init({updateFocus:3000});
+    //Hooks.init({updateFocus:3000});
     if(Meteor.user()){
         Session.set('login', true);
         if(Meteor.user().profile.site_lang)
@@ -166,7 +166,7 @@ Template.navbar.events({
         $("#navbar-nav").removeClass("in")
     }
 })
-
+/*
 Hooks.onGainFocus = function () {
     if(Meteor.user() && Meteor.user().profile.default_status == "online")
         Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
@@ -176,7 +176,7 @@ Hooks.onLoseFocus = function () {
     if(Meteor.user() && Meteor.user().profile.default_status == "online")
         Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"away"}});
 }
-
+*/
 UI.registerHelper(
     "lang_list", function(){
         return Session.get("langs");

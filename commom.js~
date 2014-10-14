@@ -549,8 +549,6 @@ UI.registerHelper("group_handler",
     }
 );
 UI.registerHelper("register_form", 
-function(){
     return Session.get("register_form");
-    }
 );
 UI.registerHelper();

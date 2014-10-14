@@ -51,7 +51,7 @@ Accounts.onCreateUser(function(options,user){
 	}
 });
 
-Hooks.onLoggedIn = function (userId) {
+/*Hooks.onLoggedIn = function (userId) {
     // this runs right after a user logs in, on the client or server
     if(Meteor.user().profile.default_status == "online")
     	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
@@ -68,7 +68,7 @@ Hooks.onLoggedOut = function (userId) {
     }
     /*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
-	Meteor.call('setFriend_Non_active');*/
+	Meteor.call('setFriend_Non_active');*//*
 }
 
 Hooks.onCloseSession = function (userId) {
@@ -78,7 +78,7 @@ Hooks.onCloseSession = function (userId) {
 	}
 	/*Meteor.call('setRoom_Non_active');
 	Meteor.call('setGroup_Non_active');
-	Meteor.call('setFriend_Non_active');*/
+	Meteor.call('setFriend_Non_active');*//*
 }
 
 Hooks.onDeleteUser = function () {
@@ -88,3 +88,4 @@ Hooks.onDeleteUser = function () {
 Hooks.onCreateUser = function () {
 
 }
+*/

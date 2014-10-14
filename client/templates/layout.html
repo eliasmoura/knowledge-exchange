@@ -65,7 +65,7 @@
 	      <ul class="nav navbar-nav">
 	        <li class="{{activeHome}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
 			<li class="{{activeBlog}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
-			<li class="{{activeChat}}" ><a class="navigation" href="/chat">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
+            <li class="{{activeChat}}" ><a class="navigation" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
 			<li class="{{activeNotes}} disabled" tile="{{mf 'under-construction' 'Under development'}}"  ><a class="navigation" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a></li>
 	      </ul>
 	      <form class="navbar-form navbar-left" disabled="disabled" tile="{{mf 'under-construction' 'Under development'}}" role="search">
@@ -75,7 +75,7 @@
 	        <button type="submit" class="btn btn-default" disabled="disabled">Submit</button>
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">
-	    	<li class='dropdown {{activeUser}}'>{{> user}}</li>
+	    	<li class='dropdown '>{{> user}}</li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

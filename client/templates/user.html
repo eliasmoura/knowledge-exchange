@@ -1,69 +1,42 @@
-<template name="user-profile">
-	User info!
-</template>
-
-<template name="user-side">
-	Side bar, User!
-</template>
-
-<!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li class="dropdown-header">Dropdown header</li>
-          <li><a href="#">Separated link</a></li>
-          <li><a href="#">One more separated link</a></li>
-        </ul> -->
-
 <template name="user">
-		{{#if user}}
-			<a id="user" class="dropdown-toggle" href="#" data-toggle="dropdown" >
-				<span class="glyphicon glyphicon-user {{user.profile.status}}" id="userstatus" data-container="body" data-toggle="popover" data-placement="botton" data-html="true"></span>
-				{{user.profile.name}}
-				<span class="badge">{{notifications.total}}</span>
-				<span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu">
-				<li><a class="navigation" id="profile" href="#">{{mf 'profile' 'Profile'}}</a></li>
-				<li><a class="navigation" id="email" href="#">
-					{{mf 'email' 'Email'}} <span class="badge">{{notifications.newemails}}</span></a>
-				</li>
-				<li><a class="navigation" href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></li>
-				<li class="divider"></li>
-				<li><a class="navigation" href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></li>
-			</ul>
-			{{#if first_login}}
-				{{> additional_info}}
-			{{/if}}
-		{{else}}
-				<a id="login" class="dropdown-toggle" href="#" data-toggle="dropdown" >
-					{{mf 'sign_in' 'Sign in'}}
-					<span class="caret"></span>
-				</a>
-			{{#if login}}
-				{{> login_form}}
-			{{else}}
-				{{> register_form}}
-			{{/if}}
-		{{/if}}
+    {{#if user}}
+        <a id="user" class="dropdown-toggle"  href="#" data-toggle="dropdown" >
+            <span class="glyphicon glyphicon-user {{user.profile.status}}" id="userstatus" data-container="body" data-toggle="popover" data-placement="botton" data-html="true"></span>
+            {{user.profile.name}}
+            <span class="badge">{{notifications.total}}</span>
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li  role="presentation" ><a class="navigation" tabindex="-1" id="profile" href="#">{{mf 'profile' 'Profile'}}</a></li>
+            <li  role="presentation" ><a class="navigation" tabindex="-1" id="email" href="#">
+                {{mf 'email' 'Email'}} <span class="badge">{{notifications.newemails}}</span></a>
+            </li>
+            <li  role="presentation" ><a class="navigation" tabindex="-1" href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></li>
+            <li class="divider"></li>
+            <li role="presentation" ><a class="navigation" tabindex="-1" href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></li>
+        </ul>
+        {{#if first_login}}
+            {{> additional_info}}
+        {{/if}}
+    {{else}}
+        {{> login_form}}
+    {{/if}}
 
-		{{#if notifications.requests}}
-			{{>notification}}
-		{{/if}}
-		
-		{{#if add_user}}
-			{{> request_friendship}}
-		{{/if}}
-		
-		{{#if user_modal}}
-			{{> user_modal}}
-		{{/if}}
+    {{#if notifications.requests}}
+        {{>notification}}
+    {{/if}}
+    
+    {{#if add_user}}
+        {{> request_friendship}}
+    {{/if}}
+    
+    {{#if user_modal}}
+        {{> user_modal}}
+    {{/if}}
 
-		{{#if email}}
-		 {{> emails}}
-		{{/if}}
+    {{#if email}}
+        {{> emails}}
+    {{/if}}
 </template>
 
 

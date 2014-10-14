@@ -181,12 +181,22 @@ Template.sent_emails.events({
 	'click .subject': function(e,t){
 		e.preventDefault();
 		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
-	}
+	},
+    'click .btn-remove': function(event, template){
+        event.preventDefault();
+        var emailID = event.target.id;
+        Email.remove({_id:emailID});
+    }
 });
 Template.received_emails.events({
 	'click .subject': function(e,t){
 		e.preventDefault();
 		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
         Email.update({_id:$(e.target).attr('data-toggle-to')}, {$set:{isnew:false}});
-	}
+	},
+    'click .btn-remove': function(event, template){
+        event.preventDefault();
+        var emailID = event.target.id;
+        Email.remove({_id:emailID});
+    }
 });
