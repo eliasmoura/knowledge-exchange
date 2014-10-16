@@ -14,7 +14,7 @@ packages
  .netrwhist
  *\~
 .*\~
-
+*.js~
  ### Meteor ###
  .meteor/local
  .meteor/meteorite

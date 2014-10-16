@@ -29,6 +29,7 @@ Template.user.events({
 		//$("div.user").css('display', 'block');
 		//$("input#signButton").css('display','none');
 	},
+
     'click a#user': function(event, template){
         event.stopPropagation();
         $('.dropdown-toggle').dropdown("toggle");
@@ -97,10 +98,6 @@ Template.user.events({
 });
 
 Template.login_form.events = {
-    'click a#login': function(event, template){
-        event.stopPropagation();
-        $('.dropdown-toggle').dropdown("toggle");
-    },
 	'submit form.login-form': function(e, t){
 		e.preventDefault();
 		var email = t.find('#login_email').value;
@@ -111,17 +108,17 @@ Template.login_form.events = {
 				throw new Meteor.Error(111, "couldn't find your email or password!");
 				return 'error';
 			}
-			return "login ok";
-		});
-		return false;
-	},
-	'click a.newUser': function(e, t){
+            });
 		//$('div.login_form').css('display', "none");
 		//$('div.register_form').css('display', 'block');
-		Session.set('login', false);
-		console.log('new');
+		Session.set('login', true);
+        Session.set("user", Meteor.user());
 		//$('#registerModal').modal("toggle");
 	},
+    'click a#login': function(event, template){
+    console.log("clicked");
+        $('.dropdown-toggle').dropdown("toggle");
+    },
 	'click span#login-submit': function(e,t){
 		$("form.login_form").submit();
 		console.log('submit');
@@ -138,7 +135,7 @@ Template.register_form.rendered = function(){
     });
 	$('#registerModal').on("hidden.bs.modal", function(){
 			Session.set('login', true);
-            Session.set("first-login", true);
+            //Session.set("first-login", true);
 	});
         //$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 }
@@ -146,7 +143,7 @@ Template.register_form.rendered = function(){
 Template.register_form.destroyed = function(){
 	//$('#registerModal').modal("hide");
 	//$('.modal-backdrop').destroy();
-	Session.set('first-login', true);
+	//Session.set('first-login', true);
 }
 Template.user.first_login = function(){
 	return Session.get("first-login");
@@ -366,26 +363,15 @@ Template.user_finder.events({
 Template.user_modal.events({
 	'click #user_modal-btn': function(e,t){
 		var action = Session.get("user_modal_actions");
-		if (action.send_email) {
-			$("#send-email-form").submit();
-		}
-		if (action.add) {
-			$("#user-invite-request-form").submit();
-		}
-		if (action.report) {
-			$("#report-user-form").submit()
-		}
-        if (action.reset){
-            $('#reset-passwd-form').submit();
-        }
+        $(t.find("form")).submit();
 	},
     'click .profile-navbar': function(event,template){
         event.preventDefault();
         var target = event.target;
-        template.findAll(".profile-navbar").forEach(function(node){
+        /*template.findAll(".profile-navbar").forEach(function(node){
             $(node).parent().removeClass("active");
         })
-        $(target).parent().addClass("active");
+        $(target).parent().addClass("active");*/
         var user_modal = Session.get("user_modal_actions");
         user_modal.info = false;
         user_modal.security = false;
@@ -555,20 +541,23 @@ Template.reset.events({
 Template.report.events({
 	'submit #report-user-form': function(e,t){
 		e.preventDefault();
-		var reason = t.find("#user-modal-msg").text;
+		var reason = t.find("#user-modal-msg").value;
 		var userId = Session.get("user_modal_actions")._id;
 		var context = Session.get("user_modal_actions").context;
-		if(reason.length < 2)
-			return false;
-		Meteor.call("report_user",{user:userId,reason:reason},function(error,result){
-			if(!error){
-				console.log("email sent");
-				$("#user-modal").modal("hide");
-				Session.set("user_modal_actions", false);
-			}else console.log(error);
-		});
+		if(reason.length < 2){
+            if (context === "chatrooms"){
+                var room = Meteor.user().profile.active_room;
+                if (room.type === "public"){
+                    
+                }
 
-	}
+            }
+
+    	}
+        console.log(context);
+        Report.insert({user_reported:userId, report_by:Meteor.userId(), reason:reason,context:context});
+        Session.set("user_modal_actions", false);
+    }
 });
 Template.user_invite_request.events({
 	'submit #user-invite-request-form':function(e,t){
@@ -652,9 +641,16 @@ var menu = [{
         fun: function () {
                     alert('i am add button');
         }
+    },{
+        name: 'delete',
+        //img: 'images/delete.png',
+        title: 'create button',
+        fun: function () {
+                    alert('i am add button');
+        }
                             
     }];
-$('.username').contextMenu(menu);
+//$('.username').contextMenu(menu);
 /*$(function(){
     $.contextMenu({
         selector: '.username',
@@ -728,3 +724,82 @@ $('.username').contextMenu(menu);
 
     })
 });*/
+
+
+//user context menu with botstrap contextmenu plugin
+Template.user_contextmenu.rendered = function(){
+$(".username").contextmenu({
+    before: function(e, element){
+        if (element.attr("id") === Meteor.userId()){
+            this.getMenu().find("a#email").remove();
+            this.getMenu().find("a#contact").remove();
+            this.getMenu().find("a#group").remove();
+            this.getMenu().find("a#remove").remove();
+            this.getMenu().find("a#block").remove();
+            this.getMenu().find("a#unblock").remove();
+            this.getMenu().find("a#report").remove();
+        }else{
+        console.log(!this.getMenu().find("a#email"));
+            if(!this.getMenu().find("a#email")){
+                this.getMenu().find("ul").append('\
+                    <li><a tabindex="-1" href="#" id="email">Email</a></li>\
+                    <li><a tabindex="-1" href="#" id="group">Group</a></li>\
+                    <li><a tabindex="-1" href="#" id="contact">Add to Contacts</a></li>\
+                    <li><a tabindex="-1" href="#" id="remove">Remove</a></li>\
+                    <li><a tabindex="-1" href="#" id="report">Report</a></li>\
+                    <li><a tabindex="-1" href="#" id="block">Block</a></li>\
+                    <li><a tabindex="-1" href="#" id="unblock">Unblock</a></li>\
+                ')
+            }
+            if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":{$in: [element.attr("id")]}}).count()){
+                this.getMenu().find("a#email").remove();
+                this.getMenu().find("a#group").remove();
+                this.getMenu().find("a#block").remove();
+                this.getMenu().find("a#contact").remove();
+            }else this.getMenu().find("a#unblock").remove();
+            if(UsersRelations.findOne({contact:{$in: [element.attr("id")]}})){
+                
+                this.getMenu().find("a#contact").remove();
+            }else this.getMenu().find("a#remove").remove();
+        }
+        return true;
+    },
+    onItem: function(e, element, target){
+        var key = element.target.id;
+        var user = e.context.id;
+        if (key == "email") {
+            // Session.set("user_modal_actions", {action:"email",user: user});
+            Session.set("emails", {send:"active", user: user});
+        }
+        if(key == "contact"){
+            Session.set("user_modal_actions", {action:"add",user: user});
+        }
+        if(key == "remove"){
+            Meteor.call("setUser_relation",{user:user,operation:false});
+        }
+        if(key == "group"){
+            Session.set("user_modal_actions", {action:"invite",user:user});
+        }
+        if(key == "profile"){
+            Session.set("user_modal_actions", {action:"profile",user:user});
+        }
+        if(key == "report"){
+            Session.set("user_modal_actions", {action:"report",user:user});
+        }
+        if(key == "block"){
+        console.log(Meteor.user().profile.blocked_users);
+        
+            if(!Meteor.users.findOne({_id:Meteor.userId(), "profile.blocked_users":{$in: [user]}})){
+                console.log("blocked");
+                Meteor.users.update({_id:Meteor.userId()}, {$push:{"profile.blocked_users":user}});
+            }
+        }
+        if(key == "unblock"){
+            Meteor.users.update({_id:Meteor.userId()}, {$pull:{"profile.blocked_users":user}});
+        }
+        if(key == "private"){
+            Session.set("private_chat",user);
+        }
+    }
+});
+}

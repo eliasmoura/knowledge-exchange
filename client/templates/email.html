@@ -41,17 +41,17 @@
 	{{#if emails.sent}}
 		{{#each emails.sent}}
 			<div class="pane panel-info media">
-					<div class="col-xs-6 col-md-3 pull-left">
-					    <a href="#" class="thumbnail">
-					    	<img data-src="holder.js/300x200" class="media-object" alt="">
-					    </a>
-					</div>
-                    <div class="media-heading">
+                <div class="col-xs-6 col-md-3 pull-left">
+                    <a href="#" class="thumbnail">
+                        <img data-src="holder.js/300x200" class="media-object" alt="">
+                    </a>
+                </div>
+                <div class="media-heading">
 					<a href="#" class="username" id="{{this.user._id}}">{{this.user.profile.name}}</a>
-					<a href="#" class="subject" data-toggle="collapse" data-toggle-to="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
+					<a href="#" class="subject" data-toggle="collapse" data-target="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
                     <button class="close btn-close btn-remove glyph glyphicon-minus" id="{{_id}}"></button>
 				</div>
-				<div class="panel-body panel-collapse collapse" id="{{_id}}">
+				<div class="panel body panel-collapse collapse" id="{{_id}}">
 					{{message}}
 				</div>
 			</div>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="media-heading">
                     <a href="#" class="username" id="{{this.user._id}}">{{this.user.profile.name}}</a>
-					<a href="#" class="subject" data-toggle="collapse" data-toggle-to="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
+                    <a href="div#{{_id}}" class="subject" data-toggle="collapse" data-target="{{_id}}" data-parent="#accordion" id="subject">{{subject}}</a>
                     <button class="close btn-close btn-remove glyph glyphicon-minus" id="{{_id}}"></button>
                 </div>
                 <div class="panel body panel-collapse collapse" id="{{_id}}">

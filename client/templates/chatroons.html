@@ -140,7 +140,7 @@ chat side menu
 <template name="users_chatroom">
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
 	{{#each chat_users}}
-	<label class="username col-xs-12 " id="{{_id}}">
+	<label class="username col-xs-12 " id="{{_id}}" data-toggle="context" data-target="#user_contextmenu">
 		<span class="user glyphicon glyphicon-user {{profile.status}}" title="{{profile.status}}"> </span> {{profile.name}}
 	</label>
 	{{/each}}
@@ -151,7 +151,7 @@ chat side menu
 		{{#if messages}}
 		{{#each messages}}
 		<div class="message list-group-item" id="{{_id}}">
-			<a class="username" href="#" id="{{userid}}">{{name}}: </a>{{message}}
+			<a class="username" href="#" id="{{userid}}" data-toggle ="context" data-target="#user_contextmenu">{{name}}:</a> {{message}}
 			{{#if corrections}}
 				<!-- {{> messagem_corrected_button}} -->
 				<span class=" btn-group-xs">

@@ -29,3 +29,5 @@ Explanation = new Meteor.Collection('explanation');
 Alternative = new Meteor.Collection('alternative');
 
 Email = new Meteor.Collection('email');
+
+Report = new Meteor.Collection('report');

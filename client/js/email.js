@@ -167,6 +167,8 @@ Template.send_email.events({
 		var emailto = t.find(".emailto").id;
 		var message = t.find("#send-email-msg").value;
 		var subject = t.find(".subject").value;
+        if (!subject)
+            subject = mf("no-subject", null, "No Subject");
 		if(message.length > 2)
 			Meteor.call("send_email",{emailto:emailto,subject:subject,message:message},function(error,result){
 				if(!error){
@@ -180,7 +182,7 @@ Template.send_email.events({
 Template.sent_emails.events({
 	'click .subject': function(e,t){
 		e.preventDefault();
-		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
+		$("div#"+$(e.target).attr('data-target')).collapse('toggle');
 	},
     'click .btn-remove': function(event, template){
         event.preventDefault();
@@ -191,8 +193,8 @@ Template.sent_emails.events({
 Template.received_emails.events({
 	'click .subject': function(e,t){
 		e.preventDefault();
-		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
-        Email.update({_id:$(e.target).attr('data-toggle-to')}, {$set:{isnew:false}});
+		$("div#"+$(e.target).attr('data-target')).collapse('toggle');
+        Email.update({_id:$(e.target).attr('data-target')}, {$set:{isnew:false}});
 	},
     'click .btn-remove': function(event, template){
         event.preventDefault();

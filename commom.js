@@ -69,77 +69,7 @@ Router.map( function() {
 		      
 	    },
 	    onAfterAction:function(){
-	    	var modal_action = Session.get("user_modal_actions");
-			if(Session.get("emails").send != undefined){
-				var user = null;
-				Meteor.call("find",{user:{_id:Session.get("emails").user}},function(error,users){
-					if (users){
-						Session.set("emails",{
-							send:"active",
-							user:users
-						});
-						// console.log(Session.get("emails"));
-					}
-				});
-			}
-			if(modal_action.action =="add"){
-				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
-					if (users){
-						Session.set("user_modal_actions",{
-							add:true,
-							action: "Add contact",
-							user:users.profile,
-							_id:users._id
-						});
-					}else
-						console.log('error while trying to send a friendship request');
-				});
-			}
-			if(modal_action.action =="invite"){
-				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
-					if (users){
-
-						Session.set("user_modal_actions",{
-							group:true,
-							action: "Invite "+users.profile.name+" to:",
-							name:users.profile.name,
-							_id:users._id,
-						});
-					}
-				});
-			}
-			if(modal_action.action =="profile"){
-				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
-					if (users){
-                        var currentUser = false;
-                        if (Meteor.userId() === users._id)
-                           currentUser = true; 
-                        //console.log(currentUser);
-						// console.log(users);
-						Session.set("user_modal_actions",{
-							profile:true,
-							action: users.profile.name + " " +users.profile.lastname,
-							user:users.profile,
-							_id:users._id,
-                            profile_bar:true,
-                            info:true,
-                            currentUser:currentUser
-						});
-					}
-				});
-			}
-			if(modal_action.action =="report"){
-				Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
-					if (users){
-						Session.set("user_modal_actions",{
-							report:true,
-							action: "Report user",
-							name:users.profile.name,
-							_id:users._id,
-						});
-					}
-				});
-			}
+	    	
 			
 	    	
 	    },
@@ -307,9 +237,6 @@ Router.map( function() {
 	    	user_found: function(){
 	    		return Session.get("users_found");
 	    	},
-	    	user_modal:function(){
-    			return Session.get("user_modal_actions");
-	    	},
 	    	add_user:function(){
 	    		return Session.get("add_user");
 	    	},
@@ -453,6 +380,86 @@ UI.registerHelper("edit_profile",
     function(){
         return Session.get("edit_profile");
     }
+);
+UI.registerHelper("user_modal",
+    function(){
+        var modal_action = Session.get("user_modal_actions");
+        if(Session.get("emails").send != undefined){
+            var user = null;
+            Meteor.call("find",{user:{_id:Session.get("emails").user}},function(error,users){
+                if (users){
+                    Session.set("emails",{
+                        send:"active",
+                        user:users
+                    });
+                    // console.log(Session.get("emails"));
+                }
+            });
+        }
+        if(modal_action.action =="add"){
+            Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
+                if (users){
+                    Session.set("user_modal_actions",{
+                        add:true,
+                        action: "Add contact",
+                        user:users.profile,
+                        _id:users._id
+                    });
+                }else
+                    console.log('error while trying to send a friendship request');
+            });
+        }
+        if(modal_action.action =="invite"){
+            Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
+                if (users){
+
+                    Session.set("user_modal_actions",{
+                        group:true,
+                        action: "Invite "+users.profile.name+" to:",
+                        name:users.profile.name,
+                        _id:users._id,
+                    });
+                }
+            });
+        }
+        if(modal_action.action =="profile"){
+            Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
+                if (users){
+                    var currentUser = false;
+                    if (Meteor.userId() === users._id)
+                       currentUser = true; 
+                    //console.log(currentUser);
+                    // console.log(users);
+                    Session.set("user_modal_actions",{
+                        profile:true,
+                        action: users.profile.name + " " +users.profile.lastname,
+                        user:users.profile,
+                        _id:users._id,
+                        profile_bar:true,
+                        info:true,
+                        currentUser:currentUser
+                    });
+                }
+            });
+        }
+        if(modal_action.action =="report"){
+            Meteor.call("find",{user:{_id:modal_action.user}},function(error,users){
+                if (users){
+                    Session.set("user_modal_actions",{
+                        report:true,
+                        action: "Report user",
+                        name:users.profile.name,
+                        _id:users._id,
+                    });
+                }
+            });
+        }
+        if (modal_action == false){
+            $("#user-modal").modal("hide");
+
+        }
+        return Session.get("user_modal_actions");
+	}
 );
 Handlebars.registerHelper("selected", function(lang,learnglang){
     console.log(lang);

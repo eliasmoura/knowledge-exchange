@@ -163,7 +163,7 @@ Template.post.events = {
 }
 Template.navbar.events({
     'click .navigation': function(e,t){
-        $("#navbar-nav").removeClass("in")
+        //$("#navbar-nav").removeClass("in")
     }
 })
 /*

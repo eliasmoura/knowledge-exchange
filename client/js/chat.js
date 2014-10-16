@@ -97,7 +97,7 @@ Template.chatrooms_side.requests = function(){
 	var requests = {myGroup: myGroupRequests, group: groupRequests, total:total};
 	return requests;
 }
-
+/*
 var menu = [{
         name: 'Profile',
         //img: 'images/create.png',
@@ -233,11 +233,12 @@ Template.users_chatroom.events = {
                 fun:function(){}}]);
            }
         }
-        menu = $(event.target).contextMenu('menu',menu,{containment:window});
+//        menu = $(event.target).contextMenu('menu',menu,{containment:window});
         console.log(menu);
+    
     }
 }
-
+*/
 /*Template.users_chatroom.rendered = function() {
     $(".username").contextMenu(menu);
 }*/
@@ -333,6 +334,15 @@ Template.chat.events = {
 }
 Template.chat.rendered = function(){
 	document.title = "Chat - My site";
+    console.log("chat");
+    $("#user_contextmenu").contextmenu({
+        before: function(e, element, target){
+        console.log("before");
+        },
+        onItem: function(context, e){
+            console.log("clicked");
+        }
+    });
 }
 /*$(function(){
     $.contextMenu({

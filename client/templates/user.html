@@ -254,7 +254,7 @@
 			    	<input type="button" class="btn btn-default" id="request-friendship-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
                     {{#if user_modal.info}}
                     {{else}}
-			        <input type="button" class="btn btn-primary" id="request-friendship-btn" value="{{mf 'send'}}" />
+                        <input type="button" class="btn btn-primary" id="user_modal-btn" value="{{mf 'send'}}" />
                     {{/if}}
 			    </div>
 		    </div>
@@ -491,4 +491,19 @@
 </template>
 <template name="additional_info">
 	
+</template>
+
+<template name="user_contextmenu">
+    <div id="user_contextmenu">
+        <ul class="dropdown-menu" role="menu">
+            <li><a tabindex="-1" href="#" id="profile">Profile</a></li>
+            <li><a tabindex="-1" href="#" id="email">Email</a></li>
+            <li><a tabindex="-1" href="#" id="group">Group</a></li>
+            <li><a tabindex="-1" href="#" id="contact">Add to contact</a></li>
+            <li><a tabindex="-1" href="#" id="remove">Remove</a></li>
+            <li><a tabindex="-1" href="#" id="report">Report</a></li>
+            <li><a tabindex="-1" href="#" id="block">Block</a></li>
+            <li><a tabindex="-1" href="#" id="unblock">Unblock</a></li>
+        </ul>
+    </div>
 </template>
