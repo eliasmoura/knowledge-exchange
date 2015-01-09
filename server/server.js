@@ -20,6 +20,76 @@ Meteor.startup(function(){
 		Chatrooms.insert({"name": "Test", details:"A test room"});
 		Chatrooms.insert({"name": "Test2", details:"A test room"});
 	}
+    Meteor.users.find({"status.onile": true}).observe({
+        changed: function(newdoc, olddoc){
+        console.log("user changed");
+            if(newdoc.profile.active_room.room != olddoc.profile.active_room.room){
+                if(newdoc.profile.active_room.type == "group"){
+                    console.log("should removes the new messages notification!");
+                    var user_group =  User_Group.findOne({group:newdoc.profile.active_room.room, user:Meteor.userId()})._id;
+                    console.log(user_group);
+                    console.log(User_Group.findOne({_id:user_group}));
+                    User_Group.update({_id:user_group}, {$set:{new_messages:0}});
+                }
+            }
+            
+        }
+    })
+
+    var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
+    user_chatroom.observe({
+         added: function(doc){
+            User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,joined: true, date:Date.now()});
+        },
+        changed: function(doc){
+            var is_joined = User_Chatroom.findOne({room:doc.profile.active_room.room, user: doc._id});
+            if (is_joined == undefined)
+                User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,joined: true, date:Date.now()});
+        }
+    });
+    UserRequest.find().observe({
+        changed: function(doc){
+            console.log(doc);
+            if (doc.accept == 1){
+                UsersRelations.insert({user:doc.request_to,contact:doc.user,relation:doc.relation,time: Date.now()});
+                UsersRelations.insert({user:doc.user,contact:doc.request_to,relation:doc.relation,time: Date.now()},function(error){
+                    if (!error) {
+                        if (PrivateChat.findOne({users:{$in:[doc.user,doc.request_to]}}) == undefined){
+                            PrivateChat.insert({users:[doc.user,doc.request_to]}, function(error, result){});
+                            UserRequest.remove({_id:doc._id});
+                            console.log('friendship ok');
+
+                        }
+                    }else console.log(error);
+                });
+            }else{
+                UserRequest.remove({_id:doc._id});
+            }
+        }
+    });
+    GroupChat.find().observe({
+        added: function(doc){
+            var user_group = User_Group.find({group:doc.groupchat}, {fields:{user:1}}).fetch()
+            var userArray = new Array();
+            user_group.forEach(function(row){
+                userArray.push(row.user);
+            });
+            var users = Meteor.users.find({_id:{$in:userArray},"profile.active_room.room":{$ne:doc.groupchat}}, {fields:{_id:1}}).fetch();
+            userArray = new Array();
+            users.forEach(function(row){
+                userArray.push(row._id);
+            });
+            User_Group.update({group:doc.groupchat, user:{$in:userArray}}, {$inc: {new_messages:1}},{multi:true});
+        }
+    });
+    PrivateMessages.find().observe({
+        added:function(doc){
+            PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}})
+            //PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
+        }
+    });
+
+
 
 
 });
@@ -68,22 +138,6 @@ UserStatus.events.on("connectionIdle", function(user){
         Meteor.users.update({_id:user.userId}, {$set:{"profile.status":"away"}});
     }
 });
-var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
-user_chatroom.observe({
-     added: function(doc){
-        User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,date:Date.now()});
-    },
-    changed: function(doc){
-        User_Chatroom.remove({user:doc._id});
-        if (doc.profile.active_room.type == "public"){
-            User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,date:Date.now()});
-        }
-    },    
-    removed: function(doc){
-        User_Chatroom.remove({user:doc._id});
-    }
-})
-
 /*Hooks.onLoggedIn = function (userId) {
     // this runs right after a user logs in, on the client or server
     if(Meteor.user().profile.default_status == "online")

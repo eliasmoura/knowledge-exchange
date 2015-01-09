@@ -4,24 +4,6 @@ Meteor.publish("requests", function(){
 	var groupsRequest_participation = false;
 
 	var friendshipRequests = UserRequest.find({request_to: this.userId});
-    friendshipRequests.observe({
-        changed: function(doc){
-            console.log(doc);
-            if (doc.accept == 1){
-                UsersRelations.insert({user:doc.request_to,contact:doc.user,relation:doc.relation,time: Date.now()});
-                UsersRelations.insert({user:doc.user,contact:doc.request_to,relation:doc.relation,time: Date.now()},function(error){
-                    if (!error) {
-                        PrivateChat.insert({users:[doc.user,doc.request_to]}, function(error, result){
-                        });
-                        UserRequest.remove({_id:doc._id});
-                        console.log('friendship ok');
-                    }else console.log(error);
-                });
-            }else{
-                UserRequest.remove({_id:doc._id});
-            }
-        }
-    });
 	var	friends = false;
 	
 	var response = new Array();
@@ -37,7 +19,6 @@ Meteor.publish("requests", function(){
 		response.push(friendshipRequests);
 	if(groupsRequest_participation)
 		response.push(groupsRequest_participation);
-        console.log("resturning requests");
 	return response;
 });
 Meteor.publish("requests-invite", function(){
@@ -98,25 +79,11 @@ Meteor.publish("chat-messages", function(active_room){
     }
     if(active_room.type == "group"){
 		messages = GroupChat.find({groupchat:active_room.room}, {sort: {time: +1}});
-        messages.observe({
-            added:function(doc){
-                User_Group.update({room:active_room.room, active:false}, {$inc: {new_messages:1}},{multi:true});
-            }
-        });
     }
     if(active_room.type == "privatechat"){
 		messages = PrivateMessages.find({chat:active_room.room}, {sort: {time: +1}});
-        messages.observe({
-            added:function(doc){
-                PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
-            }
-        });
-    }
-    return messages;
-});
-
-
-
+    } return messages;
+}); 
 Meteor.publish("rooms-users-list", function(room){
     var room = Meteor.users.findOne({_id:this.userId}).profile.active_room;
     Meteor.users.find({_id:this.userId})

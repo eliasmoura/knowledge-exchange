@@ -83,9 +83,8 @@ Router.map( function() {
 	    		// console.log(rooms);
 	    		var roomsArray = new Array();
 	    		rooms.forEach(function(row){
-	    			var userRom = User_Chatroom.findOne({room:row._id,user:Meteor.userId()});
-	    			if (userRom != undefined)
-	    				row.active = userRom.active;
+	    			if (row._id == Meteor.user().profile.active_room.room)
+	    				row.active = "true";
 	    			roomsArray.push(row);
 	    		})
 	    		return roomsArray;
@@ -102,7 +101,7 @@ Router.map( function() {
 	    			}	
     				else if ( room.type == "privatechat"){
     					var user  = PrivateChat.findOne({_id:room.room}).users;
-                        if(user[0] == Meteor.userId()){
+                        if(user[0] != Meteor.userId()){
                             user = Meteor.users.findOne({_id:user[0]});
                         }else{
                             user = Meteor.users.findOne({_id:user[1]});
@@ -136,11 +135,12 @@ Router.map( function() {
 	    		var users_relations = UsersRelations.find({}).fetch();
 	    		var users_relationsArray = new Array();
 	    		users_relations.forEach(function(row){
-	    			var privatechat = PrivateChat.findOne({contact:row.contact});
+	    			var privatechat = PrivateChat.findOne({users:{$in:[row.contact]}});
 	    			var user = Meteor.users.findOne({_id:row.contact});
 	    			try{
 		    			user.notification = privatechat.new_messages;
-		    			user.active = privatechat.active;
+                        if (privatechat._id == Meteor.user().active_room.room)
+                            user.active = true;
 	    			}catch(e){}
 	    			users_relationsArray.push(user);
 	    		});
@@ -181,7 +181,6 @@ Router.map( function() {
 					messages = PrivateMessages.find({chat:messages.room});
 				}
                 else messages = false;
-                console.log(messages);
 				var blocked_users = Meteor.user().profile.blocked_users;
                 if (messages)
 				if (messages.count()){
@@ -217,7 +216,8 @@ Router.map( function() {
 	    			// console.log(group);
 	    			if(group != undefined){
 	    				group.notification = row.new_messages;
-		    			group.active = row.active;
+                        if (row.group == Meteor.user().profile.active_room.room)
+                            group.active = true;
 		    			// console.log(group);
                         group.owner = row.owner;
                         group.mod = row.mod;
