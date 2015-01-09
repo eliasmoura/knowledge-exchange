@@ -253,6 +253,9 @@
 				<div class="modal-footer">
 			    	<input type="button" class="btn btn-default" id="request-friendship-btn-close" data-dismiss="modal" value="{{mf 'close'}}" />
                     {{#if user_modal.info}}
+                        {{#if user_modal.edit_profile}}
+                            <input type="button" class="btn btn-primary" id="user_modal-btn" value="{{mf 'save' 'Save'}}" />
+                        {{/if}}
                     {{else}}
                         <input type="button" class="btn btn-primary" id="user_modal-btn" value="{{mf 'send'}}" />
                     {{/if}}
@@ -300,13 +303,15 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">{{mf 'groups' 'Groups'}}</div>
 		<div class="panel-body list-group">
-		{{#each group_manage}}
-			<div class="list-group-item">
-				<span class="btn-group-xs">
-					<span id="{{_id}}" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'invite_to_group' 'Invite the user for this group'}}"></span>
-				</span>
-				<span class="group" id="{{_id}}">{{name}}</span>
-			</div>
+		{{#each group_rooms}}
+            {{#if mod}}
+                <div class="list-group-item">
+                    <span class="btn-group-xs">
+                        <span id="{{_id}}" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'invite_to_group' 'Invite the user for this group'}}"></span>
+                    </span>
+                    <span class="group" id="{{_id}}">{{name}}</span>
+                </div>
+            {{/if}}
 		{{/each}}
 		</div>
 	</div>
@@ -349,7 +354,7 @@
 			<div class="know">
 				<div><a href='www.google.com.br/#q={{this.user.nativelang}}' target='_blank'>{{this.user.nativelang}}</a> ({{mf 'native' 'Native'}})</div>
 				{{#each this.user.knownlanguages}}
-					<div><a href="www.google.com.br/#q={{this}}">{{this}}</a> ({{mf 'fluent' 'Fluent'}})</div>
+					<div><a href="www.google.com.br/#q={{this}}" target="blank">{{this}}</a> ({{mf 'fluent' 'Fluent'}})</div>
 				{{/each}}
 			</div>
 			<label for="learning">{{mf 'learning' 'Learning'}}:</label>

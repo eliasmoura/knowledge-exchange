@@ -24,22 +24,26 @@ Template.chatrooms_side.events = {
 		var room = event.target.id;
 		//$(event.target).popover();
 		//var user_room = User_Chatroom.findOne({room:room,user:user});
-		Meteor.call('setRoom_active',room);
+		//Meteor.call('setRoom_active',room);
+        if (Meteor.user().profile.active_room.room != room)
+        Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"public",room:room}}}, function(error,docs){if(error)console.log(error)});
 		//console.log(user_room);
 			
 	},'click a.chat-group' : function(event, template){
 		var group = event.target.id;
-		Meteor.call('setGroup_active',group);
+		//Meteor.call('setGroup_active',group);
+        Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"group",room:group}}}, function(error,docs){if(error)console.log(error)});
 
 	},'click a.friends-contacts' : function(event, template){
 		var friend = event.target.id;
-		Meteor.call('setFriend_active',friend);
+        var friendroom = PrivateChat.findOne({users:{$in:[friend,Meteor.userId()]}})._id;
+		//Meteor.call('setFriend_active',friend);
+        Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"privatechat",room:friendroom}}}, function(error,docs){if(error)console.log(error)});
 	},
 	'click a.panel-rooms': function(e,t){
 		$("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
 		e.stopPropagation();
 		e.preventDefault();
-		console.log('collapse');
 
 	},
 	'click span#add-find-chat': function(e,t){
@@ -65,29 +69,7 @@ Template.chatrooms_side.events = {
 		console.log('click find user');
 	}
 }
-/*Template.chatrooms_side_xs.events = {
-	'click a.roombutton' : function(event){
-		var room = event.target.id;
-		// $(event.target).popover();
-		var user = Meteor.userId();
-		Session.set("currentRoom", room);
-		var user_room = User_Chatroom.findOne({room:room, user:user});
-		if (!user_room & user != null){
-			User_Chatroom.insert({room:room,
-			user:user,active:true});
-			Session.set("currentRoom", room);
-		}
-		else if (!user_room['active']){
-			User_Chatroom.update({_id:user_room['_id']}, {$set:{active: true}});
-			Session.set("currentRoom", room);
-		}
-	},
-	'click .chatrooms': function(e,t){
-		$("#panel-rooms").collapse('toggle');
-		e.stopPropagation();
 
-	}
-}*/
 Template.chatrooms_side.find_chat_group = function(){return Session.get('group-finder');}
 Template.chatrooms_side.requests = function(){
 	var userId = Meteor.userId();
@@ -97,151 +79,7 @@ Template.chatrooms_side.requests = function(){
 	var requests = {myGroup: myGroupRequests, group: groupRequests, total:total};
 	return requests;
 }
-/*
-var menu = [{
-        name: 'Profile',
-        //img: 'images/create.png',
-        title: 'create button',
-        fun: function (user) {
-            console.log(user);
-            Session.set("user_modal_actions", {action:"profile", user:user});
-        }
-                            
-    }, {
-        name: 'Email',
-        //img: 'images/update.png',
-        title: 'update button',
-        onOpen: function(data, event){
-            console.log(data);
-        },
-        fun: function () {
-               // console.log($(this).parent().parent().parent());
-        }
-                            
-    }, {
-        name: 'Add to Contacts',
-        //img: 'images/delete.png',
-        title: 'create button',
-        fun: function () {
-                    alert('i am add button');
-        }
-                            
-    }, {
-        name: "Chat",
-        //img: "",
-        title: "Invite to private chat",
-        fun: function (){}
-    }, {
-        name: "Invite to a Group",
-        //img: "",
-        title: "Invite user to a Group",
-        fun: function(){}
-    }, {
-        name: "Remove",
-        //img: "",
-        title: "Remove contact",
-        fun: function(){}
-    }, {
-        name: "block",
-        //img: "",
-        title: "Block user",
-        fun: function(){}
 
-    }, {
-        name: "Report",
-        //img: "",
-        title: "Report user",
-        fun: function(){}
-    }
-    
-];
-
-Template.users_chatroom.events = {
-    'click .username': function(event, template){
-        var menu = [{
-                name: 'Profile',
-                //img: 'images/create.png',
-                title: 'create button',
-                fun: function (user) {
-                    console.log(user);
-                    Session.set("user_modal_actions", {action:"profile",user: user});
-                }
-                                    
-            }          
-        ];
-        console.log(Meteor.userId());
-        console.log(event.target.id);
-        if(Meteor.userId() != event.target.id){
-           //if(Meteor.user().profile.blocked_users.indexOf(event.target.id) != -1){
-            if(!Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":{$in: [event.target.id]}}).count()){
-               menu = menu.concat([
-                   {
-                        name: 'Email',
-                        //img: 'images/update.png',
-                        title: 'Send an Email',
-                        fun: function () {
-                               // console.log($(this).parent().parent().parent());
-                        }
-                                            
-                    }]);
-                if (!UsersRelations.findOne({contact:event.target.id})){
-                    menu = menu.concat([{
-                        name: 'Add to Contacts',
-                        //img: 'images/delete.png',
-                        title: 'Add user to your Contacts',
-                        fun: function () {
-                                    alert('i am add button');
-                        }
-                                            
-                    }]);
-                }else{
-                    menu = menu.concat([
-                    {
-                        name: "Remove",
-                        //img: "",
-                        title: "Remove user from your Contacts",
-                        fun: function(){}
-                    }, {
-                        name: "Chat",
-                        //img: "",
-                        title: "Invite user to a private chat",
-                        fun: function (){}
-                    }, {
-                        name: "Group",
-                        //img: "",
-                        title: "Invite user to a Group",
-                        fun: function(){}
-                    }, {
-                        name: "block",
-                        //img: "",
-                        title: "Block user",
-                        fun: function(){}
-
-                    }, {
-                        name: "Report",
-                        //img: "",
-                        title: "Report user",
-                        fun: function(){}
-                    }
-                ]);
-                }
-                
-           }else {
-            menu = menu.concat([{name:"Umblock",
-                //img: "",
-                title:"Umblock user",
-                fun:function(){}}]);
-           }
-        }
-//        menu = $(event.target).contextMenu('menu',menu,{containment:window});
-        console.log(menu);
-    
-    }
-}
-*/
-/*Template.users_chatroom.rendered = function() {
-    $(".username").contextMenu(menu);
-}*/
 
 /*
 	Chat functions
@@ -280,34 +118,20 @@ Template.chat_input.events = {
                             groupchat:room.room,
                             time: Date.now(),
                         });
-                        User_Group.find({group:room.room, active:false}).forEach(function(row){
-                            User_Group.update({_id:row._id},{$inc:{new_messages:1}});
-                            console.log('setting inc group');
-                        })
                 }	
                 else if (room.type == "privatechat"){
-                    var privatechat = PrivateChat.findOne({_id:room.room});
-                    var privatechat_2 = PrivateChat.findOne({user:privatechat.contact, contact:privatechat.user});
-                    var privatechats = [privatechat._id, privatechat_2._id];
                     var messageiD = PrivateMessages.insert({
                             name: name,
                             lstname: lstname,
                             userid: userid,
                             message: message.value,
-                            chat:privatechats,
+                            chat:room.room,
                             time: Date.now(),
                         });
-                    if (!privatechat.active || !privatechat_2.active){
-                        PrivateChat.find({_id:{$in: privatechats}, active:false}).forEach(function(row){
-                            PrivateChat.update({_id:row._id},{$inc:{new_messages:1}},{multi:true});
-                            console.log('setting inc');
-                        })
-                                        
-                    }
+                    
                 }
-
-				document.getElementById('message').value = '';
-				message.value = '';
+				document.getElementById('message').value = null;
+				//message.value = '';
 			}
 		}
 	}
@@ -321,20 +145,10 @@ Template.chat.events = {
 			$(e.target).popover('show');
 			$(e.target).addClass( "ok")
 		}
-		/*$(e.target).popover({trigger:"manual"});
-		$('.correctionWraper').popover('hide');
-		$(".correctionWraper").on('hidden.bs.popover', function(){
-			$(e.target).popover("show");
-		})*/
-		
-
-		//var button = e.target;
-		
 	}
 }
 Template.chat.rendered = function(){
 	document.title = "Chat - My site";
-    console.log("chat");
     $("#user_contextmenu").contextmenu({
         before: function(e, element, target){
         console.log("before");
@@ -344,48 +158,3 @@ Template.chat.rendered = function(){
         }
     });
 }
-/*$(function(){
-    $.contextMenu({
-    	trigger: "right",
-        selector: '.message', 
-        callback: function(key, options) {
-        	console.log("correction");
-        	console.log($(this));
-            if (key == "correction") {
-            	var text = $(this).contents().filter(
-            		function(){return this.nodeType === 3;}).text();
-            	Session.set("correct", true);
-            	$('#correctionModal').modal("show");
-            	Session.set("correctionSource", {messageId:$(this).attr("id"),text:text});
-            	//$('#correctionModal').modal("show");
-            }
-        },
-        items: {
-            "edit": {name: " Edit", icon: "edit glyphicon glyphicon-pencil"},
-            // "cut": {name: "Cut", icon: "cut"},
-            "copy": {name: " Copy", icon: "copy"},
-            // "paste": {name: "Paste", icon: "paste"},
-            "delete": {name: " Delete", icon: "delete glyphicon glyphicon-trash"},
-            "correction": {name: " Correction",icon: "correction glyphicon glyphicon-ok"},
-            // "sep1": "---------",
-            // "quit": {name: "Quit", icon: "quit"}
-        }
-    });
-    
-    $('.message').on('click', function(e){
-        console.log('clicked', this);
-    })
-})
-Template.chatrooms.correct = function(e,t){
-	return Session.get("correct");
-}*/
-
-/*$(document).click(function(e) {
-    // Check for click on the popup itself
-    $('.popover').click(function() {
-        return false; // Do nothing
-    });  
-    // Clicking on document other than popup then hide the popup
-    $('.pop').popover('hide');  
-});*/
-

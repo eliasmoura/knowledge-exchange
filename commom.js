@@ -49,21 +49,23 @@ Router.map( function() {
 		    	Meteor.subscribe("user-list"),
 		    	Meteor.subscribe("user-contact"),
 		    	Meteor.subscribe("emails-received"),
-		    	Meteor.subscribe("emails-sent")
+		    	Meteor.subscribe("emails-sent"),
+                Meteor.subscribe("rooms-users-list", Meteor.user().profile.active_room)
 	    	];
 	    },
 	    onBeforeAction:function(){
 	    	if (!Meteor.user()) {
 		        // render the login template but keep the url in the browser the same
-		        // this.render('notFound');
+		        this.render('notFound');
 
 		        // stop the rest of the before hooks and the action function 
-		        // this.pause();
+		        this.pause();
 		      }else{
 		      	/*var isso = Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"chatrooms"}}, function(error,doc){
 		      		console.log(error);
 		      	});
 		      	console.log(isso);*/
+                this.next();
 		      }
 		      
 		      
@@ -99,8 +101,12 @@ Router.map( function() {
 	    				room = Groups.findOne({_id:room.room});
 	    			}	
     				else if ( room.type == "privatechat"){
-    					var user  = PrivateChat.findOne({_id:room.room}).contact;
-    					user = Meteor.users.findOne({_id:user});
+    					var user  = PrivateChat.findOne({_id:room.room}).users;
+                        if(user[0] == Meteor.userId()){
+                            user = Meteor.users.findOne({_id:user[0]});
+                        }else{
+                            user = Meteor.users.findOne({_id:user[1]});
+                        }
     					room = {name:user.profile.name};
     				}
 	    			return room;
@@ -110,23 +116,21 @@ Router.map( function() {
 	    		}
 	    	},
 	    	chat_users: function(){
-    			Deps.autorun(function(){
-    				Meteor.call("user_list", Meteor.user().profile.active_room,function(error,result){
-    					if(!error){
-    						//userlist.push(result);
-    						//console.log(userlist);
-    						// if(room.type == "public")
-    						// 	result = result.sort({"profile.online":1,"profile.name":1}).fetch();
-    						Session.set("chat_users", result);
-    						//return result;
-    					}
-    				});
-    			})
-
-				/*console.log(userlist);
-				console.log(room);*/
-				//console.log(Session.get("chat_users"));
-				return Session.get("chat_users");
+                var room = Meteor.user().profile.active_room;
+                var userList = new Array();
+                if(room.type =="public"){
+                    User_Chatroom.find({room:room.room}).forEach(function(row){
+                        userList.push(row.user);
+                    });
+                }else if (room.type == "group"){
+                    User_Group.find({group:room.room}).forEach(function(row){
+                        userList.push(row.user);
+                    });
+                }else if(room.type == "privatechat"){
+                    userList = PrivateChat.findOne({_id:room.room}).users;
+                }
+                userList = Meteor.users.find({_id:{$in:userList} }).fetch();
+				return userList;
 	    	},
 	    	contacts: function(){
 	    		var users_relations = UsersRelations.find({}).fetch();
@@ -174,11 +178,10 @@ Router.map( function() {
     				}catch(e){console.log(e);}
     			}	
 				else if (messages.type == "privatechat"){
-					messages = PrivateMessages.find({chat:{$in: [messages.room]}});
+					messages = PrivateMessages.find({chat:messages.room});
 				}
                 else messages = false;
-				// console.log(Meteor.user().profile.blocked_users);
-				// console.log(Meteor.user().profile.blocked_users.indexOf(row.userid));
+                console.log(messages);
 				var blocked_users = Meteor.user().profile.blocked_users;
                 if (messages)
 				if (messages.count()){
@@ -216,6 +219,8 @@ Router.map( function() {
 	    				group.notification = row.new_messages;
 		    			group.active = row.active;
 		    			// console.log(group);
+                        group.owner = row.owner;
+                        group.mod = row.mod;
 		    			groupsArray.push(group);
 	    			}
 	    		});

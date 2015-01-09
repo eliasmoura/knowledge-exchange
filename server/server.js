@@ -34,6 +34,7 @@ Accounts.onCreateUser(function(options,user){
 	    options.profile.active_room = {type:"none",room:"none"};
 	    options.profile.default_status = "online";
 	    options.profile.status = "online";
+        options.profile.blocked_users = [];
 		user.profile = options.profile;
 		// Accounts.setPassword(user._id, user.password);
 		/*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
@@ -50,6 +51,38 @@ Accounts.onCreateUser(function(options,user){
 		console.log(e);
 	}
 });
+
+UserStatus.events.on("connectionLogin", function(user){
+    if (user.userId){
+        Meteor.users.update({_id:user.userId}, {$set:{"profile.status":"online"}});
+    }
+});
+UserStatus.events.on("connectionLogout", function(user){
+    if (user.userId){
+        Meteor.users.update({_id:user.userId}, {$set:{"profile.status":"ofline"}});
+    }
+});
+UserStatus.events.on("connectionIdle", function(user){
+    if (user.userId){
+        console.log(user)
+        Meteor.users.update({_id:user.userId}, {$set:{"profile.status":"away"}});
+    }
+});
+var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
+user_chatroom.observe({
+     added: function(doc){
+        User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,date:Date.now()});
+    },
+    changed: function(doc){
+        User_Chatroom.remove({user:doc._id});
+        if (doc.profile.active_room.type == "public"){
+            User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,date:Date.now()});
+        }
+    },    
+    removed: function(doc){
+        User_Chatroom.remove({user:doc._id});
+    }
+})
 
 /*Hooks.onLoggedIn = function (userId) {
     // this runs right after a user logs in, on the client or server

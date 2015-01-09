@@ -1,19 +1,3 @@
-/**
-*    Templates
-**/
-
-/**Meteor.autorun(function() {
-    // Whenever this session variable changes, run this function.
-    var message = Session.get('displayMessage');
-    if (message) {
-      var stringArray = message.split('&amp;');
-      Meteor.ui.notify(stringArray[0], stringArray[1])
-        .effect('slide')
-        .closable();
-
-      Session.set('displayMessage', null);
-    }
-  });**/
 Meteor.startup(function(){
     //Hooks.init({updateFocus:3000});
     if(Meteor.user()){
@@ -182,8 +166,3 @@ UI.registerHelper(
         return Session.get("langs");
     }
 )
-/*
-Template.dsdsd.dsds = function(e,t){
-	UsersRelations.insert(
-		{user:"A2EggWM4y9LQKPba6",userrelation:["ddxhhoTQsH9LuafHn","F"]});
-}*/

@@ -107,8 +107,10 @@ Template.login_form.events = {
 			if (err){
 				throw new Meteor.Error(111, "couldn't find your email or password!");
 				return 'error';
-			}
-            });
+			}else{
+                $(".dropdown-toggle").dropdown("toggle");
+            }
+        });
 		//$('div.login_form').css('display', "none");
 		//$('div.register_form').css('display', 'block');
 		Session.set('login', true);
@@ -116,15 +118,16 @@ Template.login_form.events = {
 		//$('#registerModal').modal("toggle");
 	},
     'click a#login': function(event, template){
-    console.log("clicked");
         $('.dropdown-toggle').dropdown("toggle");
     },
 	'click span#login-submit': function(e,t){
 		$("form.login_form").submit();
-		console.log('submit');
 	},
     'click a.reset':function(event,template){
         Session.set('user_modal_actions',{reset:true})
+    },
+    'click a.newUser': function(event, template){
+        Session.set("login", false);
     }
 }
 Template.register_form.rendered = function(){
@@ -368,10 +371,10 @@ Template.user_modal.events({
     'click .profile-navbar': function(event,template){
         event.preventDefault();
         var target = event.target;
-        /*template.findAll(".profile-navbar").forEach(function(node){
+        template.findAll(".profile-navbar").forEach(function(node){
             $(node).parent().removeClass("active");
         })
-        $(target).parent().addClass("active");*/
+        $(target).parent().addClass("active");
         var user_modal = Session.get("user_modal_actions");
         user_modal.info = false;
         user_modal.security = false;
@@ -563,18 +566,18 @@ Template.user_invite_request.events({
 	'submit #user-invite-request-form':function(e,t){
 		e.preventDefault();
 		var message = t.find("#user-modal-msg").value;
+        var user = t.find("[name=user-name]").id;
 		var type = $(".user-form:checked");
-		console.log(type);
 		var userId = Session.get("user_modal_actions")._id;
-		Meteor.call("user_friendship_request", userId, message,function(error,result){
-			if(!error){
-				console.log('request sent');
-				$("#user-modal").modal("hide");
-				Session.set("user_modal_actions", false);
-			}
-				
-
-		});
+        UserRequest.insert({user: Meteor.userId(), request_to:user, message:message}, function(error){
+                if(error){
+                    console.log(error);
+                }
+                else {
+                    $(".modal").modal("hide");
+                    Session.set("user_modal_actions", false);
+                }            }
+        );
 	}
 })
 Template.user_modal.rendered = function(){
@@ -591,10 +594,16 @@ Template.request_friendship.events({
 	'submit #request-friendship-form': function(e,t){
 		e.preventDefault();
 		var message = t.find("#request-friendship-msg").value;
+        var user = t.find("[name=user-name]").id;
 		var type = $(".user-form:checked");
 		console.log(type);
-		Meteor.call("user_friendship_request", user, message);
-		$("#request-friendship-modal").modal('hide');
+        UserRequest.insert({user: Meteor.userId(), request_to:user, message:message}, function(error){
+                if(error){
+                    console.log(error);
+                }
+            }
+        );
+		$("#user-modal").modal('hide');
 	},
 	'click #request-friendship-btn': function(e,t){
 		$("#request-friendship-form").submit();
@@ -618,149 +627,91 @@ Template.group.events({
 		Meteor.call("group_invite_request",{user:userId,message:message,group:groupId});
 	}
 });
-var menu = [{
-        name: 'create',
-        //img: 'images/create.png',
-        title: 'create button',
-        fun: function () {
-                    alert('i am add button');
-        }
-                            
-    }, {
-        name: 'update',
-        //img: 'images/update.png',
-        title: 'update button',
-        fun: function () {
-                    alert('i am update button');
-        }
-                            
-    }, {
-        name: 'delete',
-        //img: 'images/delete.png',
-        title: 'create button',
-        fun: function () {
-                    alert('i am add button');
-        }
-    },{
-        name: 'delete',
-        //img: 'images/delete.png',
-        title: 'create button',
-        fun: function () {
-                    alert('i am add button');
-        }
-                            
-    }];
-//$('.username').contextMenu(menu);
-/*$(function(){
-    $.contextMenu({
-        selector: '.username',
-        build: function($trigger, e){
-        	var items_menu = {
-  				"profile": {name: " Profile", icon: "profile glyphicon glyphicon-user"}
-			};
-			var user = UsersRelations.findOne({contact:$trigger.attr("id")});
-			if($trigger.attr("id") != Meteor.userId()){	
-                if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":$trigger.attr("id")}).fetch().length == 0){
+var requestHandler = function (args){
+    /*if (args.type == 1){
+        var request = GroupRequest.findOne({_id:args.request});
+        if(args.action == 1)
+            Meteor.call("setUser_group", request,1);
 
-                    items_menu.email = {name: " Email", icon: "email  glyphicon glyphicon-envelope"};
-                    if (!user)
-                        items_menu.contact = {name: " Add to Contacts", icon: "contact glyphicon glyphicon-plus"};
-                        
-                    items_menu.private = {name: " Chat",icon: "chat glyphicon glyphicon-comment"};
-                    items_menu.group = {name: " Invite to a Group",icon: "group"};
-                    items_menu.sep1 = "---------";
-                    if (items_menu.contact === undefined)
-                        items_menu.rcontact = {name: " Remove Contact", icon: "remove glyphicon glyphicon-remove"};
-                    items_menu.block = {name: " Block user", icon: "block-user glyphicon glyphicon-remove-sign"};
+        else
+            GroupRequest.remove({_id:request._id});
 
-                }else
-                    items_menu.unblock = {name: "Unblock user", icon: "unblock_user glyphicon glpyphicon-user"};
-	        	items_menu.report = {name: " Report Abuse", icon: "report-user glyphicon glyphicon-flag"};
-	        }
-
-        	return {
-        		items: items_menu,
-        		reposion:false,
-        		callback: function(key, options) {
-		            var user = $(this).attr("id");
-		            if (key == "email") {
-		            	// Session.set("user_modal_actions", {action:"email",user: user});
-		            	Session.set("emails", {send:"active", user: user});
-		            }
-		            if(key == "contact"){
-		            	Session.set("user_modal_actions", {action:"add",user: user});
-		            }
-		            if(key == "rcontact"){
-		            	Meteor.call("setUser_relation",{user:user,operation:false});
-		            }
-		            if(key == "group"){
-		            	Session.set("user_modal_actions", {action:"invite",user:user});
-		            }
-		            if(key == "profile"){
-		            	Session.set("user_modal_actions", {action:"profile",user:user});
-		            }
-		            if(key == "report"){
-		            	Session.set("user_modal_actions", {action:"report",user:user});
-		            }
-		            if(key == "block"){
-                        if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":$trigger.attr("id")}).fetch().length == 0)
-                            Meteor.users.update({_id:Meteor.userId()}, {$pull:{"profile.blocked_users":user}});
-		            }
-                    if(key == "unblock"){
-                        Meteor.users.update({_id:Meteor.userId()}, {$pull:{"profile.blocked_users":user}});
+    }else*/ 
+    console.log("herreee");
+    if (args.type == 2 || args.type == 1){
+        console.log('group invite');
+        var request = GroupRequest.findOne({_id:args.request});
+        if(args.action == 1)
+            User_Group.insert({group:request.group,user:request.user,owner:false,mod:false,active:false}, 
+                function(error, result){
+                    console.log(error);
+                    if(!error){
+                        //Meteor.call("setUser_activeRoom","group",User_Group.findOne({_id:result}));
                     }
-		            if(key == "private"){
-		            	Session.set("private_chat",user);
-		            }
-		        }
-        	}
-        },
-        trigger: "left",
-    });
-    
-    $('.username').on('click', function(e){
-        console.log('clicked', this);
-        
-
-    })
-});*/
-
+                        
+            });	
+        else
+            User_Group.remove({group:group,user:user});
+        GroupRequest.remove({_id:request._id});
+    }else{
+        var request = UserRequest.findOne({_id:args.request,request_to:this.userId});
+        if(args.action == 1){
+            var request = args.request;
+            var relation = args.relation;
+            console.log('add');
+            UsersRelations.insert({user:this.userId,contact:request.user,relation:relation,time: Date.now()});
+            UsersRelations.insert({user:request.user,contact:this.userId,relation:request.relation,time: Date.now()},function(error){
+                if (!error) {
+                    PrivateChat.insert({user:request.user,contact:request.contact_to,active:false}, function(error, result){
+                    });
+                    PrivateChat.insert({user:request.contact_to,contact:request.user,active:false}, function(error, result){
+                    });
+                    UserRequest.remove({_id:request._id});
+                    console.log('friendship ok');
+                }
+            });
+        }else{
+            UsersRelations.remove({user:this.userId,contact:args.user});
+            UsersRelations.remove({contact:this.userId,user:args.user});
+            PrivateChat.remove({user:this.userId,contact:args.user})
+            PrivateChat.remove({contact:this.userId,user:args.user})
+        }
+        UserRequest.remove({_id:request._id});
+    }
+}
 
 //user context menu with botstrap contextmenu plugin
 Template.user_contextmenu.rendered = function(){
 $(".username").contextmenu({
     before: function(e, element){
+        this.getMenu().find("a#email").show();
+        this.getMenu().find("a#contact").show();
+        this.getMenu().find("a#group").show();
+        this.getMenu().find("a#remove").show();
+        this.getMenu().find("a#block").show();
+        this.getMenu().find("a#unblock").show();
+        this.getMenu().find("a#report").show();
         if (element.attr("id") === Meteor.userId()){
-            this.getMenu().find("a#email").remove();
-            this.getMenu().find("a#contact").remove();
-            this.getMenu().find("a#group").remove();
-            this.getMenu().find("a#remove").remove();
-            this.getMenu().find("a#block").remove();
-            this.getMenu().find("a#unblock").remove();
-            this.getMenu().find("a#report").remove();
+            this.getMenu().find("a#email").hide();
+            this.getMenu().find("a#contact").hide();
+            this.getMenu().find("a#group").hide();
+            this.getMenu().find("a#remove").hide();
+            this.getMenu().find("a#block").hide();
+            this.getMenu().find("a#unblock").hide();
+            this.getMenu().find("a#report").hide();
         }else{
-        console.log(!this.getMenu().find("a#email"));
-            if(!this.getMenu().find("a#email")){
-                this.getMenu().find("ul").append('\
-                    <li><a tabindex="-1" href="#" id="email">Email</a></li>\
-                    <li><a tabindex="-1" href="#" id="group">Group</a></li>\
-                    <li><a tabindex="-1" href="#" id="contact">Add to Contacts</a></li>\
-                    <li><a tabindex="-1" href="#" id="remove">Remove</a></li>\
-                    <li><a tabindex="-1" href="#" id="report">Report</a></li>\
-                    <li><a tabindex="-1" href="#" id="block">Block</a></li>\
-                    <li><a tabindex="-1" href="#" id="unblock">Unblock</a></li>\
-                ')
-            }
             if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":{$in: [element.attr("id")]}}).count()){
-                this.getMenu().find("a#email").remove();
-                this.getMenu().find("a#group").remove();
-                this.getMenu().find("a#block").remove();
-                this.getMenu().find("a#contact").remove();
-            }else this.getMenu().find("a#unblock").remove();
+                this.getMenu().find("a#email").hide();
+                this.getMenu().find("a#group").hide();
+                this.getMenu().find("a#block").hide();
+                this.getMenu().find("a#contact").hide();
+            }else {
+                this.getMenu().find("a#unblock").hide();
+            }            
             if(UsersRelations.findOne({contact:{$in: [element.attr("id")]}})){
                 
-                this.getMenu().find("a#contact").remove();
-            }else this.getMenu().find("a#remove").remove();
+                this.getMenu().find("a#contact").hide();
+            }else this.getMenu().find("a#remove").hide();
         }
         return true;
     },
@@ -787,8 +738,6 @@ $(".username").contextmenu({
             Session.set("user_modal_actions", {action:"report",user:user});
         }
         if(key == "block"){
-        console.log(Meteor.user().profile.blocked_users);
-        
             if(!Meteor.users.findOne({_id:Meteor.userId(), "profile.blocked_users":{$in: [user]}})){
                 console.log("blocked");
                 Meteor.users.update({_id:Meteor.userId()}, {$push:{"profile.blocked_users":user}});

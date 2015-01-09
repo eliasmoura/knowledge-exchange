@@ -497,20 +497,5 @@ Meteor.methods({
 	},
     reset_passwd: function(email){
         Accounts.sendResetPasswordEmail(Meteor.users.findOne({"emails.address":email}));
-    },
-	clean_db: function(){
-		Correction.remove({});
-		Corrections.remove({});
-		Messages.remove({});
-		Usage.remove({});
-		Alternative.remove({});
-		User_Chatroom.remove({});
-		Groups.remove({});
-		//Chatrooms.remove({});
-	}
+    }
 });
-
-
-/*Accounts.onLoginFailure(function(error){
-	console.log(error);
-});*/

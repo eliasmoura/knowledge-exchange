@@ -116,8 +116,8 @@ chat side menu
 				<ul class="nav nav-pills nav-stacked">
 					{{#each contacts}}
 					<li class="{{#if active}}active{{/if}}">
-						<a href="#" class="friends-contacts {{profile.status}} pager" id="{{_id}}" >
-							<span class="user glyphicon glyphicon-user"> </span>
+						<a href="#" class="friends-contacts username pager" data-toggle="context" data-target="#user_contextmenu" id="{{_id}}" >
+                            <span class="user glyphicon glyphicon-user {{profile.status}}" title="{{profile.status}}"> </span>
 							{{profile.name}} 
 							{{#if notification}}
 							<span class="chat glyphicon glyphicon-comment badge">{{notification}}</span> 

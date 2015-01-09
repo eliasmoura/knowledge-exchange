@@ -20,14 +20,25 @@
                         {{#if group_handler.find.active}}
                             {{> find_group}}
                         {{/if}}
-                        {{#if group_handler.create.active}}
+                         {{#if group_handler.create.active}}
                             {{> create_group}}
+                        {{/if}}
+                       {{#if group_handler.edit.active}}
+                            {{> edit_group}}
                         {{/if}}
                     </div>
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-					<input type="button" class="btn btn-primary" id="handler-btn" value="{{mf 'find'}}" />
+                      {{#if group_handler.find.active}}
+                        <input type="button" class="btn btn-primary" id="handler-btn" value="{{mf 'find'}}" />
+                    {{/if}}                   
+                    {{#if group_handler.create.active}}
+                        <input type="button" class="btn btn-primary" id="handler-btn" value="{{mf 'create' 'Create'}}" />
+                    {{/if}}                   
+                    {{#if group_handler.edit.active}}
+                        <input type="button" class="btn btn-primary" id="handler-btn" value="{{mf 'save' 'Save'}}" />
+                    {{/if}}
 				</div>
 			</div>
 		</div>

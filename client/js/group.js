@@ -75,7 +75,6 @@ Template.group_handler.events({
 Template.find_group.events({
 	'submit form#find_group': function(event,template){
 		event.preventDefault();
-        $(template.find('#group-name-f')).jqBootstrapValidation();
         var groupname = template.find('#group-name-f').value;
         if (groupname.length > 4){
             Meteor.call("find", {group:{name:groupname}}, function(error,result){
@@ -106,7 +105,6 @@ Template.create_group.rendered = function(){
 }
 Template.create_group.events({
     'submit form#create_group': function(event, template){
-        $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
         event.preventDefault();
         var groupname = template.find("#group-name-c").value;
         
@@ -159,7 +157,7 @@ Template.create_group.events({
         if(!group.languages.length){
             errors.push({languages:true});
         }
-        if(!group.groupType){
+        if(!group.group_type){
             errors.push({type:true});
         }
         if(!group.group_focus){
@@ -173,19 +171,19 @@ Template.create_group.events({
                     focus:group.group_focus,
                     type:group.group_type
                 }, function(error, result){
-                    User_Group.insert({group:group,user:Meteor.userId(),owner:true,mod:true,active:true}, function(error, result){
-                        if(!error){
-                            console.log('Group ' + Groups.findOne({_id:group}).name + " created by " + Meteor.user().profile.name);
-                            Meteor.call("setUser_activeRoom","group",group);
-                        }else
-                            console.log(error);
-                    });
-                    for (var i = 0; i< members.length; i++) {
-                        group_invite_request({group:group,user:member[i],message:message});
-                        /*User_Group.insert({group:group,user:members[i],owner:false,mod:false,active:false}, function(error, result){
-                            if(!error)
+                    if(!error){
+                        User_Group.insert({group:result,user:Meteor.userId(),owner:true,mod:true,active:true}, function(error, result){
+                            if(!error){
+                                console.log(result);
+                                console.log(User_Group.findOne({_id:result}));
+                                Meteor.call("setUser_activeRoom","group",group);
+                            }else
                                 console.log(error);
-                            });*/
+                        });
+                        for (var i = 0; i< members.length; i++) {
+                            //group_invite_request({group:result,user:member[i],message:message});
+                            GroupRequest.insert({user:member[i],message:message,type:2,group:result});
+                        }
                     }
                 }
             );
@@ -193,8 +191,9 @@ Template.create_group.events({
             Meteor.call('setRoom_Non_active');
             Meteor.call('setGroup_Non_active');
             Meteor.call('setFriend_Non_active');
-            $('#group-chat-finder-modal').modal('hide');
+            $('#group-handler-modal').modal('hide');
         }else{
+        console.log(errors);
         }
     },
 	'click #morelang': function(e, t){
@@ -208,7 +207,10 @@ Template.create_group.events({
 		html = html + '</select>';
         $(element).parent().append(html);
 							
-	}
+	},
+    'click #handler-btn': function(event, tamplate){
+        $(template.find("form")).submit();
+    }
 })
 Template.create_group.langs = function(){
 	return Languages.find({},{$sort: {name: +1}});
