@@ -1,3 +1,5 @@
+List of things the project should have.
+
 #Site
 
 ##CHAT

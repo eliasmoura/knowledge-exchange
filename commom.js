@@ -56,7 +56,7 @@ Router.map( function() {
 	    onBeforeAction:function(){
 	    	if (!Meteor.user()) {
 		        // render the login template but keep the url in the browser the same
-		        this.render('notFound');
+		        this.render('home');
 
 		        // stop the rest of the before hooks and the action function 
 		        this.pause();
@@ -82,6 +82,7 @@ Router.map( function() {
 	    		var rooms = Chatrooms.find({}, {sort: {name: +1}}).fetch();
 	    		// console.log(rooms);
 	    		var roomsArray = new Array();
+                if(Meteor.user())
 	    		rooms.forEach(function(row){
 	    			if (row._id == Meteor.user().profile.active_room.room)
 	    				row.active = "true";
