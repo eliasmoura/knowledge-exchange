@@ -5,6 +5,7 @@
 * Public chat:
     - [x] enter chat room;
     - [x] see chat rooms list;
+    - [ ] subscribe to receive new messages notification:
 
 * Group chat:
 	- [x] find group;
@@ -29,6 +30,9 @@
     - [x] show users status (on line, away, busy, off line);
     - [x] set user status  (on line, away, busy);
 
+* Design:
+    - [ ] make possible to swipe "chat messages" and "chat users list" position;
+    
 
 ##BLOG
 
@@ -75,21 +79,21 @@
 	- [ ] report user;
 
 * User information:
-	- [x] name;
-	- [x] last name;
-	- [x] birthday;
+	- [x] name(Mandatory);
+	- [x] last name(Mandatory);
+	- [x] birthday(Mandatory);
 	- [x] country;
 	- [x] city;
-	- [x] native language;
-	- [x] learning languages;
+	- [x] native language(Mandatory);
+	- [x] learning languages(Mandatory, need to be at least one);
 	- [x] known languages;
 	- [x] languages fluency;
 	- [ ] description;
-	- [x] gender;
+	- [x] gender(male,female,others);
 	- [x] interests;
-	- [x] email;
-	- [x] password;
-	- [ ] photo;
+	- [x] email(Mandatory);
+	- [x] password(Mandatory);
+	- [ ] photo(considering viability);
 	- [ ] occupation;
     - [x] edit*;
     - [ ] set privacy;
