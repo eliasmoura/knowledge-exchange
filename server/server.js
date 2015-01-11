@@ -20,15 +20,11 @@ Meteor.startup(function(){
 		Chatrooms.insert({"name": "Test", details:"A test room"});
 		Chatrooms.insert({"name": "Test2", details:"A test room"});
 	}
-    Meteor.users.find({"status.onile": true}).observe({
+    Meteor.users.find({"status.online": true}).observe({
         changed: function(newdoc, olddoc){
-        console.log("user changed");
             if(newdoc.profile.active_room.room != olddoc.profile.active_room.room){
                 if(newdoc.profile.active_room.type == "group"){
-                    console.log("should removes the new messages notification!");
-                    var user_group =  User_Group.findOne({group:newdoc.profile.active_room.room, user:Meteor.userId()})._id;
-                    console.log(user_group);
-                    console.log(User_Group.findOne({_id:user_group}));
+                    var user_group =  User_Group.findOne({group:newdoc.profile.active_room.room, user:newdoc._id})._id;
                     User_Group.update({_id:user_group}, {$set:{new_messages:0}});
                 }
             }
