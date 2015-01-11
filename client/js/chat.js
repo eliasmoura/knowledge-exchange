@@ -22,9 +22,9 @@ Template.chatrooms_side.rendered = function(){
 Template.chatrooms_side.events = {
 	'click a.chat-room' : function(event, template){
 		var room = false;
-        if ($(event.target).hasClass("chat-group")){
+        if ($(event.target).hasClass("chat-room")){
             room = event.target.id;
-        }else if ($(event.target).hasClass("chatgroup-noti")){
+        }else if ($(event.target).hasClass("chatroom-noti")){
             room = $(event.target).parent().attr("id");
         }
 
