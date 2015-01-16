@@ -68,3 +68,83 @@ Template.notification.events({
 Template.notification.rendered = function(){
 	// $('#notificationModal').modal("toggle");
 }
+UI.registerHelper("notifications", 
+	function(){
+		var groupsRequests_Participation = GroupRequest.find({type:1});
+		var participationArray = new Array();
+		var groupsRequests_Invitation = GroupRequest.find({type:2});
+		var invitationsArray = new Array();
+
+		var userFriendshipRequest = UserRequest.find({});
+		var userArray = new Array();
+		
+		var totalRequest = groupsRequests_Invitation.count() + groupsRequests_Participation.count() + userFriendshipRequest.count();
+
+		var emails =  Email.find({emailto:Meteor.userId(),isnew:true}).count();
+		// console.log(emails);
+
+		if(groupsRequests_Participation)
+			groupsRequests_Participation.fetch().forEach(function(row){
+				Meteor.call("find",{user:{_id:row.user}}, function(error,result){
+					if(!error){
+						
+						Session.set("participationArray", result);
+						//console.log(participationArray);
+					}
+				});
+				participationArray.push({user:Session.get("participationArray"), group:row });
+				
+			});
+
+		if(groupsRequests_Invitation)
+			groupsRequests_Invitation.fetch().forEach(function(row){
+				var group = Groups.findOne({_id:row.group});
+				invitationsArray.push({group:group,request:row});
+			});
+
+		if(userFriendshipRequest)
+			userFriendshipRequest.fetch().forEach(function(row){
+				userArray.push({user:Meteor.users.findOne({_id: row.user}), message:row.message,request:row._id, type:row.type});
+			});
+		var total = totalRequest + emails;
+		
+		if(emails == 0) emails = false;
+		if(total == 0) total = false;
+		if (totalRequest == 0) totalRequest = false;
+		
+		return {
+			requests:
+				{
+					participation:participationArray,
+					invitation:invitationsArray,
+					friendship:userArray,
+					total:totalRequest
+				},
+			newemails:emails,
+			total:total
+			};
+		
+	}
+);
+UI.registerHelper("chat_notifications",
+	function(){
+		// console.log('test');
+		var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();
+		// console.log(privatechatnotifications);
+    	/*var privatenotificationsArray = {};
+    	privatechatnotifications.forEach(function(row){
+    		privatenotificationsArray[row.contact] = row.new_messages;
+    	});
+    	console.log(privatenotificationsArray);*/
+    	var user_groups = User_Group.find({user: Meteor.userId()}).fetch();
+		// console.log(user_groups);
+		var groupsArray = 0;
+		// var groups = new Array();
+		user_groups.forEach(function(row){
+			if(row.new_messages > 0)
+    			groupsArray = groupsArray +1;
+		});
+    	return privatechatnotifications.length + groupsArray;
+	}
+);
+

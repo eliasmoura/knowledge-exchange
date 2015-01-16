@@ -173,5 +173,16 @@
     </form>
 </template>
 <template name="group_management">
-    
+{{#each groupmanagenment}}
+    <div class="group panel-info">
+        <div class="panel panel-default row">
+            <div class="panel-heading">
+                <a class="panel-title groupdatails" data-toggle-to="d{{_id}}" data-toggle="collapse" data-parent="#accordion" href="#">{{name}}</a>
+            </div>
+            <div class="panel-body collapse out" id="d{{_id}}">
+                <p class="group" id="{{_id}}" >	{{description}}</p>
+            </div>
+        </div>
+    </div>
+{{/each}}
 </template>

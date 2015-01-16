@@ -229,12 +229,10 @@
 						{{> group}}
 					{{/if}}
 					{{#if user_modal.profile}}
-                        {{#if user_modal.currentUser}}
-                        <ul class="nav nav-tabs nav-justified" id="profile-navbar"> 
-                            <li id="" class="active"><a href="#" class="profile-navbar" id="info">{{mf 'info' 'Info'}}</a></li>
-                            <li id=""><a href="#" class="profile-navbar" id="security">{{mf 'security' 'Security'}}</a></li>
-                            <li id=""><a href="#" class="profile-navbar" id="friends">{{mf 'friends' 'Friends'}}</a></li>
-                        </ul>
+                        {{#if user_modal.modalActive}}
+                            {{#if user_modal.currentUser}}
+                                {{> user_managenment}}
+                            {{/if}}
                         {{/if}}
                         {{#if user_modal.info}}
                             {{> user_profile}}
@@ -264,7 +262,13 @@
 		</div>
 	</div>	
 </template>
-
+<template name="user_managenment">
+    <ul class="nav nav-tabs nav-justified" id="profile-navbar"> 
+        <li id="" class="active"><a href="#" class="profile-navbar" id="info">{{mf 'info' 'Info'}}</a></li>
+        <li id=""><a href="#" class="profile-navbar" id="security">{{mf 'security' 'Security'}}</a></li>
+        <li id=""><a href="#" class="profile-navbar" id="friends">{{mf 'friends' 'Friends'}}</a></li>
+    </ul>
+</template>
 <!-- <template name="send_email">
 	<form action="submit" id="send-email-form">
 		<label for="user-name">{{mf 'to' 'To'}}:</label><input type="text" class="form-control emailto" placeholder="{{mf 'user'}}" name="user-name" value="{{user_modal.name}}" id="{{user_modal._id}}">

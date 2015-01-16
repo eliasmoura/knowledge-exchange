@@ -333,19 +333,6 @@ Meteor.methods({
 	usage: function(usagefor, usage){
 		Usage.insert({usagefor:usagefor,usage:usage});
 	},
-	participation_request: function(group, message){
-		console.log('part request');
-		var group = Groups.findOne({_id: group});
-		console.log(group);
-		if (group)
-			if(!User_Group.findOne({user:this.userId, group:group._id}))
-				if(!GroupRequest.findOne({user:this.userId,group:group._id}))
-					group = GroupRequest.insert({user: Meteor.userId(), group: group._id, message: message, type: 1});
-		else
-			throw Meteor.Error(1000, "The group you are trying to send a request doesn't exit");
-		console.log(group);
-		//Groups.update({_id:groupId}, {$push:{request:userId}});
-	},
 	group_invite_request: function(args){
 		var user = Meteor.users.findOne({_id:args.user});
 		var group = Groups.findOne({_id: args.group});

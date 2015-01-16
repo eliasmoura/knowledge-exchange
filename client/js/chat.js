@@ -80,9 +80,17 @@ Template.chatrooms_side.events = {
 		Session.set("group_handler", group_handler);
 		//Session.set("find-create-group", true)
 	},
-	'click span.conf':function(e,t){
+	'click a.management':function(e,t){
+        console.log("management");
 		Session.set('group_handler', {management:e.target.id});
 	},
+    'click a.quitGroup': function(event, template){
+        var room =  $(event.target).parent().parent().parent().parent().attr("id");
+        console.log(room);
+        var user_group = User_Group.findOne({group:room, user: Meteor.userId()})._id;
+        User_Group.remove({_id:user_group});
+        console.log("quit");
+    },
 	'click span#add-find-user': function(e,t){
 		Session.set("find_user", true);
 		console.log('click find user');

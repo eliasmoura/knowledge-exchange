@@ -1,8 +1,3 @@
-Template.group_handler.events({
-    'click #handler-btl': function(event, template){
-        
-    }
-})
 Template.group_handler.group_handler = function(){ return Session.get("group_handler");}
 
 Template.group_handler.rendered = function(){
@@ -21,10 +16,8 @@ Template.group_handler.rendered = function(){
             group_handler.management.active = false;
             group_handler.management.data = null;
         }*/
-        console.log("closeing");
         group_handler.active = null;
 		Session.set('group_handler', group_handler);
-        console.log(Session.get("group_handler"));
 	});
 }
 Template.group_handler.events({
@@ -33,25 +26,8 @@ Template.group_handler.events({
         var group_handler = Session.get("group_handler");
 		$('.find-create').removeClass("active");
 		$(element).addClass('active');
-
-        group_handler.create.active = false;
-        group_handler.find.active = false;
-        group_handler.management.active = false;
-		if (element.id == "find"){
-            group_handler.find.active = true;
-            Session.set("group_handler", group_handler);
-			$("#handler-btn").val(mf("find",null,"Find"));
-			
-		}else if(element.id == "create"){
-            group_handler.create.active = true;
-			Session.set("group_handler", group_handler);
-			$("#handler-btn").val(mf("create",null,"Create"));
-		}
-		else if(element.id == "management"){
-            group_handler.management.active = true;
-			Session.set("group_handler", group_handler);
-			$("#handler-btn").val(mf("create",null,"Aply"));
-		}
+        Meteor.call("groupModalHandler",{element:element.id,group_handler:group_handler});
+        
 	},
 	'click input#handler-btn':function(event,template){
         if(event.target.value == "Find")

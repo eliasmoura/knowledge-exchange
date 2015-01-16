@@ -81,17 +81,19 @@ chat side menu
 					<li class="{{#if active}}active{{/if}}">
 						<a  href="#" class="chat-group" id="{{_id}}" >
 							{{name}}
-							<span class="btn-group-xs">
-								<span class="group glyphicon glyphicon-cog btn btn-default navbar-right" title="{{mf 'manage-group' 'Group managenment'}}"> </span>
-							</span>
-							{{#if notification}}
+							<div class="dropdown navbar-right">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+								<span class="group glyphicon glyphicon-cog" title="{{mf 'manage-group' 'Group managenment'}}"> </span>
+                                    <span class="conf" style="background: glyphicon glyphicon-wrench badge">{{request.total}}</span>
+                                    <span class="caret"></span>
+                                </button>
+                                {{> groupmenu}}
+                            </div>
+                            {{#if notification}}
 							<span class="chat chatgroup-noti glyphicon glyphicon-comment badge">{{notification}}</span>
 							{{/if}}
 							{{#if request.total}}
-							<span class="btn-group-xs">
-								<span class="conf btn btn-default" style="background: glyphicon glyphicon-wrench badge">{{request.total}}</span>
-							</span>
-							{{/if}}
+                            {{/if}}
 						</a>
 					</li>
 					{{/each}}
@@ -135,7 +137,16 @@ chat side menu
 		</div>
 	</div>
 </template>
-
+<template name="groupmenu" >
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        {{#if isMod}}
+        <li role="presentation"><a role="menuitem" class="management" tabindex="-1" href="#">Management</a></li>
+        {{/if}}
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+        <li role="presentation"><a role="menuitem" class="quitGroup" tabindex="-1" href="#">Quit</a></li>
+    </ul>
+</template>
 <!-- chat room -->
 <template name="users_chatroom">
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>

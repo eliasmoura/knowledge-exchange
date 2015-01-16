@@ -78,6 +78,16 @@ Meteor.startup(function(){
             User_Group.update({group:doc.groupchat, user:{$in:userArray}}, {$inc: {new_messages:1}},{multi:true});
         }
     });
+    User_Group.find().observe({
+        removed: function(doc){
+            var group = doc.group;
+            var usersLeft = User_Group.find({group:group});
+            if (usersLeft.count() == 0){
+                Groups.remove({_id:group});
+                GroupChat.remove({group:group});
+            }
+        }
+    })
     PrivateMessages.find().observe({
         added:function(doc){
             PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}})
