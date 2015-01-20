@@ -36,7 +36,9 @@ div.container#chat-messages
 {
     color: #BB0019;
 }
-
+.unchecked{
+    color: #7E7C7C;
+}
 
 /* @font-face {
   font-family: 'Glyphicons Halflings';

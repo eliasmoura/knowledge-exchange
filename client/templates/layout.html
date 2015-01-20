@@ -30,22 +30,7 @@
 		</div>
 	</div>
 </template>
-<!-- <nav class="navbar navbar-default navbar-static-top" >
-			<div class="container-fluid" role="navigation">
-				<ul class="nav nav-pills navbar-inverse navbar-left">
-					<li><a href="#">LOGO</a></li>
-				</ul>
-				<ul class="nav nav-pills  navbar-inverse ">
-					<li class="{{activeHome}}" ><a href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
-					<li class="{{activeBlog}}" ><a href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
-					<li class="{{activeChat}}" ><a href="/chat">{{mf 'chat' 'CHAT'}}</a></li>
-					<li class="{{activeNotes}}" ><a href="/notes">{{mf 'notes' 'NOTES'}}</a></li>
-				</ul>
-				<ul class="nav nav-pills  navbar-inverse navbar-right">
-					<li class='dropdown {{activeUser}}'>{{> user}}</li>
-				</ul>
-			</div>
-		</nav> -->
+
 <template name="navbar">
 	<nav class="navbar navbar-default" role="navigation">
 	  <div class="container-fluid">
@@ -57,13 +42,13 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">Logo</a>
+          <a class="navbar-brand" href="{{pathFor route='home'}}">Mixed Languages</a>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="navbar-nav">
 	      <ul class="nav navbar-nav">
-	        <li class="{{activeHome}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
+	        <li class="{{activeHome}}"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
 			<li class="{{activeBlog}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
             <li class="{{activeChat}}" ><a class="navigation" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
 			<li class="{{activeNotes}} disabled" tile="{{mf 'under-construction' 'Under development'}}"  ><a class="navigation" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a></li>

@@ -1,4 +1,11 @@
-
+Template.user.helpers({
+    'first_login': function(){
+        return Session.get("first-login");
+    },
+    login: function(){
+        return Session.get("login");
+    }
+});
 UI.registerHelper("register_form", 
 function(){
     return Session.get("register_form");

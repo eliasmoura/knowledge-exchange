@@ -67,22 +67,17 @@ Template.chatrooms_side.events = {
 	},
 	'click span#add-find-chat': function(e,t){
         var group_handler = Session.get("group_handler");
-        if(!group_handler)
-        {
-            group_handler = {} ;
-            group_handler.create = {data:false};
-            group_handler.find = {}
-            group_handler.find.active = true;
-            group_handler.find.data = false;
-            group_handler.management = {data:false};
-        }
         group_handler.active = true;
 		Session.set("group_handler", group_handler);
-		//Session.set("find-create-group", true)
 	},
 	'click a.management':function(e,t){
-        console.log("management");
-		Session.set('group_handler', {management:e.target.id});
+        var group_handler = Session.get("group_handler");
+        group_handler.active = true;
+        group_handler.management.active = true;
+        group_handler.find.active = false;
+        group_handler.create.active = false;
+        group_handler.management.group_id= e.target.id;
+		Session.set('group_handler', group_handler);
 	},
     'click a.quitGroup': function(event, template){
         var room =  $(event.target).parent().parent().parent().parent().attr("id");
@@ -97,23 +92,12 @@ Template.chatrooms_side.events = {
 	}
 }
 
-Template.chatrooms_side.find_chat_group = function(){return Session.get('group-finder');}
-Template.chatrooms_side.requests = function(){
-	var userId = Meteor.userId();
-	var myGroupRequests = Groups.find({owner:userId}, {fields:{request: 1, _id: 1, name:1}}).fetch();
-	var groupRequests = Groups.find({mod:{$in:[userId]}},{fields:{request: 1, _id: 1, name:1}}).fetch();
-	var total = myGroupRequests.length + groupRequests.length;
-	var requests = {myGroup: myGroupRequests, group: groupRequests, total:total};
-	return requests;
-}
-
 
 /*
 	Chat functions
 */
 Template.chat_input.events = {
 	'keydown textarea#message' : function (event){
-
 		if (event.which == 13){//enter
 			//console.log(OnlineUsers.find({}));
 			var message = document.getElementById('message');
@@ -147,7 +131,7 @@ Template.chat_input.events = {
                         });
                 }	
                 else if (room.type == "privatechat"){
-                    var messageiD = PrivateMessages.insert({
+                    PrivateMessages.insert({
                             name: name,
                             lstname: lstname,
                             userid: userid,

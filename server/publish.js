@@ -46,7 +46,9 @@ Meteor.publish("privatemessages",function(privatechat){
 
 Meteor.publish("user-chatroom-list", function(){
     var user = Meteor.users.findOne({_id:this.userId});
-	var chatroom = User_Chatroom.find({room:user.profile.active_room.room});
+	var chatroom = null;
+    if(user)
+        chatroom = User_Chatroom.find({room:user.profile.active_room.room});
 
 	var userChatroomList = new Array();
 	if (chatroom) 
@@ -135,8 +137,21 @@ Meteor.publish("group-request", function(groupId, userId){
 	return Groups.find({_id:groupId});
 });
 
-Meteor.publish("groups-owner", function(){
-	return User_Group.find({owner:true, user:this.userId});
+Meteor.publish("groups-mods", function(){
+    /**
+     * list of users and what groups they are part of the same that the actual user is moderator of.
+     **/
+    var user_groupArray = new Array();
+    var list_userGroup = new Array();
+    User_Group.find({mod:true,user:this.userId}).fetch().forEach(function(row){
+        User_Group.find({group:row.group}).fetch().forEach(function(group){
+            list_userGroup.push(group.user);
+        });
+        user_groupArray.push(row.group);
+    })
+    var users = Meteor.users.find({_id:{$in:list_userGroup}}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, status:1}});
+    var users_groups = User_Group.find({group:{$in:user_groupArray}});
+	return [users, users_groups];
 });
 
 Meteor.publish("user-groups", function(){

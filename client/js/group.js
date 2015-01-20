@@ -1,4 +1,8 @@
-Template.group_handler.group_handler = function(){ return Session.get("group_handler");}
+Template.group_handler.helpers({
+    'group_handler': function(){ 
+        return Session.get("group_handler");
+    }
+});
 
 Template.group_handler.rendered = function(){
 	$('#group-handler-modal').modal();
@@ -16,17 +20,32 @@ Template.group_handler.rendered = function(){
             group_handler.management.active = false;
             group_handler.management.data = null;
         }*/
-        group_handler.active = null;
+        group_handler.active = false;
 		Session.set('group_handler', group_handler);
 	});
 }
 Template.group_handler.events({
-	'click a.find-create': function(e,t){
-		var element = e.target;
+	'click a.menu': function(e,t){
+		var element = e.target.id;
         var group_handler = Session.get("group_handler");
-		$('.find-create').removeClass("active");
-		$(element).addClass('active');
-        Meteor.call("groupModalHandler",{element:element.id,group_handler:group_handler});
+        group_handler.create.active = false;
+        group_handler.find.active = false;
+        group_handler.management.active = false;
+		if (element == "find"){
+            group_handler.find.active = true;
+            Session.set("group_handler", group_handler);
+			$("#handler-btn").val(mf("find",null,"Find"));
+			
+		}else if(element == "create"){
+            group_handler.create.active = true;
+			Session.set("group_handler", group_handler);
+			$("#handler-btn").val(mf("create",null,"Create"));
+		}
+		else if(element == "management"){
+            group_handler.management.active = true;
+			Session.set("group_handler", group_handler);
+			$("#handler-btn").val(mf("create",null,"Aply"));
+		}
         
 	},
 	'click input#handler-btn':function(event,template){
@@ -77,7 +96,6 @@ Template.find_group.events({
 });
 
 Template.create_group.rendered = function(){
-      $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 }
 Template.create_group.events({
     'submit form#create_group': function(event, template){
@@ -164,9 +182,9 @@ Template.create_group.events({
                 }
             );
             console.log("Group created");
-            Meteor.call('setRoom_Non_active');
+            /*Meteor.call('setRoom_Non_active');
             Meteor.call('setGroup_Non_active');
-            Meteor.call('setFriend_Non_active');
+            Meteor.call('setFriend_Non_active');*/
             $('#group-handler-modal').modal('hide');
         }else{
         console.log(errors);
@@ -192,55 +210,31 @@ Template.create_group.langs = function(){
 	return Languages.find({},{$sort: {name: +1}});
 }
 Template.create_group.rendered = function(){
-		/*$('#find-create-form').bootstrapValidator({
-	        message: 'This value is not valid',
-	        feedbackIcons: {
-	            valid: 'glyphicon glyphicon-ok',
-	            invalid: 'glyphicon glyphicon-remove',
-	            validating: 'glyphicon glyphicon-refresh'
-	        },
-	        fields: {
-	            name: {
-	                message: 'The name is not valid',
-	                validators: {
-	                    notEmpty: {
-	                        message: 'The name is required and cannot be empty'
-	                    },
-	                    regexp: {
-	                        regexp: /^[a-zA-Z0-9_]+$/,
-	                        message: 'The group name can only consist of alphabetical, number and underscore'
-	                    }
-	                }
-	            },
-	            description: {
-	                message: 'The description is not valid',
-	                validators: {
-	                    notEmpty: {
-	                        message: 'The description is required and cannot be empty'
-	                    }
-	                }
-	            },
-	            email: {
-	                validators: {
-	                    notEmpty: {
-	                        message: 'The email is required and cannot be empty'
-	                    },
-	                    emailAddress: {
-	                        message: 'The input is not a valid email address'
-	                    }
-	                }
-	            }
-	        }
-	    });*/
+
 }
 Template.find_group.created =function(){
 	//Session.set('groups-found', false);
 }
-Template.find_group.group = function(){
-	var groups = Session.get('groups-found');
-	//console.log(groups);
-	return groups;
-}
-Template.find_group.events({
-	
-});
+Template.group_managenment.events({
+    'click a.manage-group': function(event, template){
+        var toggle = $(event.target).attr("data-toggle");
+        $("#manage-"+toggle).collapse("toggle");
+        event.stopPropagation();
+        event.preventDefault();
+    },
+    'click a.group-managenment-menu': function(event, template){
+        event.stopPropagation();
+        event.preventDefault();
+        var action = event.target.id;
+        if(action == "edit"){
+            Session.set("group-managenment-action", {edit:true});
+        }else if (action == "manage"){
+            Session.set("group-managenment-action", {manage:true});
+        }
+    },
+    'click .mod_actions': function(event, template){
+        event.preventDefault();
+        event.stopPropagation();
+
+    }
+})

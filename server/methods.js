@@ -1,19 +1,4 @@
 Meteor.methods({
-	sign_in: function(email, passwd){
-		console.log("login");
-		//email = trimInput(email);
-		/**validate here**/
-
-		//validating login
-		
-	},
-	sign_up: function(email,passwd,name,lastname){
-		console.log('sign up...');
-		
-		console.log('user : ' + user);
-		
-		console.log('sign in, ok?');
-	},
 	setUser_activeRoom: function(type,roomId){
 		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.active_room":{type:type,room:roomId}}},function(error,docs){
 				if(!error){

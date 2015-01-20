@@ -53,7 +53,8 @@ Template.user.events({
 			_id:Meteor.user()._id,
             profile_bar:true,
             info:true,
-            currentUser:true
+            currentUser:true,
+            modalActive:true
 		});
 	},
 	'click #email': function(e,t){
@@ -97,25 +98,22 @@ Template.user.events({
 
 });
 
-Template.login_form.events = {
+Template.login_form.events({
 	'submit form.login-form': function(e, t){
 		e.preventDefault();
 		var email = t.find('#login_email').value;
 		var passwd = t.find('#login_passwd').value;
 		email = trimInput(email);
-		Meteor.loginWithPassword(email,passwd, function(err){
+        //Meteor.call("login",{email:email,passwd:passwd});
+	    Meteor.loginWithPassword(email,passwd, function(err){
 			if (err){
 				throw new Meteor.Error(111, "couldn't find your email or password!");
 				return 'error';
 			}else{
                 $(".dropdown-toggle").dropdown("toggle");
             }
-        });
-		//$('div.login_form').css('display', "none");
-		//$('div.register_form').css('display', 'block');
-		Session.set('login', true);
-        Session.set("user", Meteor.user());
-		//$('#registerModal').modal("toggle");
+        });	
+        //$('#registerModal').modal("toggle");
 	},
     'click a#login': function(event, template){
         $('.dropdown-toggle').dropdown("toggle");
@@ -129,7 +127,8 @@ Template.login_form.events = {
     'click a.newUser': function(event, template){
         Session.set("login", false);
     }
-}
+});
+
 Template.register_form.rendered = function(){
 	$('#registerModal').modal("show");
     $("#registermodal").on("shown.bs.modal", function(){
@@ -148,9 +147,7 @@ Template.register_form.destroyed = function(){
 	//$('.modal-backdrop').destroy();
 	//Session.set('first-login', true);
 }
-Template.user.first_login = function(){
-	return Session.get("first-login");
-}
+
 Template.register_form.events({
 	'click button.register-btn': function(e, t){
 		

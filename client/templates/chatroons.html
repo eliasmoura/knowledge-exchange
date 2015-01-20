@@ -137,16 +137,6 @@ chat side menu
 		</div>
 	</div>
 </template>
-<template name="groupmenu" >
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        {{#if isMod}}
-        <li role="presentation"><a role="menuitem" class="management" tabindex="-1" href="#">Management</a></li>
-        {{/if}}
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-        <li role="presentation"><a role="menuitem" class="quitGroup" tabindex="-1" href="#">Quit</a></li>
-    </ul>
-</template>
 <!-- chat room -->
 <template name="users_chatroom">
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>

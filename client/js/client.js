@@ -7,6 +7,14 @@ Meteor.startup(function(){
         else
             Session.set('locale', 'en_US');
         document.title = "Mixed Languages";
+        var group_handler = {} ;
+        group_handler.create = {data:false};
+        group_handler.find = {}
+        group_handler.find.active = false;
+        group_handler.find.data = false;
+        group_handler.management = {data:false};
+        group_handler.active = false;
+		Session.set('group_handler', group_handler);
     }
     else
         Session.set('locale', 'en_US');
