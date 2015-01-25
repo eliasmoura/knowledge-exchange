@@ -3,8 +3,6 @@
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="fragment" content="!">
-	<link rel="stylesheet" href="client/css/bootstrapValidator.min.css"/>
-	<script type="text/javascript" src="client/js/bootstrapValidator.min.js"></script>
 </head>
 
 <body>
@@ -29,6 +27,7 @@
 			<div class="col-xs-4 col-xs-offset-4">footer</div>
 		</div>
 	</div>
+    {{> modal_handler}}
 </template>
 
 <template name="navbar">
@@ -53,12 +52,7 @@
             <li class="{{activeChat}}" ><a class="navigation" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
 			<li class="{{activeNotes}} disabled" tile="{{mf 'under-construction' 'Under development'}}"  ><a class="navigation" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a></li>
 	      </ul>
-	      <form class="navbar-form navbar-left" disabled="disabled" tile="{{mf 'under-construction' 'Under development'}}" role="search">
-	        <div class="form-group">
-	          <input type="text" class="form-control" disabled="disabled" placeholder="Search">
-	        </div>
-	        <button type="submit" class="btn btn-default" disabled="disabled">Submit</button>
-	      </form>
+            {{>search}}
 	      <ul class="nav navbar-nav navbar-right">
 	    	<li class='dropdown '>{{> user}}</li>
 	      </ul>

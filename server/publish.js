@@ -1,6 +1,7 @@
 Meteor.publish("requests", function(){
-	var groups = User_Group.find({user:this.userId, mod:true}).fetch();
-	var groupArray = new Array();
+	//var groups = User_Group.find({user:this.userId, mod:true}).fetch();
+    var groupsArray = Roles.getGroupsForUser(this.userId, "group-manager")
+	//var groupArray = new Array();
 	var groupsRequest_participation = false;
 
 	var friendshipRequests = UserRequest.find({request_to: this.userId});
@@ -8,12 +9,13 @@ Meteor.publish("requests", function(){
 	
 	var response = new Array();
 
-	if(groups){
+	/*if(groups){
 		groups.forEach(function(row){
 			groupArray.push(row.group);
 		});
-		groupsRequest_participation = GroupRequest.find({group:{$in: groupArray},type:1});
-	}
+	}*/
+
+    groupsRequest_participation = GroupRequest.find({group:{$in: groupsArray},type:1});
 
 	if (friendshipRequests)
 		response.push(friendshipRequests);
@@ -217,3 +219,25 @@ Meteor.publish("emails-sent", function(){
 Meteor.publish("emails-received", function(){
 	return Email.find({emailto:this.userId});
 });
+
+
+//userprofile
+Meteor.publish("profile",function(args){
+    var user = Meteor.users.findOne({_id:args.userId});
+    if (user.profile.privacy == "open"){
+        user = Meteor.users.find({_id:args.userId},{fields:{_id:1,"profile":1, status:1, privacy:1}});
+    }else if (user.profile.privacy =="contacts"){
+        if(UsersRelations.findOne({user:args.userId, contact:args.currentUser}))
+            user = Meteor.users.find({_id:args.userId},{fields:{_id:1,"profile":1, status:1, privacy:1}});
+        else
+            user = Meteor.users.find({_id:args.userId}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, privacy:1}});
+    }else{
+        //them it's private, but the name and last name will always be shown
+        user = Meteor.users.find({_id:args.userId}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, privacy:1}});
+    }
+    return user;
+});
+// Users roles
+Meteor.publish(null, function (){ 
+  return Meteor.roles.find({})
+  });

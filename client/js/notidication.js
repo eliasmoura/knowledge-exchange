@@ -12,16 +12,16 @@ var requestHandler = function (args){
         console.log('group invite');
         var request = GroupRequest.findOne({_id:args.request});
         if(args.action == 1)
-            User_Group.insert({group:request.group,user:request.user,owner:false,mod:false,active:false}, 
+            User_Group.insert({group:request.group,user:request.user,active:false}, 
                 function(error, result){
                     console.log(error);
                     if(!error){
                         //Meteor.call("setUser_activeRoom","group",User_Group.findOne({_id:result}));
                     }
-                        
             });	
-        else
-            User_Group.remove({group:group,user:user});
+        //else
+            //User_Group.remove({group:group,user:user});
+        console.log(request);
         GroupRequest.remove({_id:request._id});
     }else{
         var request = UserRequest.findOne({_id:args.request,request_to:Meteor.userId()});
@@ -46,22 +46,22 @@ var requestHandler = function (args){
 Template.notification.events({
 	'click .acept':function(e,t){
 		var element = e.target;
-		var request = element.id;
-		var request_type = t.find('input.request-type'+request).value;
+		var request = $(element).attr("[data-request-id]");
+		var request_type = $(element).attr("[data-request-type]");
 		requestHandler({request:request, type:request_type,action:1});
         //client.js.client.js.user.requestHandler();
         
     },
 	'click .deny':function(e,t){
 		var element = e.target;
-		var request = element.id;
-		var request_type = t.find('input.request-type'+request).value;
-            UserRequest.update({_id:request},{$set:{accept:0}},function(error,docs){
+		var request = $(element).attr("[data-request-id]");
+		var request_type = $(element).attr("[data-request-type]");
+		//var request_type = t.find('input.request-type'+request).value;
+        /*    UserRequest.update({_id:request},{$set:{accept:0}},function(error,docs){
                 if (error) console.log(error);
                 else console.log("request accepted");
-            });
-
-		//resquestHandler({request:request, type:request_type,action:0});
+            });*/
+		requestHandler({request:request, type:request_type,action:0});
 	}
 });
 
@@ -147,4 +147,3 @@ UI.registerHelper("chat_notifications",
     	return privatechatnotifications.length + groupsArray;
 	}
 );
-

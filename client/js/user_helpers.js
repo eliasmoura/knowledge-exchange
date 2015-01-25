@@ -166,4 +166,14 @@ UI.registerHelper("knownlanguages",function(){
     }
     
 });
-
+Template.user_profile.helpers({
+    'profile':function(){
+        var id = Session.get("profile");
+        var profile = null;
+        if(id){
+            profile = Meteor.users.findOne({_id:id});
+        }
+        console.log(profile);
+        return profile;
+    }
+});

@@ -1,7 +1,7 @@
 <template name="user">
     {{#if user}}
         <a id="user" class="dropdown-toggle"  href="#" data-toggle="dropdown" >
-            <span class="glyphicon glyphicon-user {{user.profile.status}}" id="userstatus" data-container="body" data-toggle="popover" data-placement="botton" data-html="true"></span>
+            <span class="glyphicon glyphicon-user {{#if user.status.online}}online{{else}}offline{{/if}}" ></span><!--id="userstatus" data-container="body" data-toggle="popover" data-placement="botton" data-html="true"></span>-->
             {{user.profile.name}}
             <span class="badge">{{notifications.total}}</span>
             <span class="caret"></span>
@@ -54,8 +54,8 @@
 			        	<div class="friend-request">
 			        		<label for="" class="username">{{user.profile.name}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{message}} </span>
-			        		<input type='button' class="acept btn btn-primary" id="{{request}}" value="{{mf 'acept' 'Acept'}}"/>
-			        		<input type="button" class="deny btn btn-default" id="{{request}}" value="{{mf 'deny' 'Deny'}}" />
+			        		<input type='button' class="acept btn btn-primary" id="{{request}}" data-request-type="{{type.type}}" data-request-id="{{request}}" value="{{mf 'acept' 'Acept'}}"/>
+			        		<input type="button" class="deny btn btn-default" id="{{request}}" data-request-type="{{type.type}}" data-request-id="{{request}}" value="{{mf 'deny' 'Deny'}}" />
 			        		<input type="text" value="{{type.type}}" class="request-type{{request}} hide"/>
 			        	</div>
 			        {{/each}}
@@ -64,9 +64,8 @@
 			        	<div class="participation-request">
 			        		<label for="" class="username" id="user._id">{{user.profile.name}} {{user.profile.lastname}}:</label>
 			        		<span id="">{{group.message}}</span>
-			        		<input type='button' class="acept btn btn-primary" id="{{group._id}}" value="{{mf 'acept'}}" />
-			        		<input type="button" class="deny btn btn-default" id="{{group._id}}" value="{{mf 'deny' }}" />
-			        		<input type="text" value="{{group.type}}" class="request-type{{group._id}} hide"/>
+			        		<input type='button' class="acept btn btn-primary" id="{{group._id}}"  data-request-type="{{group.type}}" data-request-id="{{group._id}}" value="{{mf 'acept'}}" />
+                            <input type="button" class="deny btn btn-default" id="{{group._id}}" data-request-type="{{group.type}}" data-request-id="{{group._id}}" value="{{mf 'deny' }}" />
 			        	</div>
 			        {{/each}}
 			        <h4 class="invatation-request">{{mf 'invitation-request' 'Group participation invitation request'}}({{notifications.requests.invitation.length}}):</h4>
@@ -332,7 +331,7 @@
     {{#if user_modal.edit_profile}}
         {{> user_profile_edit}}
     {{else}}
-	{{#with user_modal}}
+	{{#with profile}}
         {{#if this.currentUser}}
             <a href="#" id="edit-profile">{{mf 'edit-info' 'Edit info'}}</a>
         {{/if}}
@@ -344,10 +343,13 @@
 				    	<img data-src="holder.js/300x200" alt="">
 				    </a>
 				</div>
+                <div>
+                    {{this.profile.name}} {{this.profile.lastname}}
+                </div>
 				<div>
-					<a href="www.google.com.br/#q={{this.user.city}}">{{this.user.city}}</a>, <a href="www.google.com.br/#q={{this.user.country}}">{{this.user.country}}</a>
+					<a href="www.google.com.br/#q={{this.profile.city}}">{{this.profile.city}}</a>, <a href="www.google.com.br/#q={{this.user.country}}">{{this.user.country}}</a>
 
-					<br>{{mf 'birthday' 'Birthday'}}: <span>{{this.user.birthday}}</span>
+					<br>{{mf 'birthday' 'Birthday'}}: <span>{{this.profile.birthday}}</span>
 				</div>
 			</div>
 		</div>
@@ -356,14 +358,14 @@
 		<div class="panel-body">
 			<label for="know">{{mf 'know' 'Know'}}:</label>
 			<div class="know">
-				<div><a href='www.google.com.br/#q={{this.user.nativelang}}' target='_blank'>{{this.user.nativelang}}</a> ({{mf 'native' 'Native'}})</div>
-				{{#each this.user.knownlanguages}}
+				<div><a href='www.google.com.br/#q={{this.profile.nativelang}}' target='_blank'>{{this.profile.nativelang}}</a> ({{mf 'native' 'Native'}})</div>
+				{{#each this.profile.knownlanguages}}
 					<div><a href="www.google.com.br/#q={{this}}" target="blank">{{this}}</a> ({{mf 'fluent' 'Fluent'}})</div>
 				{{/each}}
 			</div>
 			<label for="learning">{{mf 'learning' 'Learning'}}:</label>
 			<div class="learning">
-				{{#each this.user.learninglanguages}}
+				{{#each this.profile.learninglanguages}}
 					<div><a href="www.google.com.br/#q={{this}}">{{this}}</a></div>
 				{{/each}}
 			</div>
@@ -372,7 +374,7 @@
     <div class="panel panel-info interests">
         <div class="panel-heading">{{mf 'interests' 'Interests'}}</div>
         <div class="panel-body">
-            {{#each this.user.interests}}
+            {{#each this.profile.interests}}
             <span>{{this}}, </span> 
             {{/each}}
         </div>
@@ -380,7 +382,7 @@
 	<div class="panel panel-info">
 		<div class="panel-heading"> {{mf 'user-description' 'User description'}}:</div>
 		<div class="panel-body">
-			{{this.user.description}}
+			{{this.profile.description}}
 		</div>
 	</div>
 	{{/with}}

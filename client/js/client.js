@@ -15,6 +15,7 @@ Meteor.startup(function(){
         group_handler.management = {data:false};
         group_handler.active = false;
 		Session.set('group_handler', group_handler);
+        Session.set("group-overview", false);
     }
     else
         Session.set('locale', 'en_US');

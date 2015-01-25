@@ -10,8 +10,6 @@
 				<div class="modal-body"><!--content here-->
 					<div class="group-handler"> 
                         <ul class="nav nav-tabs nav-justified">
-                            <li><a href="#" class="btn btn-default menu {{#if group_handler.find.active}}
-                            active{{/if}}" id="find">{{mf 'find' 'Find'}}</a></li>
                             <li><a href="#" class="btn btn-default menu {{#if group_handler.create.active}}
                             active{{/if}}" id="create">{{mf 'create' 'Create'}}</a></li>
                             <li><a href="#" class="btn btn-default managemente menu {{#if group_handler.management.active}}
@@ -48,15 +46,11 @@
 	</div>
 </template>
 
-<template name="find_group">
-    <form class="find_group" id="find_group">
-        <div class="form-group control-group controls">
-            <input type="text" class="form-control" placeholder="Group name" id="group-name-f" required >
-            <p class="help-block"></p>
-        </div>
-    </form>
+<template name="group_overview">
+should show something?
+{{this.group_info}}
+    {{#with group_info}}
     <div class="groups">
-        {{#each group}}
         <div class="group panel panel-info" id="{{_id}}">
             <div class="panel-heading">
                 <h4>
@@ -80,8 +74,8 @@
                 </div>
             </div>
         </div>
-        {{/each}}
     </div>
+    {{/with}}
 </template>
 
 <template name="create_group">
@@ -268,7 +262,7 @@
 </template>
 <template name="groupmenu" >
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        {{#if isMod}}
+        {{#if isInRole "group-manager" _id}}
         <li role="presentation"><a role="menuitem" class="management" tabindex="-1" href="#">Management</a></li>
         {{/if}}
         <li role="presentation"><a role="menuitem" class="quitGroup" tabindex="-1" href="#">Leave group</a></li>
@@ -303,27 +297,61 @@
 </template>
 <template name="managenment_usersgroup">
     <div class="users_groups_managenment">
-        <div class="row">
-            <span class="col-xs-4"><strong>User</strong></span>
-            <span class="col-xs-4"><strong>Moderator</strong></span>
-            <span class="col-xs-4"><strong>Delete</strong></span>
+
+         <div class="panel-heading">
+            <a class="panel-title row manage-userlist" data-toggle="{{_id}}" data-parent="#accordion" href="#">Users:</a>
+        </div>       
+        <div class="panel-body collapse out" id="manage-userlist-{{_id}}">
+            <div class="row">
+                <span class="col-xs-4"><strong>User</strong></span>
+                <span class="col-xs-4"><strong>Moderator</strong></span>
+                <span class="col-xs-4"><strong>Delete</strong></span>
+            </div>
+            {{#each this.users.users}}
+            <div class="row" data-user-id="{{this.user._id}}">
+                <div class="col-xs-4">
+                    {{this.user.profile.name}} {{this.user.profile.lastname}}
+                </div>
+                <div class="col-xs-4">
+                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="toggle-mod">
+                        <span class="glyphicon glyphicon-ok {{#if isInRole 'group-manager' ../_id}}alert-success{{else}}unchecked{{/if}}" value="mod" checked> </span>
+                    </label>
+                </div>
+                <div class="col-xs-4">
+                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="delete-user">
+                        <span class="glyphicon glyphicon-remove alert-danger" data-user-id="{{this.user._id}}"></span>
+                    </label>
+                </div>
+            </div>
+            {{/each}}
         </div>
-        {{#each this.users.users}}
-        <div class="row" data-user-id="{{this.user._id}}">
-            <div class="col-xs-4">
-                {{this.user.profile.name}} {{this.user.profile.lastname}}
+        <div class="panel-heading">
+            <a class="panel-title manage-requests" data-toggle="{{_id}}" data-parent="#accordion" href="#">Participation Requests:</a>
+        </div>       
+        <div class="panel-body collapse out" id="manage-requests-{{_id}}">
+            <div class="row">
+                <span class="col-xs-4"><strong>User</strong></span>
+                <span class="col-xs-4"><strong>Accept</strong></span>
+                <span class="col-xs-4"><strong>Deny</strong></span>
             </div>
-            <div class="col-xs-4">
-                <label class="mod_actions" data-user-id="{{this.user._id}}">
-                    <span class="glyphicon glyphicon-ok {{#if this.mod}}alert-success{{else}}unchecked{{/if}}" value="mod" checked> </span>
-                </label>
+            {{#each this.requests.participation_requests}}
+            <div class="row" data-user-id="{{this.user._id}}">
+                <div class="col-xs-4">
+                    {{this.user.profile.name}} {{this.user.profile.lastname}}
+                </div>
+                <div class="col-xs-4">
+                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="accept-request">
+                        <span class="glyphicon glyphicon-ok alert-success" value="mod" checked> </span>
+                    </label>
+                </div>
+                <div class="col-xs-4">
+                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="deny-request">
+                        <span class="glyphicon glyphicon-remove alert-danger" data-user-id="{{this.user._id}}"></span>
+                    </label>
+                </div>
             </div>
-            <div class="col-xs-4">
-                <label class="mod_actions" data-user-id="{{this.user._id}}">
-                    <span class="glyphicon glyphicon-remove alert-danger" data-user-id="{{this.user._id}}"></span>
-                </label>
-            </div>
+            {{/each}}
         </div>
-        {{/each}}
+
     </div>
 </template>

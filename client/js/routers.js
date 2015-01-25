@@ -70,6 +70,10 @@ Router.route('userprofile', {
     yieldTemplates: {
                     'home-side': {to: 'sidebar'}
     },
+    fastRender: true,
+    waitOn: function(){
+        return Meteor.subscribe("profile",{userId:this.params._id,currentUser:Meteor.userId()});
+    },
     onBeforeAction:function(){
         if (!Meteor.user()) {
             // render the login template but keep the url in the browser the same
@@ -77,22 +81,13 @@ Router.route('userprofile', {
 
             // stop the rest of the before hooks and the action function 
           }else{
-            var user = Meteor.users.findOne({_id:this.params._id});
+            /*var user = Meteor.users.findOne({_id:this.params._id});
             var username = user.profile.name + " " +user.profile.lastname;
             var currentUser = false;
             if (this.params._id == Meteor.userId()){
                 currentUser = true;
-            }
-            Session.set("user_modal_actions",{
-                profile:true,
-                action: username,
-                user:user.profile,
-                _id:user._id,
-                profile_bar:true,
-                info:true,
-                currentUser:currentUser,
-                modalActive: false
-            });
+            }*/
+            Session.set("profile",this.params._id);
             this.next();
           // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"home"}});
           }
@@ -122,6 +117,7 @@ Router.route('chatrooms', {path:'/chat',
             Meteor.subscribe("requests-invite"),
             Meteor.subscribe("user-list"),
             Meteor.subscribe("groups-mods"),
+            Meteor.subscribe("groups-list"),
             Meteor.subscribe("user-contact"),
             Meteor.subscribe("emails-received"),
             Meteor.subscribe("emails-sent"),
@@ -203,7 +199,7 @@ Router.route('chatrooms', {path:'/chat',
             }else if(room.type == "privatechat"){
                 userList = PrivateChat.findOne({_id:room.room}).users;
             }
-            userList = Meteor.users.find({_id:{$in:userList} }).fetch();
+            userList = Meteor.users.find({_id:{$in:userList} }, {fields:{_id:1, status:1, "profile.name":1, "profile.lastname":1}}).fetch();
             return userList;
         },
         contacts: function(){
@@ -296,8 +292,9 @@ Router.route('chatrooms', {path:'/chat',
                     // console.log(group);
                     group.owner = row.owner;
                     group.mod = row.mod;
-                    if(row. owner || row.mod){
+                    if(Roles.userIsInRole(Meteor.userId(), "group-manager", row.group)|| Roles.userIsInRole(Meteor.userId(), "owner", row.group)){
                         group.isMod = true;
+                        group.request = {total:GroupRequest.find({group:row.group, type:1}).count()};
                     }else group.isMod = false;
                     groupsArray.push(group);
                 }
@@ -311,14 +308,6 @@ Router.route('chatrooms', {path:'/chat',
             //console.log(groups);
             //console.log(groupsArray);
             return groupsArray;
-        },
-
-        
-        find_user: function(){
-            return Session.get('find_user');
-        },
-        user_found: function(){
-            return Session.get("users_found");
         },
         add_user:function(){
             return Session.get("add_user");

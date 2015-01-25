@@ -119,7 +119,7 @@ chat side menu
 					{{#each contacts}}
 					<li class="{{#if active}}active{{/if}}">
 						<a href="#" class="friends-contacts username pager" data-toggle="context" data-target="#user_contextmenu" id="{{_id}}" >
-                            <span class="user glyphicon glyphicon-user {{profile.status}}" title="{{profile.status}}"> </span>
+                            <span class="user glyphicon glyphicon-user {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"> </span>
 							{{profile.name}} 
 							{{#if notification}}
 							<span class="chat friends-contacts-noti glyphicon glyphicon-comment badge">{{notification}}</span> 
@@ -142,7 +142,7 @@ chat side menu
 	<label class="col-xs-12">{{mf 'users' 'Users'}}:</label>
 	{{#each chat_users}}
 	<label class="username col-xs-12 " id="{{_id}}" data-toggle="context" data-target="#user_contextmenu">
-		<span class="user glyphicon glyphicon-user {{profile.status}}" title="{{profile.status}}"> </span> {{profile.name}}
+        <span class="user glyphicon glyphicon-user {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"> </span> {{profile.name}}
 	</label>
 	{{/each}}
 </template>

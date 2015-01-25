@@ -13,7 +13,7 @@ Meteor.startup(function(){
 	Chatrooms.remove({});*/
 	//Accounts.config({forbidClientAccountCreation:true});
 	//console.log(Chatrooms.find().count());
-    Kadira.connect('w7MjJY7CJSWexx5xM', '1a6f7899-23f6-45a4-9fcb-78a742ac639a');
+    //Kadira.connect('w7MjJY7CJSWexx5xM', '1a6f7899-23f6-45a4-9fcb-78a742ac639a');
 	if (Chatrooms.find().count() == 0){
 		//Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
 		console.log('adding chatrooms');
@@ -31,10 +31,13 @@ Meteor.startup(function(){
             
         }
     })
-
+    
+    var starting = true;
     var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
     user_chatroom.observe({
          added: function(doc){
+            //prevent data being duplicated on server restart
+            if(!starting)
             User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,joined: true, date:Date.now()});
         },
         changed: function(doc){
@@ -65,17 +68,20 @@ Meteor.startup(function(){
     });
     GroupChat.find().observe({
         added: function(doc){
-            var user_group = User_Group.find({group:doc.groupchat}, {fields:{user:1}}).fetch()
-            var userArray = new Array();
-            user_group.forEach(function(row){
-                userArray.push(row.user);
-            });
-            var users = Meteor.users.find({_id:{$in:userArray},"profile.active_room.room":{$ne:doc.groupchat}}, {fields:{_id:1}}).fetch();
-            userArray = new Array();
-            users.forEach(function(row){
-                userArray.push(row._id);
-            });
-            User_Group.update({group:doc.groupchat, user:{$in:userArray}}, {$inc: {new_messages:1}},{multi:true});
+            //prevent data being duplicated on server restart
+            if(!starting){
+                var user_group = User_Group.find({group:doc.groupchat}, {fields:{user:1}}).fetch()
+                var userArray = new Array();
+                user_group.forEach(function(row){
+                    userArray.push(row.user);
+                });
+                var users = Meteor.users.find({_id:{$in:userArray},"profile.active_room.room":{$ne:doc.groupchat}}, {fields:{_id:1}}).fetch();
+                userArray = new Array();
+                users.forEach(function(row){
+                    userArray.push(row._id);
+                });
+                User_Group.update({group:doc.groupchat, user:{$in:userArray}}, {$inc: {new_messages:1}},{multi:true});
+            }
         }
     });
     User_Group.find().observe({
@@ -86,16 +92,43 @@ Meteor.startup(function(){
                 Groups.remove({_id:group});
                 GroupChat.remove({group:group});
             }
+        },
+        added: function(doc){
+            //prevent data being duplicated on server restart
+            if(!starting){
+                Roles.addUsersToRoles(doc.user, "group-member", doc.group);
+            }
+        },
+        changed: function(newdoc, oldDoc){
+            /*var user_groups_mods = User_group.find({group:newdoc.group, mod:true}).count();
+            if (!newdoc.mod){
+                if(user_groups_mods){
+                    User_group.update(newdoc, {$set:oldDoc});
+                }
+            }*/
         }
     })
     PrivateMessages.find().observe({
         added:function(doc){
-            PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}})
-            //PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
+            //prevent data being duplicated on server restart
+            if(!starting){
+                PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}})
+                PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
+
+            }
+                    }
+    });
+    Groups.find({}).observe({
+        added:function (doc){
+            //prevent data being duplicated on server restart
+            if(!starting){
+                console.log("adding user_group");
+                User_Group.insert({group:doc._id,user:doc.createdBy,active:true, date: Date.now()});
+                Roles.addUsersToRoles(doc.createdBy,["owner", "group-manager"], doc._id);
+            }
         }
     });
-
-
+    starting = false;
 
 
 });
