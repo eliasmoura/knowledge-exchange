@@ -13,7 +13,7 @@ Meteor.startup(function(){
 	Chatrooms.remove({});*/
 	//Accounts.config({forbidClientAccountCreation:true});
 	//console.log(Chatrooms.find().count());
-    //Kadira.connect('w7MjJY7CJSWexx5xM', '1a6f7899-23f6-45a4-9fcb-78a742ac639a');
+    Kadira.connect('w7MjJY7CJSWexx5xM', '1a6f7899-23f6-45a4-9fcb-78a742ac639a');
 	if (Chatrooms.find().count() == 0){
 		//Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
 		console.log('adding chatrooms');
