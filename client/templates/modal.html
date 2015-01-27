@@ -1,32 +1,31 @@
 <template name="modal_handler">
-	<div class="modal fade in" id="modal-handler" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content container">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="group-handler-ModalLabel"></h4>
-				</div>
-				<div class="modal-body"><!--content here-->
-					<div class="group-handler"> 
-                        <ul class="nav nav-tabs nav-justified">
-                            <li><a href="#" class="btn btn-default menu {{#if modal_handler.overview.active}}
-                            active{{/if}}" id="overview">{{mf 'overview' 'Overview'}}</a></li>
-                            <li><a href="#" class="btn btn-default managemente menu {{#if modal_handler.member_list.active}}
-                            active{{/if}}" id="member_list">{{mf 'member-list' 'Member list'}}</a></li>
-                        </ul>
-                    </div>
-                    {{#if modal_handler.group_overview.active}}
-                        overview
-                        {{> group_overview}}
-                    {{/if}}
-                    {{#if modal.member_list.active}}
-                    {{/if}}
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-                </div>
-			</div>
-		</div>
-	</div>
+<div class="ui modal" id="modal-handler">
+    <i class="close icon"></i>
+    <div class="header">
+        <h4 class="header" id="group-handler-ModalLabel">Modal Header</h4>
+    </div>
+    <div class="content"><!--content here-->
+        <div class="group-handler"> 
+            <div class="ui top attached tabular menu">
+                <a href="#" class="item {{#if modal_handler.overview.active}}
+                active{{/if}}" data-tab="overview" id="overview">{{mf 'overview' 'Overview'}}</a>
+                <a href="#" class="item {{#if modal_handler.member_list.active}}
+                active{{/if}}" data-tab="member-list" id="member_list">{{mf 'member-list' 'Member list'}}</a>
+            </div>
+        </div>
+        <div class="ui bottom attached tabular segment" data-tab="overview">
+        {{#if modal_handler.group_overview.active}}
+            {{> group_overview}}
+        {{/if}}
+        </div>
+        <div class=" ui bottom attached tabular segment" data-tab="member_list">
+        {{#if modal.member_list.active}}
+        {{/if}}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
+    </div>
+</div>
 </template>
 

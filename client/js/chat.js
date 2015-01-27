@@ -1,4 +1,4 @@
-Template.chat.rendered = function(){
+/*Template.chat.rendered = function(){
     $('body').ready(function(){
 		$("#testediv").css('height',0);
 	    $("#testediv").css('height',$('#layout').height() - $('.chat-input').height() - $('.chat-input').height() *1.1);
@@ -7,9 +7,9 @@ Template.chat.rendered = function(){
         $("#testediv").css('height',0);
         $("#testediv").css('height',$('#layout').height() - $('.chat-input').height() - $('.chat-input').height() *1.1);
     });
-}
+}*/
 Template.chatrooms_side.rendered = function(){
-	$('body').ready(function(){
+/*	$('body').ready(function(){
 		$(".sidebar").css('height',0);
 	    $(".sidebar").css('height',$('#layout').height() * 0.8);
     });
@@ -17,6 +17,9 @@ Template.chatrooms_side.rendered = function(){
         $(".sidebar").css('height',0);
         $(".sidebar").css('height',$('#layout').height() * 0.8);
     });
+*/
+    $(".dropdown").dropdown();
+    console.log($(".dropdown").attr("id"));
     // $(".sidebar").scrollable();
 }
 Template.chatrooms_side.events = {

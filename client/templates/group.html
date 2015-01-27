@@ -261,12 +261,26 @@ should show something?
     </form>
 </template>
 <template name="groupmenu" >
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    <span class="ui floating dropdown label manage-group-dropdown">
+        <div class="text" title="{{mf 'manage-group' 'Group managenment'}}">
+            <i class="left setting icon"></i>
+            <div class="center" style="">{{request.total}}</div>
+        </div>
+        <i class="right dropdown icon"></i>
+        <div class="menu">
+
         {{#if isInRole "group-manager" _id}}
-        <li role="presentation"><a role="menuitem" class="management" tabindex="-1" href="#">Management</a></li>
+        <div role="presentation" class="item"><a role="menuitem" class="management" tabindex="-1" href="#">Management</a></div>
         {{/if}}
-        <li role="presentation"><a role="menuitem" class="quitGroup" tabindex="-1" href="#">Leave group</a></li>
-    </ul>
+        <div role="presentation" class="item"><a role="menuitem" class="quitGroup" tabindex="-1" href="#">Leave group</a></div>
+        </div>
+        {{#if notification}}
+            {{notification}}
+        {{/if}}
+    </span>
+    {{#if request.total}}
+    {{/if}}
+
 </template>
 <template name="group_managenment">
 {{#each group_managenment}}

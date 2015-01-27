@@ -5,7 +5,5 @@ UI.registerHelper("modal_handler",
     }
 );
 Template.modal_handler.rendered = function(){
-    $("#modal-handler").on("hidden.bs.modal", function(){
-        
-    });
-}
+    $("#modal-handler").modal();
+};

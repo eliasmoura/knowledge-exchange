@@ -6,13 +6,23 @@ Template.search.events({
         }
         var search =  event.target.value;
         if (search.length > 0){
-            var users = Meteor.users.find({"profile.name":{$regex: search, $options: 'i' }}).fetch();
-            var groups = Groups.find({name:{ $regex: search, $options: 'i' }}).fetch();
-            Session.set("search",{users:users,groups:groups});
-            $("#search").dropdown();
-        }
+            $('.search').search({
+                    apiSettings: {
+                            url: '/search/?q={query}'
+                    },
+                    success: true,
+                    source: false,
+                    cache: true,
+                    type: "category",
+                    searchFields   : [
+                          'title'
+                    ],
+                        searchFullText: true
+                });
+            }
     }
 });
+
 Template.search.rendered = function(){
 }
 UI.registerHelper("search_results", function(){
@@ -33,3 +43,4 @@ Template.search_results.events({
         }
     }
 })
+

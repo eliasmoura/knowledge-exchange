@@ -206,7 +206,10 @@ Template.group_overview.events({
         }
 	}
 });
-
+Template.groupmenu.rendered = function(){
+    $(".manage-group-dropdown").dropdown();
+    console.log($(".manage-group-dropdown").attr("id"));
+}
 Template.group_managenment.events({
     'click a.manage-group': function(event, template){
         var toggle = $(event.target).attr("data-toggle");

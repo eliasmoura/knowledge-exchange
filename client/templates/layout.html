@@ -14,50 +14,32 @@
 </template>
 <template name="layout">
 	{{>navbar}}
-	<div class="container-fluid" id='layout'>
-		<div class="row">
-			<div class="sidebar col-xs-2   panel" role="navigation">
-				{{> yield region='sidebar'}}
-			</div>
-			<div class="panel panel-primary col-xs-10 content" id="content">
-				{{> yield }}
-			</div>
-		</div>
-		<div class="footer row">
-			<div class="col-xs-4 col-xs-offset-4">footer</div>
+	<div class="ui grid" id='layout'>
+        <div class="sidebar two wide column" role="navigation">
+            {{> yield region='sidebar'}}
+        </div>
+        <div class="fourteen wide column content" id="content">
+            {{> yield }}
+        </div>
+		<div class="ui bottom attached">
+			<div class="">footer</div>
 		</div>
 	</div>
     {{> modal_handler}}
 </template>
 
 <template name="navbar">
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-nav">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-          <a class="navbar-brand" href="{{pathFor route='home'}}">Mixed Languages</a>
-	    </div>
-
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="navbar-nav">
-	      <ul class="nav navbar-nav">
-	        <li class="{{activeHome}}"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a></li>
-			<li class="{{activeBlog}} disabled"  tile="{{mf 'under-construction' 'Under development'}}" ><a class="navigation" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a></li>
-            <li class="{{activeChat}}" ><a class="navigation" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<span class="badge">{{chat_notifications}}</span>{{/if}}</a></li>
-			<li class="{{activeNotes}} disabled" tile="{{mf 'under-construction' 'Under development'}}"  ><a class="navigation" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a></li>
-	      </ul>
-            {{>search}}
-	      <ul class="nav navbar-nav navbar-right">
-	    	<li class='dropdown '>{{> user}}</li>
-	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-    {{> user_contextmenu}}
+    <nav class="ui secondary center menu navbar" role="navigation">
+        <a class="brand item" href="{{pathFor route='home'}}">Mixed Languages</a>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <a class="navigation item {{activeHome}}" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a>
+        <a class="navigation item {{activeBlog}}" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a>
+        <a class="navigation item {{activeChat}}" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<i class="cicle icon">{{chat_notifications}}</i>{{/if}}</a>
+        <a class="navigation item {{activeNotes}}" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a>
+        {{>search}}
+        <div class="item right">
+            {{> user}}
+        </div>
+    </nav>
+        <!--{{> user_contextmenu}}-->
 </template>

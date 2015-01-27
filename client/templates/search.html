@@ -1,14 +1,12 @@
 <template name="search">
-  <form class="navbar-form navbar-left" tile="{{mf 'search-for' 'You can search for users and groups'}}" role="search">
-    <div class="form-group dropdown">
-      <input type="text" id="search" class="form-control" data-toggle="dropdown"  placeholder="Search">
-  {{#if search_results}}
-    {{> search_results}}
-  {{/if}}
+    <div class="item ui fluid category search">
+        <div class="ui icon input">
+            <input type="text" id="search" class="prompt" placeholder="Search">
+            <i class="search link icon"></i>
+        </div>
+        <div class="results"></div>
     </div>
-    <button type="submit" class="btn btn-default" >Submit</button>
-
-  </form>
+    {{> flashMessages}}
 </template>
 <template name="search_results">
     <div class="dropdown-menu" aria-labelledby="search" tabindex="-1">

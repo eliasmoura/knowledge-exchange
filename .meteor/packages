@@ -30,8 +30,9 @@ mrt:jquery-ui
 mizzao:user-status
 iron:router
 meteorhacks:kadira
-ian:bootstrap-3
 jquery
-pascoual:bootstrap-contextmenu
 
 alanning:roles
+useraccounts:semantic-ui
+mrt:flash-messages
+nooitaf:semantic-ui

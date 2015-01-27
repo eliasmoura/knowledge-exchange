@@ -1,20 +1,26 @@
 <template name="user">
     {{#if user}}
-        <a id="user" class="dropdown-toggle"  href="#" data-toggle="dropdown" >
-            <span class="glyphicon glyphicon-user {{#if user.status.online}}online{{else}}offline{{/if}}" ></span><!--id="userstatus" data-container="body" data-toggle="popover" data-placement="botton" data-html="true"></span>-->
-            {{user.profile.name}}
-            <span class="badge">{{notifications.total}}</span>
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-            <li  role="presentation" ><a class="navigation" tabindex="-1" id="profile" href="#">{{mf 'profile' 'Profile'}}</a></li>
-            <li  role="presentation" ><a class="navigation" tabindex="-1" id="email" href="#">
-                {{mf 'email' 'Email'}} <span class="badge">{{notifications.newemails}}</span></a>
-            </li>
-            <li  role="presentation" ><a class="navigation" tabindex="-1" href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></li>
-            <li class="divider"></li>
-            <li role="presentation" ><a class="navigation" tabindex="-1" href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></li>
-        </ul>
+        <div class='ui floating dropdown large button' id="user-dropdown">
+            <i class="user icon"></i>
+            <a id="user" class="text"  href="#">
+                {{user.profile.name}}
+                <span class="label">{{notifications.total}}</span>
+            </a>
+            <i class="dropdown icon"></i>
+            <div class="menu" role="menu">
+                <div class="item" role="presentation" >
+                    <a class="navigation" tabindex="-1" id="profile" href="#">{{mf 'profile' 'Profile'}}</a></div>
+                <div class="item"  role="presentation" >
+                    <a class="navigation" tabindex="-1" id="email" href="#">
+                    {{mf 'email' 'Email'}} <span class="badge">{{notifications.newemails}}</span></a>
+                </div>
+                <div class="item"  role="presentation" >
+                    <a class="navigation" tabindex="-1" href="#" id='notification'>{{mf 'notification' 'Notifications'}} <span class="badge">{{notifications.requests.total}}</span></a></div>
+                <div class="divider"></div>
+                <div class="item" role="presentation" >
+                    <a class="navigation" tabindex="-1" href="#" id="logoutButton">{{mf 'log_out' 'Log out'}}</a></div>
+            </div>
+        </div>
         {{#if first_login}}
             {{> additional_info}}
         {{/if}}
@@ -23,7 +29,7 @@
     {{/if}}
 
     {{#if notifications.requests}}
-        {{>notification}}
+    <!--{{>notification}}-->
     {{/if}}
     
     {{#if add_user}}

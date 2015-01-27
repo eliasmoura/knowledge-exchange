@@ -24,6 +24,9 @@ Template.notification.destroyed = function(){
 
 	
 }
+Template.user.rendered = function(){
+    $("#user-dropdown").dropdown();
+}
 Template.user.events({
 	'click input#signButton': function(e,t){
 		//$("div.user").css('display', 'block');
@@ -31,8 +34,8 @@ Template.user.events({
 	},
 
     'click a#user': function(event, template){
-        event.stopPropagation();
-        $('.dropdown-toggle').dropdown("toggle");
+        //event.stopPropagation();
+        //$('.dropdown-toggle').dropdown("toggle");
     },
 	'click a#logoutButton': function(){
 		console.log("logging out");
@@ -46,6 +49,11 @@ Template.user.events({
         Session.set("login", false);
 	},
 	'click #profile': function(e,t){
+        var modal_handler = {
+            user_overview:{
+                active:true,
+            }
+        };
 		Session.set("user_modal_actions",{
 			profile:true,
 			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
