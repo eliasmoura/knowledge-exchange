@@ -46,23 +46,30 @@ Meteor.publish("privatemessages",function(privatechat){
 
 
 
-Meteor.publish("user-chatroom-list", function(){
-    var user = Meteor.users.findOne({_id:this.userId});
-	var chatroom = null;
-    if(user)
-        chatroom = User_Chatroom.find({room:user.profile.active_room.room});
+Meteor.publish("user-chat-list", function(){
+    var user = Meteor.users.find({_id:this.userId});
+    var users_list =null;
+    var result = [];
+    var room = null;
+    user.observe({
+        changed:function(){
+            this.changed();
+            }
+            });
+    if(user.count()){
+        user = user.fetch()[0];
+        room = user.profile.active_room.room;
+        //users_list = User_Chatroom.find({room:room});
+        //users_list = _.map(users_list.fetch(), function(doc){return doc._id;});
+        //var user_chatroom = User_Chatroom.find({room:user.profile.active_room.room});
+        result.push(Meteor.users.find({"profile.active_room.room": room}, 
+            {fields:{_id:1, "profile.name":1, "profile.lastname":1, "profile.status":1,status:1}},
+            {sort:{"status.online":true,"profile.name":1,"profile.lastname":1}}));
 
-	var userChatroomList = new Array();
-	if (chatroom) 
-		chatroom.fetch().forEach(function(row){
-			userChatroomList.push(row.room);
-		});
-
-	var user_chatroom = User_Chatroom.find({room:user.profile.active_room.room});
-	var users =  Meteor.users.find({"profile.active_room.room":user.profile.active_room.room}, 
-        {fields:{_id:1, "profile.name":1, "profile.lastname":1, "profile.status":1,status:1}},
-        {sort:{"profile.status":["online","away","offline"],"profile.name":1,"profile.lastname":1}});
-    return [user_chatroom,users];
+    }else{
+        return Meteor.users.find({_id:this.userId});
+    }
+    return result;
 });
 
 Meteor.publish("chatrooms-list", function(){

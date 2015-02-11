@@ -9,9 +9,9 @@ var isValidPassword = function(val, field) {
 		return false;
 	}
 }
-Template.login_form.login = function(){
+/*Template.login_form.login = function(){
 	return Session.get("login");
-}
+}*/
 /*Template.userlist.userlist = function(){
 	var users = OnlineUsers.find({}).fetch();
 	var userlist = new Array();
@@ -28,11 +28,14 @@ Template.user.rendered = function(){
     $("#user-dropdown").dropdown();
 }
 Template.user.events({
-	'click input#signButton': function(e,t){
+	'click div.ui.button': function(e,t){
 		//$("div.user").css('display', 'block');
 		//$("input#signButton").css('display','none');
+        var self = this;
+        if(!Meteor.user()){
+            Session.set("modal-handler",{active:true,login:true});
+        }
 	},
-
     'click a#user': function(event, template){
         //event.stopPropagation();
         //$('.dropdown-toggle').dropdown("toggle");
@@ -52,9 +55,11 @@ Template.user.events({
         var modal_handler = {
             user_overview:{
                 active:true,
+                _id:Meteor.userId()
             }
         };
-		Session.set("user_modal_actions",{
+        Session.set("modal-handler",modal_handler);
+		/*Session.set("user_modal_actions",{
 			profile:true,
 			action: Meteor.user().profile.name + " " +Meteor.user().profile.lastname,
 			user:Meteor.user().profile,
@@ -63,15 +68,18 @@ Template.user.events({
             info:true,
             currentUser:true,
             modalActive:true
-		});
+		});*/
 	},
 	'click #email': function(e,t){
 		// console.log('emails click');
 		Session.set("emails", {sent:"active"});
+        console.log('email');
+        Session.set("modal-handler", {email:true});
 		// console.log(Session.get("emails"));
 	},
 	'click #notification': function(e, t){
-		$('#notificationModal').modal("toggle");
+		//$('#notificationModal').modal("toggle");
+        Session.set("modal-handler", {noti:true});
 		console.log('should show the notification ');
 	},
 	'click #userstatus': function(e,t){
@@ -105,22 +113,27 @@ Template.user.events({
 	}
 
 });
-
+Template.login_form.rendered = function(){
+    //$(".dropdown").dropdown();
+}
 Template.login_form.events({
-	'submit form.login-form': function(e, t){
+	'submit form.form': function(e, t){
 		e.preventDefault();
-		var email = t.find('#login_email').value;
-		var passwd = t.find('#login_passwd').value;
-		email = trimInput(email);
-        //Meteor.call("login",{email:email,passwd:passwd});
-	    Meteor.loginWithPassword(email,passwd, function(err){
-			if (err){
-				throw new Meteor.Error(111, "couldn't find your email or password!");
-				return 'error';
-			}else{
-                $(".dropdown-toggle").dropdown("toggle");
-            }
-        });	
+                var email = $('#login_email').val();
+                var passwd = $('#login_passwd').val();
+                email = trimInput(email);
+                //Meteor.call("login",{email:email,passwd:passwd});
+                Meteor.loginWithPassword(email,passwd, function(err){
+                    if (err){
+                        throw new Meteor.Error(111, "couldn't find your email or password!");
+                        return 'error';
+                    }else{
+                        $(".ui.sidebar").sidebar("setting","transition","push");
+                        $("#modal-handler").modal("hide");
+                    }
+                });
+
+		console.alert("Heyy");
         //$('#registerModal').modal("toggle");
 	},
     'click a#login': function(event, template){

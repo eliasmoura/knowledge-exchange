@@ -18,8 +18,15 @@ Template.chatrooms_side.rendered = function(){
         $(".sidebar").css('height',$('#layout').height() * 0.8);
     });
 */
-    $(".dropdown").dropdown();
-    console.log($(".dropdown").attr("id"));
+
+    if(Meteor.isCordova){
+
+    $(".ui.sidebar").sidebar("setting","transition","push");
+        $(".ui.sidebar").sidebar("hide");
+    }
+    if(!Meteor.user()){
+        $(".ui.sidebar").sidebar("hide");
+    }
     // $(".sidebar").scrollable();
 }
 Template.chatrooms_side.events = {
@@ -33,7 +40,13 @@ Template.chatrooms_side.events = {
 
         if(room){
             if (Meteor.user().profile.active_room.room != room)
-                Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"public",room:room}}}, function(error,docs){if(error)console.log(error)});
+                Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"public",room:room}}}, 
+                        function(error,docs){
+                            if(error)
+                                console.log(error)
+                            else
+                                $(".ui.sidebar").sidebar("toggle");
+                        });
         }
 	},'click a.chat-group' : function(event, template){
         var group = false;
@@ -44,7 +57,11 @@ Template.chatrooms_side.events = {
         }
 
         if(group){
-            Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"group",room:group}}}, function(error,docs){if(error)console.log(error)});
+            Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"group",room:group}}}, 
+                    function(error,docs){
+                        if(error)console.log(error)
+                        else $(".ui.sidebar").sidebar("toggle");
+                    });
         }
 		
 	},'click a.friends-contacts' : function(event, template){
@@ -58,7 +75,11 @@ Template.chatrooms_side.events = {
 
         if(friend){
             var friendroom = PrivateChat.findOne({users:{$in:[friend,Meteor.userId()]}})._id;
-            Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"privatechat",room:friendroom}}}, function(error,docs){if(error)console.log(error)});
+            Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"privatechat",room:friendroom}}}, 
+                    function(error,docs){
+                        if(error)console.log(error)
+                        else $(".ui.sidebar").sidebar("toggle");
+                        });
 
         }	
     },
@@ -73,14 +94,14 @@ Template.chatrooms_side.events = {
         group_handler.active = true;
 		Session.set("group_handler", group_handler);
 	},
-	'click a.management':function(e,t){
+	'click a.manage-group':function(e,t){
         var group_handler = Session.get("group_handler");
+        var isGroup = event.currentTarget.id;
         group_handler.active = true;
         group_handler.management.active = true;
-        group_handler.find.active = false;
         group_handler.create.active = false;
-        group_handler.management.group_id= e.target.id;
-		Session.set('group_handler', group_handler);
+        group_handler.management.group_id= isGroup;
+		Session.set('modal_handler', group_handler);
 	},
     'click a.quitGroup': function(event, template){
         var room =  $(event.target).parent().parent().parent().parent().attr("id");

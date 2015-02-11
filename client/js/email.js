@@ -47,24 +47,6 @@ function(){
 );
 
 Template.emails.rendered = function(){
-	// console.log('emails');
-	var element = Session.get("emails")
-	if (element.sent){
-			Session.set("emails", {sent:"active"});
-			$("#send-btn").addClass("hide disabled");
-		}else if (element.received){
-			Session.set("emails", {received:"active"});
-			$("#send-btn").addClass("hide disabled");
-		}else if (element.send){
-			Session.set("emails", {send:"active"});
-			$("#send-btn").removeClass("hide disabled");
-			$("#send-btn").val(mf("send",null,"Send"));
-		}
-	$('#emails-modal').modal('toggle');
-	$("#emails-modal").on('hidden.bs.modal', function(){
-		Session.set('emails', false);
-		Session.set('emailsd', false);
-	})
 }
 Template.emails.events({
 	'click a.email': function(e,t){

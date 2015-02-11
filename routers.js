@@ -1,10 +1,9 @@
 Router.configure({
 	layoutTemplate: 'layout',
-	//notFoundTemplate: 'notFound',
+	notFoundTemplate: 'notFound',
 	loadingTemplate: 'loading'
 
 });
-
 
 Router.route("/search",function(){
              var search =  this.params.query;
@@ -15,25 +14,30 @@ Router.route("/search",function(){
                 return {"title":group.name, "url":"/chat/group/:_id"+group._id}
             });
             users = _.map(users, function(user){
-                return {"title": user.profile.name + " " + user.profile.lastname, url:"/profile/:_id"+user._id};
+                return {"title": user.profile.name + " " + user.profile.lastname, url:"/userprofile/"+user._id};
             });
-            var data = {
-                "results": {
-                    "category1": {
+            var search_result = {};
+            var action = null;
+            if(users.length > 0){
+                search_result.category1 = {
                           "name": "Users",
                           "results": users
-                    },
-                    "category2": {
+                    }
+            }
+            if(groups.length){
+                search_result.category2 = {
                           "name": "Groups",
                           "results": groups
                     }
-                },
-                "action": {
+                }
+            if((groups.length + users.length) > 10){
+                action = {
                     "url": 'search/results/q='+search.q,
                     "text": "View all 202 results"
                           
                 }
-            };
+            }
+            var data = {"results": search_result,action:action};
             console.log(data);
             console.log(search);
             this.response.writeHeader(200, {'Content-Type': 'application/json'});

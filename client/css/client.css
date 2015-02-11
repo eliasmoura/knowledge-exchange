@@ -39,7 +39,9 @@ div.container#chat-messages
 .unchecked{
     color: #7E7C7C;
 }
-
+.group-name{
+    text-align:center;
+}
 /* @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.eot');

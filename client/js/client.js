@@ -157,6 +157,9 @@ Template.post.events = {
 Template.navbar.events({
     'click .navigation': function(e,t){
         //$("#navbar-nav").removeClass("in")
+    },
+    'click #side_bar': function(event, template){
+        $(".ui.sidebar").sidebar("toggle");
     }
 })
 /*
@@ -175,3 +178,19 @@ UI.registerHelper(
         return Session.get("langs");
     }
 )
+UI.registerHelper("isCordova", function(){return Meteor.isCordova;});
+Template.layout.rendered = function(){
+    console.log("layout");
+}
+Template.popup.helpers({
+    'popup': function(event, template){
+        return Session.get("popup_info");
+    }
+})
+Template.popup.rendered =  function(){
+    /*$(".pop_this").popup({
+        hovered: true,
+        popup: "content_popup"
+    });*/
+    $(".popup_this").popup({inline:true});
+}

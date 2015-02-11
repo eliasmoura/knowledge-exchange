@@ -207,7 +207,7 @@ Template.group_overview.events({
 	}
 });
 Template.groupmenu.rendered = function(){
-    $(".manage-group-dropdown").dropdown();
+    $(".manage-group-dropdown").accordion();
     console.log($(".manage-group-dropdown").attr("id"));
 }
 Template.group_managenment.events({

@@ -2,7 +2,7 @@ Router.route('home', {
     path:'/',
     template: 'home',
     yieldTemplates: {
-                    'home-side': {to: 'sidebar'}
+                    //'home-side': {to: 'sidebar'}
     },
     onBeforeAction:function(){
         if (!Meteor.user()) {
@@ -23,7 +23,7 @@ Router.route('login', {
     path:'/login',
     template: 'login_form',
     yieldTemplates: {
-                    'home-side': {to: 'sidebar'}
+                    //'home-side': {to: 'sidebar'}
     },
     onBeforeAction:function(){
         if (!Meteor.user()) {
@@ -41,20 +41,20 @@ Router.route('login', {
     data:{activeHome: "active",
           pageTitle: "Home"}
 });
-Router.route('signin', {
-    path:'/signin',
+Router.route('signup', {
+    path:'/signup',
     template: 'register_form',
     yieldTemplates: {
-                    'home-side': {to: 'sidebar'}
+                    //'home-side': {to: 'sidebar'}
     },
     onBeforeAction:function(){
         if (!Meteor.user()) {
             // render the login template but keep the url in the browser the same
-            this.render('welcome');
+            //this.render('welcome');
 
               this.next();
             // stop the rest of the before hooks and the action function 
-            this.pause();
+            //this.pause();
           }else{
           // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"home"}});
             this.redirect("/userprofile");
@@ -68,7 +68,7 @@ Router.route('userprofile', {
     template: 'user_profile',
 
     yieldTemplates: {
-                    'home-side': {to: 'sidebar'}
+                    //'home-side': {to: 'sidebar'}
     },
     fastRender: true,
     waitOn: function(){
@@ -106,7 +106,7 @@ Router.route('chatrooms', {path:'/chat',
         if(Meteor.user())
         return [
             Meteor.subscribe("chatrooms-list"),
-            Meteor.subscribe("user-chatroom-list"),
+            Meteor.subscribe("user-chat-list"),
             Meteor.subscribe("privatechat"),
             Meteor.subscribe("chat-messages", Meteor.user().profile.active_room),
             Meteor.subscribe("chat-corrections",Meteor.user().profile.active_room),
@@ -177,7 +177,7 @@ Router.route('chatrooms', {path:'/chat',
                     }else{
                         user = Meteor.users.findOne({_id:user[1]});
                     }
-                    room = {name:user.profile.name};
+                    room = {name:user.profile.name, _id:PrivateChat.findOne({_id:room.room})._id};
                 }
                 return room;
             }catch (e){
@@ -199,7 +199,10 @@ Router.route('chatrooms', {path:'/chat',
             }else if(room.type == "privatechat"){
                 userList = PrivateChat.findOne({_id:room.room}).users;
             }
-            userList = Meteor.users.find({_id:{$in:userList} }, {fields:{_id:1, status:1, "profile.name":1, "profile.lastname":1}}).fetch();
+            userList = Meteor.users.find({_id:{$in:userList} }, {fields:{_id:1, status:1, "profile.name":1, "profile.lastname":1}});
+            userList = _.map(userList.fetch(), function(doc){return {_id:doc._id,name:doc.profile.name,lastname:doc.profile.lastname,fullname:doc.profile.name + " " + doc.profile.lastname};});
+            console.log(room);
+            console.log(userList);
             return userList;
         },
         contacts: function(){
@@ -363,4 +366,3 @@ Router.route('user', {path:'/user/:_ID',
     }
 });*/
 Router.route('logo',function(){this.redirect("home");});
-

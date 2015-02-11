@@ -1,6 +1,6 @@
 Template.search.events({
     'keydown input#search':function(event,template){
-		if (event.which == 13){//enter
+        if (event.which == 13){//enter
         event.preventDefault()
         event.stopPropagation();
         }
@@ -33,6 +33,7 @@ Template.search_results.events({
         event.preventDefault();
         event.stopPropagation();
         var type = event.target.name;
+        console.log(type);
         if (type== "user"){
             Session.set("profile", event.target.id);
             Router.go("userprofile", {_id:event.target.id});
@@ -43,4 +44,3 @@ Template.search_results.events({
         }
     }
 })
-

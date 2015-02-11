@@ -1,40 +1,26 @@
 <template name="emails">
-	<div class="modal fade" id="emails-modal" tabindex="-1" role="dialog" aria-labelledby="emails-ModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="emails-ModalLabel">{{mf 'email' 'Email'}}</h4>
-				</div>
-				<div class="modal-body"><!--content here-->
-					<div clas="emails"> 
-						<!-- <form action="submit" class="group-finder" id="find-create-form"> -->
-							<ul class="nav nav-tabs nav-justified">
-								<li><a href="#" class="btn btn-default email {{email.sent}}" id="sent">{{mf 'sent' 'Sent'}}</a></li>
-								<li><a href="#" class="btn btn-default email {{email.received}}" id="received">{{mf 'received' 'Received'}}</a></li>
-								<li><a href="#" class="btn btn-default email {{email.send}}" id="send">{{mf 'send' 'Send'}}</a></li>
-							</ul>
-							<div class="">
-								{{#if email.sent}}
-									{{> sent_emails}}
-								{{/if}}
-								{{#if email.received}}
-									{{> received_emails}}
-								{{/if}}
-								{{#if email.send}}
-									{{> send_email}}
-								{{/if}}
-							</div>
-						<!-- </form> -->
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" id="close_emails" data-dismiss="modal" value="{{mf 'close'}}" />
-					<input type="button" class="btn btn-primary" id="send-btn" value="{{mf 'Send'}}" />
-				</div>
-			</div>
-		</div>
-	</div>
+    {{#with emails}}
+        <div clas="emails"> 
+            <!-- <form action="submit" class="group-finder" id="find-create-form"> -->
+            <ul class="ui top attached tabular menu">
+                <li><a href="#" class="item {{email.sent}}" id="sent">{{mf 'sent' 'Sent'}}</a></li>
+                <li><a href="#" class="item {{email.received}}" id="received">{{mf 'received' 'Received'}}</a></li>
+                <li><a href="#" class="item {{email.send}}" id="send">{{mf 'send' 'Send'}}</a></li>
+            </ul>
+            <div class="ui bottom attached tabular segment">
+                {{#if email.sent}}
+                    {{> sent_emails}}
+                {{/if}}
+                {{#if email.received}}
+                    {{> received_emails}}
+                {{/if}}
+                {{#if email.send}}
+                    {{> send_email}}
+                {{/if}}
+            </div>
+            <!-- </form> -->
+        </div>
+    {{/with}}
 </template>
 
 <template name="sent_emails">

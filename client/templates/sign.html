@@ -1,31 +1,21 @@
 <template name="login_form">
-    <a id="login" class="dropdown-toggle" href="#" data-toggle="dropdown" >
-        {{mf 'sign-in' 'Sign in'}}
-        <span class="caret"></span>
-    </a>
-    {{#if login}}
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" >
-            <li role="presentation">
-                <form class="login-form" id="login-form" action="submit">
-                    <div  tabindex="-1" class="input-group input-group-sm">
-                        <div class="input-group input-group-sm">
-                        <input type="email" id="login_email" class="form-control" placeholder="email">
-                        <input type="password" id="login_passwd" class="form-control" placeholder="password">
-                        </div>
-                        <button type="submit" id="login-submit" class="form-control btn btn-primary"> {{mf 'enter' 'Enter'}}</button>
-                    </div>
-                </form>
-            </li>
-            <li role="presentation" >
-                <a href="#"  tabindex="-1" class='navigation reset'>{{mf 'reset_password' 'Reset my password'}}</a>
-                <a href="#" tabindex="-1" class='navigation newUser'>{{mf 'create_acc' 'Create Account'}}</a>
-            </li>
-            {{#if reset_passwd}}
-                {{> reset_passwd}}
-            {{/if}}
-        </ul>
-    {{else}}
-        {{> register_form}}
+        <form class="ui form">
+            <div class="field">
+                {{mf 'email' 'Email'}}
+                <input type="email" id="login_email" class="" placeholder="email">
+            </div>
+            <div  class="field">
+                {{mf 'passwd' 'Password'}}
+                <input type="password" id="login_passwd" class="" placeholder="password">
+            </div>
+            <input type="submit" id="login-submit" class="ui button approve" value="{{mf 'enter' 'Enter'}}">
+        </form>
+    <div class="item">
+        <a href="{{pathFor 'login'}}" class='navigation reset'>{{mf 'reset_password' 'Reset my password'}}</a>
+        <a href="{{pathFor 'signup'}}" class='navigation newUser'>{{mf 'create_acc' 'Create Account'}}</a>
+    </div>
+    {{#if reset_passwd}}
+        {{> reset_passwd}}
     {{/if}}
 </template>
 
@@ -59,162 +49,133 @@
 </template>
 
 <template name="register_form">
-	<div class="modal fade row" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+	<div class="centered" id="" >
 		  <div class="modal-dialog modal-lg">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        <h4 class="modal-title" id="registerModalLabel">{{mf 'sing_up' 'Sign up'}}</h4>
-		      </div>
-		      <div class="modal-body"><!--content here-->
-		        <form id="register_form" action="">
-					<div class="input-group input-group-sm">
-						<div class="panel panel-info">
-							<div class="panel-heading">{{mf 'basic-info' 'Basic Information'}}:</div>
-							<div class="panel-body control-group">
-                                <div class="form-group control-group error">
-									<label for="name_registerform">{{mf 'name' 'Name'}}:</label>
-                                    <div class="controls">
-                                    <input required autofocus="autofocus" data-validation-required-message="{{mf 'enter-firstname' 'Enter your firstname here.'}}" type="text" class="form-control" id="name_registerform" />
-            <p class="help-block"></p>
-                                    </div>
-								</div>
-								<div class="form-group control-group error">
-									<label for="lastname_registerform">{{mf 'lname' 'Last name'}}:</label>
-                                    <div class="controls">
-									<input  required type="text" class="form-control" id="lastname_registerform" />
-            <p class="help-block"></p>
-                                    </div>
-								</div>
-								<div class="form-group controls">
-									<label for="birthday_registerform">{{mf 'birthday' 'Birthday'}}:</label>
-									<input type="date"  required class="form-control" id="birthday_registerform" />
-            <p class="help-block"></p>
-								</div>
-								<div class="form-group controls">
-            <p class="help-block"></p>
-									<label for="masculine_gender">{{mf 'masculine' 'Masculine'}}</label>
-									<input type="radio" name="gender"  required class="gender" value="Masculine" id="masculine_gender" />
-									<label for="feminine_gender">{{mf 'feminine' 'Feminine'}}</label>
-									<input type="radio" name="gender"  required class="gender" value="Feminine" id="feminine_gender"/>
-								</div>
-								<div class="form-group controls">
-									<label for="country_registerform">{{mf 'country' 'Country'}}:</label>
-									<input type="text" class="form-control"  required id="country_registerform" />
-            <p class="help-block"></p>
-								</div>
-								<div class="form-group controls">
-									<label for="city_registerform">{{mf 'city' 'City'}}:</label>
-									<input type="text" class="form-control" id="city_registerform" required  />
-            <p class="help-block"></p>
-								</div>
-								<div class="form-group controls">
-									<label for="native_registerform">{{mf 'native-lang' 'Native Language'}}: </label>
-									<select name="native_registerform" class="form-control"  id="native_registerform" required >
-										<option value="0">{{mf 'select' 'Select One'}}</option>
-										{{#each lang_list}}
-											<option value="{{this}}">{{this}}</option>
-										{{/each}}
-									</select>
-            <p class="help-block"></p>
-								</div>
-							</div>
-						</div>
-						<div class="panel panel-info">
-							<div class="panel-heading">
-								{{mf 'languages-information' 'Languages informations'}}:
-							</div>
-							<div class="panel-body">
-								<div class="form-group" id="knownlanguages">
-									<label for="knowlanguages">{{mf 'know-language' "I'm fluent in"}}: </label>
-									<span class="btn-group-xs">
-										<span id="add-more-knownlanguages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
-									</span>
-									<select name="knowlanguages" class="knownlanguage" required >
-										<option value="0">{{mf 'select' 'Select One'}}</option>
-										{{#each lang_list}}
-											<option value="{{this}}">{{this}}</option>
-										{{/each}}
-									</select>
-									<!-- {{#each lang_list}}
-											<input type="checkbox" name="llanguage" id="{{lang}}" value="{{lang}}"><label for="{{lang}}">{{lang}}</label>
-										{{/each}} -->
-								</div>
-								<div class="form-group" id="learninglanguages">
-									<label for="learn_registerform">{{mf 'learning-language' "I'm learning"}}: </label>
-									<span class="btn-group-xs">
-										<span id="add-more-languages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
-									</span>
-									<select name="learn_registerform" class="learning-language" required >
-										<option value="0">{{mf 'select' 'Select One'}}</option>
-										{{#each lang_list}}
-											<option value="{{this}}">{{this}}</option>
-										{{/each}}
-									</select>
-									<!-- {{#each lang_list}}
-											<input type="checkbox" name="llanguage" id="{{lang}}" value="{{lang}}"><label for="{{lang}}">{{lang}}</label>
-										{{/each}} -->
-								</div>
-							</div>
-						</div>
-						<div class="form-group panel panel-info">
-							<div class="panel-heading">{{mf 'interests' 'Interests'}}:</div>
-							<div class="panel-body">
-							<label for="music">{{mf 'music' 'Music'}}</label>
-							<input type="checkbox" class="" name='interests' id="music" value="Music" />
-							<label for="sports">{{mf 'sports' 'Sports'}}</label>
-							<input type="checkbox" class="" name='interests' id="sports" value="Sports" />
-							<label for="Literature">{{mf 'literature' 'Literature'}}</label>
-							<input type="checkbox" class="" name='interests' id="literature" value="Literature" />
-							<label for="video-games">{{mf 'video-games' 'Video games'}}</label>
-							<input type="checkbox" class="" name='interests' id="video-games" value="Video Games" />
-							<label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
-							<input type="checkbox" class="" name='interests' id="tv-shows" value="T.V. Shows" />
-							<label for="movies">{{mf 'movies' 'Movies'}}</label>
-							<input type="checkbox" class="" name='interests' id="movies" value="Movies" />
-							<label for="languages">{{mf 'languages' 'Languages'}}</label>
-							<input type="checkbox" class="" name='interests' id="languages" value="Languages" />
-							<label for="education">{{mf 'education' 'Education'}}</label>
-							<input type="checkbox" class="" name='interests' id="education" value="Education" />
-							<label for="teaching">{{mf 'teaching' 'Teaching'}}</label>
-							<input type="checkbox" class="" name='interests' id="teaching" value="Teaching" />
-							<label for="make-friends">{{mf 'make-friends' 'Make new friends'}}</label>
-							<input type="checkbox" class="" name='interests' id="make-friends" value="Make new friends" />
-							<label for="travel">{{mf 'travel' 'Travel abroad'}}</label>
-							<input type="checkbox" class="" name='interests' id="travel" value="Travel abroad" />
-							</div>
-						</div>
-						<div class="panel panel-info">
-							<div class="panel-heading">
-								{{mf 'login-info' 'Login information'}}:
-							</div>
-							<div class="panel-body">
-								<div class="form-group">
-									<label for="email_registerform">{{mf 'email' 'Email'}}:</label>
-									<input type="email" class="form-control" id="email_registerform" required  />
-                                </div>
-                                <div class="form-group">
-                                    <label for="emailcheck_registerform">{{mf 'check-email' 'Confirme email'}}:</label>
-                                    <input type="email" class="form-control" id="emailcheck_registerform" data-validation-matches-match="email" data-validation-matches-message="{{mf 'must-match' 'Must match email address entered above'}}"  />
-								</div>
-								<div class="form-group">
-									<label for="password_registerform">{{mf 'passwd' 'Password'}}:</label>
-									<input type="password" class="form-control" id="passwd_registerform" required  />
-								</div>
-								<div class="form-group">
-									<label for="passwdcheck_registerform">{{mf 'passwd_check' 'Password check'}}:</label>
-									<input type="password" class="form-control" id="passwdcheck_registerform" required  />
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-		    </div>
-		    <div class="modal-footer">
-		    	<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close' 'Close'}}</button>
-		        <button type="button" class="register-btn btn btn-primary" id="register-btn">{{mf 'sing_up' 'Sign up'}}</button>
-		    </div>
-		    </div>
+		    <h2 class="modal-title" id="registerModalLabel">{{mf 'sing_up' 'Signing up'}}</h2>
+            <form id="register_form" class="ui form group" action="">
+                        <h3 class="ui dividing header">{{mf 'basic-info' 'Basic Information'}}:</h3>
+                                <label for="">{{mf 'name' 'Name'}}:</label>
+                        <div class="two fields">
+                                <div class="field"><input required placeholder="name" type="text" id="name_registerform" /></div>
+                                <div class="field"><input  required placeholder="last name" type="text" id="lastname_registerform" /></div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field">
+                                <label for="birthday_registerform">{{mf 'birthday' 'Birthday'}}:</label>
+                                <input type="date"  required placeholder="DD/MM/YYYY" class="date" id="birthday_registerform" />
+                            </div>
+                            <div class="field">
+                                <label>{{mf 'gender' 'Gender'}}:</label>
+                                <select class="select" id="gender">
+                                    <option value="0">{{mf 'select' 'Select one option'}}</option>
+                                    <option value="m">{{mf 'masculine' 'Masculine'}}</option>
+                                    <option value="f">{{mf 'feminine' 'Feminine'}}</option>
+                                    <option value="o">{{mf 'other' 'Other'}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="country_registerform">{{mf 'country' 'Country'}}:</label>
+                                <input type="text" class="form-control"  required id="country_registerform" />
+                            </div>
+                            <div class="field">
+                                <label for="city_registerform">{{mf 'city' 'City'}}:</label>
+                                <input type="text" class="form-control" id="city_registerform" required  />
+                            </div>
+                        </div>
+                            <div class="field">
+                                <label for="">{{mf 'native-lang' 'Native Language'}}: </label>
+                                <select name="native_registerform" class="field"  id="native_registerform" required >
+                                    <option value="0">{{mf 'select' 'Select One'}}</option>
+                                    {{#each lang_list}}
+                                        <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        <div class="ui dividing header">
+                            {{mf 'languages-information' 'Languages informations'}}:
+                        </div>
+                        <div class="two fields">
+                            <div class="field" id="knownlanguages">
+                                <label for="knowlanguages">{{mf 'know-language' "I'm fluent in"}}: </label>
+                                <span class="btn-group-xs">
+                                    <span id="add-more-knownlanguages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
+                                </span>
+                                <select name="knowlanguages" class="knownlanguage" required >
+                                    <option value="0">{{mf 'select' 'Select One'}}</option>
+                                    {{#each lang_list}}
+                                        <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
+                                </select>
+                                <!-- {{#each lang_list}}
+                                        <input type="checkbox" name="llanguage" id="{{lang}}" value="{{lang}}"><label for="{{lang}}">{{lang}}</label>
+                                    {{/each}} -->
+                            </div>
+                            <div class="field" id="learninglanguages">
+                                <label for="learn_registerform">{{mf 'learning-language' "I'm learning"}}: </label>
+                                <span class="btn-group-xs">
+                                    <span id="add-more-languages" class="plus glyphicon glyphicon-plus btn btn-default" title="{{mf 'add-more-languages' 'Add more lnaguages'}}"></span>
+                                </span>
+                                <select name="learn_registerform" class="learning-language" required >
+                                    <option value="0">{{mf 'select' 'Select One'}}</option>
+                                    {{#each lang_list}}
+                                        <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
+                                </select>
+                                <!-- {{#each lang_list}}
+                                        <input type="checkbox" name="llanguage" id="{{lang}}" value="{{lang}}"><label for="{{lang}}">{{lang}}</label>
+                                    {{/each}} -->
+                            </div>
+                        </div>
+                        <div class="ui dividing header">{{mf 'interests' 'Interests'}}:</div>
+                    <div class="four fields">
+                        <div class="field"><label for="music">{{mf 'music' 'Music'}}</label>
+                        <input type="checkbox" class="" name='interests' id="music" value="Music" /></div>
+                        <div class="field"><label for="sports">{{mf 'sports' 'Sports'}}</label>
+                        <input type="checkbox" class="" name='interests' id="sports" value="Sports" /></div>
+                        <div class="field"><label for="Literature">{{mf 'literature' 'Literature'}}</label>
+                        <input type="checkbox" class="" name='interests' id="literature" value="Literature" /></div>
+                        <div class="field"><label for="video-games">{{mf 'video-games' 'Video games'}}</label>
+                        <input type="checkbox" class="" name='interests' id="video-games" value="Video Games" /></div>
+                        <div class="field"><label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
+                        <input type="checkbox" class="" name='interests' id="tv-shows" value="T.V. Shows" /></div>
+                        <div class="field"><label for="movies">{{mf 'movies' 'Movies'}}</label>
+                        <input type="checkbox" class="" name='interests' id="movies" value="Movies" /></div>
+                        <div class="field"><label for="languages">{{mf 'languages' 'Languages'}}</label>
+                        <input type="checkbox" class="" name='interests' id="languages" value="Languages" /></div>
+                        <div class="field"><label for="education">{{mf 'education' 'Education'}}</label>
+                        <input type="checkbox" class="" name='interests' id="education" value="Education" /></div>
+                        <div class="field"><label for="teaching">{{mf 'teaching' 'Teaching'}}</label>
+                        <input type="checkbox" class="" name='interests' id="teaching" value="Teaching" /></div>
+                        <div class="field"><label for="make-friends">{{mf 'make-friends' 'Make new friends'}}</label>
+                        <input type="checkbox" class="" name='interests' id="make-friends" value="Make new friends" /></div>
+                        <div class="field"><label for="travel">{{mf 'travel' 'Travel abroad'}}</label>
+                        <input type="checkbox" class="" name='interests' id="travel" value="Travel abroad" /></div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            {{mf 'login-info' 'Login information'}}:
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="email_registerform">{{mf 'email' 'Email'}}:</label>
+                                <input type="email" class="form-control" id="email_registerform" required  />
+                            </div>
+                            <div class="form-group">
+                                <label for="emailcheck_registerform">{{mf 'check-email' 'Confirme email'}}:</label>
+                                <input type="email" class="form-control" id="emailcheck_registerform" data-validation-matches-match="email" data-validation-matches-message="{{mf 'must-match' 'Must match email address entered above'}}"  />
+                            </div>
+                            <div class="form-group">
+                                <label for="password_registerform">{{mf 'passwd' 'Password'}}:</label>
+                                <input type="password" class="form-control" id="passwd_registerform" required  />
+                            </div>
+                            <div class="form-group">
+                                <label for="passwdcheck_registerform">{{mf 'passwd_check' 'Password check'}}:</label>
+                                <input type="password" class="form-control" id="passwdcheck_registerform" required  />
+                            </div>
+                        </div>
+                    </div>
+            </form>
+		    <button type="button" class="register-btn btn btn-primary" id="register-btn">{{mf 'sing_up' 'Sign up'}}</button>
 		  </div>
 		</div>
 </template>

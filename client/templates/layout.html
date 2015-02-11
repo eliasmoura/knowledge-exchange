@@ -13,28 +13,44 @@
 	{{pageTitle}}
 </template>
 <template name="layout">
+{{#if isCordova}}
+{{/if}}
+    <div class="pusher">
 	{{>navbar}}
 	<div class="ui grid" id='layout'>
-        <div class="sidebar two wide column" role="navigation">
-            {{> yield region='sidebar'}}
+        <div class="fourteen wide column centered ui grid content" id="content">
+            {{#if currentUser}}
+                <div class="chatroom-menu ui vertical secondary {{#if isCordova}}left fixe inverted thin sidebar{{else}}four{{/if}} wide column menu" id="content_sticky">
+
+                    {{>yield 'sidebar'}}
+                </div>
+                <div class="{{#if isCordova}}sixteen{{else}}eleven{{/if}} wide column" id="content">
+                    {{> yield }}
+                </div>
+            {{else}}
+                {{> welcome}}
+            {{/if}}
         </div>
-        <div class="fourteen wide column content" id="content">
-            {{> yield }}
-        </div>
-		<div class="ui bottom attached">
+		<div class="footer row">
 			<div class="">footer</div>
 		</div>
 	</div>
-    {{> modal_handler}}
+    {{#if modal_handler}}
+        {{> modal_handler}}
+    {{/if}}
+    </div>
 </template>
 
 <template name="navbar">
-    <nav class="ui secondary center menu navbar" role="navigation">
+    <nav class="ui center align menu navbar" role="navigation">
+        {{#if isCordova}}
+        <a class="brand item" href="#" id="side_bar" > <i class="content icon"></i></a>
+        {{else}}
         <a class="brand item" href="{{pathFor route='home'}}">Mixed Languages</a>
-        <!-- Collect the nav links, forms, and other content for toggling -->
+        {{/if}}
         <a class="navigation item {{activeHome}}" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a>
         <a class="navigation item {{activeBlog}}" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a>
-        <a class="navigation item {{activeChat}}" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<i class="cicle icon">{{chat_notifications}}</i>{{/if}}</a>
+        <a class="navigation item {{activeChat}}" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<div class="label">{{chat_notifications}}</div>{{/if}}</a>
         <a class="navigation item {{activeNotes}}" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a>
         {{>search}}
         <div class="item right">
@@ -42,4 +58,10 @@
         </div>
     </nav>
         <!--{{> user_contextmenu}}-->
+</template>
+<template name="popup">
+    <div class="ui popup" id="content_popup">
+        <h4 class="ui header">{{name}}</h4>
+        <div>{{message}}</div>
+    </div>
 </template>

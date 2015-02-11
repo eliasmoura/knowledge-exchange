@@ -263,16 +263,17 @@ should show something?
 <template name="groupmenu" >
     <span class="ui floating dropdown label manage-group-dropdown">
         <div class="text" title="{{mf 'manage-group' 'Group managenment'}}">
-            <i class="left setting icon"></i>
-            <div class="center" style="">{{request.total}}</div>
+            <i class="setting icon"></i>
+            <div class="" style="">{{request.total}}</div>
         </div>
-        <i class="right dropdown icon"></i>
-        <div class="menu">
-
-        {{#if isInRole "group-manager" _id}}
-        <div role="presentation" class="item"><a role="menuitem" class="management" tabindex="-1" href="#">Management</a></div>
-        {{/if}}
-        <div role="presentation" class="item"><a role="menuitem" class="quitGroup" tabindex="-1" href="#">Leave group</a></div>
+            <i class="dropdown icon"></i>
+        <div class="item">
+            <div class="menu">
+                {{#if isInRole "group-manager" _id}}
+                    <a class="item " id="management" href="#">Management</a>
+                {{/if}}
+                    <a class="item " id="quitGroup" href="#">Leave group</a>
+            </div>
         </div>
         {{#if notification}}
             {{notification}}

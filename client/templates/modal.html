@@ -2,9 +2,34 @@
 <div class="ui modal" id="modal-handler">
     <i class="close icon"></i>
     <div class="header">
-        <h4 class="header" id="group-handler-ModalLabel">Modal Header</h4>
+        <h4 class="header" id="group-handler-ModalLabel">{{modal_handler.modal_header}}</h4>
     </div>
     <div class="content"><!--content here-->
+        {{#if modal_handler.login}}
+            {{> login_form}}
+        {{/if}}
+        {{#if modal_handler.email}}
+            {{> emails}}
+        {{/if}}
+        {{#if modal_handler.noti}}
+            {{> notification}}
+        {{/if}}
+        {{#if modal_handler.user_overview}}
+            {{#with modal_handler.user_overview.data}}
+                {{> user_profile}}
+            {{/with}}
+        {{/if}}
+    </div>
+    <div class="actions">
+        <input type="button" class="ui button deny" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
+        {{#if modal_handler.login}}
+        <input type="button" class="ui button approve" id="crrbutton_close" data-dismiss="modal" value="{{mf 'login'}}" />
+        {{/if}}
+    </div>
+</div>
+</template>
+
+<template name="group_modal">
         <div class="group-handler"> 
             <div class="ui top attached tabular menu">
                 <a href="#" class="item {{#if modal_handler.overview.active}}
@@ -22,10 +47,5 @@
         {{#if modal.member_list.active}}
         {{/if}}
         </div>
-    </div>
-    <div class="modal-footer">
-        <input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-    </div>
-</div>
-</template>
 
+</template>

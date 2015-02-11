@@ -1,93 +1,91 @@
-<head>
-</head>
-
-<body>
-
-</body>
 <template name="chatrooms">
-    <div class="chatroon-name sixteen wide column row">
-        <h3 class="ui header">{{room.name}}</h3>
-    </div>
-    <div class="sixteen wide column row">
-        <div class="ui grid">
-            <div class="two wide column" >
-                {{> users_chatroom}}
-            </div>
-            <div class="divmessages fourteen wide column" id="chat-messages">
-                {{> chat}}
-            </div>
-        </div>
-    </div>
-    <div class="sixteen wide column">
-        <div class="ui grid">
-            <div class="two wide column">
-            </div>
-            <div class="fourteen wide column">
-                {{> chat_input}}
+        <div class="chatroon-name fourteen wide mobile four wide computer column row">
+            <div class="ui secondary menu">
+                <div class="brand item">
+                    <a class="ui header group-name">{{room.name}}</a>
+                </div>
+                <div class="item">
+                    <a href="#" class="settings" id="{{room._id}}">Settings</a>
+                </div>
+                {{#if isInRole "group-manager" room._id}}
+                <div class="item">
+                    <a href="#" id="{{room._id}}" class="manage">Manage</a>
+                </div>
+                {{/if}}
             </div>
         </div>
-    </div>
+        <div class="sixteen wide  mobile fithteen wide computer column row ui sticky to_content">
+            <div class="ui grid">
+                <div class="two wide column" >
+                    {{> users_chatroom}}
+                </div>
+                <div class="divmessages fourteen wide column" id="chat-messages">
+                    {{> chat}}
+                </div>
+            </div>
+        </div>
+        <div class="sixteen wide column">
+            <div class="ui grid">
+                <div class="two wide column">
+                </div>
+                <div class="fourteen wide column">
+                    {{> chat_input}}
+                </div>
+            </div>
+        </div>
 	{{#if correct}}
-	{{> correctiontools}}
+        {{> correctiontools}}
 	{{/if}}
 </template>
 
 
 
 <!--
-chat side menu
+chat sidebar menu
 -->
 
 <template name="chatrooms_side">
-	<div class="chatroom-menu ui left vertical visible inverted labeled icon sidebar menu">
-        <div class="item">
-            <i class="world icon"></i><a class="" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
-            <div class="menu" id="panel-rooms">
-                {{#each rooms}}
-                    <a href="#" class="item chat-room {{#if active}}active{{/if}}" id="{{_id}}" >{{name}}</a>
-                {{/each}}
-            </div>
+    <div class="item">
+        <i class="world icon"></i><a class="" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
+        <div class="menu" id="panel-rooms">
+            {{#each rooms}}
+                <a href="#" class="item chat-room {{#if active}}active{{/if}}" id="{{_id}}" >{{name}}</a>
+            {{/each}}
         </div>
-        <div class="item">
-            <i class="community icon"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
-            <span id="add-find-chat" class="plus icon" title="{{mf 'add-find-group' 'Add/Find a chat group'}}"></span>
-            <div class="menu" id="panel-groups">
-                {{#each group_rooms}}
-                    <a  href="#" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
-                        {{name}}
-                                {{> groupmenu}}
-                    </a>
-                {{/each}}
-            {{#if group_handler.active}}
-                {{> group_handler}}
-            {{/if}}
-            </div> 
-        </div>
-        <div class="item">
-            <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
-            <span id="add-find-user" class="plus icon" title="add/find a contact"></span>
-            <div class="menu" id="panel-friends">
-                {{#each contacts}}
-                    <a href="#" class="friends-contacts username item" data-toggle="context" data-target="#user_contextmenu" id="{{_id}}" >
-                        <span class="user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"> </span>
-                        {{profile.name}} 
-                        {{#if notification}}
-                        <span class="chat friends-contacts-noti label icon">{{notification}}</span> 
-                        {{/if}}
-                    </a>
-                {{/each}}
-            </div>
-        </div>
-        {{#if find_user}}
-
-        {{> user_finder_modal}}
-
+    </div>
+    <div class="item">
+        <i class="community icon"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
+        <span id="add-find-chat" class="plus icon" title="{{mf 'add-find-group' 'Add/Find a chat group'}}"></span>
+        <div class="menu" id="panel-groups">
+            {{#each group_rooms}}
+                <a  href="#" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
+                    {{name}}<button class="ui label icon button manage-group"><i class="setting icon"></i></button>
+                </a>
+            {{/each}}
+        {{#if group_handler.active}}
+            {{> group_handler}}
         {{/if}}
-	</div>
+        </div> 
+    </div>
+    <div class="item">
+        <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
+        <span id="add-find-user" class="plus icon" title="add/find a contact"></span>
+        <div class="menu" id="panel-friends">
+            {{#each contacts}}
+                <a href="#" class="friends-contacts username item" id="{{_id}}" >
+                    <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"> </i>
+                    {{profile.name}} <button class="ui label icon button"><i class="setting icon"></i></button>
+                    {{#if notification}}
+                    <span class="chat friends-contacts-noti label icon">{{notification}}</span> 
+                    {{/if}}
+                </a>
+            {{/each}}
+        </div>
+    </div>
 </template>
 <!-- chat room -->
 <template name="users_chatroom">
-    <div class="ui list">
+    <div class="ui items">
         <div class="item">
             <h4 class="ui header">{{mf 'users' 'Users'}}:</h4>
         </div>
@@ -97,7 +95,7 @@ chat side menu
                     <div class="user item" id="{{_id}}">
                         <label>
                         <i class="user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
-                        <a href="#">{{profile.name}}</a>
+                        <a href="#">{{fullname}}</a>
                         </label>
                     </div>
                 {{/each}}
@@ -110,7 +108,9 @@ chat side menu
     <div class="ui celled list">
 		{{#each messages}}
 		<li class="message item" id="{{_id}}">
-			<a class="username" href="#" id="{{userid}}">{{name}}:</a> {{message}}
+			<a class="username popup_this" href="#" id="{{userid}}">{{name}}:</a> 
+            {{> popup}}
+            {{message}}
 			{{#if corrections}}
 				<!-- {{> messagem_corrected_button}} -->
 			{{/if}}

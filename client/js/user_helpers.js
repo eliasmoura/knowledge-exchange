@@ -164,16 +164,13 @@ UI.registerHelper("knownlanguages",function(){
             return "selected";
         }
     }
-    
 });
 Template.user_profile.helpers({
-    'profile':function(){
-        var id = Session.get("profile");
-        var profile = null;
-        if(id){
-            profile = Meteor.users.findOne({_id:id});
+});
+UI.registerHelper('profile',function(user){
+        if(user){
+            profile = Meteor.users.findOne({_id:user});
         }
-        console.log(profile);
         return profile;
     }
-});
+    );
