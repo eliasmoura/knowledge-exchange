@@ -2,7 +2,7 @@ List of things the project should have.
 
 #Site
 
-##CHAT
+####CHAT
 
 * Public chat:
     - [x] enter chat room;
@@ -36,11 +36,11 @@ List of things the project should have.
     - [ ] make possible to swipe "chat messages" and "chat users list" position;
     
 
-##BLOG
+####BLOG
 
-##HOME
+####HOME
 
-##CORRECTION TOOLS
+####CORRECTION TOOLS
 - [x] select text for correction;
 - [ ] word definition;
 - [ ] expression definition;
@@ -59,7 +59,7 @@ List of things the project should have.
 	- [x] corrector;
 
 
-##General
+####General
 * Users relationship:
 	- find users;
 		- [x] by name:

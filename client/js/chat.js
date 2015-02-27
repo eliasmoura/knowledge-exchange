@@ -18,14 +18,13 @@ Template.chatrooms_side.rendered = function(){
         $(".sidebar").css('height',$('#layout').height() * 0.8);
     });
 */
-
-    if(Meteor.isCordova){
-
-    $(".ui.sidebar").sidebar("setting","transition","push");
-        $(".ui.sidebar").sidebar("hide");
+    if($("#seide_bar").css("display") != "none"){
+    console.log("display diferent none");
+        //$(".ui.sidebar").sidebar("setting","transition","push");
+        //$(".ui.sidebar").sidebar("hide");
     }
     if(!Meteor.user()){
-        $(".ui.sidebar").sidebar("hide");
+        //$(".ui.sidebar").sidebar("hide");
     }
     // $(".sidebar").scrollable();
 }
@@ -37,7 +36,6 @@ Template.chatrooms_side.events = {
         }else if ($(event.target).hasClass("chatroom-noti")){
             room = $(event.target).parent().attr("id");
         }
-
         if(room){
             if (Meteor.user().profile.active_room.room != room)
                 Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"public",room:room}}}, 

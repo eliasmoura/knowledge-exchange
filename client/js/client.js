@@ -194,3 +194,35 @@ Template.popup.rendered =  function(){
     });*/
     $(".popup_this").popup({inline:true});
 }
+Template.navbar.rendered = function(){
+    $("body").on("resize",
+    function(){
+    /*if($("#side_bar").css("display") == "none"){
+        $("#home_mixedlang").show();
+        $("#home").hide();
+    }else{
+        $("#home_mixedlang").hide();
+        $("#home").show();
+    }*/});
+}
+Template.registerHelper("menu_options", 
+    function(){
+       var css_check = $("#home_home").css("display");
+       console.log(css_check);
+        $("body").ready(function(){
+            Tracker.autorun(function(css_check){
+                console.log(css_check);
+                var options = null;
+                if ($("#home_home").css("display") == "none"){
+                    options = "four wide column";
+                    $("#side_bar").css("display", "none");
+                }else{
+                    options = "left fixe inverted thin sidebar";
+                    $("#side_bar").css("display", "inline-block");
+                }
+                Session.set("menu-options", options);
+            });
+        });
+        return Session.get("menu-options");
+    }
+);

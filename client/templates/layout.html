@@ -18,18 +18,19 @@
     <div class="pusher">
 	{{>navbar}}
 	<div class="ui grid" id='layout'>
-        <div class="fourteen wide column centered ui grid content" id="content">
-            {{#if currentUser}}
-                <div class="chatroom-menu ui vertical secondary {{#if isCordova}}left fixe inverted thin sidebar{{else}}four{{/if}} wide column menu" id="content_sticky">
-
-                    {{>yield 'sidebar'}}
-                </div>
-                <div class="{{#if isCordova}}sixteen{{else}}eleven{{/if}} wide column" id="content">
-                    {{> yield }}
-                </div>
-            {{else}}
-                {{> welcome}}
-            {{/if}}
+        <div class="fourteen wide computer sixteen tablet mobile wide column centered content" id="content">
+            <div class="ui grid">
+                {{#if currentUser}}
+                    <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
+                        {{>yield 'sidebar'}}
+                    </div>
+                    <div class="ui twelve wide tablet computer sixteen mobile wide column" id="content">
+                        {{> yield }}
+                    </div>
+                {{else}}
+                    {{> welcome}}
+                {{/if}}
+            </div>
         </div>
 		<div class="footer row">
 			<div class="">footer</div>
@@ -42,22 +43,51 @@
 </template>
 
 <template name="navbar">
-    <nav class="ui center align menu navbar" role="navigation">
-        {{#if isCordova}}
-        <a class="brand item" href="#" id="side_bar" > <i class="content icon"></i></a>
-        {{else}}
-        <a class="brand item" href="{{pathFor route='home'}}">Mixed Languages</a>
-        {{/if}}
-        <a class="navigation item {{activeHome}}" href="{{pathFor 'home'}}">{{mf 'home' 'Home'}}</a>
-        <a class="navigation item {{activeBlog}}" href="{{pathFor 'blog'}}">{{mf 'blog' 'BLOG'}}</a>
-        <a class="navigation item {{activeChat}}" href="{{pathFor 'chatrooms'}}">{{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<div class="label">{{chat_notifications}}</div>{{/if}}</a>
-        <a class="navigation item {{activeNotes}}" href="{{pathFor 'notes'}}">{{mf 'notes' 'NOTES'}}</a>
+    <nav class="ui sixteen wide grid center align menu navbar" role="navigation">
+        <a class="brand item mobile only" href="#" id="side_bar" ><i class="content icon"></i></a>
+        <a class="brand item 8 wide tablet computer {{activeHome}}" id="home_mixedlang" href="{{pathFor route='home'}}">
+            <div class="ui grid">
+                <div class="column mobile only" id="home_home">
+                    <i class="icon home"></i>
+                </div>
+                <div class="column tablet computer only">Mixed Languages</div>
+            </div>
+        </a>
+        <a class="navigation item {{activeBlog}}" href="{{pathFor 'blog'}}">
+            <div class="ui grid">
+                <div class="column mobile only">
+                    <i class="icon edit"></i>
+                </div>
+                <div class="column tablet computer only">
+                    {{mf 'blog' 'BLOG'}}
+                </div>
+            </div>
+        </a>
+        <a class="navigation item {{activeChat}}" href="{{pathFor 'chatrooms'}}">
+            <div class="ui grid">
+                <div class="column mobile only">
+                    <i class="icon chat"></i>
+                </div>
+                <div class="column tablet computer only">
+                    {{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<div class="label">{{chat_notifications}}</div>{{/if}}
+                </div>
+            </div>
+        </a>
+        <a class="navigation item {{activeNotes}}" href="{{pathFor 'notes'}}">
+            <div class="ui grid">
+                <div class="column mobile only">
+                    <i class="icon book"></i>
+                </div>
+                <div class="column tablet computer only">
+                    {{mf 'notes' 'NOTES'}}
+                </div>
+            </div>
+        </a>
         {{>search}}
         <div class="item right">
             {{> user}}
         </div>
     </nav>
-        <!--{{> user_contextmenu}}-->
 </template>
 <template name="popup">
     <div class="ui popup" id="content_popup">

@@ -16,20 +16,18 @@
         </div>
         <div class="sixteen wide  mobile fithteen wide computer column row ui sticky to_content">
             <div class="ui grid">
-                <div class="two wide column" >
+                <div class="two wide column tablet computer only">
                     {{> users_chatroom}}
                 </div>
-                <div class="divmessages fourteen wide column" id="chat-messages">
-                    {{> chat}}
-                </div>
-            </div>
-        </div>
-        <div class="sixteen wide column">
-            <div class="ui grid">
-                <div class="two wide column">
-                </div>
-                <div class="fourteen wide column">
-                    {{> chat_input}}
+                <div class="fourteen wide tablet computer sixteen wide mobile column">
+                    <div class="ui grid">
+                        <div class="divmessages sixteen wide column" id="chat-messages">
+                            {{> chat}}
+                        </div>
+                        <div class="sixteen wide column">
+                            {{> chat_input}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
