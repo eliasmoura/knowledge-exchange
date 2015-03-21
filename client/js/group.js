@@ -145,9 +145,6 @@ Template.create_group.events({
                 }
             );
             console.log("Group created");
-            /*Meteor.call('setRoom_Non_active');
-            Meteor.call('setGroup_Non_active');
-            Meteor.call('setFriend_Non_active');*/
             $('#group-handler-modal').modal('hide');
         }else{
         console.log(errors);
@@ -155,6 +152,8 @@ Template.create_group.events({
     },
 	'click #morelang': function(e, t){
 		var element = t.find('.lang');
+        e.preventDefault();
+        e.stopPropagation();
 		var langs = Session.get("langs");
         var html = '<select name="lang" id="" class="lang form-control">\
 					<option value="0">'+ mf('select',null,'Select One')+'</option>';

@@ -42,8 +42,10 @@ Template.chatrooms_side.events = {
                         function(error,docs){
                             if(error)
                                 console.log(error)
-                            else
+                            else{
+                                Session.set("group_handler", {active: false});
                                 $(".ui.sidebar").sidebar("toggle");
+                            }
                         });
         }
 	},'click a.chat-group' : function(event, template){
@@ -58,7 +60,10 @@ Template.chatrooms_side.events = {
             Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"group",room:group}}}, 
                     function(error,docs){
                         if(error)console.log(error)
-                        else $(".ui.sidebar").sidebar("toggle");
+                        else{
+                            $(".ui.sidebar").sidebar("toggle");
+                            Session.set("group_handler", {active: false});
+                        }
                     });
         }
 		
@@ -76,8 +81,11 @@ Template.chatrooms_side.events = {
             Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.active_room":{type:"privatechat",room:friendroom}}}, 
                     function(error,docs){
                         if(error)console.log(error)
-                        else $(".ui.sidebar").sidebar("toggle");
-                        });
+                        else{
+                            $(".ui.sidebar").sidebar("toggle");
+                            Session.set("group_handler", {active: false});
+                        }
+                    });
 
         }	
     },
@@ -87,7 +95,7 @@ Template.chatrooms_side.events = {
 		e.preventDefault();
 
 	},
-	'click span#add-find-chat': function(e,t){
+	'click button#add-group': function(e,t){
         var group_handler = Session.get("group_handler");
         group_handler.active = true;
 		Session.set("group_handler", group_handler);
@@ -113,7 +121,38 @@ Template.chatrooms_side.events = {
 		console.log('click find user');
 	}
 }
+Template.chatrooms.rendered = function(){
+    $(".ui.tabular.menu").tab();
+}
+Template.chatrooms.events({
+    'click #create-group-send': function(event, template){
+        $("#create_group").submit();
+    },
+    'click #create-group-cancel': function(event, template){
+        Session.set("group_handler", {active: false});
+    },
+    'click #room-manage': function(event, template){
+        var room_handler = {manage:{active:"active"}};
+        room_handler.chat = {active:false};
+        room_handler.settings = {active:false};
+        Session.set("room_handler", room_handler);
+        console.log("manage");
+    },
+    'click #room-chat': function(event, template){
+        var room_handler = {};
+        room_handler.manage = {active:false};
+        room_handler.chat = {active:"active"};
+        room_handler.settings = {active:false};
+        Session.set("room_handler", room_handler);
+        console.log(room_handler);
+    }
+})
+UI.registerHelper("room_handler",
+    function(){
 
+        return Session.get("room_handler");
+    }
+)
 
 /*
 	Chat functions
@@ -121,12 +160,8 @@ Template.chatrooms_side.events = {
 Template.chat_input.events = {
 	'keydown textarea#message' : function (event){
 		if (event.which == 13){//enter
-			//console.log(OnlineUsers.find({}));
 			var message = document.getElementById('message');
-			//var room = User_Chatroom.findOne({active:true, user:Meteor.userId()}).room;
-			//Meteor.call("send_message",message);
 			if (message.value != ''){
-				//Meteor.call("send_message", message.value);
                 var name = Meteor.user().profile.name;
                 var lstname = Meteor.user().profile.lastname;
                 var room = Meteor.user().profile.active_room;
@@ -169,7 +204,6 @@ Template.chat_input.events = {
 		}
 	}
 }
-
 Template.chat.events = {
 	'click button.correctionWraper': function(e,t){
 		//console.log('test');
@@ -191,3 +225,24 @@ Template.chat.rendered = function(){
         }
     });
 }
+Template.registerHelper("menu_options", 
+    function(){
+       var css_check = $("#home_home").css("display");
+       console.log(css_check);
+        $("body").ready(function(){
+            Tracker.autorun(function(css_check){
+                console.log(css_check);
+                var options = null;
+                if ($("#home_home").css("display") == "none"){
+                    options = "four wide column";
+                    $("#side_bar").css("display", "none");
+                }else{
+                    options = "left fixe inverted thin sidebar";
+                    $("#side_bar").css("display", "inline-block");
+                }
+                Session.set("menu-options", options);
+            });
+        });
+        return Session.get("menu-options");
+    }
+);

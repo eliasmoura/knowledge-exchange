@@ -79,17 +79,17 @@ should show something?
 </template>
 
 <template name="create_group">
-    <form class="create_group" id="create_group">
+    <form class="ui form create_group" id="create_group">
         <div class="panel panel-info control-group">
-            <div class="panel-heading">{{mf 'group-info' 'Group information'}}:</div>
-            <div class="panel-body">
+            <div class="ui dividiong header">{{mf 'group-info' 'Group information'}}:</div>
+            <div class="">
                 <label for="group-name-c">{{mf 'name'}}:<sup>*</sup></label>
                 <input type="text" name="name" required min="3" class="form-control" placeholder="Group name" id="group-name-c" />
                 <p class="help-block">{{mf 'name-3-length' 'The name should be at least 3 character'}}</p>
             <div class="info">
-                        <div class="controls" id="">
+                        <div class="one field" id="">
                             <label for="type" class="control-label">{{mf 'type' 'Type'}}:<sup>*</sup></label>
-                            <select id="type" class="form-control" required>
+                            <select id="type" class="" required>
                                 <option value="none">{{mf 'select-one' 'Select one'}} </option>
                                 <option value="open">{{mf 'open_group' 'Open group'}} </option>
                                 <option value="participation">{{mf 'part_request' 'Participation request'}}</option>
@@ -97,42 +97,60 @@ should show something?
                             </select>
                             <p class="help-block"></p>
                         </div>
-                        <div class="form-group panel panel-default controls">
-                            <div class="panel-heading control-label">{{mf 'groupgenre' 'Group genre'}}:</div>
-                            <div class="panel-body controls">
+                        <div class="">
+                            <div class="ui dividing header">{{mf 'groupgenre' 'Group genre'}}:</div>
+                            <div class="four fields">
+                                <div class="field">
                                 <label for="music">{{mf 'music' 'Music'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="music" value="Music" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="sports">{{mf 'sports' 'Sports'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="sports" value="Sports" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="Literature">{{mf 'literature' 'Literature'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="literature" value="Literature" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="video-games">{{mf 'video-games' 'Video games'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="video-games" value="Video Games" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="tv-shows" value="T.V. Shows" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="movies">{{mf 'movies' 'Movies'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="movies" value="Movies" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="languages">{{mf 'languages' 'Languages'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="languages" value="Languages" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="education">{{mf 'education' 'Education'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="education" value="Education" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="teaching">{{mf 'teaching' 'Teaching'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="teaching" value="Teaching" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="travel">{{mf 'travel' 'Travel abroad'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="travel" value="Travel abroad" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
                             </div>
                             <p class="help-block"></p>
                         </div>
-                        <div class="panel panel-default " id="alert_groupdescription">
-                            <div class="panel-heading control-label">{{mf 'description' 'Description'}}:<sup>*</sup></div>
+                            <div class="ui dividing header">{{mf 'description' 'Description'}}:<sup>*</sup></div>
                             <div class="panel-body controls">
                                 <textarea type="text" required class="form-control" rows="10" id="description" placeholder=""  > </textarea>
                                 <p class="help-block"></p>
                             </div>
-                        </div>
                         <div class="form-group panel panel-default" id="">
-                            <div class="panel-heading control-label">{{mf 'allowed_langs' 'Allowed Languages'}}:<sup>*</sup>
-                                <span class="btn btn-default btn-sm glyphicon glyphicon-plus" id="morelang"></span>
+                            <div class="ui diviging header">{{mf 'allowed_langs' 'Allowed Languages'}}:<sup>*</sup>
+                                <button class="icon button" id="morelang"><i class="icon plus"></i></button>
                             </div>
                             <div class="panel-body controls" id="alert_grouplangs">
                                 <select name="lang" id="" class="lang form-control" required >
@@ -146,7 +164,7 @@ should show something?
                     </div>
                     
                     <div id="" class="panel panel-default ">
-                        <div class="invitemembers panel-heading">{{mf 'invite-users' 'Invite users'}}:</div>
+                        <div class="ui dividing header">{{mf 'invite-users' 'Invite users'}}:</div>
                         <div class="panel-body">
                             <div>
                                 <label >{{mf 'Contacts' 'Contacts'}}:</label>
@@ -367,6 +385,5 @@ should show something?
             </div>
             {{/each}}
         </div>
-
     </div>
 </template>

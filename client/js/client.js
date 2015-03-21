@@ -5,7 +5,8 @@ Meteor.startup(function(){
         if(Meteor.user().profile.site_lang)
             Session.set('locale', Meteor.user().profile.site_lang);
         else
-            Session.set('locale', 'en_US');
+            //Session.set('locale', 'en_US');
+            mfPkg.setLocale("en_US");
         document.title = "Mixed Languages";
         var group_handler = {} ;
         group_handler.create = {data:false};
@@ -205,24 +206,4 @@ Template.navbar.rendered = function(){
         $("#home").show();
     }*/});
 }
-Template.registerHelper("menu_options", 
-    function(){
-       var css_check = $("#home_home").css("display");
-       console.log(css_check);
-        $("body").ready(function(){
-            Tracker.autorun(function(css_check){
-                console.log(css_check);
-                var options = null;
-                if ($("#home_home").css("display") == "none"){
-                    options = "four wide column";
-                    $("#side_bar").css("display", "none");
-                }else{
-                    options = "left fixe inverted thin sidebar";
-                    $("#side_bar").css("display", "inline-block");
-                }
-                Session.set("menu-options", options);
-            });
-        });
-        return Session.get("menu-options");
-    }
-);
+

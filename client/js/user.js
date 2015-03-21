@@ -151,7 +151,7 @@ Template.login_form.events({
 });
 
 Template.register_form.rendered = function(){
-	$('#registerModal').modal("show");
+    /*$('#registerModal').modal("show");
     $("#registermodal").on("shown.bs.modal", function(){
         $('#name_registerform').focus();
         $(this.find("#name_registerform")).attr("autofocus", "autofocus");
@@ -161,6 +161,7 @@ Template.register_form.rendered = function(){
             //Session.set("first-login", true);
 	});
         //$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+        //*/
 }
 
 Template.register_form.destroyed = function(){
@@ -174,6 +175,9 @@ Template.register_form.events({
 		
 		$("#register_form").submit();
 	},
+    'focus input': function(event,template){
+        event.preventDefault();
+    },
 	'submit #register_form':function(e,t){
 		e.preventDefault();
 		var name = t.find('#name_registerform').value;
@@ -299,7 +303,7 @@ Template.register_form.events({
 		var langs = Session.get("langs");
         var element = t.find('#learninglanguages');
         var html = '<select name="lang" id="" class="learninglanguage">\
-        						<option value="0">'+ mf('select',null,'Select One')+'</option>';
+        						<option value="0">'+ mf('select-one',null,'Select One')+'</option>';
 		for (var i = 0; i < langs.length; i++) {
 			html = html + '<option value="'+langs[i]+'">'+langs[i]+'</option>';
 		}
@@ -310,7 +314,7 @@ Template.register_form.events({
 		var langs = Session.get("langs");
         var element = t.find('#knownlanguages');
         var html = '<select name="lang" id="" class="knownlanguage">\
-        						<option value="0">'+ mf('select',null,'Select One')+'</option>';
+        						<option value="0">'+ mf('select-one',null,'Select One')+'</option>';
 		for (var i = 0; i < langs.length; i++) {
 			html = html + '<option value="'+langs[i]+'">'+langs[i]+'</option>';
 		}

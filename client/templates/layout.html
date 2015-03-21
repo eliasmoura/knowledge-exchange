@@ -6,7 +6,6 @@
 </head>
 
 <body>
-	
 
 </body>
 <template name="title">
@@ -18,21 +17,12 @@
     <div class="pusher">
 	{{>navbar}}
 	<div class="ui grid" id='layout'>
-        <div class="fourteen wide computer sixteen tablet mobile wide column centered content" id="content">
+        <div class="fourteen wide computer sixteen tablet mobile wide column centered" id="content">
             <div class="ui grid">
-                {{#if currentUser}}
-                    <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
-                        {{>yield 'sidebar'}}
-                    </div>
-                    <div class="ui twelve wide tablet computer sixteen mobile wide column" id="content">
-                        {{> yield }}
-                    </div>
-                {{else}}
-                    {{> welcome}}
-                {{/if}}
+                {{> yield }}
             </div>
         </div>
-		<div class="footer row">
+		<div class="ui footer grid">
 			<div class="">footer</div>
 		</div>
 	</div>
@@ -44,7 +34,7 @@
 
 <template name="navbar">
     <nav class="ui sixteen wide grid center align menu navbar" role="navigation">
-        <a class="brand item mobile only" href="#" id="side_bar" ><i class="content icon"></i></a>
+        <a class="ui item mobile only column" href="#" id="side_bar" ><div class="ui grid"><i class="column content icon"></i></div></a>
         <a class="brand item 8 wide tablet computer {{activeHome}}" id="home_mixedlang" href="{{pathFor route='home'}}">
             <div class="ui grid">
                 <div class="column mobile only" id="home_home">

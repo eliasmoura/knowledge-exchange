@@ -38,11 +38,12 @@ Router.route('login', {
             this.redirect("userprofile", {_id:Meteor.userId()});
           }
     },
-    data:{activeHome: "active",
+    data:{//activeHome: "active",
           pageTitle: "Home"}
 });
-Router.route('signup', {
+Router.route('/signup', {
     path:'/signup',
+    name:'signup',
     template: 'register_form',
     yieldTemplates: {
                     //'home-side': {to: 'sidebar'}
@@ -60,7 +61,7 @@ Router.route('signup', {
             this.redirect("/userprofile");
           }
     },
-    data:{activeHome: "active",
+    data:{//activeHome: "active",
           pageTitle: "Home"}
 });
 Router.route('userprofile', {

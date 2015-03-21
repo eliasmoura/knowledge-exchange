@@ -1,47 +1,61 @@
 <template name="chatrooms">
-        <div class="chatroon-name fourteen wide mobile four wide computer column row">
-            <div class="ui secondary menu">
-                <div class="brand item">
-                    <a class="ui header group-name">{{room.name}}</a>
-                </div>
-                <div class="item">
-                    <a href="#" class="settings" id="{{room._id}}">Settings</a>
-                </div>
-                {{#if isInRole "group-manager" room._id}}
-                <div class="item">
-                    <a href="#" id="{{room._id}}" class="manage">Manage</a>
-                </div>
-                {{/if}}
+    <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
+        {{>yield 'sidebar'}}
+    </div>
+    <div class="ui twelve wide tablet computer sixteen mobile wide column" id="content">
+        {{#if group_handler.active}}
+            {{> create_group}}
+            <button class="ui button" id="create-group-send" >{{mf 'create' 'Create'}}</button>
+                <button class="ui button" id="create-group-cancel" >{{mf 'cancel' 'Cancel'}}</button>
+        {{else}}
+        <div class="sixteen wide  mobile fithteen wide computer column row">
+            <div class="ui top attached tabular menu">
+                <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
+                        <a class="ui group-name">{{room.name}}</a>
+                    </div>
+                    <div class="{{room_handler.settings.active}} item" id="room-settings" data-tab="chat-settings">
+                        <a href="#" class="settings" id="{{room._id}}">Settings</a>
+                    </div>
+                    {{#if isInRole "group-manager" room._id}}
+                    <div class="{{room_handler.manage.active}} item" id="room-manage" data-tab="chat-manage">
+                        <a href="#" id="{{room._id}}" class="manage">Manage</a>
+                    </div>
+                    {{/if}}
             </div>
-        </div>
-        <div class="sixteen wide  mobile fithteen wide computer column row ui sticky to_content">
-            <div class="ui grid">
-                <div class="two wide column tablet computer only">
-                    {{> users_chatroom}}
-                </div>
-                <div class="fourteen wide tablet computer sixteen wide mobile column">
-                    <div class="ui grid">
-                        <div class="divmessages sixteen wide column" id="chat-messages">
-                            {{> chat}}
-                        </div>
-                        <div class="sixteen wide column">
-                            {{> chat_input}}
+            <div class="ui bottom attached {{room_handler.chat.active}} tab segment" data-tab="chat-content">
+                <div class="ui grid">
+                    <div class="two wide column tablet computer only">
+                        {{> users_chatroom}}
+                    </div>
+                    <div class="fourteen wide tablet computer sixteen wide mobile column">
+                        <div class="ui grid">
+                            <div class="divmessages sixteen wide column" id="chat-messages">
+                                {{> chat}}
+                            </div>
+                            <div class="sixteen wide column">
+                                {{> chat_input}}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="ui bottom attached {{room_handler.manage.active}} tab segment" data-tab="chat-manage">
+                {{> group_managenment}}
+            </div>
+            <div class="ui bottom attached {{room_handler.settings.active}} tab segment" data-tab="chat-settings">
+            </div>
         </div>
+        {{/if}}
+    </div>
 	{{#if correct}}
         {{> correctiontools}}
 	{{/if}}
 </template>
 
 
-
 <!--
 chat sidebar menu
 -->
-
 <template name="chatrooms_side">
     <div class="item">
         <i class="world icon"></i><a class="" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
@@ -52,18 +66,17 @@ chat sidebar menu
         </div>
     </div>
     <div class="item">
-        <i class="community icon"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
-        <span id="add-find-chat" class="plus icon" title="{{mf 'add-find-group' 'Add/Find a chat group'}}"></span>
+        <i class="icon comunity"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
+        <button id="add-group" class="ui icon button label">
+            <i class="icon plus" title="{{mf 'add-find-group' 'Create a chat group'}}"></i>
+        </button>
         <div class="menu" id="panel-groups">
             {{#each group_rooms}}
                 <a  href="#" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
                     {{name}}<button class="ui label icon button manage-group"><i class="setting icon"></i></button>
                 </a>
             {{/each}}
-        {{#if group_handler.active}}
-            {{> group_handler}}
-        {{/if}}
-        </div> 
+        </div>
     </div>
     <div class="item">
         <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
@@ -71,10 +84,10 @@ chat sidebar menu
         <div class="menu" id="panel-friends">
             {{#each contacts}}
                 <a href="#" class="friends-contacts username item" id="{{_id}}" >
-                    <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"> </i>
+                    <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
                     {{profile.name}} <button class="ui label icon button"><i class="setting icon"></i></button>
                     {{#if notification}}
-                    <span class="chat friends-contacts-noti label icon">{{notification}}</span> 
+                    <span class="chat friends-contacts-noti label icon">{{notification}}</span>
                     {{/if}}
                 </a>
             {{/each}}
@@ -132,11 +145,6 @@ chat sidebar menu
 </div>
 </template>
 
-
-
-
-
-
 <!-- tools -->
 <template name="correctiontools">
 	<div class="modal fade row" id="correctionModal" tabindex="-1" role="dialog" aria-labelledby="correctionModalLabel" aria-hidden="true">
@@ -154,7 +162,6 @@ chat sidebar menu
 							<div class="source" id="{{sourceid}} " row="4">{{source.text}}</div>
 						</div>
 						</div>
-
 						<div class="panel-default panel ">
 							<ul class="nav nav-pills row">
 								<li class="{{activeop1}}"><a href="#">op1</a></li>
@@ -201,30 +208,7 @@ chat sidebar menu
 <template name="translationtools">
 
 </template>
-<!--
-_id
-	"A2EggWM4y9LQKPba6"
-	
-profile
-	Object { name="elias", lastname="moura"}
 
-_id
-	"ddxhhoTQsH9LuafHn"
-	
-emails
-	[Object { address="jao@j.com", verified=false}]
-	
-profile
-	Object { name="jão", lastname="j"}
-
-
-_id
-	"gSNy5oSE34D5fathm"
-	
-profile
-	Object { name="mmm", lastname="nnn"}
-
--->
 <template name="public_room_finder">
 	<div class="modal fade" id="public-room-finder-modal" tabindex="-1" role="dialog" aria-labelledby="public-room-finder-ModalLabel" aria-hidden="true">
 		<div class="modal-dialog">

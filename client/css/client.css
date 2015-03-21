@@ -5,12 +5,12 @@
     overflow-x: hidden;
     resize: none;
 } */
-
-html, body {height: 100%;}
+/*html, body {height: 100%;}
+/*
 
 div.container#chat-messages
 {
-    /*height:500px;*/
+    height:500px;
 }
 .container-fluid, .divchat, #content
 {
@@ -42,6 +42,7 @@ div.container#chat-messages
 .group-name{
     text-align:center;
 }
+*/
 /* @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.eot');
@@ -126,106 +127,3 @@ div.chatroon-name{
 }
  */
 
-.context-menu-list {
-    background: none repeat scroll 0 0 #EEEEEE;
-    /*border: 1px solid #DDDDDD;*/
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    display: block;
-    font-family: Verdana,Arial,Helvetica,sans-serif, #000000;
-    color: #000000;
-    font-size: 11px;
-    list-style-type: none;
-    margin: 0;
-    max-width: 250px;
-    min-width: 120px;
-    padding: 0;
-    position: absolute;
-}
-.context-menu-item {
-    -moz-user-select: none;
-    /*background-color: #EEEEEE;*/
-    display: block;
-    padding: 2px 2px 2px 24px;
-    position: relative;
-    min-width: 100px;
-}
-.context-menu-separator {
-    /*border-bottom: 1px solid #DDDDDD;*/
-    padding-bottom: 0;
-}
-.context-menu-item > label > input, .context-menu-item > label > textarea {
-    -moz-user-select: text;
-}
-.context-menu-item.hover {
-    /*background-color: #3399FF;*/
-    cursor: pointer;
-}
-.context-menu-item.disabled {
-    /*color: #666666;*/
-}
-.context-menu-input.hover, .context-menu-item.disabled.hover {
-    /*background-color: #EEEEEE;*/
-    cursor: default;
-}
-.context-menu-submenu:after {
-    /*color: #666666;*/
-    content: ">";
-    position: absolute;
-    right: 3px;
-    top: 0;
-    z-index: 1;
-}
-.context-menu-item.icon {
-    background-position: 4px 2px;
-    background-repeat: no-repeat;
-    min-height: 16px;
-}
-.context-menu-item.icon-edit {
-    background-image: url("../public/img/layout/Addressbook-Contacts-icon16.png");
-}
-.context-menu-item.icon-cut {
-    background-image: url("images/cut.png");
-}
-.context-menu-item.icon-copy {
-    background-image: url("images/page_white_copy.png");
-}
-.context-menu-item.icon-paste {
-    background-image: url("images/page_white_paste.png");
-}
-.context-menu-item.icon-delete {
-    background-image: url("images/page_white_delete.png");
-}
-.context-menu-item.icon-add {
-    background-image: url("images/page_white_add.png");
-}
-.context-menu-item.icon-quit {
-    background-image: url("images/door.png");
-}
-.context-menu-input > label > * {
-    vertical-align: top;
-}
-.context-menu-input > label > input[type="checkbox"], .context-menu-input > label > input[type="radio"] {
-    margin-left: -17px;
-}
-.context-menu-input > label > span {
-    margin-left: 5px;
-}
-.context-menu-input > label, .context-menu-input > label > input[type="text"], .context-menu-input > label > textarea, .context-menu-input > label > select {
-    -moz-box-sizing: border-box;
-    display: block;
-    width: 100%;
-}
-.context-menu-input > label > textarea {
-    height: 100px;
-}
-.context-menu-item > .context-menu-list {
-    display: none;
-    right: -5px;
-    top: 5px;
-}
-.context-menu-item.hover > .context-menu-list {
-    display: block;
-}
-.context-menu-accesskey {
-    text-decoration: underline;
-}

@@ -4,7 +4,6 @@
 # but you can also edit it by hand.
 
 insecure
-accounts-ui
 accounts-google
 accounts-password
 accounts-base
@@ -12,18 +11,13 @@ meteorhacks:fast-render@1.0.0
 meteor
 webapp
 logging
-deps
 session
-livedata
-mongo-livedata
-ui
 spacebars
 templating
 check
 underscore
 random
 ejson
-standard-app-packages
 email
 gadicohen:messageformat
 mrt:jquery-ui
@@ -33,6 +27,10 @@ meteorhacks:kadira
 jquery
 
 alanning:roles
-useraccounts:semantic-ui
 mrt:flash-messages
-nooitaf:semantic-ui
+semantic:ui-css
+blaze
+meteor-platform
+mongo
+ddp
+tracker
