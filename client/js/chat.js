@@ -19,7 +19,6 @@ Template.chatrooms_side.rendered = function(){
     });
 */
     if($("#seide_bar").css("display") != "none"){
-    console.log("display diferent none");
         //$(".ui.sidebar").sidebar("setting","transition","push");
         //$(".ui.sidebar").sidebar("hide");
     }
@@ -31,7 +30,10 @@ Template.chatrooms_side.rendered = function(){
 Template.chatrooms_side.events = {
 	'click a.chat-room' : function(event, template){
 		var room = false;
-        if ($(event.target).hasClass("chat-room")){
+        var group_handler = {active: false};
+		Session.set("group_handler", group_handler);
+
+        /*if ($(event.target).hasClass("chat-room")){
             room = event.target.id;
         }else if ($(event.target).hasClass("chatroom-noti")){
             room = $(event.target).parent().attr("id");
@@ -47,10 +49,12 @@ Template.chatrooms_side.events = {
                                 $(".ui.sidebar").sidebar("toggle");
                             }
                         });
-        }
+        }*/
 	},'click a.chat-group' : function(event, template){
         var group = false;
-        if ($(event.target).hasClass("chat-group")){
+        var group_handler = {active: false};
+		Session.set("group_handler", group_handler);
+        /*if ($(event.target).hasClass("chat-group")){
             group = event.target.id;
         }else if ($(event.target).hasClass("chatgroup-noti")){
             group = $(event.target).parent().attr("id");
@@ -65,7 +69,7 @@ Template.chatrooms_side.events = {
                             Session.set("group_handler", {active: false});
                         }
                     });
-        }
+        }*/
 		
 	},'click a.friends-contacts' : function(event, template){
 		var friend = false;
@@ -96,9 +100,9 @@ Template.chatrooms_side.events = {
 
 	},
 	'click button#add-group': function(e,t){
-        var group_handler = Session.get("group_handler");
-        group_handler.active = true;
+        var group_handler = {active: true};
 		Session.set("group_handler", group_handler);
+        Router.go("/chat");
 	},
 	'click a.manage-group':function(e,t){
         var group_handler = Session.get("group_handler");
@@ -112,8 +116,8 @@ Template.chatrooms_side.events = {
     'click a.quitGroup': function(event, template){
         var room =  $(event.target).parent().parent().parent().parent().attr("id");
         console.log(room);
-        var user_group = User_Group.findOne({group:room, user: Meteor.userId()})._id;
-        User_Group.remove({_id:user_group});
+        var user_group = User_Room.findOne({group:room, type: "group",user: Meteor.userId()})._id;
+        User_Room.remove({_id:user_group});
         console.log("quit");
     },
 	'click span#add-find-user': function(e,t){
@@ -135,16 +139,32 @@ Template.chatrooms.events({
         var room_handler = {manage:{active:"active"}};
         room_handler.chat = {active:false};
         room_handler.settings = {active:false};
+        room_handler.overview = {active:false};
         Session.set("room_handler", room_handler);
-        console.log("manage");
     },
     'click #room-chat': function(event, template){
         var room_handler = {};
         room_handler.manage = {active:false};
         room_handler.chat = {active:"active"};
         room_handler.settings = {active:false};
+        room_handler.overview = {active:false};
         Session.set("room_handler", room_handler);
-        console.log(room_handler);
+    },
+    'click #room-settings': function(event, template){
+        var room_handler = {};
+        room_handler.manage = {active:false};
+        room_handler.chat = {active:false};
+        room_handler.settings = {active:"active"};
+        room_handler.overview = {active:false};
+        Session.set("room_handler", room_handler);
+    },
+    'click #room-overview': function(event, template){
+        var room_handler = {};
+        room_handler.manage = {active:false};
+        room_handler.chat = {active:false};
+        room_handler.settings = {active:false};
+        room_handler.overview = {active:"active"};
+        Session.set("room_handler", room_handler);
     }
 })
 UI.registerHelper("room_handler",
@@ -164,40 +184,16 @@ Template.chat_input.events = {
 			if (message.value != ''){
                 var name = Meteor.user().profile.name;
                 var lstname = Meteor.user().profile.lastname;
-                var room = Meteor.user().profile.active_room;
                 var userid = Meteor.userId();
-
-                if (room.type == "public"){
-                    Messages.insert({
-                            name: name,
-                            lstname: lstname,
-                            userid: userid,
-                            message: message.value,
-                            room:room.room,
-                            time: Date.now(),
-                        });
-                }
-                else if (room.type == "group" ){
-                    GroupChat.insert({
-                            name: name,
-                            lstname: lstname,
-                            userid: userid,
-                            message: message.value,
-                            groupchat:room.room,
-                            time: Date.now(),
-                        });
-                }	
-                else if (room.type == "privatechat"){
-                    PrivateMessages.insert({
-                            name: name,
-                            lstname: lstname,
-                            userid: userid,
-                            message: message.value,
-                            chat:room.room,
-                            time: Date.now(),
-                        });
-                    
-                }
+                Messages.insert({
+                        name: name,
+                        lstname: lstname,
+                        owner: userid,
+                        message: message.value,
+                        room:Session.get("roomid"),
+                        type: Session.get("roomtype"),
+                        time: Date.now(),
+                    });
 				document.getElementById('message').value = null;
 				//message.value = '';
 			}
@@ -215,23 +211,13 @@ Template.chat.events = {
 	}
 }
 Template.chat.rendered = function(){
-	document.title = "Chat - My site";
-    $("#user_contextmenu").contextmenu({
-        before: function(e, element, target){
-        console.log("before");
-        },
-        onItem: function(context, e){
-            console.log("clicked");
-        }
-    });
+
 }
 Template.registerHelper("menu_options", 
     function(){
        var css_check = $("#home_home").css("display");
-       console.log(css_check);
         $("body").ready(function(){
             Tracker.autorun(function(css_check){
-                console.log(css_check);
                 var options = null;
                 if ($("#home_home").css("display") == "none"){
                     options = "four wide column";

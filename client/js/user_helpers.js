@@ -173,4 +173,9 @@ UI.registerHelper('profile',function(user){
         }
         return profile;
     }
-    );
+);
+UI.registerHelper('userinfo_popup', 
+    function(user_id){
+        return Meteor.users.findOne({_id:user_id});
+    }
+);

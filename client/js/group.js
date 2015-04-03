@@ -134,14 +134,14 @@ Template.create_group.events({
                     languages:group.languages,
                     focus:group.group_focus,
                     type:group.group_type,
-                    createdBy:Meteor.userId()
+                    owner:Meteor.userId()
                 }, function(error, result){
                     if(!error){
                         for (var i = 0; i< members.length; i++) {
                             //group_invite_request({group:result,user:member[i],message:message});
                             GroupRequest.insert({user:member[i],message:message,type:2,group:result});
                         }
-                    }
+                    }else console.log(error);
                 }
             );
             console.log("Group created");
@@ -174,10 +174,7 @@ Template.create_group.langs = function(){
 Template.create_group.rendered = function(){
 
 }
-Template.group_overview.rendered = function(){
-    //console.log("group overview rendered");
-}
-Template.group_overview.events({
+Template.room_overview.events({
 	'submit form#find_group': function(event,template){
 		event.preventDefault();
         var groupname = template.find('#group-name-f').value;
@@ -208,6 +205,10 @@ Template.group_overview.events({
 Template.groupmenu.rendered = function(){
     $(".manage-group-dropdown").accordion();
     console.log($(".manage-group-dropdown").attr("id"));
+}
+Template.managenment_usersgroup.rendered = function(){
+
+    $(".ui.accordion").accordion();
 }
 Template.group_managenment.events({
     'click a.manage-group': function(event, template){

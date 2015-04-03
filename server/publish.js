@@ -46,29 +46,19 @@ Meteor.publish("privatemessages",function(privatechat){
 
 
 
-Meteor.publish("user-chat-list", function(){
-    var user = Meteor.users.find({_id:this.userId});
+Meteor.publish("user-chat-list", function(active_room){
     var users_list =null;
     var result = [];
-    var room = null;
-    user.observe({
-        changed:function(){
-            this.changed();
-            }
-            });
-    if(user.count()){
-        user = user.fetch()[0];
-        room = user.profile.active_room.room;
-        //users_list = User_Chatroom.find({room:room});
-        //users_list = _.map(users_list.fetch(), function(doc){return doc._id;});
-        //var user_chatroom = User_Chatroom.find({room:user.profile.active_room.room});
-        result.push(Meteor.users.find({"profile.active_room.room": room}, 
-            {fields:{_id:1, "profile.name":1, "profile.lastname":1, "profile.status":1,status:1}},
-            {sort:{"status.online":true,"profile.name":1,"profile.lastname":1}}));
-
-    }else{
-        return Meteor.users.find({_id:this.userId});
-    }
+    var room = active_room.room;
+    //users_list = User_Chatroom.find({room:room});
+    //users_list = _.map(users_list.fetch(), function(doc){return doc._id;});
+    //var user_chatroom = User_Chatroom.find({room:user.profile.active_room.room});
+    User_Room.find({room: room}).forEach(function(row){
+        result.push(row.user);
+    });
+    result = Meteor.users.find({_id:{$in: result}}, 
+        {fields:{_id:1, "profile.name":1, "profile.lastname":1, "profile.status":1,status:1}},
+        {sort:{"status.online":true,"profile.name":1,"profile.lastname":1}});
     return result;
 });
 
@@ -77,49 +67,32 @@ Meteor.publish("chatrooms-list", function(){
 	return Chatrooms.find({});
 });
 
-Meteor.publish("chat-messages", function(active_room){
-	// console.log(active_room);
-	var isso = active_room.type;
-    var messages = null;
-	if(active_room.type == "none"){
-		console.log('no room active');
-		return Messages.find({room:null}, {sort: {time: +1}})
-	}
-    if(active_room.type == "public"){
-		messages =  Messages.find({room:active_room.room}, {sort: {time: +1}});
-    }
-    if(active_room.type == "group"){
-		messages = GroupChat.find({groupchat:active_room.room}, {sort: {time: +1}});
-    }
-    if(active_room.type == "privatechat"){
-		messages = PrivateMessages.find({chat:active_room.room}, {sort: {time: +1}});
-    } return messages;
-}); 
-Meteor.publish("rooms-users-list", function(room){
-    var room = Meteor.users.findOne({_id:this.userId}).profile.active_room;
-    Meteor.users.find({_id:this.userId})
+Meteor.publish("messages", function(room){
+     return Messages.find({room:room}, {sort: {time: +1}});
+});
+
+Meteor.publish("group-messages", function(room){
+    return GroupChat.find({groupchat:room}, {sort: {time: +1}});
+});
+
+Meteor.publish("private-messages", function(room){
+    return PrivateMessages.find({chat:room}, {sort: {time: +1}});
+});
+
+Meteor.publish("users-room", function(room){
     var userList = new Array();
     var roomUsers = null;
-    if(room.type == "public"){
-        roomUsers = User_Chatroom.find({room:room.room});
-        User_Chatroom.find({room:room.type}).fetch().forEach(function(row){
-            userList.push(row.user);
-        });
-    }else
-    if(room.type == "group"){
-        roomUsers = User_Group.find({group:room.room});
-        User_Group.find({group:room.room}).fetch().forEach(function(row){
-            userList.push(row.user);
-        });
-    }else
-    if(room.type == "privatechat"){
-        roomUsers = PrivateChat.find({_id:room.room});
-        userList.push(roomUsers.fetch().contact);
-        userList.push(this.userId);
-    }
+    if(room.room == "none"){
+        return Chatrooms.find({});
+        }
+    roomUsers = User_Room.find({room:room.room, type:room.type});
+    User_Room.find({room:room.room}).fetch().forEach(function(row){
+        userList.push(row.user);
+    });
     userList = Meteor.users.find({_id:{$in: userList}},
         {fields:{_id:1, "prodile.name":1, "profile.lastname":1, "profile.status":1,status:1}},
-        {sort:{"profile.status":["online","away","offline"],"profile.name":1,"profile.lastname":1}});
+        {sort:{"profile.status":["online","away","offline"],"profile.name":1,"profile.lastname":1}}
+    );
     return [userList, roomUsers];
 });
 
@@ -152,20 +125,20 @@ Meteor.publish("groups-mods", function(){
      **/
     var user_groupArray = new Array();
     var list_userGroup = new Array();
-    User_Group.find({mod:true,user:this.userId}).fetch().forEach(function(row){
-        User_Group.find({group:row.group}).fetch().forEach(function(group){
+    User_Room.find({mod:true,user:this.userId}).fetch().forEach(function(row){
+        User_Room.find({group:row.group}).fetch().forEach(function(group){
             list_userGroup.push(group.user);
         });
         user_groupArray.push(row.group);
     })
     var users = Meteor.users.find({_id:{$in:list_userGroup}}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, status:1}});
-    var users_groups = User_Group.find({group:{$in:user_groupArray}});
+    var users_groups = User_Room.find({group:{$in:user_groupArray}});
 	return [users, users_groups];
 });
 
 Meteor.publish("user-groups", function(){
 
-	return User_Group.find({user: this.userId});
+	return User_Room.find({user: this.userId});
 })
 
 Meteor.publish("group-chat", function(group){

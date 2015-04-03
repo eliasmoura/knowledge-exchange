@@ -12,7 +12,7 @@ var requestHandler = function (args){
         console.log('group invite');
         var request = GroupRequest.findOne({_id:args.request});
         if(args.action == 1)
-            User_Group.insert({group:request.group,user:request.user,active:false}, 
+            User_Room.insert({group:request.group,user:request.user,active:false}, 
                 function(error, result){
                     console.log(error);
                     if(!error){
@@ -136,7 +136,7 @@ UI.registerHelper("chat_notifications",
     		privatenotificationsArray[row.contact] = row.new_messages;
     	});
     	console.log(privatenotificationsArray);*/
-    	var user_groups = User_Group.find({user: Meteor.userId()}).fetch();
+    	var user_groups = User_Room.find({user: Meteor.userId()}).fetch();
 		// console.log(user_groups);
 		var groupsArray = 0;
 		// var groups = new Array();

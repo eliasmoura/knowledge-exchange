@@ -117,30 +117,27 @@ Template.login_form.rendered = function(){
     //$(".dropdown").dropdown();
 }
 Template.login_form.events({
-	'submit form.form': function(e, t){
-		e.preventDefault();
-                var email = $('#login_email').val();
-                var passwd = $('#login_passwd').val();
-                email = trimInput(email);
-                //Meteor.call("login",{email:email,passwd:passwd});
-                Meteor.loginWithPassword(email,passwd, function(err){
-                    if (err){
-                        throw new Meteor.Error(111, "couldn't find your email or password!");
-                        return 'error';
-                    }else{
-                        $(".ui.sidebar").sidebar("setting","transition","push");
-                        $("#modal-handler").modal("hide");
-                    }
-                });
-
-		console.alert("Heyy");
+	'submit form#login-form': function(e, t){
+        var email = $('#login_email').val();
+        var passwd = $('#login_passwd').val();
+        email = trimInput(email);
+        //Meteor.call("login",{email:email,passwd:passwd});
+        Meteor.loginWithPassword(email,passwd, function(err){
+            if (err){
+                throw new Meteor.Error(111, "couldn't find your email or password!");
+                return 'error';
+            }else{
+                $(".ui.sidebar").sidebar("setting","transition","push");
+                $("#modal-handler").modal("hide");
+            }
+        });
         //$('#registerModal').modal("toggle");
 	},
     'click a#login': function(event, template){
         $('.dropdown-toggle').dropdown("toggle");
     },
-	'click span#login-submit': function(e,t){
-		$("form.login_form").submit();
+	'click input#login-submit': function(e,t){
+		$("form#login-form").submit();
 	},
     'click a.reset':function(event,template){
         Session.set('user_modal_actions',{reset:true})
@@ -171,8 +168,8 @@ Template.register_form.destroyed = function(){
 }
 
 Template.register_form.events({
-	'click button.register-btn': function(e, t){
-		
+	'click button#register-btn': function(e, t){
+		console.log("submit");
 		$("#register_form").submit();
 	},
     'focus input': function(event,template){
@@ -560,8 +557,7 @@ Template.reset.events({
             }else 
                 console.log(error);
         });
-        
-    } 
+    }
 })
 Template.report.events({
 	'submit #report-user-form': function(e,t){
@@ -702,75 +698,3 @@ var requestHandler = function (args){
     }
 }
 
-//user context menu with botstrap contextmenu plugin
-Template.user_contextmenu.rendered = function(){
-$(".username").contextmenu({
-    before: function(e, element){
-        this.getMenu().find("a#email").show();
-        this.getMenu().find("a#contact").show();
-        this.getMenu().find("a#group").show();
-        this.getMenu().find("a#remove").show();
-        this.getMenu().find("a#block").show();
-        this.getMenu().find("a#unblock").show();
-        this.getMenu().find("a#report").show();
-        if (element.attr("id") === Meteor.userId()){
-            this.getMenu().find("a#email").hide();
-            this.getMenu().find("a#contact").hide();
-            this.getMenu().find("a#group").hide();
-            this.getMenu().find("a#remove").hide();
-            this.getMenu().find("a#block").hide();
-            this.getMenu().find("a#unblock").hide();
-            this.getMenu().find("a#report").hide();
-        }else{
-            if(Meteor.users.find({_id:Meteor.userId(), "profile.blocked_users":{$in: [element.attr("id")]}}).count()){
-                this.getMenu().find("a#email").hide();
-                this.getMenu().find("a#group").hide();
-                this.getMenu().find("a#block").hide();
-                this.getMenu().find("a#contact").hide();
-            }else {
-                this.getMenu().find("a#unblock").hide();
-            }            
-            if(UsersRelations.findOne({contact:{$in: [element.attr("id")]}})){
-                
-                this.getMenu().find("a#contact").hide();
-            }else this.getMenu().find("a#remove").hide();
-        }
-        return true;
-    },
-    onItem: function(e, element, target){
-        var key = element.target.id;
-        var user = e.context.id;
-        if (key == "email") {
-            // Session.set("user_modal_actions", {action:"email",user: user});
-            Session.set("emails", {send:"active", user: user});
-        }
-        if(key == "contact"){
-            Session.set("user_modal_actions", {action:"add",user: user});
-        }
-        if(key == "remove"){
-            Meteor.call("setUser_relation",{user:user,operation:false});
-        }
-        if(key == "group"){
-            Session.set("user_modal_actions", {action:"invite",user:user});
-        }
-        if(key == "profile"){
-            Session.set("user_modal_actions", {action:"profile",user:user});
-        }
-        if(key == "report"){
-            Session.set("user_modal_actions", {action:"report",user:user});
-        }
-        if(key == "block"){
-            if(!Meteor.users.findOne({_id:Meteor.userId(), "profile.blocked_users":{$in: [user]}})){
-                console.log("blocked");
-                Meteor.users.update({_id:Meteor.userId()}, {$push:{"profile.blocked_users":user}});
-            }
-        }
-        if(key == "unblock"){
-            Meteor.users.update({_id:Meteor.userId()}, {$pull:{"profile.blocked_users":user}});
-        }
-        if(key == "private"){
-            Session.set("private_chat",user);
-        }
-    }
-});
-}

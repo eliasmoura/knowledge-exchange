@@ -11,7 +11,7 @@ Router.route("/search",function(){
             var groups = Groups.find({name:{ $regex: search.q, $options: 'i' }}).fetch();
             //Session.set("search",{users:users,groups:groups});
             groups = _.map(groups, function(group){
-                return {"title":group.name, "url":"/chat/group/:_id"+group._id}
+                return {"title":group.name, "url":"/chatroom/group/"+group._id}
             });
             users = _.map(users, function(user){
                 return {"title": user.profile.name + " " + user.profile.lastname, url:"/userprofile/"+user._id};
@@ -38,8 +38,6 @@ Router.route("/search",function(){
                 }
             }
             var data = {"results": search_result,action:action};
-            console.log(data);
-            console.log(search);
             this.response.writeHeader(200, {'Content-Type': 'application/json'});
             this.response.end(JSON.stringify(data));
 

@@ -8,43 +8,54 @@
             <button class="ui button" id="create-group-send" >{{mf 'create' 'Create'}}</button>
                 <button class="ui button" id="create-group-cancel" >{{mf 'cancel' 'Cancel'}}</button>
         {{else}}
-        <div class="sixteen wide  mobile fithteen wide computer column row">
-            <div class="ui top attached tabular menu">
-                <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
-                        <a class="ui group-name">{{room.name}}</a>
+            {{#if chatfeed}}
+                {{> chatfeed}}
+            {{else}}
+            <div class="sixteen wide  mobile fithteen wide computer column row">
+                <div class="ui top attached tabular menu">
+                    <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
+                        <a href="#" class="ui group-name">{{room.name}}</a>
                     </div>
                     <div class="{{room_handler.settings.active}} item" id="room-settings" data-tab="chat-settings">
                         <a href="#" class="settings" id="{{room._id}}">Settings</a>
+                    </div>
+                    <div class="{{room_handler.overview.active}} item" id="room-overview" data-tab="chat-overview">
+                        <a href="#" class="overview" id="{{room._id}}">Overview</a>
                     </div>
                     {{#if isInRole "group-manager" room._id}}
                     <div class="{{room_handler.manage.active}} item" id="room-manage" data-tab="chat-manage">
                         <a href="#" id="{{room._id}}" class="manage">Manage</a>
                     </div>
                     {{/if}}
-            </div>
-            <div class="ui bottom attached {{room_handler.chat.active}} tab segment" data-tab="chat-content">
-                <div class="ui grid">
-                    <div class="two wide column tablet computer only">
-                        {{> users_chatroom}}
-                    </div>
-                    <div class="fourteen wide tablet computer sixteen wide mobile column">
-                        <div class="ui grid">
-                            <div class="divmessages sixteen wide column" id="chat-messages">
-                                {{> chat}}
-                            </div>
-                            <div class="sixteen wide column">
-                                {{> chat_input}}
+                </div>
+                <div class="ui bottom attached {{room_handler.chat.active}} tab segment" data-tab="chat-content">
+                    <div class="ui grid">
+                        <div class="two wide column tablet computer only">
+                            {{> users_chatroom}}
+                        </div>
+                        <div class="fourteen wide tablet computer sixteen wide mobile column">
+                            <div class="ui grid">
+                                <div class="divmessages sixteen wide column" id="chat-messages">
+                                    {{> chat}}
+                                </div>
+                                <div class="sixteen wide column">
+                                    {{> chat_input}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="ui bottom attached {{room_handler.manage.active}} tab segment" data-tab="chat-manage">
+                    {{> group_managenment}}
+                </div>
+                <div class="ui bottom attached {{room_handler.settings.active}} tab segment" data-tab="chat-settings">
+                    {{> settings}}
+                </div>
+                <div class="ui bottom attached {{room_handler.overview.active}} tab segment" data-tab="chat-overview">
+                    {{> room_overview}}
+                </div>
             </div>
-            <div class="ui bottom attached {{room_handler.manage.active}} tab segment" data-tab="chat-manage">
-                {{> group_managenment}}
-            </div>
-            <div class="ui bottom attached {{room_handler.settings.active}} tab segment" data-tab="chat-settings">
-            </div>
-        </div>
+            {{/if}}
         {{/if}}
     </div>
 	{{#if correct}}
@@ -52,7 +63,11 @@
 	{{/if}}
 </template>
 
-
+<template name="chatfeed">
+            <div class="sixteen wide  mobile fithteen wide computer column row">
+          chat feed
+            </div>
+</template>
 <!--
 chat sidebar menu
 -->
@@ -61,19 +76,21 @@ chat sidebar menu
         <i class="world icon"></i><a class="" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
         <div class="menu" id="panel-rooms">
             {{#each rooms}}
-                <a href="#" class="item chat-room {{#if active}}active{{/if}}" id="{{_id}}" >{{name}}</a>
+            <a href="{{pathFor route='PublicChat'}}" class="item chat-room {{#if active}}active{{/if}}" id="{{_id}}" >{{name}}</a>
             {{/each}}
         </div>
     </div>
     <div class="item">
-        <i class="icon comunity"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
+        <i class="icon users"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
         <button id="add-group" class="ui icon button label">
             <i class="icon plus" title="{{mf 'add-find-group' 'Create a chat group'}}"></i>
         </button>
         <div class="menu" id="panel-groups">
             {{#each group_rooms}}
-                <a  href="#" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
-                    {{name}}<button class="ui label icon button manage-group"><i class="setting icon"></i></button>
+            <a  href="{{pathFor route='GroupChat'}}" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
+                    {{name}}<!--<button class="ui label icon button manage-group">
+                        <i class="setting icon"></i>
+                        </button>-->
                 </a>
             {{/each}}
         </div>
@@ -83,13 +100,14 @@ chat sidebar menu
         <span id="add-find-user" class="plus icon" title="add/find a contact"></span>
         <div class="menu" id="panel-friends">
             {{#each contacts}}
-                <a href="#" class="friends-contacts username item" id="{{_id}}" >
+                <a href="#" class="friends-contacts username item popup_this" id="{{_id}}" >
                     <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
                     {{profile.name}} <button class="ui label icon button"><i class="setting icon"></i></button>
                     {{#if notification}}
                     <span class="chat friends-contacts-noti label icon">{{notification}}</span>
                     {{/if}}
                 </a>
+                {{> popup}}
             {{/each}}
         </div>
     </div>
@@ -106,7 +124,8 @@ chat sidebar menu
                     <div class="user item" id="{{_id}}">
                         <label>
                         <i class="user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
-                        <a href="#">{{fullname}}</a>
+                        <a href="#" class="popup_this">{{fullname}}</a>
+                        {{> popup}}
                         </label>
                     </div>
                 {{/each}}
@@ -115,6 +134,10 @@ chat sidebar menu
     </div>
 </template>
 
+<template name="settings">
+    Room  settings
+
+</template>
 <template name="chat">
     <div class="ui celled list">
 		{{#each messages}}
@@ -245,4 +268,8 @@ chat sidebar menu
 			</div>
 		</div>
 	</div>
+</template>
+
+<template name="tuto_chat">
+    <h3 class="ui header">{{mf 'Hello' 'Hello'}} {{currentUser.profile.name}}</h3>
 </template>

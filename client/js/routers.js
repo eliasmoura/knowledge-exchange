@@ -64,8 +64,33 @@ Router.route('/signup', {
     data:{//activeHome: "active",
           pageTitle: "Home"}
 });
-Router.route('userprofile', {
-    path:'/userprofile/:_id',
+Router.route('/chatroom/create-group', {
+    name:'CreateGroup',
+    template: 'create_group',
+    yieldTemplates: {
+                    //'home-side': {to: 'sidebar'}
+    },
+    onBeforeAction:function(){
+        if (!Meteor.user()) {
+            // render the login template but keep the url in the browser the same
+            //this.render('welcome');
+            this.redirect("/userprofile");
+            // stop the rest of the before hooks and the action function 
+            //this.pause();
+          }else{
+          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"home"}});
+              this.next();
+          }
+    },
+    data:{//activeHome: "active",
+          pageTitle: "Home"}
+});
+Router.route('/userprofile/:_id',
+    function(){
+        document.title = "Chat - My site";
+    },
+    {
+    name: "userprofile_id",
     template: 'user_profile',
 
     yieldTemplates: {
@@ -82,109 +107,271 @@ Router.route('userprofile', {
 
             // stop the rest of the before hooks and the action function 
           }else{
-            /*var user = Meteor.users.findOne({_id:this.params._id});
-            var username = user.profile.name + " " +user.profile.lastname;
-            var currentUser = false;
-            if (this.params._id == Meteor.userId()){
-                currentUser = true;
-            }*/
-            Session.set("profile",this.params._id);
+            if(this.params._id)
+                Session.set("profile",this.params._id);
             this.next();
-          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"home"}});
           }
     },
-    data:{activeHome: "active",
+    data:{activeUser: "active",
           pageTitle: "Home"}
 });
-Router.route('chatrooms', {path:'/chat',
-    template: 'chatrooms',
+Router.route('/userprofile',
+    function(){
+        document.title = "Chat - My site";
+    },
+    {
+    name: "userprofile",
+    template: 'user_profile',
+
     yieldTemplates: {
-        'chatrooms_side': {to: 'sidebar'}
+                    //'home-side': {to: 'sidebar'}
     },
     fastRender: true,
     waitOn: function(){
-        
+    },
+    onBeforeAction:function(){
+        if (!Meteor.user()) {
+            // render the login template but keep the url in the browser the same
+            this.render('welcome');
+
+            // stop the rest of the before hooks and the action function 
+          }else{
+            this.redirect("userprofile", {_id:Meteor.userId()});
+            this.next();
+          }
+    },
+    data:{activeUser: "active",
+          pageTitle: "Home"}
+});
+Router.route('/chat', {
+    name: "Chatrooms",
+    controller: "ChatroomsCtrl",
+    waitOn: function(){
         if(Meteor.user())
         return [
             Meteor.subscribe("chatrooms-list"),
-            Meteor.subscribe("user-chat-list"),
-            Meteor.subscribe("privatechat"),
-            Meteor.subscribe("chat-messages", Meteor.user().profile.active_room),
-            Meteor.subscribe("chat-corrections",Meteor.user().profile.active_room),
-            Meteor.subscribe("user-groups"),
-            Meteor.subscribe("user-groups-list", User_Group.find({user:Meteor.userId()}).fetch()),
             Meteor.subscribe("languages-list"),
             Meteor.subscribe("requests"),
             Meteor.subscribe("requests-invite"),
             Meteor.subscribe("user-list"),
+            Meteor.subscribe("user-groups"),
             Meteor.subscribe("groups-mods"),
             Meteor.subscribe("groups-list"),
             Meteor.subscribe("user-contact"),
             Meteor.subscribe("emails-received"),
             Meteor.subscribe("emails-sent"),
-            Meteor.subscribe("rooms-users-list", Meteor.user().profile.active_room)
         ];
+    }
+});
+Router.route('/chatroom/public/:_id', {
+    name: "PublicChat",
+    controller: "ChatroomCtrl",
+    waitOn: function(){
+        if(Meteor.user())
+        var subs = [
+            Meteor.subscribe("chatrooms-list"),
+            Meteor.subscribe("messages", this.params._id),
+            Meteor.subscribe("chat-corrections",{room:this.params._id, type:"public"}),
+            Meteor.subscribe("users-room",{room:this.params._id, type:"public"}),
+            Meteor.subscribe("languages-list"),
+            Meteor.subscribe("requests"),
+            Meteor.subscribe("requests-invite"),
+            Meteor.subscribe("user-list"),
+            Meteor.subscribe("user-groups"),
+            Meteor.subscribe("groups-mods"),
+            Meteor.subscribe("groups-list"),
+            Meteor.subscribe("user-contact"),
+            Meteor.subscribe("emails-received"),
+            Meteor.subscribe("emails-sent")
+        ];
+        return subs;
+    },
+    action: function(){
+        this.state.set("roomid",this.params._id);
+        this.state.set("roomtype", "public");
+        this.render();
+    },
+});
+Router.route('/chatroom/group/:_id', {
+    name: "GroupChat",
+    controller: "ChatroomCtrl",
+    waitOn: function(){
+        if(Meteor.user())
+        var subs = [
+            Meteor.subscribe("chatrooms-list"),
+            Meteor.subscribe("messages", this.params._id),
+            Meteor.subscribe("chat-corrections",{room:this.params._id, type:"group"}),
+            Meteor.subscribe("users-room",{room:this.params._id, type:"group"}),
+            Meteor.subscribe("languages-list"),
+            Meteor.subscribe("requests"),
+            Meteor.subscribe("requests-invite"),
+            Meteor.subscribe("user-list"),
+            Meteor.subscribe("user-groups"),
+            Meteor.subscribe("groups-mods"),
+            Meteor.subscribe("groups-list"),
+            Meteor.subscribe("user-contact"),
+            Meteor.subscribe("emails-received"),
+            Meteor.subscribe("emails-sent")
+        ];
+        return subs;
+    },
+    action: function(){
+        this.state.set("roomid",this.params._id);
+        this.state.set("roomtype", "group");
+        this.render();
+    },
+
+});
+Router.route('/chatroom/101/:_id', {
+    name: "PersonalChat",
+    controller: "ChatroomCtrl",
+    waitOn: function(){
+        if(Meteor.user())
+        var subs = [
+            Meteor.subscribe("chatrooms-list"),
+            Meteor.subscribe("messages", this.params._id),
+            Meteor.subscribe("chat-corrections",{room:this.params._id, type:"private"}),
+            Meteor.subscribe("users-room",{room:this.params._id, type:"private"}),
+            Meteor.subscribe("languages-list"),
+            Meteor.subscribe("requests"),
+            Meteor.subscribe("requests-invite"),
+            Meteor.subscribe("user-list"),
+            Meteor.subscribe("user-groups"),
+            Meteor.subscribe("groups-mods"),
+            Meteor.subscribe("groups-list"),
+            Meteor.subscribe("user-contact"),
+            Meteor.subscribe("emails-received"),
+            Meteor.subscribe("emails-sent")
+        ];
+        return subs;
+    },
+    action: function(){
+        this.state.set("roomid",this.params._id);
+        this.state.set("roomtype", "private");
+        this.render();
+    },
+});
+Router.route('blog', {path:'/blog',
+    template: 'blog',
+    yieldTemplates: {
+        'blog-side': {to: 'sidebar'}
     },
     onBeforeAction:function(){
         if (!Meteor.user()) {
             // render the login template but keep the url in the browser the same
-            this.render('home');
+            this.render('notFound');
 
             // stop the rest of the before hooks and the action function 
           }else{
-            /*var isso = Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"chatrooms"}}, function(error,doc){
-                console.log(error);
-            });
-            console.log(isso);*/
+          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"blog"}});
+          this.next();
+          }
+    },
+    data:{activeBlog: "active",
+        pageTitle: "Blog"
+    }
+});
+Router.route('/notes',{
+    template: 'notes',
+    yieldTemplates: {
+        'blog-side': {to: 'sidebar'}
+    },
+    onBeforeAction:function(){
+        if (!Meteor.user()) {
+            // render the login template but keep the url in the browser the same
+            this.render('notFound');
+
+            // stop the rest of the before hooks and the action function 
+          }else{
+          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"blog"}});
+          this.next();
+          }
+    },
+    data:{activeBlog: "active",
+        pageTitle: "Blog"
+    }
+});
+Router.route('user', {path:'/user/:_ID',
+    template: 'user-profile',
+    yieldTemplates:{
+        'user-side': {to: 'sidebar'}
+    },
+    onBeforeAction:function(){
+        if (!Meteor.user()) {
+            // render the login template but keep the url in the browser the same
+            this.render('notFound');
+
+            // stop the rest of the before hooks and the action function 
+            this.pause();
+          }else{
+          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"user"}});
+          }
+    },
+    data:{
+
+    }
+});
+Router.route('logo',function(){this.redirect("home");});
+
+ChatroomsCtrl = RouteController.extend({
+    template: 'chatrooms',
+    yieldTemplates: {
+        'chatrooms_side': {to: 'sidebar'}
+    },
+    fastRender: true,
+    action: function(){
+        this.render();
+    },
+    onBeforeAction:function(){
+        if (!Meteor.user()) {
+            // render the home template but keep the url in the browser the same
+            this.render('home');
+          }else{
+            var room_handler = {};
+            room_handler.manage = {active:false};
+            room_handler.chat = {active:"active"};
+            room_handler.settings = {active:false};
+            Session.set("room_handler", room_handler);
             this.next();
           }
-          
-          
     },
     onAfterAction:function(){
-        
-        
-        
     },
     data:
     {
         rooms: function(){
-            // console.log(Chatrooms.find({}, {sort: {name: +1}}).fetch());
             var rooms = Chatrooms.find({}, {sort: {name: +1}}).fetch();
-            // console.log(rooms);
             var roomsArray = new Array();
             if(Meteor.user())
-            rooms.forEach(function(row){
-                if (row._id == Meteor.user().profile.active_room.room)
-                    row.active = "true";
-                roomsArray.push(row);
-            })
+                rooms.forEach(function(row){
+                    roomsArray.push(row);
+                })
             return roomsArray;
         },
+        chatfeed: function(){
+            return true;
+        },
         room: function(){
-            try{
-                var room = Meteor.user().profile.active_room;
-                
-                if ( room.type == "public"){
-                    room = Chatrooms.findOne({_id:room.room});
-                }
-                else if ( room.type == "group"){
-                    room = Groups.findOne({_id:room.room});
-                }	
-                else if ( room.type == "privatechat"){
-                    var user  = PrivateChat.findOne({_id:room.room}).users;
-                    if(user[0] != Meteor.userId()){
-                        user = Meteor.users.findOne({_id:user[0]});
-                    }else{
-                        user = Meteor.users.findOne({_id:user[1]});
-                    }
-                    room = {name:user.profile.name, _id:PrivateChat.findOne({_id:room.room})._id};
-                }
-                return room;
-            }catch (e){
-                console.log(e);
+            var room = {room:Session.get("roomid"), type: Session.get("roomtype")};
+            if(room.room == "none"){
                 return false;
             }
+            if ( room.type == "public"){
+                room = Chatrooms.findOne({_id:room.room});
+            }
+            else if ( room.type == "group"){
+                room = Groups.findOne({_id:room.room});
+            }	
+            else if ( room.type == "privatechat"){
+                var user  = PrivateChat.findOne({_id:room.room}).users;
+                if(user[0] != Meteor.userId()){
+                    user = Meteor.users.findOne({_id:user[0]});
+                }else{
+                    user = Meteor.users.findOne({_id:user[1]});
+                }
+                room = {name:user.profile.name, _id:PrivateChat.findOne({_id:room.room})._id};
+            }
+            return room;
         },
         chat_users: function(){
             var room = Meteor.user().profile.active_room;
@@ -194,7 +381,7 @@ Router.route('chatrooms', {path:'/chat',
                     userList.push(row.user);
                 });
             }else if (room.type == "group"){
-                User_Group.find({group:room.room}).forEach(function(row){
+                User_Room.find({group:room.room}).forEach(function(row){
                     userList.push(row.user);
                 });
             }else if(room.type == "privatechat"){
@@ -202,8 +389,6 @@ Router.route('chatrooms', {path:'/chat',
             }
             userList = Meteor.users.find({_id:{$in:userList} }, {fields:{_id:1, status:1, "profile.name":1, "profile.lastname":1}});
             userList = _.map(userList.fetch(), function(doc){return {_id:doc._id,name:doc.profile.name,lastname:doc.profile.lastname,fullname:doc.profile.name + " " + doc.profile.lastname};});
-            console.log(room);
-            console.log(userList);
             return userList;
         },
         contacts: function(){
@@ -239,23 +424,12 @@ Router.route('chatrooms', {path:'/chat',
         emails_notifications: function(){
             return false;
         },
-        
         messages: function(){
-            var messages = Meteor.user().profile.active_room;
+            var messages = {room:Session.get("roomid"), type: Session.get("roomtype")};
             var messagesArray = new Array();
 
-            if (messages.type == "public"){
-                messages = Messages.find({room:messages.room});
-            }
-            else if (messages.type == "group"){
-                try{
-                messages = GroupChat.find({groupchat:messages.room});
-                }catch(e){console.log(e);}
-            }	
-            else if (messages.type == "privatechat"){
-                messages = PrivateMessages.find({chat:messages.room});
-            }
-            else messages = false;
+            messages = Messages.find({room:messages.room});
+            console.log(messages.fetch());
             var blocked_users = Meteor.user().profile.blocked_users;
             if (messages)
             if (messages.count()){
@@ -263,25 +437,22 @@ Router.route('chatrooms', {path:'/chat',
                     if( blocked_users == undefined)
                         blocked_users = [];
                     // console.log(blocked_users);
-                    if (blocked_users.indexOf(row.userid) == -1) {
+                    if (blocked_users.indexOf(row.owner) == -1) {
                         var corrections = Correction.find({message:row._id});
                         row.corrections = [];
                         corrections.forEach(function(crow){
-                            crow.corrector = Meteor.users.findOne({_id:crow.corrector},{fields:{"profile.name":1}}).profile.name;
-                            //console.log(crow.correction);
-                            //crow.text = crow.correction;
+                            crow.corrector = crow.corrector;
                             row.corrections.push(crow);
                         })
                         messagesArray.push(row);
                         //console.log(row);
                     }
                 })
-            }//catch(e){console.log(e);}
-            // console.log(messagesArray);
+            }
             return messagesArray;
         },
         group_rooms:function(){
-            var user_groups = User_Group.find({user: Meteor.userId()}).fetch();
+            var user_groups = User_Room.find({user: Meteor.userId()}).fetch();
             // console.log(user_groups);
             var groupsArray = new Array();
             // var groups = new Array();
@@ -325,45 +496,185 @@ Router.route('chatrooms', {path:'/chat',
                                   //}
                                   //return true;}
     }
-});
-/*Router.route('blog', {path:'/blog',
-    template: 'blog',
+})
+ChatroomCtrl = RouteController.extend({
+    template: 'chatrooms',
     yieldTemplates: {
-        'blog-side': {to: 'sidebar'}
+        'chatrooms_side': {to: 'sidebar'}
     },
+    fastRender: true,
     onBeforeAction:function(){
         if (!Meteor.user()) {
-            // render the login template but keep the url in the browser the same
-            this.render('notFound');
-
-            // stop the rest of the before hooks and the action function 
-            this.pause();
+            // render the home template but keep the url in the browser the same
+            this.render('home');
           }else{
-          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"blog"}});
+            var room_handler = {};
+            room_handler.manage = {active:false};
+            room_handler.chat = {active:"active"};
+            room_handler.settings = {active:false};
+            Session.set("room_handler", room_handler);
+            Session.set("roomid", this.state.get("roomid"));
+            Session.set("roomtype", this.state.get("roomtype"));
+            if(!User_Room.findOne({room:this.params._id, user:Meteor.userId()})){
+                User_Room.insert({room:this.params._id, new_messages:0, user:Meteor.userId(), type: "public"});
+            }
+            this.next();
           }
     },
-    data:{activeBlog: "active",
-        pageTitle: "Blog"
-    }
-});
-Router.route('user', {path:'/user/:_ID',
-    template: 'user-profile',
-    yieldTemplates:{
-        'user-side': {to: 'sidebar'}
+    onAfterAction:function(){
     },
-    onBeforeAction:function(){
-        if (!Meteor.user()) {
-            // render the login template but keep the url in the browser the same
-            this.render('notFound');
+    data:
+    {
+        rooms: function(){
+            var rooms = Chatrooms.find({}, {sort: {name: +1}}).fetch();
+            var roomsArray = new Array();
+            if(Meteor.user())
+            rooms.forEach(function(row){
+                if (row._id == Session.get("roomid"))
+                    row.active = "true";
+                roomsArray.push(row);
+            })
+            return roomsArray;
+        },
+        room: function(){
+            var room = Session.get("roomid");;
+            var type = Session.get("roomtype");
+            if(room == "none"){
+                return false;
+            }
+            if ( type == "public"){
+                room = Chatrooms.findOne({_id:room});
+            }
+            else if ( type == "group"){
+                room = Groups.findOne({_id:room});
+            }	
+            else if ( type == "privatechat"){
+                var user  = PrivateChat.findOne({_id:room}).users;
+                if(user[0] != Meteor.userId()){
+                    user = Meteor.users.findOne({_id:user[0]});
+                }else{
+                    user = Meteor.users.findOne({_id:user[1]});
+                }
+                room = {name:user.profile.name, _id:PrivateChat.findOne({_id:room})._id};
+            }
+            return room;
+        },
+        chat_users: function(){
+            var room = Session.get("roomid");;
+            var type = Session.get("roomtype");
 
-            // stop the rest of the before hooks and the action function 
-            this.pause();
-          }else{
-          // Meteor.users.update({_id:Meteor.userId()}, {$set:{context:"user"}});
-          }
-    },
-    data:{
+            var userList = new Array();
+            User_Room.find({room:room, type:type}).forEach(function(row){
+                userList.push(row.user);
+            });
+            userList = Meteor.users.find({_id:{$in:userList} }, {fields:{_id:1, status:1, "profile.name":1, "profile.lastname":1}});
+            userList = _.map(userList.fetch(), function(doc){return {_id:doc._id,name:doc.profile.name,lastname:doc.profile.lastname,fullname:doc.profile.name + " " + doc.profile.lastname};});
+            return userList;
+        },
+        contacts: function(){
+            var users_relations = UsersRelations.find({}).fetch();
+            var users_relationsArray = new Array();
+            users_relations.forEach(function(row){
+                var privatechat = PrivateChat.findOne({users:{$in:[row.contact]}});
+                var user = Meteor.users.findOne({_id:row.contact});
+                try{
+                    user.notification = privatechat.new_messages;
+                    if (privatechat._id == Meteor.user().active_room.room)
+                        user.active = true;
+                }catch(e){}
+                users_relationsArray.push(user);
+            });
+            /*
+            var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();;
+            var privatenotificationsArray = {};
+            console.log(privatechatnotifications);
+            privatechatnotifications.forEach(function(row){
 
+                privatenotificationsArray[row.contact] = row.new_messages;
+            });
+            // console.log(privatenotificationsArray);
+            var users = new Array();
+            Meteor.users.find({_id:{$in:users_relationsArray}}).fetch().forEach(function(row){
+                row.notification = privatenotificationsArray[row._id];
+                users.push(row);
+            });*/
+
+            return users_relationsArray;
+        },
+        emails_notifications: function(){
+            return false;
+        },
+        messages: function(){
+            var messages = {room:Session.get("roomid"), type: Session.get("roomtype")};
+            var messagesArray = new Array();
+
+            messages = Messages.find({room:messages.room});
+            console.log(messages.fetch());
+            var blocked_users = Meteor.user().profile.blocked_users;
+            if (messages)
+            if (messages.count()){
+                messages.forEach(function(row){
+                    if( blocked_users == undefined)
+                        blocked_users = [];
+                    // console.log(blocked_users);
+                    if (blocked_users.indexOf(row.owner) == -1) {
+                        var corrections = Correction.find({message:row._id});
+                        row.corrections = [];
+                        corrections.forEach(function(crow){
+                            crow.corrector = crow.corrector;
+                            row.corrections.push(crow);
+                        })
+                        messagesArray.push(row);
+                        //console.log(row);
+                    }
+                })
+            }
+            return messagesArray;
+
+        },
+        group_rooms:function(){
+            var user_groups = User_Room.find({user: Meteor.userId(), type: "group"}).fetch();
+            // console.log(user_groups);
+            var groupsArray = new Array();
+            // var groups = new Array();
+            user_groups.forEach(function(row){
+                // console.log(row);
+                var group = Groups.findOne({_id:row.group});
+                // console.log(group);
+                if(group != undefined){
+                    group.notification = row.new_messages;
+                    if (row.group == Meteor.user().profile.active_room.room)
+                        group.active = true;
+                    // console.log(group);
+                    group.owner = row.owner;
+                    group.mod = row.mod;
+                    if(Roles.userIsInRole(Meteor.userId(), "group-manager", row.group)|| Roles.userIsInRole(Meteor.userId(), "owner", row.group)){
+                        group.isMod = true;
+                        group.request = {total:GroupRequest.find({group:row.group, type:1}).count()};
+                    }else group.isMod = false;
+                    groupsArray.push(group);
+                }
+            });
+
+            
+            /*Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
+                row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
+                groups.push(row);
+            });*/
+            //console.log(groups);
+            //console.log(groupsArray);
+            return groupsArray;
+        },
+        add_user:function(){
+            return Session.get("add_user");
+        },
+        
+        activeChat: "active",
+        pageTitle: "Chat app"
+        //myUsersList: function(){//var users = UsersRelations.find({user:Session.get('currentUser')._id});
+                                  //for (var i = 0; i < users.length; i++) {
+                                  //	users[i] = {user:Meteor.users.findOne({_id:users[i][0]})};
+                                  //}
+                                  //return true;}
     }
-});*/
-Router.route('logo',function(){this.redirect("home");});
+})

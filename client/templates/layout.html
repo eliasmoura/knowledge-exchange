@@ -53,7 +53,7 @@
                 </div>
             </div>
         </a>
-        <a class="navigation item {{activeChat}}" href="{{pathFor 'chatrooms'}}">
+        <a class="navigation item {{activeChat}}" href="{{pathFor route='Chatrooms'}}">
             <div class="ui grid">
                 <div class="column mobile only">
                     <i class="icon chat"></i>
@@ -81,7 +81,11 @@
 </template>
 <template name="popup">
     <div class="ui popup" id="content_popup">
-        <h4 class="ui header">{{name}}</h4>
-        <div>{{message}}</div>
+        {{#with userinfo_popup _id}}
+            <h4 class="ui header">{{this.profile.public_name}}</h4>
+            <div>
+                {{this.profile.name}} {{this.profile.lastname}}
+            </div>
+        {{/with}}
     </div>
 </template>

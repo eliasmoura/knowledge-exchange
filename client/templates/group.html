@@ -46,7 +46,7 @@
 	</div>
 </template>
 
-<template name="group_overview">
+<template name="room_overview">
 should show something?
 {{this.group_info}}
     {{#with group_info}}
@@ -150,7 +150,7 @@ should show something?
                             </div>
                         <div class="form-group panel panel-default" id="">
                             <div class="ui diviging header">{{mf 'allowed_langs' 'Allowed Languages'}}:<sup>*</sup>
-                                <button class="icon button" id="morelang"><i class="icon plus"></i></button>
+                                <i id="morelang" class="icon plus"></i>
                             </div>
                             <div class="panel-body controls" id="alert_grouplangs">
                                 <select name="lang" id="" class="lang form-control" required >
@@ -188,17 +188,17 @@ should show something?
     </form>
 </template>
 <template name="edit_group_info">
-    <form class="create_group" id="create_group">
-        <div class="panel panel-info control-group">
-            <div class="panel-heading">{{mf 'group-info' 'Group information'}}:</div>
-            <div class="panel-body">
+    <form class="ui form" id="edit_group">
+        <div class="ui sixteen wide column">
+            <div class="ui dividing header">{{mf 'group-info' 'Group information'}}:</div>
+            <div class="">
                 <label for="group-name-c">{{mf 'name'}}:<sup>*</sup></label>
                 <input type="text" name="name" required min="3" class="form-control" placeholder="Group name" id="group-name-c" />
                 <p class="help-block">{{mf 'name-3-length' 'The name should be at least 3 character'}}</p>
             <div class="info">
-                        <div class="controls" id="">
+                        <div class="one field" id="">
                             <label for="type" class="control-label">{{mf 'type' 'Type'}}:<sup>*</sup></label>
-                            <select id="type" class="form-control" required>
+                            <select id="type" class="" required>
                                 <option value="none">{{mf 'select-one' 'Select one'}} </option>
                                 <option value="open">{{mf 'open_group' 'Open group'}} </option>
                                 <option value="participation">{{mf 'part_request' 'Participation request'}}</option>
@@ -206,29 +206,49 @@ should show something?
                             </select>
                             <p class="help-block"></p>
                         </div>
-                        <div class="form-group panel panel-default controls">
-                            <div class="panel-heading control-label">{{mf 'groupgenre' 'Group genre'}}:</div>
-                            <div class="panel-body controls">
+                        <div class="">
+                            <div class="ui dividing header">{{mf 'groupgenre' 'Group genre'}}:</div>
+                            <div class="four fields">
+                                <div class="field">
                                 <label for="music">{{mf 'music' 'Music'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="music" value="Music" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="sports">{{mf 'sports' 'Sports'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="sports" value="Sports" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="Literature">{{mf 'literature' 'Literature'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="literature" value="Literature" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="video-games">{{mf 'video-games' 'Video games'}}</label>
                                 <input type="checkbox" class="group-type " name='groupgenre' id="video-games" value="Video Games" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="tv-shows" value="T.V. Shows" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="movies">{{mf 'movies' 'Movies'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="movies" value="Movies" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="languages">{{mf 'languages' 'Languages'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="languages" value="Languages" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="education">{{mf 'education' 'Education'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="education" value="Education" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="teaching">{{mf 'teaching' 'Teaching'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="teaching" value="Teaching" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
+                                <div class="field">
                                 <label for="travel">{{mf 'travel' 'Travel abroad'}}</label>
                                 <input type="checkbox" class="group-type" name='groupgenre' id="travel" value="Travel abroad" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                                </div>
                             </div>
                             <p class="help-block"></p>
                         </div>
@@ -302,88 +322,106 @@ should show something?
 
 </template>
 <template name="group_managenment">
-{{#each group_managenment}}
-    <div class="group panel-info">
-        <div class="panel panel-info row">
-            <div class="panel-heading">
-                <a class="panel-title manage-group" data-toggle="{{_id}}" data-parent="#accordion" href="#">{{name}}</a>
-            </div>
-            <div class="panel-body collapse out" id="manage-{{_id}}">
-                <div class="group-handler"> 
-                    <ul class="nav nav-tabs nav-justified">
-                        <li><a href="#" class="btn btn-default group-managenment-menu {{#if this.edit.active}}
-                        active{{/if}}" id="edit">{{mf 'edit' 'Edit Group Info'}}</a></li>
-                        <li><a href="#" class="btn btn-default group-managenment-menu {{#if this.users.active}}
-                        active{{/if}}" id="manage">{{mf 'users-managenment' 'Users Managenment'}}</a></li>
-                    </ul>
-                    {{#if group_managenment_action.edit}}
-                        {{> edit_group_info}}
-                    {{/if}}
-                    {{#if group_managenment_action.manage}}
-                        {{> managenment_usersgroup}}
-                    {{/if}}
+{{#with group_managenment}}
+    <div class="group">
+        <div class="row">
+            <div class="ui top attached tabular menu" id="manage-{{_id}}">
+                <div class="item {{#if this.edit.active}}active{{/if}}">
+                    <a href="#" class="btn btn-default group-managenment-menu" id="edit">
+                        {{mf 'edit' 'Edit Group Info'}}
+                    </a>
+                </div>
+                <div class="item {{#if this.users.active}}active{{/if}}">
+                    <a href="#" class="btn btn-default group-managenment-menu " id="manage">
+                        {{mf 'users-managenment' 'Users Managenment'}}
+                    </a>
+                </div>
+                <div class="ui bottom attached  {{#if this.edit.active}}active{{/if}} tabular segment">
+                {{#if group_managenment_action.edit}}
+                    {{> edit_group_info}}
+                {{/if}}
+                </div>
+                <div class="ui bottom attached  {{#if this.users.active}}active{{/if}} tabular segment">
+                {{#if group_managenment_action.manage}}
+                    {{> managenment_usersgroup}}
+                {{/if}}
                 </div>
             </div>
         </div>
     </div>
-{{/each}}
+{{/with}}
 </template>
 <template name="managenment_usersgroup">
-    <div class="users_groups_managenment">
-
-         <div class="panel-heading">
-            <a class="panel-title row manage-userlist" data-toggle="{{_id}}" data-parent="#accordion" href="#">Users:</a>
-        </div>       
-        <div class="panel-body collapse out" id="manage-userlist-{{_id}}">
-            <div class="row">
-                <span class="col-xs-4"><strong>User</strong></span>
-                <span class="col-xs-4"><strong>Moderator</strong></span>
-                <span class="col-xs-4"><strong>Delete</strong></span>
+    <div class="item">
+        <div class="ui accordion" id="manage-userlist-{{_id}}">
+            <div class="active title">
+                <i class="ui icon dropdown"></i>
+                 <a class="" href="#">Users:</a>
             </div>
-            {{#each this.users.users}}
-            <div class="row" data-user-id="{{this.user._id}}">
-                <div class="col-xs-4">
-                    {{this.user.profile.name}} {{this.user.profile.lastname}}
-                </div>
-                <div class="col-xs-4">
-                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="toggle-mod">
-                        <span class="glyphicon glyphicon-ok {{#if isInRole 'group-manager' ../_id}}alert-success{{else}}unchecked{{/if}}" value="mod" checked> </span>
-                    </label>
-                </div>
-                <div class="col-xs-4">
-                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="delete-user">
-                        <span class="glyphicon glyphicon-remove alert-danger" data-user-id="{{this.user._id}}"></span>
-                    </label>
+            <div class="active content">
+                <div class="ui grid">
+                    <div class="sixteen wide column">
+                        <div class="ui grid">
+                            <span class="four wide column"><strong>User</strong></span>
+                            <span class="four wide column"><strong>Moderator</strong></span>
+                            <span class="four wide column"><strong>Delete</strong></span>
+                        </div>
+                    </div>
+                    {{#each this.users.users}}
+                    <div class="sixteen wide column" data-user-id="{{this.user._id}}">
+                        <div class="ui grid">
+                            <div class="four wide column">
+                                {{this.user.profile.name}} {{this.user.profile.lastname}}
+                            </div>
+                            <div class="four wide column">
+                                <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="toggle-mod">
+                                    <i class="ui icon checkmark {{#if isInRole 'group-manager' ../_id}}green{{else}}unchecked{{/if}}" value="mod" checked> </i>
+                                </label>
+                            </div>
+                            <div class="four wide column">
+                                <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="delete-user">
+                                    <i class="ui icon remove red" data-user-id="{{this.user._id}}"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
                 </div>
             </div>
-            {{/each}}
+            <div class="title">
+                <i class="ui icon dropdown"></i>
+                <a class="" data-toggle="{{_id}}" data-parent="#accordion" href="#">Participation Requests:</a>
+            </div>
+            <div class="content">
+                {{#if this.requests.participation_requests}}
+                    <div class="ui grid">
+                        <div class="row">
+                            <span class="col-xs-4"><strong>User</strong></span>
+                            <span class="col-xs-4"><strong>Accept</strong></span>
+                            <span class="col-xs-4"><strong>Deny</strong></span>
+                        </div>
+                        {{#each this.requests.participation_requests}}
+                        <div class="row" data-user-id="{{this.user._id}}">
+                            <div class="col-xs-4">
+                                {{this.user.profile.name}} {{this.user.profile.lastname}}
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="accept-request">
+                                    <span class="glyphicon glyphicon-ok alert-success" value="mod" checked> </span>
+                                </label>
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="deny-request">
+                                    <span class="glyphicon glyphicon-remove alert-danger" data-user-id="{{this.user._id}}"></span>
+                                </label>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    {{mf 'Nothing-here' 'Nothing here'}}
+                {{/if}}
         </div>
-        <div class="panel-heading">
-            <a class="panel-title manage-requests" data-toggle="{{_id}}" data-parent="#accordion" href="#">Participation Requests:</a>
-        </div>       
-        <div class="panel-body collapse out" id="manage-requests-{{_id}}">
-            <div class="row">
-                <span class="col-xs-4"><strong>User</strong></span>
-                <span class="col-xs-4"><strong>Accept</strong></span>
-                <span class="col-xs-4"><strong>Deny</strong></span>
-            </div>
-            {{#each this.requests.participation_requests}}
-            <div class="row" data-user-id="{{this.user._id}}">
-                <div class="col-xs-4">
-                    {{this.user.profile.name}} {{this.user.profile.lastname}}
-                </div>
-                <div class="col-xs-4">
-                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="accept-request">
-                        <span class="glyphicon glyphicon-ok alert-success" value="mod" checked> </span>
-                    </label>
-                </div>
-                <div class="col-xs-4">
-                    <label class="mod_actions" data-user="{{this.user._id}}" data-target="{{../_id}}" id="deny-request">
-                        <span class="glyphicon glyphicon-remove alert-danger" data-user-id="{{this.user._id}}"></span>
-                    </label>
-                </div>
-            </div>
-            {{/each}}
         </div>
     </div>
 </template>
