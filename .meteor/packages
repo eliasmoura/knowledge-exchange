@@ -33,3 +33,4 @@ meteor-platform
 mongo
 ddp
 tracker
+mike:mocha
