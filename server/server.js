@@ -46,7 +46,12 @@ Meteor.startup(function(){
                 User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,joined: true, date:Date.now()});
         }
     });
-    UserRequest.find().observe({
+    Requests.find().observe({
+        added: function(doc){
+            if(doc.type === "participation")
+                if(Groups.findOne({_id:doc.group}).type === "open")
+                    User_Room.insert({room:doc.group,type:"group",new_messages:0,user:doc.user,date: Date.now()});
+        },
         changed: function(doc){
             console.log(doc);
             if (doc.accept == 1){
@@ -72,14 +77,12 @@ Meteor.startup(function(){
             if(!starting){
                 if (doc.type == "group" || doc.type == "private"){
                     var user_group = User_Room.find({room:doc.room}, {fields:{user:1}}).fetch()
-                    var userArray = new Array();
-                    user_group.forEach(function(row){
-                        userArray.push(row.user);
+                    var userArray = _.map(user_group,function(row){
+                        return row.user;
                     });
-                    var users = Meteor.users.find({_id:{$in:userArray},"profile.active_room.room":{$ne:doc.groupchat}}, {fields:{_id:1}}).fetch();
-                    userArray = new Array();
-                    users.forEach(function(row){
-                        userArray.push(row._id);
+                    var users = Meteor.users.find({_id:{$in:userArray}}, {fields:{_id:1}}).fetch();
+                    userArray = _.map(users,function(row){
+                        return row._id;
                     });
                     User_Room.update({room:doc.room, user:{$in:userArray}}, {$inc: {new_messages:1}},{multi:true});
                 }
@@ -97,8 +100,12 @@ Meteor.startup(function(){
         added: function(doc){
             //prevent data being duplicated on server restart
             if(!starting){
-                if(doc.type == "group")
-                Roles.addUsersToRoles(doc.user, "group-member", doc.room);
+                if(doc.type == "group"){
+                    Roles.addUsersToRoles(doc.user, "group-member", doc.room);
+                    var request = Requests.findOne({group:doc.room,user:doc.user});
+                    if(request !== undefined)
+                        Requests.remove({_id:request._id});
+                }
             }
         },
         changed: function(newdoc, oldDoc){
@@ -125,7 +132,7 @@ Meteor.startup(function(){
             //prevent data being duplicated on server restart
             if(!starting){
                 console.log("adding user_group");
-                User_Room.insert({group:doc._id,type:"group",new_messages:0,user:doc.owner,active:true, date: Date.now()});
+                User_Room.insert({room:doc._id,type:"group",new_messages:0,user:doc.owner,active:true, date: Date.now()});
                 Roles.setUserRoles(doc.owner,["owner", "group-manager"], doc._id);
             }
         }

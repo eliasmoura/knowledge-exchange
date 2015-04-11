@@ -141,6 +141,7 @@ Template.create_group.events({
                             //group_invite_request({group:result,user:member[i],message:message});
                             GroupRequest.insert({user:member[i],message:message,type:2,group:result});
                         }
+                        Router.go("GroupChat",{_id:result});
                     }else console.log(error);
                 }
             );
@@ -150,22 +151,122 @@ Template.create_group.events({
         console.log(errors);
         }
     },
-	'click #morelang': function(e, t){
-		var element = t.find('.lang');
+    'click #morelang': function(e, t){
+        var element = t.find('.lang');
         e.preventDefault();
         e.stopPropagation();
-		var langs = Session.get("langs");
+        var langs = Session.get("langs");
         var html = '<select name="lang" id="" class="lang form-control">\
-					<option value="0">'+ mf('select',null,'Select One')+'</option>';
-		for (var i = 0; i < langs.length; i++) {
-			html = html+'<option value="'+langs[i]+'">'+langs[i]+'</option>';
-		}
-		html = html + '</select>';
+                    <option value="0">'+ mf('select',null,'Select One')+'</option>';
+        for (var i = 0; i < langs.length; i++) {
+            html = html+'<option value="'+langs[i]+'">'+langs[i]+'</option>';
+        }
+        html = html + '</select>';
         $(element).parent().append(html);
-							
-	},
+    },
     'click #handler-btn': function(event, tamplate){
         $(template.find("form")).submit();
+    }
+})
+
+Template.edit_group_info.events({
+    'submit form#edit_group': function(event, template){
+        event.preventDefault();
+        var groupname = template.find("#group-name-c").value;
+        
+        var description = template.find("#description").value;
+        var members = new Array();
+        try{
+            t.find(".friends-contacts:checked").each(function(){
+            members.push(this.id);
+            });	
+        }catch(e){}
+        
+        var langs = template.findAll(".lang option:selected");
+
+        var languages = _.map(langs, function(item) {
+             return item.value;
+        });
+
+        var groupType = template.find("#type option:selected").value;
+        var groupFocus = template.findAll("input[type=checkbox].group-type:checked");
+        var groupFocusArray = _.map(groupFocus, function(item) {
+             return item.defaultValue;
+        });
+
+        if(template.find("[name='invite-message']:checked"))
+        if(template.find("[name='invite-message']:checked").value != "default")
+            var message = template.find("#invite-message").value;
+        else
+            var message = "default";
+        
+        /*Meteor.call("create_group", {name:groupname,description:description,
+            languages:languages, invite:members,group_type:groupType,
+            group_focus:groupFocusArray,message:message});*/
+        var errors = new Array();
+        var group = {name:groupname,description:description,
+            languages:languages, group_type:groupType,
+            group_focus:groupFocusArray};
+        
+        if (group.name.length < 3){
+            errors.push({name:"too short"})
+        }
+        if (!group.description){
+            errors,push({description:true});
+        }
+        if(!group.languages.length){
+            errors.push({languages:true});
+        }
+        if(!group.group_type){
+            errors.push({type:true});
+        }
+        if(!group.group_focus){
+            errors.push({focus:true});
+        }
+        if(!errors.length){
+            var oldgroup = Groups.findOne({_id:Session.get("roomid")});
+            var updates = {};
+            if(group.name !== oldgroup.name)
+                updates.name = group.name;
+            if(group.description !== oldgroup.description)
+                updates.description = group.description;
+            if(_.every(group.languages,oldgroup.languages))
+                updates.languages = group.languages;
+            if(_.every(group.group_focus,oldgroup.focus))
+                updates.focus = group.group_focus;
+            if(group.group_type !== oldgroup.type)
+                updates.type = group.group_type;
+            Groups.update({_id:Session.get("roomid")},{$set:updates}, function(error, result){
+                    if(!error){
+                        for (var i = 0; i< members.length; i++) {
+                            //group_invite_request({group:result,user:member[i],message:message});
+                            GroupRequest.insert({user:member[i],message:message,type:2,group:result});
+                        }
+                        Router.go("GroupChat",{_id:result});
+                    }else console.log(error);
+                }
+            );
+            console.log("Group created");
+            $('#group-handler-modal').modal('hide');
+        }else{
+        console.log(errors);
+        }
+    },
+    'click #morelang': function(e, t){
+        var element = t.find('.lang');
+        e.preventDefault();
+        e.stopPropagation();
+        var langs = Session.get("langs");
+        var html = '<select name="lang" id="" class="lang form-control">\
+                    <option value="0">'+ mf('select',null,'Select One')+'</option>';
+        for (var i = 0; i < langs.length; i++) {
+            html = html+'<option value="'+langs[i]+'">'+langs[i]+'</option>';
+        }
+        html = html + '</select>';
+        $(element).parent().append(html);
+    },
+    'click #update': function(event, tamplate){
+        $("#edit_group").submit();
     }
 })
 Template.create_group.langs = function(){
@@ -175,8 +276,8 @@ Template.create_group.rendered = function(){
 
 }
 Template.room_overview.events({
-	'submit form#find_group': function(event,template){
-		event.preventDefault();
+    'submit form#find_group': function(event,template){
+        event.preventDefault();
         var groupname = template.find('#group-name-f').value;
         if (groupname.length > 4){
             Meteor.call("find", {group:{name:groupname}}, function(error,result){
@@ -187,20 +288,20 @@ Template.room_overview.events({
             });
         }
     },
-    'click button.send-request': function(event, template){
-		var groupId = event.target.id;
-		var message = 'Some thing to say :)';
-		var group = Groups.findOne({_id: groupId});
-		if (group){
-			if(!User_Group.findOne({user:Meteor.userId(), group:group._id})){
+    'click .send-request': function(event, template){
+        var groupId = event.target.id;
+        var message = 'Some thing to say :)';
+        var group = Groups.findOne({_id: groupId});
+        if (group){
+            if(!User_Room.findOne({user:Meteor.userId(), room:group._id})){
                 if(!GroupRequest.findOne({user:Meteor.userId(),group:group._id})){
-					group = GroupRequest.insert({user: Meteor.userId(), group: group._id, message: message, type: 1});
+                    group = Requests.insert({user: Meteor.userId(), group: group._id, message: message, type: "participation"});
                 }
             }
         }else{
             console.log("couldn't find this group.");
         }
-	}
+    }
 });
 Template.groupmenu.rendered = function(){
     $(".manage-group-dropdown").accordion();
@@ -220,11 +321,11 @@ Template.group_managenment.events({
     'click a.group-managenment-menu': function(event, template){
         event.stopPropagation();
         event.preventDefault();
-        var action = event.target.id;
+        var action = event.currentTarget.id;
         if(action == "edit"){
             Session.set("group-managenment-action", {edit:true});
         }else if (action == "manage"){
-            Session.set("group-managenment-action", {manage:true});
+            Session.set("group-managenment-action", {users:true});
         }
     },
     'click .mod_actions': function(event, template){
@@ -241,14 +342,14 @@ Template.group_managenment.events({
         if (Roles.userIsInRole(currentUser, "owner", targetGroup) || Roles.userIsInRole(currentUser, "group-manager", targetGroup)){
             console.log("is allowed to change the db");
             if(action == "toggle-mod"){
-                Roles.removeUsersFromRoles(targerUser, "group-manager", targetGroup);
+                Roles.removeUsersFromRoles(targertUser, "group-manager", targetGroup);
             }else if (action == "delete-user"){
                 var removeUser = User_Group.findOne({user:targetUser,group:targetGroup});
                 console.log("checking if there's a user_group collection");
                 console.log(removeUser);
                 User_Group.remove({_id:removeUser._id});
             }else if (action == "accept-request"){
-                User_Group.insert({group:targetGroup,user:targetUser, new_messages: 0, joinedIn:Date.now()});
+                User_Room.insert({room:targetGroup,user:targetUser, type:"group",new_messages: 0, date:Date.now()});
                 console.log("Accepting the request");
             }else if (action == "deny-request"){
                 console.log("deny request");

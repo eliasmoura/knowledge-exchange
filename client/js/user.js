@@ -118,6 +118,7 @@ Template.login_form.rendered = function(){
 }
 Template.login_form.events({
 	'submit form#login-form': function(e, t){
+		e.preventDefault();
         var email = $('#login_email').val();
         var passwd = $('#login_passwd').val();
         email = trimInput(email);

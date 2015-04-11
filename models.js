@@ -6,7 +6,7 @@ UsersRelations = new Meteor.Collection('users_relations');
 OnlineUsers = new Meteor.Collection('onlineusers');
 
 Messages = new Meteor.Collection('messages');
-
+Requests = new Mongo.Collection('requests');
 UserRequest = new Meteor.Collection('user_request');
 PrivateMessages = new Meteor.Collection('privatemessages');
 PrivateChat = new Meteor.Collection('privatechat');
@@ -34,7 +34,17 @@ Report = new Meteor.Collection('report');
 
 Messages.allow({
     insert: function(userId, doc){
-        return userId && doc.owner === userId;
+        var allowed = false;
+        if(userId && doc.owner === userId)
+            if(Chatrooms.findOne({_id:doc.room}))
+                allowed = true;
+            else{
+                if(Groups.findOne({_id:doc.room}))
+                    if(User_Room.findOne({user:doc.owner, room:doc.room}))
+                        allowed = true;
+            }
+
+        return allowed;
     },
     update: function(userId, doc, fields, modifier){
     },
@@ -43,9 +53,26 @@ Messages.allow({
     fetch: []
 });
 
-UserRequest.allow({
+Requests.allow({
     insert: function(userId, doc){
-        return userId && doc.owner === userId;
+        var allowed = false;
+        if(userId && userId === doc.user)
+            if(Requests.findOne({user:doc.user,group:doc.group}) === undefined &&
+                Requests.findOne({user:doc.contact,group:doc.contact}) === undefined)
+            if(doc.type === "participation"){
+                var group = Groups.findOne({_id:doc.group});
+                if(group !== undefined ){
+                    if(group.type === "open" || group.type === "participation")
+                        allowed = true;
+                    else if(Roles.userIsInRole(userId, "group-member", group._id))
+                        allowed = true;
+                }
+            }else if(doc.type === "contact"){
+                var user =  Meteor.findOne({_id:doc.user});
+                if(user !== undefined)
+                    allowed = true;
+            }
+        return allowed;
     },
     update: function(userId, doc, fields, modifier){
     },
@@ -56,7 +83,6 @@ UserRequest.allow({
 
 Chatrooms.allow({
     insert: function(userId, doc){
-        return userId && doc.owner === userId;
     },
     update: function(userId, doc, fields, modifier){
     },
@@ -78,7 +104,18 @@ User_Chatroom.allow({
 
 GroupRequest.allow({
     insert: function(userId, doc){
-        return userId && doc.owner === userId;
+        var allow = false;
+        var group = Groups.findOne({_id:doc.group});
+        if(group){
+            if(doc.type === 1){
+                if(group.groupType !== "inviterequest")
+                    allow = true;
+            }else if(Roles.userIsInRole(userId, "group-member", group._id))
+                allow = true;
+        }else{
+
+        }
+        return allow;
     },
     update: function(userId, doc, fields, modifier){
     },
@@ -113,9 +150,34 @@ GroupChat.allow({
 
 User_Room.allow({
     insert: function(userId, doc){
-        return userId && doc.user === userId;
+        var allowed = false;
+        if(doc.type === "public"){
+            if(Chatrooms.findOne({_id:doc.room}) !== undefined)
+                if(userId && doc.user === userId)
+                allowed = true;
+        }else if(doc.type === "group"){
+            var group = Groups.findOne({_id:doc.room});
+            if(group !== undefined){
+                if(group.type === "open")
+                    allowed = true;
+                else if(Roles.userIsInRole(userId, "group-manager", group._id))
+                    allowed = true;
+            }
+        }
+        return allowed;
     },
     update: function(userId, doc, fields, modifier){
+        var allowed = false;
+        var group = Groups.findOne({_id:doc.room});
+        if(group !== undefined){
+            if(Roles.userIsInRole(userId, "group-manager", group._id))
+                if(!_.contains(fields,["user","_id", "new_messages","date","room"]))
+                    allowed = true;
+            if(fields.length == 1)
+                if(_.contains(fields,"new_messages"))
+                    allowed = true;
+        }
+        return allowed;
     },
     remove: function(userId, doc){
     },

@@ -13,14 +13,22 @@
             {{else}}
             <div class="sixteen wide  mobile fithteen wide computer column row">
                 <div class="ui top attached tabular menu">
+                    {{#if isInRole "group-member" room._id}}
                     <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
                         <a href="#" class="ui group-name">{{room.name}}</a>
                     </div>
+                    {{/if}}
+                    <div class="{{room_handler.overview.active}} item" id="room-overview" data-tab="chat-overview">
+                        <a href="#" class="overview" id="{{room._id}}">
+                            {{#if isInRole "group-member" room._id}}
+                                Overview
+                            {{else}}
+                                {{room.name}}
+                            {{/if}}
+                        </a>
+                    </div>
                     <div class="{{room_handler.settings.active}} item" id="room-settings" data-tab="chat-settings">
                         <a href="#" class="settings" id="{{room._id}}">Settings</a>
-                    </div>
-                    <div class="{{room_handler.overview.active}} item" id="room-overview" data-tab="chat-overview">
-                        <a href="#" class="overview" id="{{room._id}}">Overview</a>
                     </div>
                     {{#if isInRole "group-manager" room._id}}
                     <div class="{{room_handler.manage.active}} item" id="room-manage" data-tab="chat-manage">
@@ -135,8 +143,28 @@ chat sidebar menu
 </template>
 
 <template name="settings">
-    Room  settings
-
+    <div class="ui grid">
+        <div class="sixteen wide column">
+            <h3 class="ui dividing header">
+                <i class="icon alarm"></i>
+                <div class="content">
+                {{mf 'Notifications' 'Notifications'}}
+                <div class="sub header">{{mf 'notify-when' 'Notify me when'}}</div>
+                </div>
+            </h3>
+            <div class="segment">
+                <div class="four wide column">
+                    {{mf 'every-message' 'Any new message arrives'}}
+                </div>
+            </div>
+        </div>
+        <div class="sixteen wide column">
+        </div>
+        <div class="sixteen wide column">
+        </div>
+        <div class="sixteen wide column">
+        </div>
+    </div>
 </template>
 <template name="chat">
     <div class="ui celled list">

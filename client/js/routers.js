@@ -155,7 +155,6 @@ Router.route('/chat', {
             Meteor.subscribe("requests-invite"),
             Meteor.subscribe("user-list"),
             Meteor.subscribe("user-groups"),
-            Meteor.subscribe("groups-mods"),
             Meteor.subscribe("groups-list"),
             Meteor.subscribe("user-contact"),
             Meteor.subscribe("emails-received"),
@@ -173,12 +172,12 @@ Router.route('/chatroom/public/:_id', {
             Meteor.subscribe("messages", this.params._id),
             Meteor.subscribe("chat-corrections",{room:this.params._id, type:"public"}),
             Meteor.subscribe("users-room",{room:this.params._id, type:"public"}),
+            Meteor.subscribe("currentRoom",this.params._id, "public"),
             Meteor.subscribe("languages-list"),
             Meteor.subscribe("requests"),
             Meteor.subscribe("requests-invite"),
             Meteor.subscribe("user-list"),
             Meteor.subscribe("user-groups"),
-            Meteor.subscribe("groups-mods"),
             Meteor.subscribe("groups-list"),
             Meteor.subscribe("user-contact"),
             Meteor.subscribe("emails-received"),
@@ -202,12 +201,12 @@ Router.route('/chatroom/group/:_id', {
             Meteor.subscribe("messages", this.params._id),
             Meteor.subscribe("chat-corrections",{room:this.params._id, type:"group"}),
             Meteor.subscribe("users-room",{room:this.params._id, type:"group"}),
+            Meteor.subscribe("currentRoom",this.params._id, "group"),
             Meteor.subscribe("languages-list"),
             Meteor.subscribe("requests"),
             Meteor.subscribe("requests-invite"),
             Meteor.subscribe("user-list"),
             Meteor.subscribe("user-groups"),
-            Meteor.subscribe("groups-mods"),
             Meteor.subscribe("groups-list"),
             Meteor.subscribe("user-contact"),
             Meteor.subscribe("emails-received"),
@@ -232,12 +231,12 @@ Router.route('/chatroom/101/:_id', {
             Meteor.subscribe("messages", this.params._id),
             Meteor.subscribe("chat-corrections",{room:this.params._id, type:"private"}),
             Meteor.subscribe("users-room",{room:this.params._id, type:"private"}),
+            Meteor.subscribe("currentRoom",this.params._id, "user"),
             Meteor.subscribe("languages-list"),
             Meteor.subscribe("requests"),
             Meteor.subscribe("requests-invite"),
             Meteor.subscribe("user-list"),
             Meteor.subscribe("user-groups"),
-            Meteor.subscribe("groups-mods"),
             Meteor.subscribe("groups-list"),
             Meteor.subscribe("user-contact"),
             Meteor.subscribe("emails-received"),
@@ -426,14 +425,9 @@ ChatroomsCtrl = RouteController.extend({
         },
         messages: function(){
             var messages = {room:Session.get("roomid"), type: Session.get("roomtype")};
-            var messagesArray = new Array();
-
-            messages = Messages.find({room:messages.room});
-            console.log(messages.fetch());
+            messages = Messages.find({room:messages.room}).fetch();
             var blocked_users = Meteor.user().profile.blocked_users;
-            if (messages)
-            if (messages.count()){
-                messages.forEach(function(row){
+            var messagesArray = _.map(messages, function(row){
                     if( blocked_users == undefined)
                         blocked_users = [];
                     // console.log(blocked_users);
@@ -444,46 +438,28 @@ ChatroomsCtrl = RouteController.extend({
                             crow.corrector = crow.corrector;
                             row.corrections.push(crow);
                         })
-                        messagesArray.push(row);
-                        //console.log(row);
                     }
+                    return row;
                 })
-            }
             return messagesArray;
+
         },
         group_rooms:function(){
-            var user_groups = User_Room.find({user: Meteor.userId()}).fetch();
-            // console.log(user_groups);
-            var groupsArray = new Array();
-            // var groups = new Array();
-            user_groups.forEach(function(row){
-                // console.log(row);
-                var group = Groups.findOne({_id:row.group});
-                // console.log(group);
-                if(group != undefined){
+            var user_groups = User_Room.find({user: Meteor.userId(), type: "group"}, {fields:{room:1, new_messages:1}}).fetch();
+            var groupsArray = _.map(user_groups,function(row){
+                var group = Groups.findOne({_id:row.room});
+                if(group !== undefined){
                     group.notification = row.new_messages;
-                    if (row.group == Meteor.user().profile.active_room.room)
+                    if (row.room == Session.get("roomid"))
                         group.active = true;
-                    // console.log(group);
-                    group.owner = row.owner;
-                    group.mod = row.mod;
-                    if(Roles.userIsInRole(Meteor.userId(), "group-manager", row.group)|| Roles.userIsInRole(Meteor.userId(), "owner", row.group)){
+                    if(Roles.userIsInRole(Meteor.userId(), "group-manager", row.room)|| Roles.userIsInRole(Meteor.userId(), "owner", row.room)){
                         group.isMod = true;
-                        group.request = {total:GroupRequest.find({group:row.group, type:1}).count()};
+                        group.request = {total:GroupRequest.find({room:row.room, type:1}).count()};
                     }else group.isMod = false;
-                    groupsArray.push(group);
+                    return group;
                 }
             });
-
-            
-            /*Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
-                row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
-                groups.push(row);
-            });*/
-            //console.log(groups);
-            //console.log(groupsArray);
-            return groupsArray;
-        },
+            return _.filter(groupsArray,function(element){return element !== undefined;});        },
         add_user:function(){
             return Session.get("add_user");
         },
@@ -510,13 +486,24 @@ ChatroomCtrl = RouteController.extend({
           }else{
             var room_handler = {};
             room_handler.manage = {active:false};
-            room_handler.chat = {active:"active"};
             room_handler.settings = {active:false};
-            Session.set("room_handler", room_handler);
+            room_handler.overview = {active:false};
+            room_handler.chat = {active:false};
             Session.set("roomid", this.state.get("roomid"));
             Session.set("roomtype", this.state.get("roomtype"));
             if(!User_Room.findOne({room:this.params._id, user:Meteor.userId()})){
-                User_Room.insert({room:this.params._id, new_messages:0, user:Meteor.userId(), type: "public"});
+                if(Chatrooms.findOne({_id:this.params._id}) !== undefined){
+                    User_Room.insert({room:this.params._id, new_messages:0, user:Meteor.userId(), type: "public"});
+                    room_handler.chat = {active:"active"};
+                }else{
+                    room_handler.overview = {active:"active"};
+                }
+            }else
+                room_handler.chat = {active:"active"};
+            Session.set("room_handler", room_handler);
+            var user_room = User_Room.findOne({room:this.state.get("roomid"), user:Meteor.userId()});
+            if(user_room !== undefined){
+                User_Room.update({_id:user_room._id}, {$set:{new_messages:0}});
             }
             this.next();
           }
@@ -606,14 +593,9 @@ ChatroomCtrl = RouteController.extend({
         },
         messages: function(){
             var messages = {room:Session.get("roomid"), type: Session.get("roomtype")};
-            var messagesArray = new Array();
-
-            messages = Messages.find({room:messages.room});
-            console.log(messages.fetch());
+            messages = Messages.find({room:messages.room}).fetch();
             var blocked_users = Meteor.user().profile.blocked_users;
-            if (messages)
-            if (messages.count()){
-                messages.forEach(function(row){
+            var messagesArray = _.map(messages, function(row){
                     if( blocked_users == undefined)
                         blocked_users = [];
                     // console.log(blocked_users);
@@ -624,46 +606,28 @@ ChatroomCtrl = RouteController.extend({
                             crow.corrector = crow.corrector;
                             row.corrections.push(crow);
                         })
-                        messagesArray.push(row);
-                        //console.log(row);
                     }
+                    return row;
                 })
-            }
             return messagesArray;
 
         },
         group_rooms:function(){
-            var user_groups = User_Room.find({user: Meteor.userId(), type: "group"}).fetch();
-            // console.log(user_groups);
-            var groupsArray = new Array();
-            // var groups = new Array();
-            user_groups.forEach(function(row){
-                // console.log(row);
-                var group = Groups.findOne({_id:row.group});
-                // console.log(group);
-                if(group != undefined){
+            var user_groups = User_Room.find({user: Meteor.userId(), type: "group"}, {fields:{room:1, new_messages:1}}).fetch();
+            var groupsArray = _.map(user_groups,function(row){
+                var group = Groups.findOne({_id:row.room});
+                if(group !== undefined){
                     group.notification = row.new_messages;
-                    if (row.group == Meteor.user().profile.active_room.room)
+                    if (row.room == Session.get("roomid"))
                         group.active = true;
-                    // console.log(group);
-                    group.owner = row.owner;
-                    group.mod = row.mod;
-                    if(Roles.userIsInRole(Meteor.userId(), "group-manager", row.group)|| Roles.userIsInRole(Meteor.userId(), "owner", row.group)){
+                    if(Roles.userIsInRole(Meteor.userId(), "group-manager", row.room)|| Roles.userIsInRole(Meteor.userId(), "owner", row.room)){
                         group.isMod = true;
-                        group.request = {total:GroupRequest.find({group:row.group, type:1}).count()};
+                        group.request = {total:Requests.find({group:row.room}).count()};
                     }else group.isMod = false;
-                    groupsArray.push(group);
+                    return group;
                 }
             });
-
-            
-            /*Groups.find({_id:{$in: groupsArray}}).fetch().forEach(function(row){
-                row.notification = User_Group.findOne({user:Meteor.userId(), group:row._id}).new_messages;
-                groups.push(row);
-            });*/
-            //console.log(groups);
-            //console.log(groupsArray);
-            return groupsArray;
+            return _.filter(groupsArray,function(element){return element !== undefined;});
         },
         add_user:function(){
             return Session.get("add_user");
@@ -671,10 +635,5 @@ ChatroomCtrl = RouteController.extend({
         
         activeChat: "active",
         pageTitle: "Chat app"
-        //myUsersList: function(){//var users = UsersRelations.find({user:Session.get('currentUser')._id});
-                                  //for (var i = 0; i < users.length; i++) {
-                                  //	users[i] = {user:Meteor.users.findOne({_id:users[i][0]})};
-                                  //}
-                                  //return true;}
     }
 })
