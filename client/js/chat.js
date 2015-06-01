@@ -114,9 +114,9 @@ Template.chatrooms_side.events = {
 		Session.set('modal_handler', group_handler);
 	},
     'click a.quitGroup': function(event, template){
-        var room =  $(event.target).parent().parent().parent().parent().attr("id");
+        var room =  currentEvent.target.id;
         console.log(room);
-        var user_group = User_Room.findOne({group:room, type: "group",user: Meteor.userId()})._id;
+        var user_group = User_Room.findOne({room:room, type: "group",user: Meteor.userId()})._id;
         User_Room.remove({_id:user_group});
         console.log("quit");
     },
@@ -165,6 +165,13 @@ Template.chatrooms.events({
         room_handler.settings = {active:false};
         room_handler.overview = {active:"active"};
         Session.set("room_handler", room_handler);
+    },
+    'click a#quitGroup': function(event, template){
+        var room =  event.currentTarget.id;
+        console.log(room);
+        var user_group = User_Room.findOne({room:Session.get("roomid"), type: "group",user: Meteor.userId()})._id;
+        User_Room.remove({_id:user_group});
+        console.log("quit");
     }
 })
 UI.registerHelper("room_handler",

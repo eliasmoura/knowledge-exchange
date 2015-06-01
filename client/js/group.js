@@ -159,7 +159,7 @@ Template.create_group.events({
         var html = '<select name="lang" id="" class="lang form-control">\
                     <option value="0">'+ mf('select',null,'Select One')+'</option>';
         for (var i = 0; i < langs.length; i++) {
-            html = html+'<option value="'+langs[i]+'">'+langs[i]+'</option>';
+            html = html+'<option value="'+langs[i].key+'">'+langs[i].lang+'</option>';
         }
         html = html + '</select>';
         $(element).parent().append(html);
@@ -193,21 +193,10 @@ Template.edit_group_info.events({
         var groupFocusArray = _.map(groupFocus, function(item) {
              return item.defaultValue;
         });
-
-        if(template.find("[name='invite-message']:checked"))
-        if(template.find("[name='invite-message']:checked").value != "default")
-            var message = template.find("#invite-message").value;
-        else
-            var message = "default";
-        
-        /*Meteor.call("create_group", {name:groupname,description:description,
-            languages:languages, invite:members,group_type:groupType,
-            group_focus:groupFocusArray,message:message});*/
         var errors = new Array();
         var group = {name:groupname,description:description,
             languages:languages, group_type:groupType,
             group_focus:groupFocusArray};
-        
         if (group.name.length < 3){
             errors.push({name:"too short"})
         }
@@ -230,24 +219,21 @@ Template.edit_group_info.events({
                 updates.name = group.name;
             if(group.description !== oldgroup.description)
                 updates.description = group.description;
-            if(_.every(group.languages,oldgroup.languages))
+            if(_.difference(group.languages,oldgroup.languages).length || _.difference(oldgroup.languages,group.languages).length)
                 updates.languages = group.languages;
-            if(_.every(group.group_focus,oldgroup.focus))
+            if(_.difference(group.group_focus,oldgroup.focus).length || _.difference(oldgroup.focus,group.group_focus).length)
                 updates.focus = group.group_focus;
             if(group.group_type !== oldgroup.type)
                 updates.type = group.group_type;
-            Groups.update({_id:Session.get("roomid")},{$set:updates}, function(error, result){
+            if(!_.isEmpty(updates))
+            Groups.update({_id:Session.get("roomid")},{$set:updates}, 
+                function(error, result){
                     if(!error){
-                        for (var i = 0; i< members.length; i++) {
-                            //group_invite_request({group:result,user:member[i],message:message});
-                            GroupRequest.insert({user:member[i],message:message,type:2,group:result});
-                        }
-                        Router.go("GroupChat",{_id:result});
+                        console.log("Edited");
+                        Router.go("GroupChat",{_id:Session.get("roomid")});
                     }else console.log(error);
                 }
             );
-            console.log("Group created");
-            $('#group-handler-modal').modal('hide');
         }else{
         console.log(errors);
         }
@@ -260,7 +246,7 @@ Template.edit_group_info.events({
         var html = '<select name="lang" id="" class="lang form-control">\
                     <option value="0">'+ mf('select',null,'Select One')+'</option>';
         for (var i = 0; i < langs.length; i++) {
-            html = html+'<option value="'+langs[i]+'">'+langs[i]+'</option>';
+            html = html+'<option value="'+langs[i].key+'">'+langs[i].lang+'</option>';
         }
         html = html + '</select>';
         $(element).parent().append(html);
@@ -301,8 +287,35 @@ Template.room_overview.events({
         }else{
             console.log("couldn't find this group.");
         }
-    }
+    },
+
 });
+Template.group_settings.events({
+    'change .group-settings':function(event, template){
+        event.preventDefault();
+        event.stopPropagation();
+        var target = event.currentTarget.id;
+        var value = 0;
+        var settings = {notification:{any:1}};
+        settings.notification = {muted:0};
+        settings.notification = {direct:0};
+        settings.notification = {threshold:0};
+        if(target === "mutedfor")
+            settings.notification.muted = event.currentTarget.value;
+        else if(target === "message-threshold")
+            settings.notification.threshold = event.currentTarget.value;
+        else if(target === "any")
+            settings.notification.any = !settings.notification.any;
+        else if(target === "direct")
+            settings.notifications.direct = !settings.notification.direct;
+
+
+
+        var room = Session.get("roomid");
+        var user_room = User_Room.findOne({room:room,user:Meteor.userId()});
+        User_Room.update({_id:user_room._id},{$set:{settings:settings}});
+    }
+})
 Template.groupmenu.rendered = function(){
     $(".manage-group-dropdown").accordion();
     console.log($(".manage-group-dropdown").attr("id"));
@@ -344,10 +357,10 @@ Template.group_managenment.events({
             if(action == "toggle-mod"){
                 Roles.removeUsersFromRoles(targertUser, "group-manager", targetGroup);
             }else if (action == "delete-user"){
-                var removeUser = User_Group.findOne({user:targetUser,group:targetGroup});
+                var removeUser = User_Room.findOne({user:targetUser,room:targetGroup});
                 console.log("checking if there's a user_group collection");
                 console.log(removeUser);
-                User_Group.remove({_id:removeUser._id});
+                User_Room.remove({_id:removeUser._id});
             }else if (action == "accept-request"){
                 User_Room.insert({room:targetGroup,user:targetUser, type:"group",new_messages: 0, date:Date.now()});
                 console.log("Accepting the request");

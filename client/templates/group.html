@@ -56,10 +56,14 @@
                         {{name}}
                     {{else}}
                         {{#if actions.send_request}}
+                        <!-- show the "send request" action if the user isn't a member and the group isn't
+                            "member indication" type -->
                             <button class="ui button send-request" id="{{_id}}">
                                 {{mf 'send-request' 'Send participation request'}}
                                 <i id="{{_id}}" class="ui icon plus send-request"></i>
                             </button>
+                        {{else}}
+                            {{name}}
                         {{/if}}
                     {{/if}}
                 </h4>
@@ -217,23 +221,23 @@
                     <div class="four fields">
                         <div class="field">
                         <label for="music">{{mf 'music' 'music'}}</label>
-                        <input {{isGenreChecked this._id 'Music'}} type="checkbox" class="group-type " name='groupgenre' id="music" value="music" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
+                        <input {{isGenreChecked this._id 'music'}} type="checkbox" class="group-type " name='groupgenre' id="music" value="music" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
                         </div>
                         <div class="field">
                         <label for="sports">{{mf 'sports' 'sports'}}</label>
-                        <input {{isGenreChecked this._id 'Sports'}} type="checkbox" class="group-type " name='groupgenre' id="sports" value="sports" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
+                        <input {{isGenreChecked this._id 'sports'}} type="checkbox" class="group-type " name='groupgenre' id="sports" value="sports" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
                         </div>
                         <div class="field">
                         <label for="literature">{{mf 'literature' 'literature'}}</label>
-                        <input {{isGenreChecked this._id 'Literature'}} type="checkbox" class="group-type " name='groupgenre' id="literature" value="literature" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
+                        <input {{isGenreChecked this._id 'literature'}} type="checkbox" class="group-type " name='groupgenre' id="literature" value="literature" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
                         </div>
                         <div class="field">
                         <label for="video-games">{{mf 'video-games' 'video games'}}</label>
-                        <input {{isGenreChecked this._id 'Video Games'}} type="checkbox" class="group-type " name='groupgenre' id="video-games" value="video games" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
+                        <input {{isGenreChecked this._id 'Video games'}} type="checkbox" class="group-type " name='groupgenre' id="video-games" value="video games" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'choose at least one'}}" />
                         </div>
                         <div class="field">
                         <label for="tv-shows">{{mf 'tv-shows' 'T.V. Shows'}}</label>
-                        <input {{isGenreChecked this._id 'T.V. Shos'}} type="checkbox" class="group-type" name='groupgenre' id="tv-shows" value="T.V. Shows" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
+                        <input {{isGenreChecked this._id 'T.V. Shows'}} type="checkbox" class="group-type" name='groupgenre' id="tv-shows" value="T.V. Shows" data-validation-minchecked-minchecked="1" data-validation-minchecked-message="{{mf 'choose-at-1' 'Choose at least one'}}" />
                         </div>
                         <div class="field">
                         <label for="movies">{{mf 'movies' 'Movies'}}</label>
@@ -275,7 +279,7 @@
                             <select name="lang" id="" class="lang form-control" required >
                                 <option value="0">{{mf 'select_one' 'Select One'}}</option>
                                 {{#each lang_list}}
-                                    <option {{isSelected ../selectedLang lang}} value="{{key}}">{{lang}}</option>
+                                    <option {{isSelected ../selectedLang key}} value="{{key}}">{{lang}}</option>
                                 {{/each}}
                             </select>
                         {{/each}}

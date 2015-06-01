@@ -71,17 +71,28 @@ UI.registerHelper("group_managenment_action",
         return Session.get("group-managenment-action");
     }
 );
+UI.registerHelper("group_notification",
+    function(setting){
+        var group_settings = User_Room.findOne({_id:Session.get("roomid")},{fields:{settings:1}});
+        if(group_settings !== undefined)
+            return group_settings[setting];
+        return false;
+    }
+);
 UI.registerHelper("room_info",
     function(room){
         var group = Groups.findOne({_id:room});
         if(group !== undefined){
-            group.owner = Meteor.users.findOne({_id:group.owner}, {fields:{_id:1, name:1, lastname:1}});
+            group.owner = Meteor.users.findOne({_id:group.owner}, {fields:{_id:1, "profile.name":1, "profile.lastname":1}});
             group.actions = {send_request:true};
             if(User_Room.findOne({user:Meteor.userId(),room:group._id})){
                 group.actions.send_request = false
             }else if (GroupRequest.findOne({user:Meteor.userId(), room:group._id})){
                 group.actions.send_request = false;
             }else if (group.request == "invite"){
+                group.actions.send_request = false;
+            }
+            if(group.type === "indication"){
                 group.actions.send_request = false;
             }
         }

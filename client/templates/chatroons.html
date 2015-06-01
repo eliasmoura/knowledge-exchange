@@ -35,6 +35,14 @@
                         <a href="#" id="{{room._id}}" class="manage">Manage</a>
                     </div>
                     {{/if}}
+                    <div class="ui red item" id="room-leave">
+                        <a class="item " id="quitGroup" href="#">
+                            {{#if isInRole "group-member" room._id}}
+                            {{mf 'leave-group' 'Leave group'}}
+                            {{else}}
+                            {{/if}}
+                        </a>
+                    </div>
                 </div>
                 <div class="ui bottom attached {{room_handler.chat.active}} tab segment" data-tab="chat-content">
                     <div class="ui grid">
@@ -57,7 +65,7 @@
                     {{> group_managenment}}
                 </div>
                 <div class="ui bottom attached {{room_handler.settings.active}} tab segment" data-tab="chat-settings">
-                    {{> settings}}
+                    {{> group_settings}}
                 </div>
                 <div class="ui bottom attached {{room_handler.overview.active}} tab segment" data-tab="chat-overview">
                     {{> room_overview}}
@@ -142,7 +150,7 @@ chat sidebar menu
     </div>
 </template>
 
-<template name="settings">
+<template name="group_settings">
     <div class="ui grid">
         <div class="sixteen wide column">
             <h3 class="ui dividing header">
@@ -154,7 +162,47 @@ chat sidebar menu
             </h3>
             <div class="segment">
                 <div class="four wide column">
+                    <div class="">
                     {{mf 'every-message' 'Any new message arrives'}}
+                    {{#if group_notification "any"}}
+                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" checked />
+                    {{else}}
+                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" />
+                    {{/if}}
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="">
+                    {{mf 'direct-message' 'New direct message arrives'}}
+                    {{#if group_notification "direct"}}
+                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="direct" checked />
+                    {{else}}
+                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" />
+                    {{/if}}
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="">
+                        {{#if group_notification "threshold"}}
+                            <input class="ui checkbox group-settings" type="checkbox" name="threshold" id="threshold-check" checked>
+                        {{else}}
+                            <input class="ui checkbox group-settings" type="checkbox" name="threshold" id="threshold-check" >
+                        {{/if}}
+                        {{mf 'threshold-notification' 'Only after'}}
+                        <input class="ui textbox group-settings" type="number" name="threhold" id="message-threshold">
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="">
+                        {{mf 'mute-this-group' 'Mute this group for:'}}
+                        <select name="muted" id="muted" class=" group-settings">
+                            <option value="0">{{mf 'hours' 'Hours'}}</option>
+                            <option value="1">{{mf 'days' 'Days'}}</option>
+                            <option value="2">{{mf 'months' 'Months'}}</option>
+                            <option value="3">{{mf 'years' 'Years'}}</option>
+                        </select>
+                        <input class="ui text group-settings" name="mutefor" id="mutedfor" type="number" value="{{group_settings.mutedfor}}" >
+                    </div>
                 </div>
             </div>
         </div>

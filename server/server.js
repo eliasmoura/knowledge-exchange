@@ -92,10 +92,12 @@ Meteor.startup(function(){
     User_Room.find().observe({
         removed: function(doc){
             var group = doc.room;
-            if (usersLeft.count() == 0){
+            if (User_Room.find({room:doc.room}).count() == 0){
                 Groups.remove({_id:group});
                 Messages.remove({room:group});
             }
+            var roles = Roles.getRolesForUser(doc.user,doc.room);
+            Roles.removeUsersFromRoles(doc.user, roles, doc.room);
         },
         added: function(doc){
             //prevent data being duplicated on server restart
