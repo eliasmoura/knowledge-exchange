@@ -1,91 +1,96 @@
 <head>
-	<!-- <title>{{title}}</title> -->
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="fragment" content="!">
+<!-- <title>{{title}}</title> -->
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="fragment" content="!">
 </head>
 
 <body>
 
 </body>
 <template name="title">
-	{{pageTitle}}
+{{pageTitle}}
 </template>
 <template name="layout">
 {{#if isCordova}}
 {{/if}}
-    <div class="pusher">
-	{{>navbar}}
-	<div class="ui grid" id='layout'>
-        <div class="fourteen wide computer sixteen tablet mobile wide column centered" id="content">
-            <div class="ui grid">
-                {{> yield }}
-            </div>
-        </div>
-		<div class="ui footer grid">
-			<div class="">footer</div>
-		</div>
-	</div>
-    {{#if modal_handler}}
-        {{> modal_handler}}
-    {{/if}}
+<div class="pusher">
+  {{>navbar}}
+  <div class="ui grid" id='layout'>
+    <div class="fourteen wide computer sixteen tablet mobile wide column centered" id="content">
+      <div class="ui grid yield_wraper">
+        {{> yield }}
+      </div>
     </div>
+    <div class="ui sixteen wide column">
+      <div class="">footer</div>
+    </div>
+  </div>
+  {{> modal_handler}}
+</div>
 </template>
 
 <template name="navbar">
-    <nav class="ui sixteen wide grid center align menu navbar" role="navigation">
-        <a class="ui item mobile only column" href="#" id="side_bar" ><div class="ui grid"><i class="column content icon"></i></div></a>
-        <a class="brand item 8 wide tablet computer {{activeHome}}" id="home_mixedlang" href="{{pathFor route='home'}}">
-            <div class="ui grid">
-                <div class="column mobile only" id="home_home">
-                    <i class="icon home"></i>
-                </div>
-                <div class="column tablet computer only">Mixed Languages</div>
-            </div>
-        </a>
-        <a class="navigation item {{activeBlog}}" href="{{pathFor 'blog'}}">
-            <div class="ui grid">
-                <div class="column mobile only">
-                    <i class="icon edit"></i>
-                </div>
-                <div class="column tablet computer only">
-                    {{mf 'blog' 'BLOG'}}
-                </div>
-            </div>
-        </a>
-        <a class="navigation item {{activeChat}}" href="{{pathFor route='Chatrooms'}}">
-            <div class="ui grid">
-                <div class="column mobile only">
-                    <i class="icon chat"></i>
-                </div>
-                <div class="column tablet computer only">
-                    {{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<div class="label">{{chat_notifications}}</div>{{/if}}
-                </div>
-            </div>
-        </a>
-        <a class="navigation item {{activeNotes}}" href="{{pathFor 'notes'}}">
-            <div class="ui grid">
-                <div class="column mobile only">
-                    <i class="icon book"></i>
-                </div>
-                <div class="column tablet computer only">
-                    {{mf 'notes' 'NOTES'}}
-                </div>
-            </div>
-        </a>
-        {{>search}}
-        <div class="item right">
-            {{> user}}
-        </div>
-    </nav>
+<nav class="ui sixteen wide grid center align menu navbar" role="navigation">
+  <a class="ui item mobile only column" href="#" id="side_bar" ><div class="ui grid"><i class="column content icon"></i></div></a>
+  <a class="brand item 8 wide tablet computer {{activeHome}}" id="home_mixedlang" href="{{pathFor route='home'}}">
+    <div class="ui grid">
+      <div class="column mobile only" id="home_home">
+        <i class="icon home"></i>
+      </div>
+      <div class="column tablet computer only">Mixed Languages</div>
+    </div>
+  </a>
+  <a class="navigation item {{activeBlog}}" href="{{pathFor 'blog'}}">
+    <div class="ui grid">
+      <div class="column mobile only">
+        <i class="icon edit"></i>
+      </div>
+      <div class="column tablet computer only">
+        {{mf 'blog' 'BLOG'}}
+      </div>
+    </div>
+  </a>
+  <a class="navigation item {{activeChat}}" href="{{pathFor route='Chatrooms'}}">
+    <div class="ui grid">
+      <div class="column mobile only">
+        <i class="icon chat"></i>
+      </div>
+      <div class="column tablet computer only">
+        {{mf 'chat' 'CHAT'}}{{#if chat_notifications}}<div class="label">{{chat_notifications}}</div>{{/if}}
+      </div>
+    </div>
+  </a>
+  <a class="navigation item {{activeNotes}}" href="{{pathFor 'notes'}}">
+    <div class="ui grid">
+      <div class="column mobile only">
+        <i class="icon book"></i>
+      </div>
+      <div class="column tablet computer only">
+        {{mf 'notes' 'NOTES'}}
+      </div>
+    </div>
+  </a>
+  {{>search}}
+  <div class="item right">
+    {{#if currentUser}}
+    {{> user}}
+    {{#if first_login}}
+    {{> additional_info}}
+    {{/if}}
+    {{else}}
+    <div class="ui button" id="sign-in" >{{mf 'sign-in-up' 'Sign in/up'}}</div>
+    {{/if}}
+  </div>
+</nav>
 </template>
 <template name="popup">
-    <div class="ui popup" id="content_popup">
-        {{#with userinfo_popup _id}}
-            <h4 class="ui header">{{this.profile.public_name}}</h4>
-            <div>
-                {{this.profile.name}} {{this.profile.lastname}}
-            </div>
-        {{/with}}
-    </div>
+<div class="ui popup" id="content_popup">
+  {{#with userinfo_popup _id}}
+  <h4 class="ui header">{{this.profile.public_name}}</h4>
+  <div>
+    {{this.profile.name}} {{this.profile.lastname}}
+  </div>
+  {{/with}}
+</div>
 </template>

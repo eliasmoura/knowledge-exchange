@@ -43,7 +43,7 @@ UI.registerHelper("isGenreChecked",
         if(_.indexOf(Groups.findOne({_id:group}).focus,genre) !== -1)
             return "checked";
         else
-            return;
+            return "";
     }
 );
 
@@ -52,7 +52,7 @@ UI.registerHelper("isTypeSelected",
         if(Groups.findOne({_id:group}).type === type)
             return "selected";
         else
-            return;
+            return "";
     }
 );
 UI.registerHelper("isSelected",
@@ -78,7 +78,44 @@ UI.registerHelper("group_notification",
             return group_settings[setting];
         return false;
     }
-);
+                 );
+UI.registerHelper("group_settings", function(args){
+    var user_room = User_Room.findOne({room:Session.get("roomid"),
+                                       user:Meteor.userId()});
+
+    if(args ==undefined)
+        args = {setting:"",value:""};
+    else
+        args = args.hash;
+    var setting = args.setting;
+    var value = args.value;
+    if(setting === "notification" && user_room !== undefined){
+        var settings = {};
+        if(user_room.settings === undefined){
+            var settings ={
+                notification:{
+                    muted:false,
+                    threshold:0,
+                    any:true,
+                    direct:false
+                }
+            };
+            User_Room.update({_id:user_room._id},{$set:{settings:settings}});
+            user_room = User_Room.findOne({room:Session.get("roomid"),
+                                      user:Meteor.userId()});
+        }
+        settings = user_room.settings;
+        if(value === "muted")
+            return settings.notification.muted;
+        if(value  === "message-threshold")
+            return settings.notification.threshhold;
+        if(value === "any")
+            return settings.notification.any;
+        if(value === "direct")
+            return settings.notification.direct;
+    }
+    return false;
+});
 UI.registerHelper("room_info",
     function(room){
         var group = Groups.findOne({_id:room});
@@ -86,7 +123,7 @@ UI.registerHelper("room_info",
             group.owner = Meteor.users.findOne({_id:group.owner}, {fields:{_id:1, "profile.name":1, "profile.lastname":1}});
             group.actions = {send_request:true};
             if(User_Room.findOne({user:Meteor.userId(),room:group._id})){
-                group.actions.send_request = false
+                group.actions.send_request = false;
             }else if (GroupRequest.findOne({user:Meteor.userId(), room:group._id})){
                 group.actions.send_request = false;
             }else if (group.request == "invite"){
@@ -99,3 +136,6 @@ UI.registerHelper("room_info",
         return group;
     }
 );
+UI.registerHelper("numberLangs", function(){
+  return Session.get("numberLangs");
+});

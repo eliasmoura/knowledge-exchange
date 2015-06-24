@@ -10,7 +10,7 @@ Meteor.startup(function(){
         document.title = "Mixed Languages";
         var group_handler = {} ;
         group_handler.create = {data:false};
-        group_handler.find = {}
+        group_handler.find = {};
         group_handler.find.active = false;
         group_handler.find.data = false;
         group_handler.management = {data:false};
@@ -20,7 +20,7 @@ Meteor.startup(function(){
     }
     else
         Session.set('locale', 'en_US');
-    
+
     Session.set('group-finder', false);
     Session.set("login",true);
     Session.set("add_ser",false);
@@ -142,14 +142,14 @@ Template.post.events = {
         //mfPkg.setLocale('pt_BR');
         Session.set('locale', 'pt_BR');
         Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.default_status":status}});
-        
+
     },
     'click input.toen': function(e,t){
         var element = e.target;
         //mfPkg.setLocale='pt_BR';
         //mfPkg.setLocale('pt_BR');
         Session.set('locale', 'en_US');
-        
+
     },
     'click input.clean': function(e,t){
         Meteor.call("clean_db");
@@ -205,4 +205,3 @@ Template.navbar.rendered = function(){
         $("#home").show();
     }*/});
 }
-

@@ -1,351 +1,285 @@
 <template name="chatrooms">
-    <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
-        {{>yield 'sidebar'}}
-    </div>
-    <div class="ui twelve wide tablet computer sixteen mobile wide column" id="content">
-        {{#if group_handler.active}}
-            {{> create_group}}
-            <button class="ui button" id="create-group-send" >{{mf 'create' 'Create'}}</button>
-                <button class="ui button" id="create-group-cancel" >{{mf 'cancel' 'Cancel'}}</button>
-        {{else}}
-            {{#if chatfeed}}
-                {{> chatfeed}}
-            {{else}}
-            <div class="sixteen wide  mobile fithteen wide computer column row">
-                <div class="ui top attached tabular menu">
-                    {{#if isInRole "group-member" room._id}}
-                    <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
-                        <a href="#" class="ui group-name">{{room.name}}</a>
-                    </div>
-                    {{/if}}
-                    <div class="{{room_handler.overview.active}} item" id="room-overview" data-tab="chat-overview">
-                        <a href="#" class="overview" id="{{room._id}}">
-                            {{#if isInRole "group-member" room._id}}
-                                Overview
-                            {{else}}
-                                {{room.name}}
-                            {{/if}}
-                        </a>
-                    </div>
-                    <div class="{{room_handler.settings.active}} item" id="room-settings" data-tab="chat-settings">
-                        <a href="#" class="settings" id="{{room._id}}">Settings</a>
-                    </div>
-                    {{#if isInRole "group-manager" room._id}}
-                    <div class="{{room_handler.manage.active}} item" id="room-manage" data-tab="chat-manage">
-                        <a href="#" id="{{room._id}}" class="manage">Manage</a>
-                    </div>
-                    {{/if}}
-                    <div class="ui red item" id="room-leave">
-                        <a class="item " id="quitGroup" href="#">
-                            {{#if isInRole "group-member" room._id}}
-                            {{mf 'leave-group' 'Leave group'}}
-                            {{else}}
-                            {{/if}}
-                        </a>
-                    </div>
-                </div>
-                <div class="ui bottom attached {{room_handler.chat.active}} tab segment" data-tab="chat-content">
-                    <div class="ui grid">
-                        <div class="two wide column tablet computer only">
-                            {{> users_chatroom}}
-                        </div>
-                        <div class="fourteen wide tablet computer sixteen wide mobile column">
-                            <div class="ui grid">
-                                <div class="divmessages sixteen wide column" id="chat-messages">
-                                    {{> chat}}
-                                </div>
-                                <div class="sixteen wide column">
-                                    {{> chat_input}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui bottom attached {{room_handler.manage.active}} tab segment" data-tab="chat-manage">
-                    {{> group_managenment}}
-                </div>
-                <div class="ui bottom attached {{room_handler.settings.active}} tab segment" data-tab="chat-settings">
-                    {{> group_settings}}
-                </div>
-                <div class="ui bottom attached {{room_handler.overview.active}} tab segment" data-tab="chat-overview">
-                    {{> room_overview}}
-                </div>
-            </div>
-            {{/if}}
+  <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
+    {{>yield 'sidebar'}}
+  </div>
+  <div class="ui twelve wide tablet computer sixteen mobile wide column" id="content">
+    {{#if group_handler.create.active}}
+    {{> create_group}}
+    <button class="ui button" id="create-group-send" >{{mf 'create' 'Create'}}</button>
+    <button class="ui button" id="create-group-cancel" >{{mf 'cancel' 'Cancel'}}</button>
+    {{else}}
+    {{#if chatfeed}}
+    {{> chatfeed}}
+    {{else}}
+    <div id="chat_content" class="sixteen wide  mobile fithteen wide computer column">
+      <div class="ui top attached tabular menu" id="chat-tab">
+        {{#if isInRole "group-member" room._id}}
+        <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
+          <a href="#" class="ui group-name">{{room.name}}</a>
+        </div>
         {{/if}}
+        <div class="{{room_handler.overview.active}} item" id="room-overview" data-tab="chat-overview">
+          <a href="#" class="overview" id="{{room._id}}">
+            {{#if isInRole 'group-member' room._id}} Overview
+            {{else}} {{room.name}} {{/if}}
+          </a>
+        </div>
+        <div class="{{room_handler.settings.active}} item" id="room-settings" data-tab="chat-settings">
+          <a href="#" class="settings" id="{{room._id}}">Settings</a>
+        </div>
+        {{#if isInRole "group-manager" room._id}}
+        <div class="{{room_handler.manage.active}} item" id="room-manage" data-tab="chat-manage">
+          <a href="#" id="{{room._id}}" class="manage">Manage</a>
+        </div>
+        {{/if}}
+        {{#if isInRole "group-member" room._id}}
+        <div class="ui danger item" id="room-leave">
+          <a class="item " id="quitGroup" href="#">
+            {{mf 'leave-group' 'Leave group'}}
+          </a>
+        </div>
+        {{/if}}
+      </div>
+      <div class="ui bottom attached {{room_handler.chat.active}} tab segment tab-content" data-tab="chat-content">
+        <div class="ui grid chat-content">
+          <div class="two wide column tablet computer only user-list">
+            {{> users_chatroom}}
+          </div>
+          <div id="chat-container" class="fourteen wide tablet computer sixteen wide mobile column chat-content">
+            <div class="ui grid chat-content">
+              <div class="divmessages sixteen wide column chat-content" id="chat-messages">
+                {{> chat}}
+              </div>
+              <div id="message-input" class="sixteen wide column">
+                {{> chat_input}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui bottom attached {{room_handler.manage.active}} tab segment tab-content" data-tab="chat-manage">
+        {{> group_managenment}}
+      </div>
+      <div class="ui bottom attached {{room_handler.settings.active}} tab segment tab-content" data-tab="chat-settings">
+        {{> group_settings}}
+      </div>
+      <div class="ui bottom attached {{room_handler.overview.active}} tab segment tab-content" data-tab="chat-overview">
+        {{> room_overview}}
+      </div>
     </div>
-	{{#if correct}}
-        {{> correctiontools}}
-	{{/if}}
+    {{/if}}
+    {{/if}}
+  </div>
+  {{#if correct}}
+  {{> correctiontools}}
+  {{/if}}
 </template>
 
 <template name="chatfeed">
-            <div class="sixteen wide  mobile fithteen wide computer column row">
-          chat feed
-            </div>
+  <div class="sixteen wide  mobile fithteen wide computer column row">
+    chat feed
+  </div>
 </template>
 <!--
-chat sidebar menu
--->
+    chat sidebar menu
+  -->
 <template name="chatrooms_side">
-    <div class="item">
-        <i class="world icon"></i><a class="" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
-        <div class="menu" id="panel-rooms">
-            {{#each rooms}}
-            <a href="{{pathFor route='PublicChat'}}" class="item chat-room {{#if active}}active{{/if}}" id="{{_id}}" >{{name}}</a>
-            {{/each}}
-        </div>
+  <div class="item">
+    <i class="world icon"></i><a class="" href="#">{{mf 'public_rooms' 'Public rooms'}}:</a>
+    <div class="menu" id="panel-rooms">
+      {{#each rooms}}
+      <a href="{{pathFor route='PublicChat'}}" class="item chat-room {{#if active}}active{{/if}}" id="{{_id}}" >{{name}}</a>
+      {{/each}}
     </div>
-    <div class="item">
-        <i class="icon users"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
-        <button id="add-group" class="ui icon button label">
-            <i class="icon plus" title="{{mf 'add-find-group' 'Create a chat group'}}"></i>
-        </button>
-        <div class="menu" id="panel-groups">
-            {{#each group_rooms}}
-            <a  href="{{pathFor route='GroupChat'}}" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
-                    {{name}}<!--<button class="ui label icon button manage-group">
-                        <i class="setting icon"></i>
-                        </button>-->
-                </a>
-            {{/each}}
-        </div>
+  </div>
+  <div class="item">
+    <i class="icon users"></i><a class="panel-rooms" href="#">{{mf 'group_chats' 'Groups'}}:</a>
+    <button id="add-group" class="ui icon button label">
+      <i class="icon plus" title="{{mf 'add-find-group' 'Create a chat group'}}"></i>
+    </button>
+    <div class="menu" id="panel-groups">
+      {{#each group_rooms}}
+      <a  href="{{pathFor route='GroupChat'}}" class="item chat-group {{#if active}}active{{/if}}" id="{{_id}}" >
+        {{name}}<!--<button class="ui label icon button manage-group">
+                    <i class="setting icon"></i>
+        </button>-->
+      </a>
+      {{/each}}
     </div>
-    <div class="item">
-        <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
-        <span id="add-find-user" class="plus icon" title="add/find a contact"></span>
-        <div class="menu" id="panel-friends">
-            {{#each contacts}}
-                <a href="#" class="friends-contacts username item popup_this" id="{{_id}}" >
-                    <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
-                    {{profile.name}} <button class="ui label icon button"><i class="setting icon"></i></button>
-                    {{#if notification}}
-                    <span class="chat friends-contacts-noti label icon">{{notification}}</span>
-                    {{/if}}
-                </a>
-                {{> popup}}
-            {{/each}}
-        </div>
+  </div>
+  <div class="item">
+    <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
+    <span id="add-find-user" class="plus icon" title="add/find a contact"></span>
+    <div class="menu" id="panel-friends">
+      {{#each contacts}}
+      <a href="#" class="friends-contacts username item popup_this" id="{{_id}}" >
+        <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
+        {{profile.name}} <button class="ui label icon button"><i class="setting icon"></i></button>
+        {{#if notification}}
+        <span class="chat friends-contacts-noti label icon">{{notification}}</span>
+        {{/if}}
+      </a>
+      {{> popup}}
+      {{/each}}
     </div>
+  </div>
 </template>
 <!-- chat room -->
 <template name="users_chatroom">
-    <div class="ui items">
-        <div class="item">
-            <h4 class="ui header">{{mf 'users' 'Users'}}:</h4>
-        </div>
-        <div class="item">
-            <div class="list">
-                {{#each chat_users}}
-                    <div class="user item" id="{{_id}}">
-                        <label>
-                        <i class="user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
-                        <a href="#" class="popup_this">{{fullname}}</a>
-                        {{> popup}}
-                        </label>
-                    </div>
-                {{/each}}
-            </div>
-        </div>
+  <div class="ui items user-list">
+    <div class="item">
+      <h4 class="ui header">{{mf 'users' 'Users'}}:</h4>
     </div>
+    <div class="item user-list">
+      <div class="list">
+        {{#each chat_users}}
+        <div class="user item" id="{{_id}}">
+          <label>
+            <i class="user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
+            <a href="#" class="popup_this">{{fullname}}</a>
+            {{> popup}}
+          </label>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="group_settings">
-    <div class="ui grid">
-        <div class="sixteen wide column">
-            <h3 class="ui dividing header">
-                <i class="icon alarm"></i>
-                <div class="content">
-                {{mf 'Notifications' 'Notifications'}}
-                <div class="sub header">{{mf 'notify-when' 'Notify me when'}}</div>
-                </div>
-            </h3>
-            <div class="segment">
-                <div class="four wide column">
-                    <div class="">
-                    {{mf 'every-message' 'Any new message arrives'}}
-                    {{#if group_notification "any"}}
-                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" checked />
-                    {{else}}
-                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" />
-                    {{/if}}
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="">
-                    {{mf 'direct-message' 'New direct message arrives'}}
-                    {{#if group_notification "direct"}}
-                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="direct" checked />
-                    {{else}}
-                        <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" />
-                    {{/if}}
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="">
-                        {{#if group_notification "threshold"}}
-                            <input class="ui checkbox group-settings" type="checkbox" name="threshold" id="threshold-check" checked>
-                        {{else}}
-                            <input class="ui checkbox group-settings" type="checkbox" name="threshold" id="threshold-check" >
-                        {{/if}}
-                        {{mf 'threshold-notification' 'Only after'}}
-                        <input class="ui textbox group-settings" type="number" name="threhold" id="message-threshold">
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="">
-                        {{mf 'mute-this-group' 'Mute this group for:'}}
-                        <select name="muted" id="muted" class=" group-settings">
-                            <option value="0">{{mf 'hours' 'Hours'}}</option>
-                            <option value="1">{{mf 'days' 'Days'}}</option>
-                            <option value="2">{{mf 'months' 'Months'}}</option>
-                            <option value="3">{{mf 'years' 'Years'}}</option>
-                        </select>
-                        <input class="ui text group-settings" name="mutefor" id="mutedfor" type="number" value="{{group_settings.mutedfor}}" >
-                    </div>
-                </div>
-            </div>
+  <div class="ui grid">
+    <div class="sixteen wide column">
+      <h3 class="ui dividing header">
+        <i class="icon alarm"></i>
+        <div class="content">
+          {{mf 'Notifications' 'Notifications'}}
+          <div class="sub header">{{mf 'notify-when' 'Notify me when'}}</div>
         </div>
-        <div class="sixteen wide column">
+      </h3>
+      <div class="segment">
+        <div class="four wide column">
+          <div class="">
+            {{mf 'every-message' 'Any new message arrives'}}
+            {{#if group_settings setting="notification" value="any"}}
+            dsad
+            <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" checked />
+            {{else}}
+            <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" />
+            {{/if}}
+          </div>
         </div>
-        <div class="sixteen wide column">
+        <div class="four wide column">
+          <div class="">
+            {{mf 'direct-message' 'New direct message arrives'}}
+            {{#if group_settings setting="notification" value="direct"}}
+            <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="direct" checked />
+            {{else}}
+            <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="direct" />
+            {{/if}}
+          </div>
         </div>
-        <div class="sixteen wide column">
+        <div class="four wide column">
+          <div class="">
+            {{#if group_settings setting="notification" value="threshold"}}
+            <input class="ui checkbox group-settings" type="checkbox" name="threshold" id="threshold-check" checked>
+            {{else}}
+            <input class="ui checkbox group-settings" type="checkbox" name="threshold" id="threshold-check" >
+            {{/if}}
+            {{mf 'threshold-notification' 'Only after'}}
+            <input class="ui textbox group-settings" type="number" name="threhold" id="message-threshold" value="{{group_settings setting='notification' value='threshold'}}">
+          </div>
         </div>
+        <div class="four wide column">
+          <div class="">
+            {{mf 'mute-this-group' 'Mute this group for:'}}
+            <select name="muted" id="muted" class=" group-settings">
+              <option value="0">{{mf 'hours' 'Hours'}}</option>
+              <option value="1">{{mf 'days' 'Days'}}</option>
+              <option value="2">{{mf 'months' 'Months'}}</option>
+              <option value="3">{{mf 'years' 'Years'}}</option>
+            </select>
+            <input class="ui text group-settings" name="mutefor" id="mutedfor" type="number" value="{{group_settings setting='notification' value='mutedfor'}}" >
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="sixteen wide column">
+    </div>
+    <div class="sixteen wide column">
+    </div>
+    <div class="sixteen wide column">
+    </div>
+  </div>
 </template>
 <template name="chat">
-    <div class="ui celled list">
-		{{#each messages}}
-		<li class="message item" id="{{_id}}">
-			<a class="username popup_this" href="#" id="{{userid}}">{{name}}:</a> 
-            {{> popup}}
-            {{message}}
-			{{#if corrections}}
-				<!-- {{> messagem_corrected_button}} -->
-			{{/if}}
-		</li>
-		{{/each}}
-    </div>
+  <div class="ui celled list">
+    {{#each messages}}
+    <li class="message item" id="{{_id}}">
+      <div>
+      <a class="username popup_this" href="#" id="{{userid}}">{{name}}:</a>
+      {{> popup}}
+      {{message}}
+      </div>
+<!--      {{> basic_correction_tool}}-->
+    </li>
+    {{#if chat_ready}}
+    {{scroll_chat}}
+    {{/if}}
+    {{/each}}
+  </div>
 </template>
-<template name="messagem_corrected_button">
-	<span class=" btn-group-xs">
-		<button type="button" class="correctionWraper btn btn-default" data-container="body" data-toggle="popover" data-placement="left">
-			<span class="glyphicon glyphicon-saved"></span>
-		</button>
-	</span>
-</template>
-
 <template name="chat_input">
-<div class="ui form">
+  <div class="ui form">
     <div class="field">
-        <textarea name="textareamessage" id="message" value="" placeholder="{{mf 'message' 'Message'}}" rows="2" class="ui input" > </textarea>
+      <textarea name="textareamessage" id="message" placeholder="{{mf 'message' 'Message'}}" rows="2" class="ui input" ></textarea>
     </div>
-</div>
+  </div>
 </template>
 
 <!-- tools -->
-<template name="correctiontools">
-	<div class="modal fade row" id="correctionModal" tabindex="-1" role="dialog" aria-labelledby="correctionModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="correctionModalLabel">{{mf 'correction' 'Correction'}}</h4>
-				</div>
-				<div class="modal-body"><!--content here-->
-					<div clas="corretiontool "> 
-						<div class=" panel panel-default">
-						<div class="panel-heading"><h2 class="panel-title">Source:</h2></div>
-						<div class="panel-body">
-							<div class="source" id="{{sourceid}} " row="4">{{source.text}}</div>
-						</div>
-						</div>
-						<div class="panel-default panel ">
-							<ul class="nav nav-pills row">
-								<li class="{{activeop1}}"><a href="#">op1</a></li>
-								<li class="{{activeOp2}}"><a href="#">op2</a></li>
-								<li class="{{activeOp3}}"><a href="#">op3</a></li>
-								<li class="{{activeOp4}}"><a href="#">op3</a></li>
-								<li class='dropdown {{activeOp5}}'><a href="#">op5</a></li>
-							</ul>
-							<form class="form-correction" role="form">
-								<textarea class="correction form-control" id="{{correctionid}}">{{source.text}}</textarea>
-								<div class="panel panel-default ">
-									<div class="input-group">
-										<span class="input-group-addon">{{mf 'E' 'E'}}</span> 
-										<input class="form-control expl" type="text" placeholder="{{mf 'explanation' 'Explanation'}}"> 
-										<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-									</div>
-									<div class="input-group">
-										<span class="input-group-addon">{{mf 'A' 'A'}}</span> 
-										<input class="form-control alt-input-f" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
-										<input class="form-control alt alt-input-e" type="text" placeholder="{{mf 'alternative' 'Alternative'}}"> 
-										<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-									</div>
-									<div class="input-group">
-										<span class="usage input-group-addon">{{mf 'U' 'U'}}</span> 
-										<input class="form-control usage-input-f" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
-										<input class="form-control usage-input-e" type="text" placeholder="{{mf 'usage' 'Usage'}}" container="body"> 
-										<span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-									</div>
-								</div>
-							</form>
-						</div>
-
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal">{{mf 'close'}}</button>
-					<button type="button" class="btn btn-primary" id="crrbutton_save">{{mf 'save-correction' 'Save correction'}}</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
 
 <template name="translationtools">
 
 </template>
 
 <template name="public_room_finder">
-	<div class="modal fade" id="public-room-finder-modal" tabindex="-1" role="dialog" aria-labelledby="public-room-finder-ModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="public-room-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
-				</div>
-				<div class="modal-body"><!--content here-->
-					<div clas="find-tool"> 
-						<form action="submit" class="public-room-finder" id="public-room-find-form">
-							
-							<div class="panel panel-group">
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Group name" id="group-name-f" />
-								</div>
-								<div class="rooms list-group">
-									<ul class="list-group-item">
-										{{#each rooms}}
-										<li class="{{#if active}}active{{/if}}">
-											<a href="#" class="chat-room" id="{{_id}}" >{{name}}</a><span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span> 
-										</li>
-										{{/each}}
-									</ul>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
-					<input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="modal fade" id="public-room-finder-modal" tabindex="-1" role="dialog" aria-labelledby="public-room-finder-ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="public-room-finder-ModalLabel">{{mf 'find-create' 'Find/Create'}}</h4>
+        </div>
+        <div class="modal-body"><!--content here-->
+          <div clas="find-tool">
+            <form action="submit" class="public-room-finder" id="public-room-find-form">
+
+              <div class="panel panel-group">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Group name" id="group-name-f" />
+                </div>
+                <div class="rooms list-group">
+                  <ul class="list-group-item">
+                    {{#each rooms}}
+                    <li class="{{#if active}}active{{/if}}">
+                      <a href="#" class="chat-room" id="{{_id}}" >{{name}}</a><span class="send-request plus glyphicon glyphicon-plus btn btn-default" id="{{_id}}"></span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="button" class="btn btn-default" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
+          <input type="button" class="btn btn-primary" id="find-create-btn" value="{{mf 'find'}}" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="tuto_chat">
-    <h3 class="ui header">{{mf 'Hello' 'Hello'}} {{currentUser.profile.name}}</h3>
+  <h3 class="ui header">{{mf 'Hello' 'Hello'}} {{currentUser.profile.name}}</h3>
 </template>

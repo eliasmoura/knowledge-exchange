@@ -11,3 +11,16 @@ Template.chatrooms_side.helpers({
         return requests;
     }
 })
+UI.registerHelper("scroll_chat",
+                  function(){
+                      var element = document.getElementById("chat-messages");
+                      if(!Session.get("chat-ready"))
+                          element.scrollTop = element.scrollHeight;
+                  });
+UI.registerHelper("chat_ready",
+                  function(){
+                      if(Session.get("chat-ready")){
+                          Session.set("chat-ready", Session.get("chat-ready") -1);
+                      }
+                      return !Session.get("chat-ready");
+                  });

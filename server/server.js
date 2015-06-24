@@ -1,25 +1,25 @@
 /**
-*	Server routines
+*       Server routines
 **/
 
 Meteor.startup(function(){
-	/*Correction.remove({});
-	Corrections.remove({});
-	Messages.remove({});
-	Usage.remove({});
-	Alternative.remove({});
-	User_Chatroom.remove({});
-	Groups.remove({});
-	Chatrooms.remove({});*/
-	//Accounts.config({forbidClientAccountCreation:true});
-	//console.log(Chatrooms.find().count());
+        /*Correction.remove({});
+        Corrections.remove({});
+        Messages.remove({});
+        Usage.remove({});
+        Alternative.remove({});
+        User_Chatroom.remove({});
+        Groups.remove({});
+        Chatrooms.remove({});*/
+        //Accounts.config({forbidClientAccountCreation:true});
+        //console.log(Chatrooms.find().count());
     //Kadira.connect('w7MjJY7CJSWexx5xM', '1a6f7899-23f6-45a4-9fcb-78a742ac639a');
-	if (Chatrooms.find().count() == 0){
-		//Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
-		console.log('adding chatrooms');
-		Chatrooms.insert({"name": "Test", details:"A test room"});
-		Chatrooms.insert({"name": "Test2", details:"A test room"});
-	}
+        if (Chatrooms.find().count() == 0){
+                //Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
+                console.log('adding chatrooms');
+                Chatrooms.insert({"name": "Test", details:"A test room"});
+                Chatrooms.insert({"name": "Test2", details:"A test room"});
+        }
     Meteor.users.find({"status.online": true}).observe({
         changed: function(newdoc, olddoc){
             if(newdoc.profile.active_room.room != olddoc.profile.active_room.room){
@@ -28,10 +28,9 @@ Meteor.startup(function(){
                     User_Room.update({_id:user_room}, {$set:{new_messages:0}});
                 }
             }
-            
+
         }
-    })
-    
+    });
     var starting = true;
     var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
     user_chatroom.observe({
@@ -76,7 +75,7 @@ Meteor.startup(function(){
             //prevent data being duplicated on server restart
             if(!starting){
                 if (doc.type == "group" || doc.type == "private"){
-                    var user_group = User_Room.find({room:doc.room}, {fields:{user:1}}).fetch()
+                    var user_group = User_Room.find({room:doc.room}, {fields:{user:1}}).fetch();
                     var userArray = _.map(user_group,function(row){
                         return row.user;
                     });
@@ -102,12 +101,13 @@ Meteor.startup(function(){
         added: function(doc){
             //prevent data being duplicated on server restart
             if(!starting){
-                if(doc.type == "group"){
                     Roles.addUsersToRoles(doc.user, "group-member", doc.room);
-                    var request = Requests.findOne({group:doc.room,user:doc.user});
-                    if(request !== undefined)
-                        Requests.remove({_id:request._id});
-                }
+                    var request_group = Requests.findOne({group:doc.room,user:doc.user});
+                    var request_user = Requests.findOne({group:doc.room,user:doc.user});
+                    if(request_group !== undefined)
+                        Requests.remove({_id:request_group._id});
+                    if(request_user !== undefined)
+                        Requests.remove({_id:request_user._id});
             }
         },
         changed: function(newdoc, oldDoc){
@@ -118,12 +118,12 @@ Meteor.startup(function(){
                 }
             }*/
         }
-    })
+    });
     PrivateMessages.find().observe({
         added:function(doc){
             //prevent data being duplicated on server restart
             if(!starting){
-                PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}})
+                PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}});
                 PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
 
             }
@@ -145,31 +145,31 @@ Meteor.startup(function(){
 });
 
 Accounts.onCreateUser(function(options,user){
-	console.log('Creationg user');
-	try{
-		// console.log(user.services.password.srp);
-		
-		options.profile.online = true;
-    	options.profile.away = false;
-	    options.profile.active_room = {type:"none",room:"none"};
-	    options.profile.default_status = "online";
-	    options.profile.status = "online";
+        console.log('Creationg user');
+        try{
+                // console.log(user.services.password.srp);
+
+                options.profile.online = true;
+        options.profile.away = false;
+            options.profile.active_room = {type:"none",room:"none"};
+            options.profile.default_status = "online";
+            options.profile.status = "online";
         options.profile.blocked_users = [];
-		user.profile = options.profile;
-		// Accounts.setPassword(user._id, user.password);
-		/*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
-			if(error)
-				console.log(error);
-		});*/
+                user.profile = options.profile;
+                // Accounts.setPassword(user._id, user.password);
+                /*Accounts.verifyEmail(user.services.password.srp.verifier,function(error){
+                        if(error)
+                                console.log(error);
+                });*/
         user.srp = options.srp;
-		console.log("User created:");
-		console.log(user.profile);
-		console.log('sign up ok');
-		return user;
-	}catch(e){
-		console.log('error on sign up: ' + user.profile.name);
-		console.log(e);
-	}
+                console.log("User created:");
+                console.log(user.profile);
+                console.log('sign up ok');
+                return user;
+        }catch(e){
+                console.log('error on sign up: ' + user.profile.name);
+                console.log(e);
+        }
 });
 
 UserStatus.events.on("connectionLogin", function(user){
@@ -191,31 +191,31 @@ UserStatus.events.on("connectionIdle", function(user){
 /*Hooks.onLoggedIn = function (userId) {
     // this runs right after a user logs in, on the client or server
     if(Meteor.user().profile.default_status == "online")
-    	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"online"}});
     console.log("User: " + Meteor.user().profile.name + " logged in. Status: " + Meteor.user().profile.status);
 }
 Hooks.onLoggedOut = function (userId) {
     // this runs right after a user logs out, on the client or server
-	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
-	// Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.away":false}});
-	if(Meteor.user())
+        // Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.online":false}});
+        // Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.away":false}});
+        if(Meteor.user())
     {
-	Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
-	console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.status);
+        Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
+        console.log("User: " + Meteor.user().profile.name + " logged out. Status: " + Meteor.user().profile.status);
     }
     /*Meteor.call('setRoom_Non_active');
-	Meteor.call('setGroup_Non_active');
-	Meteor.call('setFriend_Non_active');*//*
+        Meteor.call('setGroup_Non_active');
+        Meteor.call('setFriend_Non_active');*//*
 }
 
 Hooks.onCloseSession = function (userId) {
-	if(Meteor.user()){
-		Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
-		console.log("User: " + Meteor.user().profile.name + " closed the session. Status: " + Meteor.user().profile.status);	
-	}
-	/*Meteor.call('setRoom_Non_active');
-	Meteor.call('setGroup_Non_active');
-	Meteor.call('setFriend_Non_active');*//*
+        if(Meteor.user()){
+                Meteor.users.update({_id:Meteor.userId()},{$set:{"profile.status":"offline"}});
+                console.log("User: " + Meteor.user().profile.name + " closed the session. Status: " + Meteor.user().profile.status);    
+        }
+        /*Meteor.call('setRoom_Non_active');
+        Meteor.call('setGroup_Non_active');
+        Meteor.call('setFriend_Non_active');*//*
 }
 
 Hooks.onDeleteUser = function () {

@@ -1,24 +1,78 @@
 /* div.divchat{
     min-height: 200px;
-    
     max-height: 600ṕx;
     overflow-x: hidden;
     resize: none;
 } */
-html, body {height: 100%;}
+html, body {height: 95%;}
 
-
-div.container#chat-messages
-{
-    height:500px;
+* {
+    padding: 0px;
+    margin: 0px;
 }
-.container-fluid, .divchat, #content
+#chat_content
+{
+    height: 95%;
+}
+.container-fluid, .pusher, #layout, .yield_wraper, .divchat, #content
 {
     height:100%;
 }
+.tab-content {
+    height: 100%;
+}
+.user-list {
+    height: 100%;
+}
+div#chat-tab {
+    margin: 0px;
+    padding: 0px;
+    clear: both;
+}
+div#chat-tab div.item {
+    margin: 0px;
+
+}
 #chat-messages, .sidebar, .sidebar
 {
-    /*overflow-y: auto;*/
+    overflow-y: auto;
+    height: 95%;
+    clear: both;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#content_sticky {
+    height: 100%;
+}
+div.chat-content {
+    height: 100%;
+    clear:both;
+}
+dvi#chat-container {
+
+}
+div#message-input {
+    margin: 5px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    clear:both;
+}
+textarea#message {
+    clear: both;
+    min-height: 2em;
+    max-height: 24em;
+    height: 3em;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+li.message{
+    cursor: pointer;
+}
+div#original-message {
+    height: 100%;
 }
 .online
 {
@@ -41,6 +95,15 @@ div.container#chat-messages
 }
 .group-name{
     text-align:center;
+}
+.danger { background-color:#FF0000; }
+
+.hidden { display:none; }
+div.user label {
+    width: 10px;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* @font-face {
@@ -126,4 +189,3 @@ div.chatroon-name{
     text-align: center;
 }
  */
-

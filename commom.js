@@ -1,9 +1,9 @@
 
 mfPkg.init('en', {});
 
-UI.registerHelper("user",function(){return Meteor.user()});
+UI.registerHelper("user",function(){return Meteor.user();});
 UI.registerHelper("edit_profile",
-    function(){
+		  function(){
         return Session.get("edit_profile");
     }
 );

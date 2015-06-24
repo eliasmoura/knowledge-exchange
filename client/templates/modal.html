@@ -18,7 +18,10 @@
             {{#with modal_handler.user_overview.data}}
                 {{> user_profile}}
             {{/with}}
-        {{/if}}
+      {{/if}}
+      {{#if modal_handler.correction}}
+      {{> correction_tool}}
+      {{/if}}
     </div>
     <div class="actions">
         <input type="button" class="ui button deny" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
@@ -30,7 +33,7 @@
 </template>
 
 <template name="group_modal">
-        <div class="group-handler"> 
+        <div class="group-handler">
             <div class="ui top attached tabular menu">
                 <a href="#" class="item {{#if modal_handler.overview.active}}
                 active{{/if}}" data-tab="overview" id="overview">{{mf 'overview' 'Overview'}}</a>

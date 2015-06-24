@@ -167,11 +167,12 @@ UI.registerHelper("knownlanguages",function(){
 });
 Template.user_profile.helpers({
 });
-UI.registerHelper('profile',function(user){
+UI.registerHelper('profile',function(){
+var user = Session.get("profile");
         if(user){
-            profile = Meteor.users.findOne({_id:user});
+            return Meteor.users.findOne({_id:user});
         }
-        return profile;
+        return false;
     }
 );
 UI.registerHelper('userinfo_popup', 

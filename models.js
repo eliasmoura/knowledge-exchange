@@ -169,15 +169,17 @@ User_Room.allow({
     update: function(userId, doc, fields, modifier){
         var allowed = false;
         var group = Groups.findOne({_id:doc.room});
+        var pgroup = Chatrooms.findOne({_id:doc.room});
+        group = group !== undefined ? group : pgroup;
         if(group !== undefined){
             if(Roles.userIsInRole(userId, "group-manager", group._id))
                 if(!_.contains(fields,["user","_id", "new_messages","date","room"]))
                     allowed = true;
-            if(fields.length == 1)
+            if(fields.length == 1 && userId === doc.user)
                 if(_.contains(fields,"new_messages"))
                     allowed = true;
-            if(userId === Meteor.userId() && userId)
-                if(!_.contains(fields, ["user","_id", "new_messages", "date", "room"]))
+            if(userId === doc.user && userId)
+                if(!_.contains(fields, ["user","_id", "date", "room"]))
                     allowed = true;
         }
         return allowed;

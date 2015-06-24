@@ -3,7 +3,7 @@
     <form class="ui form" id="login-form">
         <div class="field">
             {{mf 'email' 'Email'}}
-            <input type="email" id="login_email" class="" placeholder="email">
+            <input type="email" id="login_email" value="" class="" placeholder="email">
         </div>
         <div  class="field">
             {{mf 'passwd' 'Password'}}
@@ -78,7 +78,7 @@
             <select name="native_registerform" class="field"  id="native_registerform" >
                 <option value="0">{{mf 'select'}}</option>
                 {{#each lang_list}}
-                    <option value="{{this}}">{{this}}</option>
+                    <option value="{{this.key}}">{{this.lang}}</option>
                 {{/each}}
             </select>
         </div>
@@ -91,7 +91,7 @@
                 <select name="knowlanguages" class="knownlanguage" >
                     <option value="0">{{mf 'select-one' 'Select One'}}</option>
                     {{#each lang_list}}
-                        <option value="{{this}}">{{this}}</option>
+                        <option value="{{this.key}}">{{this.lang}}</option>
                     {{/each}}
                 </select>
             </div>
@@ -100,7 +100,7 @@
                 <select name="learn_registerform" class="learning-language" >
                     <option value="0">{{mf 'select-one' 'Select One'}}</option>
                     {{#each lang_list}}
-                        <option value="{{this}}">{{this}}</option>
+                        <option value="{{this.key}}">{{this.lang}}</option>
                     {{/each}}
                 </select>
             </div>

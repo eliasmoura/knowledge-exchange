@@ -1,4 +1,4 @@
-UI.registerHelper("modal_handler", 
+UI.registerHelper("modal_handler",
     function(){
         var handler = Session.get("modal-handler");
         if(handler){
@@ -10,7 +10,7 @@ UI.registerHelper("modal_handler",
                         name:handler.modal_header,
                         user:Meteor.user().profile,
                         _id:Meteor.user()._id,
-                        currentUser:user._id == Meteor.userId(),
+                        currentUser:user._id == Meteor.userId()
                 }
             }
             if(handler.email){
@@ -25,6 +25,6 @@ UI.registerHelper("modal_handler",
     }
 );
 Template.modal_handler.rendered = function(){
-    $("#modal-handler").modal("toggle");
+    $("#modal-handler").modal();
     $("#modal-handler").modal({onHidden:function(){console.log("hidden");Session.set("modal-handler", false);}});
 };
