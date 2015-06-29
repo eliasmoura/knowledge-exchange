@@ -133,7 +133,7 @@ Meteor.startup(function(){
 $('html').click(function(){
 	//console.log('test');
 	//$("[data-toggle=popover]").popover('hide');
-})
+});
 
 Template.post.events = {
 	'click input.topt': function(e,t){
@@ -154,7 +154,7 @@ Template.post.events = {
     'click input.clean': function(e,t){
         Meteor.call("clean_db");
     }
-}
+};
 Template.navbar.events({
     'click .navigation': function(e,t){
         //$("#navbar-nav").removeClass("in")
@@ -162,7 +162,7 @@ Template.navbar.events({
     'click #side_bar': function(event, template){
         $(".ui.sidebar").sidebar("toggle");
     }
-})
+});
 /*
 Hooks.onGainFocus = function () {
     if(Meteor.user() && Meteor.user().profile.default_status == "online")
@@ -178,22 +178,41 @@ UI.registerHelper(
     "lang_list", function(){
         return Session.get("langs");
     }
-)
+);
 UI.registerHelper("isCordova", function(){return Meteor.isCordova;});
 Template.layout.rendered = function(){
-}
+};
+Template.popup.events({
+    'click button.send-request': function(event, template){
+        event.stopPropagation();
+        event.preventDefault();
+        var user = event.currentTarget.id;
+        console.log(user);
+        UserRequest.insert(
+            {
+                user: Meteor.userId(), request_to: user
+            },
+            function(error){console.log(error);}
+        );
+    }
+});
 Template.popup.helpers({
     'popup': function(event, template){
         return Session.get("popup_info");
     }
-})
+});
 Template.popup.rendered =  function(){
-    /*$(".pop_this").popup({
-        hovered: true,
-        popup: "content_popup"
-    });*/
-    $(".popup_this").popup({inline:true});
-}
+    $(".popup_this").popup(
+        {
+            inline:true,
+    hoverable: true,
+            delay:{
+                show:200,
+                hide: 500
+            }
+        }
+    );
+};
 Template.navbar.rendered = function(){
     $("body").on("resize",
     function(){
@@ -204,4 +223,4 @@ Template.navbar.rendered = function(){
         $("#home_mixedlang").hide();
         $("#home").show();
     }*/});
-}
+};

@@ -3,71 +3,68 @@ Template.group_handler.helpers({
         return Session.get("group_handler");
     }
 });
-
 Template.group_handler.rendered = function(){
-        $('#group-handler-modal').modal();
-        $("#group-handler-modal").on('hidden.bs.modal', function(){
+    $('#group-handler-modal').modal();
+    $("#group-handler-modal").on('hidden.bs.modal', function(){
         var group_handler = Session.get("group_handler");
         /*if (group_handler.create.active){
-            group_handler.create.active = false;
-            group_handler.create.data = null;
-        }
-        if (group_handler.find.active){
-            group_handler.find.active = false;
-            group_handler.find.data = null;
-        }
-        if (group_handler.management.active){
-            group_handler.management.active = false;
-            group_handler.management.data = null;
-        }*/
+         group_handler.create.active = false;
+         group_handler.create.data = null;
+         }
+         if (group_handler.find.active){
+         group_handler.find.active = false;
+         group_handler.find.data = null;
+         }
+         if (group_handler.management.active){
+         group_handler.management.active = false;
+         group_handler.management.data = null;
+         }*/
         group_handler.active = false;
-                Session.set('group_handler', group_handler);
-        });
+        Session.set('group_handler', group_handler);
+    });
 }
 Template.group_handler.events({
-        'click a.menu': function(e,t){
-                var element = e.target.id;
+    'click a.menu': function(e,t){
+        var element = e.target.id;
         var group_handler = Session.get("group_handler");
         group_handler.create.active = false;
         group_handler.find.active = false;
         group_handler.management.active = false;
-                if (element == "find"){
+        if (element == "find"){
             group_handler.find.active = true;
             Session.set("group_handler", group_handler);
-                        $("#handler-btn").val(mf("find",null,"Find"));
+            $("#handler-btn").val(mf("find",null,"Find"));
 
-                }else if(element == "create"){
+        }else if(element == "create"){
             group_handler.create.active = true;
-                        Session.set("group_handler", group_handler);
-                        $("#handler-btn").val(mf("create",null,"Create"));
-                }
-                else if(element == "management"){
+            Session.set("group_handler", group_handler);
+            $("#handler-btn").val(mf("create",null,"Create"));
+        }
+        else if(element == "management"){
             group_handler.management.active = true;
-                        Session.set("group_handler", group_handler);
-                        $("#handler-btn").val(mf("create",null,"Aply"));
-                }
+            Session.set("group_handler", group_handler);
+            $("#handler-btn").val(mf("create",null,"Aply"));
+        }
 
-        },
-        'click input#handler-btn':function(event,template){
+    },
+    'click input#handler-btn':function(event,template){
         if(event.target.value == "Find")
             $('form#find_group').submit();
         if(event.target.value == "Create")
             $('form#create_group').submit();
         if(event.target.value == "Management")
             $('form#management').submit();
-        },
-        'keypress input#group-name-f':function(event, template){
-                var group = event.target.value;
-                if (group.length > 2){
-                        $('form#find-create-form').submit();
-                }
-        },
-        'click .groupdatails':function(e,t){
-                $("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
+    },
+    'keypress input#group-name-f':function(event, template){
+        var group = event.target.value;
+        if (group.length > 2){
+            $('form#find-create-form').submit();
         }
+    },
+    'click .groupdatails':function(e,t){
+        $("#"+$(e.target).attr('data-toggle-to')).collapse('toggle');
+    }
 });
-
-
 Template.create_group.created = function(){
     var number = [1];
     Session.set("numberLangs", number );
@@ -81,7 +78,7 @@ Template.create_group.events({
         var members = new Array();
         try{
             t.find(".friends-contacts:checked").each(function(){
-            members.push(this.id);
+                members.push(this.id);
             });
         }catch(e){}
 
@@ -96,23 +93,23 @@ Template.create_group.events({
         var groupType = template.find("select#type option:selected").value;
         var groupFocus = template.findAll("input[type=checkbox].group-type:checked");
         var groupFocusArray = _.map(groupFocus, function(item) {
-             return item.defaultValue;
+            return item.defaultValue;
         });
 
         var message = "";
         if(template.find("[name='invite-message']:checked"))
-        if(template.find("[name='invite-message']:checked").value != "default")
-            message = template.find("#invite-message").value;
+            if(template.find("[name='invite-message']:checked").value != "default")
+                message = template.find("#invite-message").value;
         else
             message = "default";
 
         /*Meteor.call("create_group", {name:groupname,description:description,
-            languages:languages, invite:members,group_type:groupType,
-            group_focus:groupFocusArray,message:message});*/
+         languages:languages, invite:members,group_type:groupType,
+         group_focus:groupFocusArray,message:message});*/
         var errors = new Array();
         var group = {name:groupname,description:description,
-            languages:languages, group_type:groupType,
-            group_focus:groupFocusArray};
+                     languages:languages, group_type:groupType,
+                     group_focus:groupFocusArray};
         //console.log(group);
         if (group.name.length < 3){
             errors.push({name:true});
@@ -134,24 +131,24 @@ Template.create_group.events({
         }
         if(errors.length === 0){
             group = Groups.insert({
-                    name:group.name,
-                    description:group.description,
-                    languages:group.languages,
-                    focus:group.group_focus,
-                    type:group.group_type,
-                    owner:Meteor.userId()
-                }, function(error, result){
-                    if(!error){
-                        Session.set("numberList", [1]);
-                        Session.set("group_handler", false);
-                        for (var i = 0; i< members.length; i++) {
-                            //group_invite_request({group:result,user:member[i],message:message});
-                            GroupRequest.insert({user:member[i],message:message,type:2,group:result});
-                        }
-                        Router.go("GroupChat",{_id:result});
-                    }else console.log(error);
-                }
-            );
+                name:group.name,
+                description:group.description,
+                languages:group.languages,
+                focus:group.group_focus,
+                type:group.group_type,
+                owner:Meteor.userId()
+            }, function(error, result){
+                if(!error){
+                    Session.set("numberList", [1]);
+                    Session.set("group_handler", false);
+                    for (var i = 0; i< members.length; i++) {
+                        //group_invite_request({group:result,user:member[i],message:message});
+                        GroupRequest.insert({user:member[i],message:message,type:2,group:result});
+                    }
+                    Router.go("GroupChat",{_id:result});
+                }else console.log(error);
+            }
+                                 );
             //console.log("Group created");
             $('#group-handler-modal').modal('hide');
         }else{
@@ -190,8 +187,8 @@ Template.create_group.events({
         $(template.find("form")).submit();
     }
 });
-Template.edit_group_info.rendered = {
-    
+Template.edit_group_info.rendered = function(){
+
 }
 Template.edit_group_info.events({
     'submit form#edit_group': function(event, template){
@@ -202,25 +199,25 @@ Template.edit_group_info.events({
         var members = new Array();
         try{
             t.find(".friends-contacts:checked").each(function(){
-            members.push(this.id);
+                members.push(this.id);
             });
         }catch(e){}
 
         var langs = template.findAll(".lang option:selected");
 
         var languages = _.map(langs, function(item) {
-             return item.value;
+            return item.value;
         });
 
         var groupType = template.find("#type option:selected").value;
         var groupFocus = template.findAll("input[type=checkbox].group-type:checked");
         var groupFocusArray = _.map(groupFocus, function(item) {
-             return item.defaultValue;
+            return item.defaultValue;
         });
         var errors = new Array();
         var group = {name:groupname,description:description,
-            languages:languages, group_type:groupType,
-            group_focus:groupFocusArray};
+                     languages:languages, group_type:groupType,
+                     group_focus:groupFocusArray};
         if (group.name.length < 3){
             errors.push({name:"too short"});
         }
@@ -250,16 +247,16 @@ Template.edit_group_info.events({
             if(group.group_type !== oldgroup.type)
                 updates.type = group.group_type;
             if(!_.isEmpty(updates))
-            Groups.update({_id:Session.get("roomid")},{$set:updates},
-                function(error, result){
-                    if(!error){
-                        console.log("Edited");
-                        Router.go("GroupChat",{_id:Session.get("roomid")});
-                    }else console.log(error);
-                }
-            );
+                Groups.update({_id:Session.get("roomid")},{$set:updates},
+                              function(error, result){
+                                  if(!error){
+                                      console.log("Edited");
+                                      Router.go("GroupChat",{_id:Session.get("roomid")});
+                                  }else console.log(error);
+                              }
+                             );
         }else{
-        console.log(errors);
+            console.log(errors);
         }
     },
     'click #morelang': function(e, t){
@@ -280,10 +277,10 @@ Template.edit_group_info.events({
     }
 })
 Template.create_group.langs = function(){
-        return Languages.find({},{$sort: {name: +1}});
+    return Languages.find({},{$sort: {name: +1}});
 }
 Template.create_group.rendered = function(){
-Session.set("allowed_langs", 1);
+    Session.set("allowed_langs", 1);
 
 }
 Template.room_overview.events({
@@ -312,8 +309,7 @@ Template.room_overview.events({
         }else{
             console.log("couldn't find this group.");
         }
-    },
-
+    }
 });
 Template.group_settings.events({
     'change .group-settings':function(event, template){
@@ -343,11 +339,12 @@ Template.group_settings.events({
             settings.notification.direct = true;
             settings.notification.any = false;
         }
-
-        User_Room.update({_id:user_room._id},{$set:{settings:settings}}, function(erro,result){
+        console.log(settings);
+        User_Room.update({_id:user_room._id},{$set:{settings:settings}}, function(error,result){
             if(error)
-            console.log(erro);
+                console.log(erro);
         });
+        console.log(User_Room.findOne({room:room,user:Meteor.userId()}));
     }
 });
 Template.groupmenu.rendered = function(){
@@ -418,4 +415,4 @@ Template.group_managenment.events({
         var toggle = $(event.target).attr("data-toggle");
         $("#manage-requests-"+toggle).collapse("toggle");
     }
-})
+});

@@ -2,7 +2,9 @@
       "libs": [
         "browser",
         "jquery",
-        "underscore"
+        "underscore",
+        "iron:router",
+        "templating"
       ],
       "loadEagerly": [ "*.js", "*/*.js", "*/*/*.js", "*/*/*/*.js" ],
       "dontLoad": [ ".meteor" ],

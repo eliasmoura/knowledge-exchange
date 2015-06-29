@@ -171,14 +171,14 @@ User_Room.allow({
         var group = Groups.findOne({_id:doc.room});
         var pgroup = Chatrooms.findOne({_id:doc.room});
         group = group !== undefined ? group : pgroup;
-        if(group !== undefined){
+        if(group !== undefined && userId){
             if(Roles.userIsInRole(userId, "group-manager", group._id))
-                if(!_.contains(fields,["user","_id", "new_messages","date","room"]))
+                if(!_.contains(fields,["user","_id", "new_messages","date","room", "settings"]))
                     allowed = true;
             if(fields.length == 1 && userId === doc.user)
                 if(_.contains(fields,"new_messages"))
                     allowed = true;
-            if(userId === doc.user && userId)
+            if(doc.user && userId)
                 if(!_.contains(fields, ["user","_id", "date", "room"]))
                     allowed = true;
         }
@@ -229,18 +229,11 @@ UsersRelations.allow({
         return userId && doc.owner === userId;
     },
     update: function(userId, doc, fields, modifier){
-        var isAllowed = false;
         if (doc.owner === userId){
-            isAllowed = true;
-            for(var i = 0; i < fields.length; i++){
-                if (fields[i] == "_id"){
-                    isAllowed = false;
-                    break;
-                }
-            }
+            if(_.contains(fields,["user","_id", "contact","date"]))
+                    return false;
         }
-
-        return isAllowed;
+        return false;
     },
     remove: function(userId, doc){
     },
@@ -362,3 +355,23 @@ Report.allow({
     fetch: []
 });
 
+UserRequest.allow({
+    insert: function(userId, doc){
+        var contact = Meteor.users.find({_id:doc.request_to},{fields:{_id:1}});
+        if(!contact) return false;
+        if(!UsersRelations.findOne({user:userId, contact:contact._id}))
+            if(!UserRequest.findOne({user:userId, request_to:contact._id}))
+                return true;
+        return false;
+    },
+    update: function(userId, doc, fields, modifier){
+        if(userId && fields.length === 1)
+            if(_.contains(fields, "accept"))
+                return true;
+        return false;
+    },
+    remove: function(userId, doc){
+        if(userId && doc.request_to === userId) return true;
+        return false;
+    }
+});

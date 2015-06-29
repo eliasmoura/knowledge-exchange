@@ -2,7 +2,7 @@
   <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
     {{>yield 'sidebar'}}
   </div>
-  <div class="ui twelve wide tablet computer sixteen mobile wide column" id="content">
+  <div class="ui twelve wide tablet computer sixteen mobile wide column" id="chat-content">
     {{#if group_handler.create.active}}
     {{> create_group}}
     <button class="ui button" id="create-group-send" >{{mf 'create' 'Create'}}</button>
@@ -11,7 +11,7 @@
     {{#if chatfeed}}
     {{> chatfeed}}
     {{else}}
-    <div id="chat_content" class="sixteen wide  mobile fithteen wide computer column">
+<!--    <div id="chat_content" class="sixteen wide  mobile fithteen wide computer column">-->
       <div class="ui top attached tabular menu" id="chat-tab">
         {{#if isInRole "group-member" room._id}}
         <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
@@ -33,7 +33,7 @@
         </div>
         {{/if}}
         {{#if isInRole "group-member" room._id}}
-        <div class="ui danger item" id="room-leave">
+        <div class="danger item" id="room-leave">
           <a class="item " id="quitGroup" href="#">
             {{mf 'leave-group' 'Leave group'}}
           </a>
@@ -66,7 +66,7 @@
       <div class="ui bottom attached {{room_handler.overview.active}} tab segment tab-content" data-tab="chat-overview">
         {{> room_overview}}
       </div>
-    </div>
+<!--    </div>-->
     {{/if}}
     {{/if}}
   </div>
@@ -109,17 +109,18 @@
   </div>
   <div class="item">
     <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
-    <span id="add-find-user" class="plus icon" title="add/find a contact"></span>
     <div class="menu" id="panel-friends">
       {{#each contacts}}
-      <a href="#" class="friends-contacts username item popup_this" id="{{_id}}" >
-        <i class="ui left horizontal label user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
-        {{profile.name}} <button class="ui label icon button"><i class="setting icon"></i></button>
+      <a href="{{pathFor route='PersonalChat'}}" class="friends-contacts username item popup_this {{#if active}}active{{/if}}" id="{{_id}}" >
+        <i class="icon user {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
+        {{this.profile.name}} {{this.profile.lastname}}
         {{#if notification}}
-        <span class="chat friends-contacts-noti label icon">{{notification}}</span>
+        <span class="chat friends-contacts-noti ui label">{{notification}}</span>
         {{/if}}
       </a>
+      {{#with _id}}
       {{> popup}}
+      {{/with}}
       {{/each}}
     </div>
   </div>
@@ -137,7 +138,9 @@
           <label>
             <i class="user icon {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
             <a href="#" class="popup_this">{{fullname}}</a>
+            {{#with _id}}
             {{> popup}}
+            {{/with}}
           </label>
         </div>
         {{/each}}
@@ -214,14 +217,18 @@
 <template name="chat">
   <div class="ui celled list">
     {{#each messages}}
-    <li class="message item" id="{{_id}}">
-      <div>
-      <a class="username popup_this" href="#" id="{{userid}}">{{name}}:</a>
-      {{> popup}}
+    <li class="message item ui accordion" id="{{_id}}">
+      <div class="title">
+        <a class="username popup_this" href="#" id="{{owner}}">{{name}}:</a>
+        {{#with owner}}
+        {{> popup}}
+        {{/with}}
       {{message}}
       </div>
+      {{> basic_correction_tool}}
 <!--      {{> basic_correction_tool}}-->
     </li>
+
     {{#if chat_ready}}
     {{scroll_chat}}
     {{/if}}

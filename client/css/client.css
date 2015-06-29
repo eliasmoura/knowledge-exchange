@@ -1,9 +1,3 @@
-/* div.divchat{
-    min-height: 200px;
-    max-height: 600ṕx;
-    overflow-x: hidden;
-    resize: none;
-} */
 html, body {height: 95%;}
 
 * {
@@ -13,31 +7,44 @@ html, body {height: 95%;}
 #chat_content
 {
     height: 95%;
+/*    background-color: #Ff4500; */
 }
 .container-fluid, .pusher, #layout, .yield_wraper, .divchat, #content
 {
     height:100%;
 }
-.tab-content {
+.yield_wraper {
+    margin: 14px;
+}
+div#chat-content {
+/*    background-color: #Ff4500; */
+    padding: 0px;
     height: 100%;
+}
+.tab-content {
+    margin: 0px;
+    padding:0px;
+    height: 100%;
+    resize: both;
 }
 .user-list {
     height: 100%;
+    background-color: #A9a9a9;
 }
+
 div#chat-tab {
     margin: 0px;
+    margin-top: -20px;
     padding: 0px;
-    clear: both;
+    resize: both;
 }
 div#chat-tab div.item {
-    margin: 0px;
 
 }
 #chat-messages, .sidebar, .sidebar
 {
     overflow-y: auto;
     height: 95%;
-    clear: both;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -47,7 +54,6 @@ div#chat-tab div.item {
 }
 div.chat-content {
     height: 100%;
-    clear:both;
 }
 dvi#chat-container {
 
@@ -57,10 +63,9 @@ div#message-input {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    clear:both;
 }
 textarea#message {
-    clear: both;
+    background-color: #11748C;
     min-height: 2em;
     max-height: 24em;
     height: 3em;
@@ -68,6 +73,12 @@ textarea#message {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+div.correction-setup div.form div textarea {
+    min-height: 2em;
+    max-height: 24em;
+    height: 3em;
+}
+
 li.message{
     cursor: pointer;
 }
@@ -93,64 +104,14 @@ div#original-message {
 .unchecked{
     color: #7E7C7C;
 }
-.group-name{
-    text-align:center;
-}
-.danger { background-color:#FF0000; }
-
+.danger:hover { background-color:#FF0000; }
 .hidden { display:none; }
+.ui.input.hidden { display:none; }
 div.user label {
-    width: 10px;
     overflow:hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-
-/* @font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.eot');
-  src: url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/packages/bootstrap-3/bootstrap-3/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-}
- *//* body{
-    padding: 10px;
-    font-family: Verdana, sans-serif;
-}
-
-.login-buttons-dropdown-align-right{
-    float: right;
-}
-div.user{
-    display: block;
-}
-div.register_form{
-    width: 350px;
-    display: none;
-}
-div.register_form input{
-    width: 350px;
-    display: block;
-}
-div.register_form label{
-    height: 60px;
-    display: block;
-}
-div.register_form label input{
-    height: 25px;
-}
-div.divmessages div.message{
-    display: block;
-}
-
-div.register_form label input{
-    float:right;
-}
-div.login_form{
-    display: block;
-}
-div.logoutdiv{
-    display: block;
-}
-
 div.divmessages{
     padding: 5px;
     min-height: 200px;
@@ -158,34 +119,15 @@ div.divmessages{
     overflow-x: hidden;
     word-break: break-all;
     background-color: #0B7A96;
-    resize: both;
-}
-div.message:hover{
-    background: #11748C;
-}
-
-label.stusername{
-    font-family: Verdana;
-    font-style: oblique;
-    display: inline-block;
 }
 label.stusername:hover{
     font-color: #B9C065;
     background: #B9C065;
 }
 div.chatusers{
-    float: left;
     overflow-y: scroll;
     overflow-x: hidden;
 }
-
-#message{
-    height: 50px;
+div.item div.menu > a.friends-contacts i.icon.user{
+    float: left;
 }
-div.page-content{
-
-}
-div.chatroon-name{
-    text-align: center;
-}
- */

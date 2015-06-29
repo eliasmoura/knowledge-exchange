@@ -6,7 +6,7 @@ Template.user.helpers({
         return Session.get("login");
     }
 });
-UI.registerHelper("register_form", 
+UI.registerHelper("register_form",
 function(){
     return Session.get("register_form");
     }
@@ -45,7 +45,6 @@ UI.registerHelper('langs_selected',
             }
             returnArray.fluent.push({fluent:fluent,removable:removable});
         }
-            
         returnArray.learning = new Array();
         for (var l = 0; l < learning_length; l++)
         {
@@ -175,8 +174,26 @@ var user = Session.get("profile");
         return false;
     }
 );
-UI.registerHelper('userinfo_popup', 
-    function(user_id){
-        return Meteor.users.findOne({_id:user_id});
+UI.registerHelper(
+    'userinfo', function(user_id)
+    {
+        var user =  Meteor.users.findOne({_id:user_id});
+        if(user === undefined) return false;
+        if(user.profile == undefined) user = profile = {};
+        user.profile.public = true;
+        if(user._id === Meteor.userId())
+            user.send_request = false;
+        else{
+            user.send_request = UserRequest.findOne({user: Meteor.userId(),
+                                                     request_to: user._id});
+            if(!user.send_request)
+                user.send_request = UsersRelations.findOne(
+                    {
+                        user:Meteor.userId(),
+                        contact:user._id
+                    }) ? false : true;
+        }
+        user.profile.public_name = user.profile.name + " " + user.profile.lastname;
+        return user;
     }
 );

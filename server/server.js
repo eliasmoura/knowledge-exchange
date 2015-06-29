@@ -3,24 +3,13 @@
 **/
 
 Meteor.startup(function(){
-        /*Correction.remove({});
-        Corrections.remove({});
-        Messages.remove({});
-        Usage.remove({});
-        Alternative.remove({});
-        User_Chatroom.remove({});
-        Groups.remove({});
-        Chatrooms.remove({});*/
         //Accounts.config({forbidClientAccountCreation:true});
-        //console.log(Chatrooms.find().count());
-    //Kadira.connect('w7MjJY7CJSWexx5xM', '1a6f7899-23f6-45a4-9fcb-78a742ac639a');
         if (Chatrooms.find().count() == 0){
-                //Meteor.users.update({_id:this.userId}, {$set:{"profile.status":Meteor.users.findOne({_id:this.userId}).profile.default_status}});
                 console.log('adding chatrooms');
                 Chatrooms.insert({"name": "Test", details:"A test room"});
                 Chatrooms.insert({"name": "Test2", details:"A test room"});
         }
-    Meteor.users.find({"status.online": true}).observe({
+    /*    Meteor.users.find({"status.online": true}).observe({
         changed: function(newdoc, olddoc){
             if(newdoc.profile.active_room.room != olddoc.profile.active_room.room){
                 if(newdoc.profile.active_room.type == "group"){
@@ -30,7 +19,7 @@ Meteor.startup(function(){
             }
 
         }
-    });
+    });*/
     var starting = true;
     var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
     user_chatroom.observe({
@@ -52,21 +41,42 @@ Meteor.startup(function(){
                     User_Room.insert({room:doc.group,type:"group",new_messages:0,user:doc.user,date: Date.now()});
         },
         changed: function(doc){
-            console.log(doc);
-            if (doc.accept == 1){
-                UsersRelations.insert({user:doc.request_to,contact:doc.user,relation:doc.relation,time: Date.now()});
-                UsersRelations.insert({user:doc.user,contact:doc.request_to,relation:doc.relation,time: Date.now()},function(error){
-                    if (!error) {
-                        if (PrivateChat.findOne({users:{$in:[doc.user,doc.request_to]}}) == undefined){
-                            PrivateChat.insert({users:[doc.user,doc.request_to]}, function(error, result){});
-                            UserRequest.remove({_id:doc._id});
-                            console.log('friendship ok');
 
-                        }
-                    }else console.log(error);
-                });
-            }else{
-                UserRequest.remove({_id:doc._id});
+        }
+    });
+    UserRequest.find().observe({
+        added: function(doc){},
+        changed: function(doc){
+            if (doc.accept){
+                UsersRelations.insert(
+                    {
+                        user:doc.request_to,
+                        contact:doc.user,
+                        relation:doc.relation,
+                        time: Date.now()
+                    }
+                );
+                UsersRelations.insert(
+                    {
+                        user:doc.user,
+                        contact:doc.request_to,
+                        relation:doc.relation,
+                        time: Date.now()
+                    },
+                    function(error, result)
+                    {
+                        if (!error) {
+                            var chat = PrivateChat.findOne({users:{$in:[doc.user,doc.request_to]}});
+                            if (chat == undefined)
+                            {
+                                PrivateChat.insert({users:[doc.user,doc.request_to]},
+                                                   function(error, result){});
+                                UserRequest.remove({_id:doc._id});
+                                console.log('friendship ok');
+                            }
+                        }else console.log(error);
+                    }
+                );
             }
         }
     });
@@ -74,7 +84,7 @@ Meteor.startup(function(){
         added: function(doc){
             //prevent data being duplicated on server restart
             if(!starting){
-                if (doc.type == "group" || doc.type == "private"){
+                if (doc.type == "group" || doc.type == "pricatechat"){
                     var user_group = User_Room.find({room:doc.room}, {fields:{user:1}}).fetch();
                     var userArray = _.map(user_group,function(row){
                         return row.user;

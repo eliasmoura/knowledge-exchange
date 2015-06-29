@@ -9,9 +9,13 @@
   <button class="correction-button ui small button">t</button>
 </template>
 <template name="basic_correction_tool">
-  <div class="ui action input hidden">
-    <button class="ui button correction-button" title="{{mf 'full-tool' 'Show full correction tool'}}">t</button>
-    <textarea class="" >{{message}}</textarea>
+  <div class="content correction-setup">
+    <div class="ui form">
+    <div class="ui action input">
+      <button class="ui button correction-button hidden" title="{{mf 'full-tool' 'Show full correction tool'}}">t</button>
+      <textarea class="" >{{message}}</textarea>
+    </div>
+    </div>
   </div>
 </template>
 <template name="correction_tool">

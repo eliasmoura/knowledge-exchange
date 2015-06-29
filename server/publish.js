@@ -31,6 +31,9 @@ Meteor.publish("requests-invite", function(){
 Meteor.publish("user-contact", function(){
         return UsersRelations.find({user:this.userId});
 });
+Meteor.publish("private-chats", function(){
+    return PrivateChat.find({users:{$in:[this.userId]}});
+});
 Meteor.publish("user-list", function(){
     var rooms = _.map(
         User_Room.find({user:this.userId}).fetch(),
@@ -53,7 +56,7 @@ Meteor.publish("messages", function(room){
             messages = Messages.find({room:room}, {sort: {time: +1}});
         else messages = Messages.find({_id: null});
     }else
-    messages = Messages.find({room:room}, {sort: {time: +1}});
+        messages = Messages.find({room:room}, {sort: {time: -1}, limit:10});
      return messages;
 });
 
@@ -110,7 +113,7 @@ Meteor.publish("groups-mods", function(){
             list_userGroup.push(group.user);
         });
         user_groupArray.push(row.group);
-    })
+    });
     var users = Meteor.users.find({_id:{$in:list_userGroup}}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, status:1}});
     var users_groups = User_Room.find({group:{$in:user_groupArray}});
         return [users, users_groups];
@@ -143,7 +146,7 @@ Meteor.publish("chat-corrections", function(active_room){
                         messages = GroupChat.find({groupchat:active_room.room});
                         }catch(e){console.log(e);}
                         console.log('c_group');
-                }       
+                }
                 else if (active_room.type == "privatechat"){
                         messages = PrivateMessages.find({chat:active_room.room});
                         console.log('c_privatechat');
@@ -155,7 +158,7 @@ Meteor.publish("chat-corrections", function(active_room){
 
                 var corrections = Correction.find({room: active_room.room});
         }else{
-                console.log("no room active")
+            console.log("no room active");
                 return Correction.find({room: null});
         }
         return corrections;

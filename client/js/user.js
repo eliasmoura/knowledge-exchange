@@ -1,4 +1,3 @@
-
 var trimInput = function(val){
   return val.replace(/^\s*|\s*$/g, "");
 }
@@ -80,9 +79,14 @@ Template.user.events({
     // console.log(Session.get("emails"));
   },
   'click #notification': function(e, t){
-    //$('#notificationModal').modal("toggle");
-    Session.set("modal-handler", {noti:true});
-    console.log('should show the notification ');
+      //$('#notificationModal').modal("toggle");
+      var modal_handler = {};
+      modal_handler.notification = true;
+      modal_handler.modal_header = "Notifications:";
+      Session.set("modal-handler", modal_handler);
+      $(".modal#modal-handler").modal("show");
+//      Session.set("modal-handler", {noti:true});
+//      console.log('should show the notification ');
   },
   'click #userstatus': function(e,t){
     e.preventDefault();
@@ -602,15 +606,15 @@ Template.user_invite_request.events({
       }            }
     );
   }
-})
+});
 Template.user_modal.rendered = function(){
   // $('#user-modal').modal();
 
   $("#user-modal").modal();
   $("#user-modal").on('hidden.bs.modal', function(){
     Session.set('user_modal_actions', false);
-  })
-}
+  });
+};
 
 
 Template.request_friendship.events({

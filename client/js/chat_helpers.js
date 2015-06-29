@@ -4,18 +4,26 @@ Template.chatrooms_side.helpers({
     },
     requests:function(){
         var userId = Meteor.userId();
-        var myGroupRequests = Groups.find({owner:userId}, {fields:{request: 1, _id: 1, name:1}}).fetch();
-        var groupRequests = Groups.find({mod:{$in:[userId]}},{fields:{request: 1, _id: 1, name:1}}).fetch();
+        var myGroupRequests = Groups.find({owner:userId},
+                                          {fields:{request: 1, _id: 1, name:1}})
+                                                  .fetch();
+        var groupRequests = Groups.find({mod:{$in:[userId]}},
+                                        {fields:{request: 1, _id: 1, name:1}})
+                                                  .fetch();
         var total = myGroupRequests.length + groupRequests.length;
-        var requests = {myGroup: myGroupRequests, group: groupRequests, total:total};
+        var requests = {myGroup: myGroupRequests,
+                        group: groupRequests,
+                        total:total};
         return requests;
     }
-})
+});
 UI.registerHelper("scroll_chat",
                   function(){
                       var element = document.getElementById("chat-messages");
-                      if(!Session.get("chat-ready"))
+                      if(!Session.get("chat-ready")){
                           element.scrollTop = element.scrollHeight;
+                          $(".ui.accordion").accordion();
+                      }
                   });
 UI.registerHelper("chat_ready",
                   function(){
