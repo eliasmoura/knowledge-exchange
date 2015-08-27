@@ -1,6 +1,6 @@
 <template name="user">
   <div class='ui floating dropdown large button' id="user-dropdown">
-    <i class="user icon"></i>
+    <i class="user icon {{#if user.status.online}}online{{else}}offline{{/if}}"></i>
     <a id="user" class=""  href="#">
       {{user.profile.name}}
       <span class="label">{{notifications.total}}</span>
@@ -33,14 +33,14 @@
   {{#each notifications.requests.friendship}}
   <div class="friend-request">
     <label for="" class="username popup_this" id="{{user._id}}">
-      {{user.profile.name}} {{user.profile.lastname}}:
+      {{this.user.profile.name}} {{this.user.profile.lastname}}:
     </label>
-    {{#with user._id}}
+    {{#with this.user._id}}
     {{> popup}}
     {{/with}}
-    <i class="acept ui icon check" id="{{request}}" data-request-type="{{type.type}}" data-request-id="{{request}}" title="{{mf 'acept' 'Acept'}}">
+    <i class="acept ui icon check" id="{{this.request}}" data-request-type="{{this.type.type}}" data-request-id="{{this.request}}" title="{{mf 'acept' 'Acept'}}">
     </i>
-    <i  class="deny ui icon remove red deny" id="{{request}}" data-request-type="{{type.type}}" data-request-id="{{request}}" title="{{mf 'deny' 'Deny'}}"></i>
+    <i  class="deny ui icon remove red deny" id="{{this.request}}" data-request-type="{{this.type.type}}" data-request-id="{{this.request}}" title="{{mf 'deny' 'Deny'}}"></i>
   </div>
   {{/each}}
   <h4 class="participation-request">{{mf 'participation-request' 'Group participation request'}}({{notifications.requests.participation.length}}):</h4>
@@ -305,34 +305,24 @@
   </form>
 </template>
 <template name="user_profile">
-  {{#if user_modal.edit_profile}}
-  {{> user_profile_edit}}
-  {{else}}
-  {{#with profile}}
-  {{#if this.currentUser}}
-  <a href="#" id="edit-profile">{{mf 'edit-info' 'Edit info'}}</a>
-  {{/if}}
-  <div class="panel panel-info">
-    <div class="ui dividing header"> {{mf 'user-info' 'Basic Info'}}:</div>
-    <div class="panel-body">
-      <div>
-        {{this.profile.name}} {{this.profile.lastname}}
-      </div>
-      <div>
-        <a href="www.google.com.br/#q={{this.profile.city}}">{{this.profile.city}}</a>, <a href="www.google.com.br/#q={{this.user.country}}">{{this.user.country}}</a>
-
-        <br>{{mf 'birthday' 'Birthday'}}: <span>{{this.profile.birthday}}</span>
-      </div>
-    </div>
-  </div>
   <div class="panel panel-info">
     <div class="ui dividing header"> {{mf 'user-languages' 'Languages Info'}}:</div>
     <div class="panel-body">
       <label for="know">{{mf 'know' 'Know'}}:</label>
       <div class="know">
-        <div><a href='www.google.com.br/#q={{this.profile.nativelang}}' target='_blank'>{{this.profile.nativelang}}</a> ({{mf 'native' 'Native'}})</div>
+        <div>
+          <a href='www.google.com.br/#q={{this.profile.nativelang}}' target='_blank'>
+            {{this.profile.nativelang}}
+          </a>
+          ({{mf 'native' 'Native'}})
+        </div>
         {{#each this.profile.knownlanguages}}
-        <div><a href="www.google.com.br/#q={{this}}" target="blank">{{this}}</a> ({{mf 'fluent' 'Fluent'}})</div>
+        <div>
+          <a href="www.google.com.br/#q={{this}}" target="blank">
+            {{this}}
+          </a>
+          ({{mf 'fluent' 'Fluent'}})
+        </div>
         {{/each}}
       </div>
       <label for="learning">{{mf 'learning' 'Learning'}}:</label>
@@ -343,6 +333,7 @@
       </div>
     </div>
   </div>
+  {{#if this.profile.iterests}}
   <div class="panel panel-info interests">
     <div class="ui dividing header">{{mf 'interests' 'Interests'}}</div>
     <div class="panel-body">
@@ -351,13 +342,14 @@
       {{/each}}
     </div>
   </div>
+  {{/if}}
+  {{#if this.profile.description}}
   <div class="panel panel-info">
     <div class="ui dividing header"> {{mf 'user-description' 'User description'}}:</div>
     <div class="panel-body">
       {{this.profile.description}}
     </div>
   </div>
-  {{/with}}
   {{/if}}
 </template>
 <template name="user_profile_edit">

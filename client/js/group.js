@@ -43,7 +43,7 @@ Template.group_handler.events({
         else if(element == "management"){
             group_handler.management.active = true;
             Session.set("group_handler", group_handler);
-            $("#handler-btn").val(mf("create",null,"Aply"));
+            // $("#handler-btn").val(mf("create",null,"Aply"));
         }
 
     },
@@ -315,12 +315,12 @@ Template.group_settings.events({
     'change .group-settings':function(event, template){
         event.preventDefault();
         event.stopPropagation();
+//      debugger
         var target = event.currentTarget.id;
         var value = 0;
         var room = Session.get("roomid");
         var user_room = User_Room.findOne({room:room,user:Meteor.userId()});
         var settings = user_room.settings;
-        console.log(settings);
         if(settings === undefined){
             settings = {notification:{any:true}};
             settings.notification = {muted:0};
@@ -339,12 +339,10 @@ Template.group_settings.events({
             settings.notification.direct = true;
             settings.notification.any = false;
         }
-        console.log(settings);
         User_Room.update({_id:user_room._id},{$set:{settings:settings}}, function(error,result){
             if(error)
                 console.log(erro);
         });
-        console.log(User_Room.findOne({room:room,user:Meteor.userId()}));
     }
 });
 Template.groupmenu.rendered = function(){

@@ -1,8 +1,9 @@
 <template name="modal_handler">
 <div class="ui modal" id="modal-handler">
-    <i class="close icon"></i>
+
     <div class="header">
-        <h4 class="header" id="group-handler-ModalLabel">{{modal_handler.modal_header}}</h4>
+    <i class="close icon"></i>
+      <h4 class="header" id="group-handler-ModalLabel">{{modal_handler.modal_header}}</h4>
     </div>
     <div class="content"><!--content here-->
         {{#if modal_handler.login}}
@@ -26,6 +27,9 @@
     <div class="actions">
         <input type="button" class="ui button deny" id="crrbutton_close" data-dismiss="modal" value="{{mf 'close'}}" />
         {{#if modal_handler.login}}
+        <input type="button" class="ui button approve" id="crrbutton_close" data-dismiss="modal" value="{{mf 'login'}}" />
+        {{/if}}
+        {{#if modal_handler.correction}}
         <input type="button" class="ui button approve" id="crrbutton_close" data-dismiss="modal" value="{{mf 'login'}}" />
         {{/if}}
     </div>

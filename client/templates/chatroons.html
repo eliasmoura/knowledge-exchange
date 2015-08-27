@@ -1,40 +1,38 @@
 <template name="chatrooms">
-  <div class="chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
+  <div class="four wide column chatroom-menu ui vertical secondary {{menu_options}} menu" id="content_sticky">
     {{>yield 'sidebar'}}
   </div>
   <div class="ui twelve wide tablet computer sixteen mobile wide column" id="chat-content">
     {{#if group_handler.create.active}}
     {{> create_group}}
-    <button class="ui button" id="create-group-send" >{{mf 'create' 'Create'}}</button>
-    <button class="ui button" id="create-group-cancel" >{{mf 'cancel' 'Cancel'}}</button>
     {{else}}
     {{#if chatfeed}}
     {{> chatfeed}}
     {{else}}
 <!--    <div id="chat_content" class="sixteen wide  mobile fithteen wide computer column">-->
       <div class="ui top attached tabular menu" id="chat-tab">
-        {{#if isInRole "group-member" room._id}}
+        {{#if isInRole "group-member" room.room}}
         <div class="{{room_handler.chat.active}} item" id="room-chat" data-tab="chat-content">
           <a href="#" class="ui group-name">{{room.name}}</a>
         </div>
         {{/if}}
         <div class="{{room_handler.overview.active}} item" id="room-overview" data-tab="chat-overview">
           <a href="#" class="overview" id="{{room._id}}">
-            {{#if isInRole 'group-member' room._id}} Overview
+            {{#if isInRole 'group-member' room.room}} Overview
             {{else}} {{room.name}} {{/if}}
           </a>
         </div>
         <div class="{{room_handler.settings.active}} item" id="room-settings" data-tab="chat-settings">
-          <a href="#" class="settings" id="{{room._id}}">Settings</a>
+          <a href="#" class="settings" id="{{room.room}}">Settings</a>
         </div>
-        {{#if isInRole "group-manager" room._id}}
+        {{#if isInRole "group-manager" room.room}}
         <div class="{{room_handler.manage.active}} item" id="room-manage" data-tab="chat-manage">
-          <a href="#" id="{{room._id}}" class="manage">Manage</a>
+          <a href="#" id="{{room.room}}" class="manage">Manage</a>
         </div>
         {{/if}}
-        {{#if isInRole "group-member" room._id}}
+        {{#if isInRole "group-member" room.room}}
         <div class="danger item" id="room-leave">
-          <a class="item " id="quitGroup" href="#">
+          <a class=" " id="quitGroup" href="#">
             {{mf 'leave-group' 'Leave group'}}
           </a>
         </div>
@@ -64,7 +62,15 @@
         {{> group_settings}}
       </div>
       <div class="ui bottom attached {{room_handler.overview.active}} tab segment tab-content" data-tab="chat-overview">
+        {{#if is_public_room room.room}}
+        {{#with profile room.contact}}
+        {{> user_profile}}
+        {{/with}}
+        {{else}}
+        {{#with room_info this.room.room}}
         {{> room_overview}}
+        {{/with}}
+        {{/if}}
       </div>
 <!--    </div>-->
     {{/if}}
@@ -111,14 +117,14 @@
     <i class="user icon"></i><a class="" href="#">{{mf 'friends_contacts' 'Contacts'}}:</a>
     <div class="menu" id="panel-friends">
       {{#each contacts}}
-      <a href="{{pathFor route='PersonalChat'}}" class="friends-contacts username item popup_this {{#if active}}active{{/if}}" id="{{_id}}" >
-        <i class="icon user {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
-        {{this.profile.name}} {{this.profile.lastname}}
+      <a href="/chatroom/101/{{this.room}}" class="friends-contacts username item popup_this {{#if active}}active{{/if}}" id="{{_id}}" >
+        <i class="icon user  {{#if status.online}}online{{else}}offline{{/if}}" title="{{profile.status}}"></i>
+        {{this.user.profile.name}} {{this.user.profile.lastname}}
         {{#if notification}}
         <span class="chat friends-contacts-noti ui label">{{notification}}</span>
         {{/if}}
       </a>
-      {{#with _id}}
+      {{#with this.user._id}}
       {{> popup}}
       {{/with}}
       {{/each}}
@@ -164,7 +170,6 @@
           <div class="">
             {{mf 'every-message' 'Any new message arrives'}}
             {{#if group_settings setting="notification" value="any"}}
-            dsad
             <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" checked />
             {{else}}
             <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="any" />
@@ -172,6 +177,7 @@
           </div>
         </div>
         <div class="four wide column">
+            {{#if isNotPrivateChat }}
           <div class="">
             {{mf 'direct-message' 'New direct message arrives'}}
             {{#if group_settings setting="notification" value="direct"}}
@@ -180,6 +186,7 @@
             <input class="ui toggle checkbox group-settings" type="radio" name="new-messages" id="direct" />
             {{/if}}
           </div>
+            {{/if}}
         </div>
         <div class="four wide column">
           <div class="">
@@ -236,11 +243,7 @@
   </div>
 </template>
 <template name="chat_input">
-  <div class="ui form">
-    <div class="field">
-      <textarea name="textareamessage" id="message" placeholder="{{mf 'message' 'Message'}}" rows="2" class="ui input" ></textarea>
-    </div>
-  </div>
+  <textarea name="textareamessage" id="message" placeholder="{{mf 'message' 'Message'}}" rows="2" class="ui input" ></textarea>
 </template>
 
 <!-- tools -->

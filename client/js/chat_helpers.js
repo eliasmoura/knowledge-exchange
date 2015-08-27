@@ -25,10 +25,27 @@ UI.registerHelper("scroll_chat",
                           $(".ui.accordion").accordion();
                       }
                   });
-UI.registerHelper("chat_ready",
-                  function(){
-                      if(Session.get("chat-ready")){
-                          Session.set("chat-ready", Session.get("chat-ready") -1);
-                      }
-                      return !Session.get("chat-ready");
-                  });
+UI.registerHelper(
+    "chat_ready", function()
+    {
+        if(Session.get("chat-ready")){
+            Session.set("chat-ready", Session.get("chat-ready") -1);
+        }
+        return !Session.get("chat-ready");
+    }
+);
+
+UI.registerHelper(
+    "is_public_room", function(room)
+    {
+        return User_Room.findOne({room:room}).type  === "private";
+    }
+);
+
+UI.registerHelper(
+  "isNotPrivateChat", function(id)
+  {
+  //console.log(Meteor.users.findOne({_id:id}));
+    return Meteor.users.findOne({_id:id}) === undefined;
+  }
+);

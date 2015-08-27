@@ -3,51 +3,43 @@
 **/
 
 Meteor.startup(function(){
-        //Accounts.config({forbidClientAccountCreation:true});
-        if (Chatrooms.find().count() == 0){
-                console.log('adding chatrooms');
-                Chatrooms.insert({"name": "Test", details:"A test room"});
-                Chatrooms.insert({"name": "Test2", details:"A test room"});
-        }
-    /*    Meteor.users.find({"status.online": true}).observe({
-        changed: function(newdoc, olddoc){
-            if(newdoc.profile.active_room.room != olddoc.profile.active_room.room){
-                if(newdoc.profile.active_room.type == "group"){
-                    var user_room =  User_Room.findOne({group:newdoc.profile.active_room.room, user:newdoc._id})._id;
-                    User_Room.update({_id:user_room}, {$set:{new_messages:0}});
-                }
-            }
-
-        }
-    });*/
+    if (Chatrooms.find().count() == 0){
+        console.log('adding chatrooms');
+        Chatrooms.insert({"name": "Test", details:"A test room"});
+        Chatrooms.insert({"name": "Test2", details:"A test room"});
+    }
+    //prevent data being duplicated on server restart
     var starting = true;
     var user_chatroom = Meteor.users.find({"profile.active_room.type": "public"});
     user_chatroom.observe({
-         added: function(doc){
-            //prevent data being duplicated on server restart
+        added: function(doc){
             if(!starting)
-            User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,joined: true, date:Date.now()});
+                User_Chatroom.insert({room:doc.profile.active_room.room,
+                                      user:doc._id,joined: true, date:Date.now()});
         },
         changed: function(doc){
-            var is_joined = User_Chatroom.findOne({room:doc.profile.active_room.room, user: doc._id});
+            var is_joined = User_Chatroom.findOne({
+                room:doc.profile.active_room.room,user: doc._id});
             if (is_joined == undefined)
-                User_Chatroom.insert({room:doc.profile.active_room.room, user:doc._id,joined: true, date:Date.now()});
+                User_Chatroom.insert({room:doc.profile.active_room.room,
+                                      user:doc._id,joined: true, date:Date.now()});
         }
     });
     Requests.find().observe({
         added: function(doc){
             if(doc.type === "participation")
                 if(Groups.findOne({_id:doc.group}).type === "open")
-                    User_Room.insert({room:doc.group,type:"group",new_messages:0,user:doc.user,date: Date.now()});
+                    User_Room.insert({room:doc.group,type:"group",
+                                      new_messages:0,user:doc.user,date: Date.now()});
         },
         changed: function(doc){
-
         }
     });
     UserRequest.find().observe({
         added: function(doc){},
         changed: function(doc){
-            if (doc.accept){
+            if (doc.accept &&
+                UsersRelations.findOne({user:doc.request_to, contact:doc.user}) === undefined){
                 UsersRelations.insert(
                     {
                         user:doc.request_to,
@@ -66,13 +58,18 @@ Meteor.startup(function(){
                     function(error, result)
                     {
                         if (!error) {
-                            var chat = PrivateChat.findOne({users:{$in:[doc.user,doc.request_to]}});
+                            var chat = PrivateChat.findOne({
+                                users:{$in:[doc.user,doc.request_to]}});
                             if (chat == undefined)
                             {
-                                PrivateChat.insert({users:[doc.user,doc.request_to]},
-                                                   function(error, result){});
+                                chat = PrivateChat.insert({users:[doc.user,doc.request_to]},
+                                                          function(error, result){});
+                                console.log(chat);
+                                User_Room.insert({room:chat,type:"private",
+                                                  new_messages:0,user:doc.user,active:false, date: Date.now(), contact:doc.request_to});
+                                User_Room.insert({room:chat,type:"private",
+                                                  new_messages:0,user:doc.request_to,active:false, date: Date.now(), contact:doc.user});
                                 UserRequest.remove({_id:doc._id});
-                                console.log('friendship ok');
                             }
                         }else console.log(error);
                     }
@@ -82,7 +79,6 @@ Meteor.startup(function(){
     });
     Messages.find().observe({
         added: function(doc){
-            //prevent data being duplicated on server restart
             if(!starting){
                 if (doc.type == "group" || doc.type == "pricatechat"){
                     var user_group = User_Room.find({room:doc.room}, {fields:{user:1}}).fetch();
@@ -101,23 +97,27 @@ Meteor.startup(function(){
     User_Room.find().observe({
         removed: function(doc){
             var group = doc.room;
-            if (User_Room.find({room:doc.room}).count() == 0){
-                Groups.remove({_id:group});
+            var room = User_Room.find({room:doc.room});
+            if (room.count == 0){
+                if(room.type === "group")
+                    Groups.remove({_id:group});
                 Messages.remove({room:group});
             }
+            if(room.type === "private")
+                Messages.remove({room:group});
             var roles = Roles.getRolesForUser(doc.user,doc.room);
             Roles.removeUsersFromRoles(doc.user, roles, doc.room);
         },
         added: function(doc){
-            //prevent data being duplicated on server restart
             if(!starting){
-                    Roles.addUsersToRoles(doc.user, "group-member", doc.room);
-                    var request_group = Requests.findOne({group:doc.room,user:doc.user});
-                    var request_user = Requests.findOne({group:doc.room,user:doc.user});
-                    if(request_group !== undefined)
-                        Requests.remove({_id:request_group._id});
-                    if(request_user !== undefined)
-                        Requests.remove({_id:request_user._id});
+                Roles.addUsersToRoles(doc.user, "group-member", doc.room);
+                console.log(doc);
+                var request_group = Requests.findOne({group:doc.room,user:doc.user});
+                var request_user = Requests.findOne({group:doc.room,user:doc.user});
+                if(request_group !== undefined)
+                    Requests.remove({_id:request_group._id});
+                if(request_user !== undefined)
+                    Requests.remove({_id:request_user._id});
             }
         },
         changed: function(newdoc, oldDoc){
@@ -131,20 +131,18 @@ Meteor.startup(function(){
     });
     PrivateMessages.find().observe({
         added:function(doc){
-            //prevent data being duplicated on server restart
             if(!starting){
                 PrivateMessages.update({_id:doc._id}, {$set:{new_message: true}});
-                PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
-
+//                PrivateChat.update({_id:doc.chat}, {$inc:{new_messages:1}});
             }
-                    }
+        }
     });
     Groups.find({}).observe({
         added:function (doc){
-            //prevent data being duplicated on server restart
             if(!starting){
                 console.log("adding user_group");
-                User_Room.insert({room:doc._id,type:"group",new_messages:0,user:doc.owner,active:true, date: Date.now()});
+                User_Room.insert({room:doc._id,type:"group",new_messages:0,
+                                  user:doc.owner,active:true, date: Date.now()});
                 Roles.setUserRoles(doc.owner,["owner", "group-manager"], doc._id);
             }
         }

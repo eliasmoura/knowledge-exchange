@@ -118,6 +118,7 @@
           </div>
         </div>
       </div>
+      {{#if this.profile.interests}}
       <div class="sixteen wide column">
         <div class="ui dividing header">{{mf 'interests' 'Interests'}}</div>
         <div class="panel-body">
@@ -126,12 +127,15 @@
           {{/each}}
         </div>
       </div>
+      {{/if}}
+      {{#if this.profile.description}}
       <div class="sixteen wide column">
         <div class="ui dividing header"> {{mf 'user-description' 'User description'}}:</div>
         <div class="panel-body">
           {{this.profile.description}}
         </div>
       </div>
+      {{/if}}
     </div>
     {{else}}
     {{mf 'profile-private' 'This profile info is private'}}

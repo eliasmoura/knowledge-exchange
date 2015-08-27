@@ -11,10 +11,10 @@
 <template name="basic_correction_tool">
   <div class="content correction-setup">
     <div class="ui form">
-    <div class="ui action input">
-      <button class="ui button correction-button hidden" title="{{mf 'full-tool' 'Show full correction tool'}}">t</button>
-      <textarea class="" >{{message}}</textarea>
-    </div>
+      <div class="ui action input">
+        <button class="ui button correction-button hidden" title="{{mf 'full-tool' 'Show full correction tool'}}">t</button>
+        <textarea class="basic-correction" >{{message}}</textarea>
+      </div>
     </div>
   </div>
 </template>
@@ -30,33 +30,73 @@
       </ul>
       <form class="form-correction ui form" role="form">
         <div class="ui grid">
-        <div class="ui eight wide column" id="original-message">
-          <div class="ui items">
-            <div class="item middle aligned" id="{{modal_handler.id}} " row="4">{{modal_handler.text}}</div>
+          <div class="ui sixteen wide column" id="original-message">
+            <div class="ui items">
+              <div class="item middle aligned" id="{{modal_handler.id}} " row="4">{{modal_handler.text}}</div>
+            </div>
           </div>
-        </div>
-        <div class="ui eight wide column">
-          <textarea class="correction form-control" id="{{modal_handler.id}}">{{modal_handler.text}}</textarea>
-        </div>
-        <div class="ui sixteen wide column">
-          <div class="ui action input">
-            <button  class="ui button">{{mf 'E' 'E'}}</button>
-            <input class="form-control ui input" type="text" placeholder="{{mf 'explanation' 'Explanation'}}">
-            <span class="plus glyphicon glyphicon-plus input-group-addon"></span>
+          <div class="ui sixteen wide column">
+            <textarea class="correction form-control" id="{{modal_handler.id}}">{{modal_handler.text}}</textarea>
           </div>
-          <div class="ui action input">
-            <span class="ui button">{{mf 'A' 'A'}}</span>
-            <input class="form-control alt-input-f ui input" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
-            <input class="form-control alt alt-input-e ui input" type="text" placeholder="{{mf 'alternative' 'Alternative'}}">
-            <span class="plus glyphicon glyphicon-plus input-group-addon"></span>
+          <div class="ui sixteen wide column">
+            <div class="ui accordion correct-accordion">
+              <div class="title">
+                <i class="dropdown icon"></i>
+                {{mf 'explanation' 'Explanation'}}
+                <button  class="ui button">{{mf 'E' 'E'}}</button>
+              </div>
+              <div class="content">
+                <select class="ui fluid search selection dropdown">
+                  <input name="explanation" type="hidden" />
+                  <i class="dropdown icon"></i>
+                  <option class="default text">{{mf 'general-explanation' 'General Explanation'}}</option>
+                  <div class="menu">
+                    <option class="item" value="{{text}}">
+                      {{text}}
+                    </option>
+                  </div>
+                </select>
+              </div>
+            </div>
+            <div class="ui accordion correct-accordion">
+              <div class="title">
+                <i class="dropdown icon"></i>
+                {{mf 'alternative' 'Alternative'}}
+                <button  class="ui button">{{mf 'E' 'E'}}</button>
+              </div>
+              <div class="content">
+                <select class="ui fluid search selection dropdown">
+                  <input name="alternative" type="hidden" />
+                  <i class="dropdown icon"></i>
+                  <option class="default text">{{mf 'alternative'}}</option>
+                  <div class="menu">
+                    <option class="item" value="{{text}}">
+                      {{text}}
+                    </option>
+                  </div>
+                </select>
+              </div>
+            </div>
+            <div class="ui accordion correct-accordion">
+              <div class="title">
+                <i class="dropdown icon"></i>
+                {{mf 'usage' 'Usage'}}
+                <button  class="ui button">{{mf 'E' 'E'}}</button>
+              </div>
+              <div class="content">
+                <select class="ui fluid search selection dropdown">
+                  <input name="usage" type="hidden" />
+                  <i class="dropdown icon"></i>
+                  <option class="default text">{{mf 'word-expression' 'Word/Expression usage'}}</option>
+                  <div class="menu">
+                    <option class="item" value="{{text}}">
+                      {{text}}
+                    </option>
+                  </div>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="ui action input">
-            <span class="ui button">{{mf 'U' 'U'}}</span>
-            <input class="form-control usage-input-f ui input" type="text" placeholder="{{mf 'word_sentence' 'word/expretion'}}" />
-            <input class="form-control usage-input-e ui input" type="text" placeholder="{{mf 'usage' 'Usage'}}" container="body">
-            <span class="plus glyphicon glyphicon-plus input-group-addon"></span>
-          </div>
-        </div>
         </div>
       </form>
     </div>

@@ -13,7 +13,7 @@ mfPkg.addNative(
     "key": "create",
     "text": "Aply",
     "file": "./client/js/group.js",
-    "line": 47,
+    "line": 46,
     "func": "function(e,t)",
     "ctime": 1398341669193,
     "mtime": 1413121531198
@@ -21,17 +21,26 @@ mfPkg.addNative(
   "cancel": {
     "key": "cancel",
     "text": "Cancel",
-    "file": "./client/templates/chatroons.html",
-    "line": 9,
-    "template": "chatrooms",
+    "file": "./client/templates/group.html",
+    "line": 405,
+    "template": "group_handler",
     "ctime": 1426859783440,
     "mtime": 1426859783440
+  },
+  "leave-group": {
+    "key": "leave-group",
+    "text": "Leave group",
+    "file": "./client/templates/chatroons.html",
+    "line": 38,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "public_rooms": {
     "key": "public_rooms",
     "text": "Public rooms",
     "file": "./client/templates/chatroons.html",
-    "line": 61,
+    "line": 96,
     "template": "chatrooms",
     "ctime": 1397014212330,
     "mtime": 1398341669193
@@ -40,7 +49,7 @@ mfPkg.addNative(
     "key": "group_chats",
     "text": "Groups",
     "file": "./client/templates/chatroons.html",
-    "line": 69,
+    "line": 104,
     "template": "chatrooms",
     "ctime": 1396794056060,
     "mtime": 1398341669193
@@ -49,7 +58,7 @@ mfPkg.addNative(
     "key": "add-find-group",
     "text": "Create a chat group",
     "file": "./client/templates/chatroons.html",
-    "line": 71,
+    "line": 106,
     "template": "chatrooms",
     "ctime": 1398707194597,
     "mtime": 1426859783440
@@ -58,7 +67,7 @@ mfPkg.addNative(
     "key": "friends_contacts",
     "text": "Contacts",
     "file": "./client/templates/chatroons.html",
-    "line": 82,
+    "line": 119,
     "template": "chatrooms",
     "ctime": 1396794056060,
     "mtime": 1398341669193
@@ -67,98 +76,107 @@ mfPkg.addNative(
     "key": "users",
     "text": "Users",
     "file": "./client/templates/chatroons.html",
-    "line": 101,
+    "line": 140,
     "template": "chatrooms",
     "ctime": 1397014212330,
     "mtime": 1397014212330
+  },
+  "Notifications": {
+    "key": "Notifications",
+    "text": "Notifications",
+    "file": "./client/templates/chatroons.html",
+    "line": 166,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "notify-when": {
+    "key": "notify-when",
+    "text": "Notify me when",
+    "file": "./client/templates/chatroons.html",
+    "line": 167,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "every-message": {
+    "key": "every-message",
+    "text": "Any new message arrives",
+    "file": "./client/templates/chatroons.html",
+    "line": 173,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "direct-message": {
+    "key": "direct-message",
+    "text": "New direct message arrives",
+    "file": "./client/templates/chatroons.html",
+    "line": 184,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "threshold-notification": {
+    "key": "threshold-notification",
+    "text": "Only after",
+    "file": "./client/templates/chatroons.html",
+    "line": 199,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "mute-this-group": {
+    "key": "mute-this-group",
+    "text": "Mute this group for:",
+    "file": "./client/templates/chatroons.html",
+    "line": 205,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "hours": {
+    "key": "hours",
+    "text": "Hours",
+    "file": "./client/templates/chatroons.html",
+    "line": 207,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "days": {
+    "key": "days",
+    "text": "Days",
+    "file": "./client/templates/chatroons.html",
+    "line": 208,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "months": {
+    "key": "months",
+    "text": "Months",
+    "file": "./client/templates/chatroons.html",
+    "line": 209,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "years": {
+    "key": "years",
+    "text": "Years",
+    "file": "./client/templates/chatroons.html",
+    "line": 210,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "message": {
     "key": "message",
     "text": "Message",
     "file": "./client/templates/user.html",
-    "line": 281,
+    "line": 273,
     "template": "user",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "correction": {
-    "key": "correction",
-    "text": "Correction",
-    "file": "./client/templates/chatroons.html",
-    "line": 155,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "E": {
-    "key": "E",
-    "text": "E",
-    "file": "./client/templates/chatroons.html",
-    "line": 177,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "explanation": {
-    "key": "explanation",
-    "text": "Explanation",
-    "file": "./client/templates/chatroons.html",
-    "line": 178,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "A": {
-    "key": "A",
-    "text": "A",
-    "file": "./client/templates/chatroons.html",
-    "line": 182,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "word_sentence": {
-    "key": "word_sentence",
-    "text": "word/expretion",
-    "file": "./client/templates/chatroons.html",
-    "line": 189,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "alternative": {
-    "key": "alternative",
-    "text": "Alternative",
-    "file": "./client/templates/chatroons.html",
-    "line": 184,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "U": {
-    "key": "U",
-    "text": "U",
-    "file": "./client/templates/chatroons.html",
-    "line": 188,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "usage": {
-    "key": "usage",
-    "text": "Usage",
-    "file": "./client/templates/chatroons.html",
-    "line": 190,
-    "template": "chatrooms",
-    "ctime": 1397014212330,
-    "mtime": 1397014212330
-  },
-  "save-correction": {
-    "key": "save-correction",
-    "text": "Save correction",
-    "file": "./client/templates/chatroons.html",
-    "line": 201,
-    "template": "chatrooms",
     "ctime": 1397014212330,
     "mtime": 1397014212330
   },
@@ -166,10 +184,82 @@ mfPkg.addNative(
     "key": "find-create",
     "text": "Find/Create",
     "file": "./client/templates/chatroons.html",
-    "line": 218,
+    "line": 262,
     "template": "chatrooms",
     "ctime": 1398341669193,
     "mtime": 1398341669193
+  },
+  "Hello": {
+    "key": "Hello",
+    "text": "Hello",
+    "file": "./client/templates/chatroons.html",
+    "line": 295,
+    "template": "chatrooms",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "full-tool": {
+    "key": "full-tool",
+    "text": "Show full correction tool",
+    "file": "./client/templates/correction.html",
+    "line": 15,
+    "template": "messagem_corrected_button",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "explanation": {
+    "key": "explanation",
+    "text": "Explanation",
+    "file": "./client/templates/correction.html",
+    "line": 45,
+    "template": "messagem_corrected_button",
+    "ctime": 1397014212330,
+    "mtime": 1397014212330
+  },
+  "E": {
+    "key": "E",
+    "text": "E",
+    "file": "./client/templates/correction.html",
+    "line": 84,
+    "template": "messagem_corrected_button",
+    "ctime": 1397014212330,
+    "mtime": 1397014212330
+  },
+  "general-explanation": {
+    "key": "general-explanation",
+    "text": "General Explanation",
+    "file": "./client/templates/correction.html",
+    "line": 52,
+    "template": "messagem_corrected_button",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "alternative": {
+    "key": "alternative",
+    "text": "Alternative",
+    "file": "./client/templates/correction.html",
+    "line": 64,
+    "template": "messagem_corrected_button",
+    "ctime": 1397014212330,
+    "mtime": 1397014212330
+  },
+  "usage": {
+    "key": "usage",
+    "text": "Usage",
+    "file": "./client/templates/correction.html",
+    "line": 83,
+    "template": "messagem_corrected_button",
+    "ctime": 1397014212330,
+    "mtime": 1397014212330
+  },
+  "word-expression": {
+    "key": "word-expression",
+    "text": "Word/Expression usage",
+    "file": "./client/templates/correction.html",
+    "line": 90,
+    "template": "messagem_corrected_button",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "sent": {
     "key": "sent",
@@ -202,7 +292,7 @@ mfPkg.addNative(
     "key": "to",
     "text": "To",
     "file": "./client/templates/user.html",
-    "line": 258,
+    "line": 250,
     "template": "user",
     "ctime": 1398707194597,
     "mtime": 1398707194597
@@ -220,7 +310,7 @@ mfPkg.addNative(
     "key": "msg",
     "text": "Message",
     "file": "./client/templates/user.html",
-    "line": 259,
+    "line": 251,
     "template": "user",
     "ctime": 1398341669193,
     "mtime": 1398341711355
@@ -238,16 +328,25 @@ mfPkg.addNative(
     "key": "save",
     "text": "Save",
     "file": "./client/templates/user.html",
-    "line": 239,
+    "line": 231,
     "template": "user",
     "ctime": 1426859783441,
     "mtime": 1426859783441
+  },
+  "send-request": {
+    "key": "send-request",
+    "text": "Send participation request",
+    "file": "./client/templates/layout.html",
+    "line": 99,
+    "template": "title",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "details": {
     "key": "details",
     "text": "Details",
     "file": "./client/templates/user.html",
-    "line": 121,
+    "line": 113,
     "template": "user",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -256,79 +355,97 @@ mfPkg.addNative(
     "key": "group-info",
     "text": "Group information",
     "file": "./client/templates/group.html",
-    "line": 193,
+    "line": 315,
     "template": "group_handler",
     "ctime": 1404915874641,
     "mtime": 1404915874641
+  },
+  "name-length": {
+    "key": "name-length",
+    "text": "Group name must be at least 3 characters long",
+    "file": "./client/templates/group.html",
+    "line": 92,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "name-3-length": {
     "key": "name-3-length",
     "text": "The name should be at least 3 character",
     "file": "./client/templates/group.html",
-    "line": 197,
+    "line": 319,
     "template": "group_handler",
     "ctime": 1413121531198,
     "mtime": 1413121531198
   },
   "type": {
     "key": "type",
-    "text": "Type",
+    "text": "type",
     "file": "./client/templates/group.html",
-    "line": 200,
+    "line": 322,
     "template": "group_handler",
     "ctime": 1398341669193,
-    "mtime": 1398341669193
+    "mtime": 1436027023999
   },
   "select-one": {
     "key": "select-one",
-    "text": "Select one",
-    "file": "./client/templates/group.html",
-    "line": 202,
-    "template": "group_handler",
+    "text": "Select One",
+    "file": "./client/js/user.js",
+    "line": 323,
+    "func": "function(e,t)",
     "ctime": 1404915874641,
-    "mtime": 1426862450275
+    "mtime": 1436027023999
   },
   "open_group": {
     "key": "open_group",
-    "text": "Open group",
+    "text": "open group",
     "file": "./client/templates/group.html",
-    "line": 203,
+    "line": 325,
     "template": "group_handler",
     "ctime": 1398341669193,
-    "mtime": 1398341669193
+    "mtime": 1436027023999
   },
   "part_request": {
     "key": "part_request",
-    "text": "Participation request",
+    "text": "participation request",
     "file": "./client/templates/group.html",
-    "line": 204,
+    "line": 326,
     "template": "group_handler",
     "ctime": 1398341669193,
-    "mtime": 1398341669193
+    "mtime": 1436027023999
   },
   "memb_indication": {
     "key": "memb_indication",
-    "text": "Members indicatioin",
+    "text": "members indicatioin",
     "file": "./client/templates/group.html",
-    "line": 205,
+    "line": 327,
     "template": "group_handler",
     "ctime": 1398341669193,
-    "mtime": 1398341669193
+    "mtime": 1436027023999
+  },
+  "group-type": {
+    "key": "group-type",
+    "text": "Set how new members can join your group",
+    "file": "./client/templates/group.html",
+    "line": 103,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "groupgenre": {
     "key": "groupgenre",
-    "text": "Group genre",
+    "text": "group genre",
     "file": "./client/templates/group.html",
-    "line": 210,
+    "line": 332,
     "template": "group_handler",
     "ctime": 1404915874641,
-    "mtime": 1404915874641
+    "mtime": 1436027023999
   },
   "music": {
     "key": "music",
     "text": "Music",
     "file": "./client/templates/sign.html",
-    "line": 127,
+    "line": 110,
     "template": "login_form",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -337,7 +454,7 @@ mfPkg.addNative(
     "key": "choose-at-1",
     "text": "Choose at least one",
     "file": "./client/templates/group.html",
-    "line": 231,
+    "line": 372,
     "template": "group_handler",
     "ctime": 1413121531198,
     "mtime": 1413121531198
@@ -346,7 +463,7 @@ mfPkg.addNative(
     "key": "sports",
     "text": "Sports",
     "file": "./client/templates/sign.html",
-    "line": 129,
+    "line": 112,
     "template": "login_form",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -355,7 +472,7 @@ mfPkg.addNative(
     "key": "literature",
     "text": "Literature",
     "file": "./client/templates/sign.html",
-    "line": 131,
+    "line": 114,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
@@ -364,7 +481,7 @@ mfPkg.addNative(
     "key": "video-games",
     "text": "Video games",
     "file": "./client/templates/sign.html",
-    "line": 133,
+    "line": 116,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
@@ -373,7 +490,7 @@ mfPkg.addNative(
     "key": "tv-shows",
     "text": "T.V. Shows",
     "file": "./client/templates/sign.html",
-    "line": 135,
+    "line": 118,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
@@ -382,7 +499,7 @@ mfPkg.addNative(
     "key": "movies",
     "text": "Movies",
     "file": "./client/templates/sign.html",
-    "line": 137,
+    "line": 120,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
@@ -391,7 +508,7 @@ mfPkg.addNative(
     "key": "languages",
     "text": "Languages",
     "file": "./client/templates/sign.html",
-    "line": 139,
+    "line": 122,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
@@ -400,7 +517,7 @@ mfPkg.addNative(
     "key": "education",
     "text": "Education",
     "file": "./client/templates/sign.html",
-    "line": 141,
+    "line": 124,
     "template": "login_form",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -409,7 +526,7 @@ mfPkg.addNative(
     "key": "teaching",
     "text": "Teaching",
     "file": "./client/templates/sign.html",
-    "line": 143,
+    "line": 126,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
@@ -418,34 +535,52 @@ mfPkg.addNative(
     "key": "travel",
     "text": "Travel abroad",
     "file": "./client/templates/sign.html",
-    "line": 147,
+    "line": 130,
     "template": "login_form",
     "ctime": 1404915874641,
     "mtime": 1404915874641
+  },
+  "group-genre-length": {
+    "key": "group-genre-length",
+    "text": "Define what subject this group focus on",
+    "file": "./client/templates/group.html",
+    "line": 149,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "description": {
     "key": "description",
     "text": "Description",
     "file": "./client/templates/group.html",
-    "line": 236,
+    "line": 377,
     "template": "group_handler",
     "ctime": 1398341669193,
     "mtime": 1398341669193
+  },
+  "group-description-length": {
+    "key": "group-description-length",
+    "text": "Set a description to let people know what this group is about",
+    "file": "./client/templates/group.html",
+    "line": 153,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "languages-accepted": {
+    "key": "languages-accepted",
+    "text": "Set the languages accept in this group",
+    "file": "./client/templates/group.html",
+    "line": 161,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
   },
   "allowed_langs": {
     "key": "allowed_langs",
     "text": "Allowed Languages",
     "file": "./client/templates/group.html",
-    "line": 243,
-    "template": "group_handler",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "select_one": {
-    "key": "select_one",
-    "text": "Select One",
-    "file": "./client/templates/group.html",
-    "line": 248,
+    "line": 386,
     "template": "group_handler",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -454,7 +589,7 @@ mfPkg.addNative(
     "key": "invite-users",
     "text": "Invite users",
     "file": "./client/templates/group.html",
-    "line": 258,
+    "line": 174,
     "template": "group_handler",
     "ctime": 1413121531198,
     "mtime": 1413121531198
@@ -463,7 +598,7 @@ mfPkg.addNative(
     "key": "Contacts",
     "text": "Contacts",
     "file": "./client/templates/group.html",
-    "line": 261,
+    "line": 177,
     "template": "group_handler",
     "ctime": 1413121531198,
     "mtime": 1413121531198
@@ -472,7 +607,7 @@ mfPkg.addNative(
     "key": "find",
     "text": "Find",
     "file": "./client/js/group.js",
-    "line": 37,
+    "line": 36,
     "func": "function(e,t)",
     "ctime": 1398341669193,
     "mtime": 1398341669193
@@ -481,658 +616,19 @@ mfPkg.addNative(
     "key": "default-group-invite-message",
     "text": "Hi, check out this group, I think you\\",
     "file": "./client/templates/group.html",
-    "line": 273,
+    "line": 189,
     "template": "group_handler",
     "ctime": 1404915874641,
     "mtime": 1404915874641
   },
-  "manage-group": {
-    "key": "manage-group",
-    "text": "Group managenment",
-    "file": "./client/templates/group.html",
-    "line": 283,
-    "template": "group_handler",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "edit": {
-    "key": "edit",
-    "text": "Edit Group Info",
-    "file": "./client/templates/group.html",
-    "line": 315,
-    "template": "group_handler",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "users-managenment": {
-    "key": "users-managenment",
-    "text": "Users Managenment",
-    "file": "./client/templates/group.html",
-    "line": 317,
-    "template": "group_handler",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "blog": {
-    "key": "blog",
-    "text": "BLOG",
-    "file": "./client/templates/layout.html",
-    "line": 52,
-    "template": "title",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "chat": {
-    "key": "chat",
-    "text": "CHAT",
-    "file": "./client/templates/layout.html",
-    "line": 62,
-    "template": "title",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "notes": {
-    "key": "notes",
-    "text": "NOTES",
-    "file": "./client/templates/layout.html",
-    "line": 72,
-    "template": "title",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "overview": {
-    "key": "overview",
-    "text": "Overview",
-    "file": "./client/templates/modal.html",
-    "line": 36,
-    "template": "modal_handler",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "member-list": {
-    "key": "member-list",
-    "text": "Member list",
-    "file": "./client/templates/modal.html",
-    "line": 38,
-    "template": "modal_handler",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "email": {
-    "key": "email",
-    "text": "Email",
-    "file": "./client/templates/user.html",
-    "line": 15,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1398707194597
-  },
-  "passwd": {
-    "key": "passwd",
-    "text": "Password",
-    "file": "./client/templates/sign.html",
-    "line": 161,
-    "template": "login_form",
-    "ctime": 1396799101552,
-    "mtime": 1404915874642
-  },
-  "enter": {
-    "key": "enter",
-    "text": "Enter",
-    "file": "./client/templates/sign.html",
-    "line": 11,
-    "template": "login_form",
-    "ctime": 1404915874641,
-    "mtime": 1404915874641
-  },
-  "reset_password": {
-    "key": "reset_password",
-    "text": "Reset my password",
-    "file": "./client/templates/sign.html",
-    "line": 14,
-    "template": "login_form",
-    "ctime": 1404915874641,
-    "mtime": 1404915874641
-  },
-  "create_acc": {
-    "key": "create_acc",
-    "text": "Create Account",
-    "file": "./client/templates/sign.html",
-    "line": 15,
-    "template": "login_form",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "reset-passwd": {
-    "key": "reset-passwd",
-    "text": "Reset my password",
-    "file": "./client/templates/user.html",
-    "line": 474,
-    "template": "user",
-    "ctime": 1404915874641,
-    "mtime": 1404916320377
-  },
-  "reset": {
-    "key": "reset",
-    "text": "Reset",
-    "file": "./client/templates/sign.html",
-    "line": 38,
-    "template": "login_form",
-    "ctime": 1404915874641,
-    "mtime": 1404915874641
-  },
-  "sing_up": {
-    "key": "sing_up",
-    "text": "Signing up",
-    "file": "./client/templates/sign.html",
-    "line": 52,
-    "template": "login_form",
-    "ctime": 1398341669193,
-    "mtime": 1426859948637
-  },
-  "basic-info": {
-    "key": "basic-info",
-    "text": "Basic Information",
-    "file": "./client/templates/sign.html",
-    "line": 55,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "name": {
-    "key": "name",
-    "text": "Name",
-    "file": "./client/templates/sign.html",
-    "line": 56,
-    "template": "login_form",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "birthday": {
-    "key": "birthday",
-    "text": "Birthday",
-    "file": "./client/templates/user.html",
-    "line": 386,
-    "template": "user",
-    "ctime": 1398734903623,
-    "mtime": 1398734903623
-  },
-  "gender": {
-    "key": "gender",
-    "text": "Gender",
-    "file": "./client/templates/sign.html",
-    "line": 69,
-    "template": "login_form",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "masculine": {
-    "key": "masculine",
-    "text": "Masculine",
-    "file": "./client/templates/sign.html",
-    "line": 72,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "feminine": {
-    "key": "feminine",
-    "text": "Feminine",
-    "file": "./client/templates/sign.html",
-    "line": 73,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "other": {
-    "key": "other",
-    "text": "Other",
-    "file": "./client/templates/sign.html",
-    "line": 74,
-    "template": "login_form",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "country": {
-    "key": "country",
-    "text": "Country",
-    "file": "./client/templates/user.html",
-    "line": 384,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "city": {
-    "key": "city",
-    "text": "City",
-    "file": "./client/templates/user.html",
-    "line": 383,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "native-lang": {
-    "key": "native-lang",
-    "text": "Native Language",
-    "file": "./client/templates/sign.html",
-    "line": 87,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "languages-information": {
-    "key": "languages-information",
-    "text": "Languages informations",
-    "file": "./client/templates/sign.html",
-    "line": 96,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "know-language": {
-    "key": "know-language",
-    "text": "I'm fluent in",
-    "file": "./client/templates/user.html",
-    "line": 402,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "add-more-languages": {
-    "key": "add-more-languages",
-    "text": "Add more lnaguages",
-    "file": "./client/templates/user.html",
-    "line": 423,
-    "template": "user",
-    "ctime": 1398734903623,
-    "mtime": 1398734903623
-  },
-  "select": {
-    "key": "select",
+  "select_one": {
+    "key": "select_one",
     "text": "Select One",
-    "file": "./client/js/user.js",
-    "line": 492,
-    "func": "function(event,template)",
-    "ctime": 1398734903623,
-    "mtime": 1404915874642
-  },
-  "learning-language": {
-    "key": "learning-language",
-    "text": "I'm learning",
-    "file": "./client/templates/sign.html",
-    "line": 113,
-    "template": "login_form",
-    "ctime": 1398735089360,
-    "mtime": 1404915874642
-  },
-  "interests": {
-    "key": "interests",
-    "text": "Interests",
-    "file": "./client/templates/user.html",
-    "line": 355,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "make-friends": {
-    "key": "make-friends",
-    "text": "Make new friends",
-    "file": "./client/templates/sign.html",
-    "line": 145,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "login-info": {
-    "key": "login-info",
-    "text": "Login information",
-    "file": "./client/templates/sign.html",
-    "line": 150,
-    "template": "login_form",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "check-email": {
-    "key": "check-email",
-    "text": "Confirme email",
-    "file": "./client/templates/sign.html",
-    "line": 157,
-    "template": "login_form",
-    "ctime": 1413121531198,
-    "mtime": 1413121531198
-  },
-  "must-match": {
-    "key": "must-match",
-    "text": "Must match email address entered above",
-    "file": "./client/templates/sign.html",
-    "line": 158,
-    "template": "login_form",
-    "ctime": 1413121531198,
-    "mtime": 1413121531198
-  },
-  "passwd_check": {
-    "key": "passwd_check",
-    "text": "Password check",
-    "file": "./client/templates/sign.html",
-    "line": 165,
-    "template": "login_form",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "profile": {
-    "key": "profile",
-    "text": "Profile",
-    "file": "./client/templates/user.html",
-    "line": 12,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "notification": {
-    "key": "notification",
-    "text": "Notifications",
-    "file": "./client/templates/user.html",
-    "line": 18,
-    "template": "user",
+    "file": "./client/templates/group.html",
+    "line": 392,
+    "template": "group_handler",
     "ctime": 1398341669193,
     "mtime": 1398341669193
-  },
-  "log_out": {
-    "key": "log_out",
-    "text": "Log out",
-    "file": "./client/templates/user.html",
-    "line": 21,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1396799101552
-  },
-  "sign-in-up": {
-    "key": "sign-in-up",
-    "text": "Sign in/up",
-    "file": "./client/templates/user.html",
-    "line": 29,
-    "template": "user",
-    "ctime": 1426859783441,
-    "mtime": 1426859783441
-  },
-  "friendship-request": {
-    "key": "friendship-request",
-    "text": "User friendship request",
-    "file": "./client/templates/user.html",
-    "line": 44,
-    "template": "user",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "acept": {
-    "key": "acept",
-    "text": "Acept",
-    "file": "./client/templates/user.html",
-    "line": 49,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "deny": {
-    "key": "deny",
-    "text": "Deny",
-    "file": "./client/templates/user.html",
-    "line": 50,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "participation-request": {
-    "key": "participation-request",
-    "text": "Group participation request",
-    "file": "./client/templates/user.html",
-    "line": 54,
-    "template": "user",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "invitation-request": {
-    "key": "invitation-request",
-    "text": "Group participation invitation request",
-    "file": "./client/templates/user.html",
-    "line": 63,
-    "template": "user",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "find-user": {
-    "key": "find-user",
-    "text": "Find user",
-    "file": "./client/templates/user.html",
-    "line": 80,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "user-name": {
-    "key": "user-name",
-    "text": "User name",
-    "file": "./client/templates/user.html",
-    "line": 88,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "invite-friendship": {
-    "key": "invite-friendship",
-    "text": "Sen a friendship request",
-    "file": "./client/templates/user.html",
-    "line": 112,
-    "template": "user",
-    "ctime": 1398734903624,
-    "mtime": 1398734903624
-  },
-  "user-info": {
-    "key": "user-info",
-    "text": "User basic info",
-    "file": "./client/templates/user.html",
-    "line": 375,
-    "template": "user",
-    "ctime": 1398734903624,
-    "mtime": 1398734903624
-  },
-  "user-languages": {
-    "key": "user-languages",
-    "text": "User languages info",
-    "file": "./client/templates/user.html",
-    "line": 391,
-    "template": "user",
-    "ctime": 1398734903624,
-    "mtime": 1398734903624
-  },
-  "know": {
-    "key": "know",
-    "text": "Know",
-    "file": "./client/templates/user.html",
-    "line": 339,
-    "template": "user",
-    "ctime": 1398734903624,
-    "mtime": 1398734903624
-  },
-  "learning": {
-    "key": "learning",
-    "text": "Learning",
-    "file": "./client/templates/user.html",
-    "line": 346,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1398734903623
-  },
-  "add-user": {
-    "key": "add-user",
-    "text": "Add contact",
-    "file": "./client/templates/user.html",
-    "line": 169,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "friend": {
-    "key": "friend",
-    "text": "Friend",
-    "file": "./client/templates/user.html",
-    "line": 273,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "contact": {
-    "key": "contact",
-    "text": "contact",
-    "file": "./client/templates/user.html",
-    "line": 275,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "teacher": {
-    "key": "teacher",
-    "text": "Teacher",
-    "file": "./client/templates/user.html",
-    "line": 277,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398734903624
-  },
-  "student": {
-    "key": "student",
-    "text": "Student",
-    "file": "./client/templates/user.html",
-    "line": 279,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "info": {
-    "key": "info",
-    "text": "Info",
-    "file": "./client/templates/user.html",
-    "line": 251,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "security": {
-    "key": "security",
-    "text": "Security",
-    "file": "./client/templates/user.html",
-    "line": 252,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "friends": {
-    "key": "friends",
-    "text": "Friends",
-    "file": "./client/templates/user.html",
-    "line": 253,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "user": {
-    "key": "user",
-    "text": "User",
-    "file": "./client/templates/user.html",
-    "line": 270,
-    "template": "user",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "groups": {
-    "key": "groups",
-    "text": "Groups",
-    "file": "./client/templates/user.html",
-    "line": 292,
-    "template": "user",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "invite_to_group": {
-    "key": "invite_to_group",
-    "text": "Invite the user for this group",
-    "file": "./client/templates/user.html",
-    "line": 298,
-    "template": "user",
-    "ctime": 1398707194597,
-    "mtime": 1398707194597
-  },
-  "report": {
-    "key": "report",
-    "text": "Report",
-    "file": "./client/templates/user.html",
-    "line": 310,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "reason": {
-    "key": "reason",
-    "text": "Reason",
-    "file": "./client/templates/user.html",
-    "line": 311,
-    "template": "user",
-    "ctime": 1398341669193,
-    "mtime": 1398341669193
-  },
-  "edit-info": {
-    "key": "edit-info",
-    "text": "Edit info",
-    "file": "./client/templates/user.html",
-    "line": 321,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "native": {
-    "key": "native",
-    "text": "Native",
-    "file": "./client/templates/user.html",
-    "line": 341,
-    "template": "user",
-    "ctime": 1396799101552,
-    "mtime": 1404915874642
-  },
-  "fluent": {
-    "key": "fluent",
-    "text": "Fluent",
-    "file": "./client/templates/user.html",
-    "line": 343,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
-  },
-  "user-description": {
-    "key": "user-description",
-    "text": "User description",
-    "file": "./client/templates/user.html",
-    "line": 441,
-    "template": "user",
-    "ctime": 1398734903624,
-    "mtime": 1398734903624
-  },
-  "learning-languages": {
-    "key": "learning-languages",
-    "text": "I'm learning",
-    "file": "./client/templates/user.html",
-    "line": 421,
-    "template": "user",
-    "ctime": 1406039292447,
-    "mtime": 1406039292447
-  },
-  "email-info": {
-    "key": "email-info",
-    "text": "Enter your account email",
-    "file": "./client/templates/user.html",
-    "line": 476,
-    "template": "user",
-    "ctime": 1404915874642,
-    "mtime": 1404915874642
   },
   "akan": {
     "key": "akan",
@@ -2034,6 +1530,681 @@ mfPkg.addNative(
     "ctime": 1404915874643,
     "mtime": 1404915874643
   },
+  "update": {
+    "key": "update",
+    "text": "Update",
+    "file": "./client/templates/group.html",
+    "line": 404,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "manage-group": {
+    "key": "manage-group",
+    "text": "Group managenment",
+    "file": "./client/templates/group.html",
+    "line": 412,
+    "template": "group_handler",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "edit": {
+    "key": "edit",
+    "text": "Edit Group Info",
+    "file": "./client/templates/group.html",
+    "line": 440,
+    "template": "group_handler",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "users-managenment": {
+    "key": "users-managenment",
+    "text": "Users Managenment",
+    "file": "./client/templates/group.html",
+    "line": 445,
+    "template": "group_handler",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "Nothing-here": {
+    "key": "Nothing-here",
+    "text": "Nothing here",
+    "file": "./client/templates/group.html",
+    "line": 531,
+    "template": "group_handler",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "blog": {
+    "key": "blog",
+    "text": "BLOG",
+    "file": "./client/templates/layout.html",
+    "line": 50,
+    "template": "title",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "chat": {
+    "key": "chat",
+    "text": "CHAT",
+    "file": "./client/templates/layout.html",
+    "line": 60,
+    "template": "title",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "notes": {
+    "key": "notes",
+    "text": "NOTES",
+    "file": "./client/templates/layout.html",
+    "line": 70,
+    "template": "title",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "sign-in-up": {
+    "key": "sign-in-up",
+    "text": "Sign in/up",
+    "file": "./client/templates/layout.html",
+    "line": 82,
+    "template": "title",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "fluent": {
+    "key": "fluent",
+    "text": "Fluent",
+    "file": "./client/templates/user.html",
+    "line": 324,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "native": {
+    "key": "native",
+    "text": "Native",
+    "file": "./client/templates/user.html",
+    "line": 317,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1404915874642
+  },
+  "interests": {
+    "key": "interests",
+    "text": "Interests",
+    "file": "./client/templates/user.html",
+    "line": 338,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "user-description": {
+    "key": "user-description",
+    "text": "User description",
+    "file": "./client/templates/user.html",
+    "line": 425,
+    "template": "user",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "profile-private": {
+    "key": "profile-private",
+    "text": "This profile info is private",
+    "file": "./client/templates/layout.html",
+    "line": 141,
+    "template": "title",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "overview": {
+    "key": "overview",
+    "text": "Overview",
+    "file": "./client/templates/modal.html",
+    "line": 39,
+    "template": "modal_handler",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "member-list": {
+    "key": "member-list",
+    "text": "Member list",
+    "file": "./client/templates/modal.html",
+    "line": 41,
+    "template": "modal_handler",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "search": {
+    "key": "search",
+    "text": "Search",
+    "file": "./client/templates/search.html",
+    "line": 4,
+    "template": "search",
+    "mtime": 1436027023999,
+    "ctime": 1436027023999
+  },
+  "email": {
+    "key": "email",
+    "text": "Email",
+    "file": "./client/templates/user.html",
+    "line": 14,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1398707194597
+  },
+  "passwd": {
+    "key": "passwd",
+    "text": "Password",
+    "file": "./client/templates/sign.html",
+    "line": 144,
+    "template": "login_form",
+    "ctime": 1396799101552,
+    "mtime": 1404915874642
+  },
+  "reset_password": {
+    "key": "reset_password",
+    "text": "Reset my password",
+    "file": "./client/templates/sign.html",
+    "line": 15,
+    "template": "login_form",
+    "ctime": 1404915874641,
+    "mtime": 1404915874641
+  },
+  "create_acc": {
+    "key": "create_acc",
+    "text": "Create Account",
+    "file": "./client/templates/sign.html",
+    "line": 18,
+    "template": "login_form",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "enter": {
+    "key": "enter",
+    "text": "Enter",
+    "file": "./client/templates/sign.html",
+    "line": 21,
+    "template": "login_form",
+    "ctime": 1404915874641,
+    "mtime": 1404915874641
+  },
+  "reset-passwd": {
+    "key": "reset-passwd",
+    "text": "Reset my password",
+    "file": "./client/templates/user.html",
+    "line": 458,
+    "template": "user",
+    "ctime": 1404915874641,
+    "mtime": 1404916320377
+  },
+  "reset": {
+    "key": "reset",
+    "text": "Reset",
+    "file": "./client/templates/sign.html",
+    "line": 35,
+    "template": "login_form",
+    "ctime": 1404915874641,
+    "mtime": 1404915874641
+  },
+  "sing_up": {
+    "key": "sing_up",
+    "text": "Signing up",
+    "file": "./client/templates/sign.html",
+    "line": 45,
+    "template": "login_form",
+    "ctime": 1398341669193,
+    "mtime": 1426859948637
+  },
+  "basic-info": {
+    "key": "basic-info",
+    "text": "Basic Information",
+    "file": "./client/templates/sign.html",
+    "line": 47,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "name": {
+    "key": "name",
+    "text": "Name",
+    "file": "./client/templates/sign.html",
+    "line": 48,
+    "template": "login_form",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "birthday": {
+    "key": "birthday",
+    "text": "Birthday",
+    "file": "./client/templates/user.html",
+    "line": 370,
+    "template": "user",
+    "ctime": 1398734903623,
+    "mtime": 1398734903623
+  },
+  "gender": {
+    "key": "gender",
+    "text": "Gender",
+    "file": "./client/templates/sign.html",
+    "line": 59,
+    "template": "login_form",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "masculine": {
+    "key": "masculine",
+    "text": "Masculine",
+    "file": "./client/templates/sign.html",
+    "line": 62,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "feminine": {
+    "key": "feminine",
+    "text": "Feminine",
+    "file": "./client/templates/sign.html",
+    "line": 63,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "other": {
+    "key": "other",
+    "text": "Other",
+    "file": "./client/templates/sign.html",
+    "line": 64,
+    "template": "login_form",
+    "ctime": 1426859783441,
+    "mtime": 1426859783441
+  },
+  "country": {
+    "key": "country",
+    "text": "Country",
+    "file": "./client/templates/user.html",
+    "line": 368,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "city": {
+    "key": "city",
+    "text": "City",
+    "file": "./client/templates/user.html",
+    "line": 367,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "native-lang": {
+    "key": "native-lang",
+    "text": "Native Language",
+    "file": "./client/templates/sign.html",
+    "line": 77,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "languages-information": {
+    "key": "languages-information",
+    "text": "Languages informations",
+    "file": "./client/templates/sign.html",
+    "line": 86,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "know-language": {
+    "key": "know-language",
+    "text": "I'm fluent in",
+    "file": "./client/templates/user.html",
+    "line": 386,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "add-more-languages": {
+    "key": "add-more-languages",
+    "text": "Add more lnaguages",
+    "file": "./client/templates/user.html",
+    "line": 407,
+    "template": "user",
+    "ctime": 1398734903623,
+    "mtime": 1398734903623
+  },
+  "learning-language": {
+    "key": "learning-language",
+    "text": "I'm learning",
+    "file": "./client/templates/sign.html",
+    "line": 99,
+    "template": "login_form",
+    "ctime": 1398735089360,
+    "mtime": 1404915874642
+  },
+  "make-friends": {
+    "key": "make-friends",
+    "text": "Make new friends",
+    "file": "./client/templates/sign.html",
+    "line": 128,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "login-info": {
+    "key": "login-info",
+    "text": "Login information",
+    "file": "./client/templates/sign.html",
+    "line": 133,
+    "template": "login_form",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "check-email": {
+    "key": "check-email",
+    "text": "Confirme email",
+    "file": "./client/templates/sign.html",
+    "line": 140,
+    "template": "login_form",
+    "ctime": 1413121531198,
+    "mtime": 1413121531198
+  },
+  "must-match": {
+    "key": "must-match",
+    "text": "Must match email address entered above",
+    "file": "./client/templates/sign.html",
+    "line": 141,
+    "template": "login_form",
+    "ctime": 1413121531198,
+    "mtime": 1413121531198
+  },
+  "passwd_check": {
+    "key": "passwd_check",
+    "text": "Password check",
+    "file": "./client/templates/sign.html",
+    "line": 148,
+    "template": "login_form",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "profile": {
+    "key": "profile",
+    "text": "Profile",
+    "file": "./client/templates/user.html",
+    "line": 11,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "notification": {
+    "key": "notification",
+    "text": "Notifications",
+    "file": "./client/templates/user.html",
+    "line": 19,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "log_out": {
+    "key": "log_out",
+    "text": "Log out",
+    "file": "./client/templates/user.html",
+    "line": 22,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1396799101552
+  },
+  "friendship-request": {
+    "key": "friendship-request",
+    "text": "User friendship request",
+    "file": "./client/templates/user.html",
+    "line": 30,
+    "template": "user",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "acept": {
+    "key": "acept",
+    "text": "Acept",
+    "file": "./client/templates/user.html",
+    "line": 41,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "deny": {
+    "key": "deny",
+    "text": "Deny",
+    "file": "./client/templates/user.html",
+    "line": 43,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "participation-request": {
+    "key": "participation-request",
+    "text": "Group participation request",
+    "file": "./client/templates/user.html",
+    "line": 46,
+    "template": "user",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "invitation-request": {
+    "key": "invitation-request",
+    "text": "Group participation invitation request",
+    "file": "./client/templates/user.html",
+    "line": 55,
+    "template": "user",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "find-user": {
+    "key": "find-user",
+    "text": "Find user",
+    "file": "./client/templates/user.html",
+    "line": 72,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "user-name": {
+    "key": "user-name",
+    "text": "User name",
+    "file": "./client/templates/user.html",
+    "line": 80,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "invite-friendship": {
+    "key": "invite-friendship",
+    "text": "Sen a friendship request",
+    "file": "./client/templates/user.html",
+    "line": 104,
+    "template": "user",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "user-info": {
+    "key": "user-info",
+    "text": "User basic info",
+    "file": "./client/templates/user.html",
+    "line": 359,
+    "template": "user",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "user-languages": {
+    "key": "user-languages",
+    "text": "User languages info",
+    "file": "./client/templates/user.html",
+    "line": 375,
+    "template": "user",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "know": {
+    "key": "know",
+    "text": "Know",
+    "file": "./client/templates/user.html",
+    "line": 311,
+    "template": "user",
+    "ctime": 1398734903624,
+    "mtime": 1398734903624
+  },
+  "learning": {
+    "key": "learning",
+    "text": "Learning",
+    "file": "./client/templates/user.html",
+    "line": 328,
+    "template": "user",
+    "ctime": 1396799101552,
+    "mtime": 1398734903623
+  },
+  "add-user": {
+    "key": "add-user",
+    "text": "Add contact",
+    "file": "./client/templates/user.html",
+    "line": 161,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "friend": {
+    "key": "friend",
+    "text": "Friend",
+    "file": "./client/templates/user.html",
+    "line": 265,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "contact": {
+    "key": "contact",
+    "text": "contact",
+    "file": "./client/templates/user.html",
+    "line": 267,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "teacher": {
+    "key": "teacher",
+    "text": "Teacher",
+    "file": "./client/templates/user.html",
+    "line": 269,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398734903624
+  },
+  "student": {
+    "key": "student",
+    "text": "Student",
+    "file": "./client/templates/user.html",
+    "line": 271,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "info": {
+    "key": "info",
+    "text": "Info",
+    "file": "./client/templates/user.html",
+    "line": 243,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "security": {
+    "key": "security",
+    "text": "Security",
+    "file": "./client/templates/user.html",
+    "line": 244,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "friends": {
+    "key": "friends",
+    "text": "Friends",
+    "file": "./client/templates/user.html",
+    "line": 245,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
+  "user": {
+    "key": "user",
+    "text": "User",
+    "file": "./client/templates/user.html",
+    "line": 262,
+    "template": "user",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "groups": {
+    "key": "groups",
+    "text": "Groups",
+    "file": "./client/templates/user.html",
+    "line": 284,
+    "template": "user",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "invite_to_group": {
+    "key": "invite_to_group",
+    "text": "Invite the user for this group",
+    "file": "./client/templates/user.html",
+    "line": 290,
+    "template": "user",
+    "ctime": 1398707194597,
+    "mtime": 1398707194597
+  },
+  "report": {
+    "key": "report",
+    "text": "Report",
+    "file": "./client/templates/user.html",
+    "line": 302,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "reason": {
+    "key": "reason",
+    "text": "Reason",
+    "file": "./client/templates/user.html",
+    "line": 303,
+    "template": "user",
+    "ctime": 1398341669193,
+    "mtime": 1398341669193
+  },
+  "select": {
+    "key": "select",
+    "text": "Select One",
+    "file": "./client/js/user.js",
+    "line": 502,
+    "func": "function(event,template)",
+    "ctime": 1398734903623,
+    "mtime": 1404915874642
+  },
+  "learning-languages": {
+    "key": "learning-languages",
+    "text": "I'm learning",
+    "file": "./client/templates/user.html",
+    "line": 405,
+    "template": "user",
+    "ctime": 1406039292447,
+    "mtime": 1406039292447
+  },
+  "email-info": {
+    "key": "email-info",
+    "text": "Enter your account email",
+    "file": "./client/templates/user.html",
+    "line": 460,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1404915874642
+  },
   "no-subject": {
     "key": "no-subject",
     "text": "No Subject",
@@ -2047,7 +2218,7 @@ mfPkg.addNative(
     "key": "online",
     "text": "Online",
     "file": "./client/js/user.js",
-    "line": 91,
+    "line": 97,
     "func": "function(e,t)",
     "ctime": 1404915874643,
     "mtime": 1404915874643
@@ -2056,7 +2227,7 @@ mfPkg.addNative(
     "key": "away",
     "text": "Away",
     "file": "./client/js/user.js",
-    "line": 92,
+    "line": 98,
     "func": "function(e,t)",
     "ctime": 1404915874643,
     "mtime": 1404915874643
@@ -2065,7 +2236,7 @@ mfPkg.addNative(
     "key": "busy",
     "text": "Busy",
     "file": "./client/js/user.js",
-    "line": 93,
+    "line": 99,
     "func": "function(e,t)",
     "ctime": 1404915874643,
     "mtime": 1404915874643
@@ -2074,7 +2245,7 @@ mfPkg.addNative(
     "key": "name-404",
     "text": "Name not defined",
     "file": "./client/js/user.js",
-    "line": 195,
+    "line": 205,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2083,7 +2254,7 @@ mfPkg.addNative(
     "key": "lastname-404",
     "text": "Lastname not defined",
     "file": "./client/js/user.js",
-    "line": 198,
+    "line": 208,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2092,7 +2263,7 @@ mfPkg.addNative(
     "key": "birthday-404",
     "text": "Birthday not defined",
     "file": "./client/js/user.js",
-    "line": 201,
+    "line": 211,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2101,7 +2272,7 @@ mfPkg.addNative(
     "key": "passwd-404",
     "text": "Password not defined",
     "file": "./client/js/user.js",
-    "line": 204,
+    "line": 214,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2110,7 +2281,7 @@ mfPkg.addNative(
     "key": "not-defined",
     "text": "Gender not defined",
     "file": "./client/js/user.js",
-    "line": 209,
+    "line": 219,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2119,7 +2290,7 @@ mfPkg.addNative(
     "key": "learning-404",
     "text": "Learning languages not defined",
     "file": "./client/js/user.js",
-    "line": 221,
+    "line": 231,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2128,7 +2299,7 @@ mfPkg.addNative(
     "key": "known-404",
     "text": "Known languages not defined",
     "file": "./client/js/user.js",
-    "line": 234,
+    "line": 244,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2137,7 +2308,7 @@ mfPkg.addNative(
     "key": "interest-404",
     "text": "Interests not defined",
     "file": "./client/js/user.js",
-    "line": 242,
+    "line": 252,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2146,7 +2317,7 @@ mfPkg.addNative(
     "key": "email-404",
     "text": "Email not defined",
     "file": "./client/js/user.js",
-    "line": 247,
+    "line": 257,
     "func": "function(e,t)",
     "ctime": 1413121531199,
     "mtime": 1413121531199
@@ -2155,10 +2326,70 @@ mfPkg.addNative(
     "key": "signin-error",
     "text": "The following fields contain errors, please check them and try again.",
     "file": "./client/js/user.js",
-    "line": 281,
+    "line": 291,
     "func": "function(error)",
     "ctime": 1426859783441,
     "mtime": 1426859783441
+  },
+  "correction": {
+    "key": "correction",
+    "text": "Correction",
+    "file": "./client/templates/chatroons.html",
+    "line": 155,
+    "template": "chatrooms",
+    "ctime": 1397014212330,
+    "mtime": 1436027024000,
+    "removed": true
+  },
+  "A": {
+    "key": "A",
+    "text": "A",
+    "file": "./client/templates/chatroons.html",
+    "line": 182,
+    "template": "chatrooms",
+    "ctime": 1397014212330,
+    "mtime": 1436027024000,
+    "removed": true
+  },
+  "word_sentence": {
+    "key": "word_sentence",
+    "text": "word/expretion",
+    "file": "./client/templates/chatroons.html",
+    "line": 189,
+    "template": "chatrooms",
+    "ctime": 1397014212330,
+    "mtime": 1436027024000,
+    "removed": true
+  },
+  "U": {
+    "key": "U",
+    "text": "U",
+    "file": "./client/templates/chatroons.html",
+    "line": 188,
+    "template": "chatrooms",
+    "ctime": 1397014212330,
+    "mtime": 1436027024000,
+    "removed": true
+  },
+  "save-correction": {
+    "key": "save-correction",
+    "text": "Save correction",
+    "file": "./client/templates/chatroons.html",
+    "line": 201,
+    "template": "chatrooms",
+    "ctime": 1397014212330,
+    "mtime": 1436027024000,
+    "removed": true
+  },
+  "edit-info": {
+    "key": "edit-info",
+    "text": "Edit info",
+    "file": "./client/templates/user.html",
+    "line": 321,
+    "template": "user",
+    "ctime": 1404915874642,
+    "mtime": 1436027024000,
+    "removed": true
   },
   "noUser-chat": {
     "key": "noUser-chat",
@@ -2167,7 +2398,7 @@ mfPkg.addNative(
     "line": 43,
     "template": "chatrooms",
     "ctime": 1397014212330,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "home": {
@@ -2177,7 +2408,7 @@ mfPkg.addNative(
     "line": 66,
     "template": "title",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "under-construction": {
@@ -2187,7 +2418,7 @@ mfPkg.addNative(
     "line": 71,
     "template": "title",
     "ctime": 1404915874641,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "create_user": {
@@ -2197,7 +2428,7 @@ mfPkg.addNative(
     "line": 20,
     "template": "login_form",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "enter-firstname": {
@@ -2206,7 +2437,7 @@ mfPkg.addNative(
     "file": "./client/templates/sign.html",
     "line": 96,
     "template": "login_form",
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "ctime": 1413121531198,
     "removed": true
   },
@@ -2217,7 +2448,7 @@ mfPkg.addNative(
     "line": 101,
     "template": "login_form",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "close": {
@@ -2227,7 +2458,7 @@ mfPkg.addNative(
     "line": 230,
     "template": "login_form",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "sign_in": {
@@ -2237,7 +2468,7 @@ mfPkg.addNative(
     "line": 42,
     "template": "user-profile",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "group_genre": {
@@ -2247,7 +2478,7 @@ mfPkg.addNative(
     "line": 270,
     "template": "chatrooms",
     "ctime": 1398341669193,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "forgot_passwd": {
@@ -2257,7 +2488,7 @@ mfPkg.addNative(
     "line": 18,
     "template": "login_form",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "messages": {
@@ -2267,7 +2498,7 @@ mfPkg.addNative(
     "line": 30,
     "template": "user-profile",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "sign_up": {
@@ -2277,7 +2508,7 @@ mfPkg.addNative(
     "line": 148,
     "template": "title",
     "ctime": 1396799101552,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   },
   "public_roons": {
@@ -2287,11 +2518,11 @@ mfPkg.addNative(
     "line": 147,
     "template": "chatroons",
     "ctime": 1396790754391,
-    "mtime": 1426862450276,
+    "mtime": 1436027024000,
     "removed": true
   }
 }, 
 {
-  "extractedAt": 1426862450276,
-  "updatedAt": 1426862450276
+  "extractedAt": 1436027024000,
+  "updatedAt": 1436027024000
 });

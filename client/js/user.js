@@ -25,11 +25,10 @@ Template.notification.destroyed = function(){
 }
 Template.layout.events({
   'click div.ui.button#sign-in': function(e,t){
-    //$("div.user").css('display', 'block');
-    //$("input#signButton").css('display','none');
     var self = this;
     if(Meteor.userId() === null)
       Session.set("modal-handler",{active:true,login:true});
+    Router.go("login");
   }
 });
 
@@ -128,18 +127,21 @@ Template.login_form.events({
     var email = $('#login_email').val();
     var passwd = $('#login_passwd').val();
     email = trimInput(email);
+    var alert = t.find("div.alert");
     //Meteor.call("login",{email:email,passwd:passwd});
-    console.log(email);
-    console.log(passwd);
+    if(email !== "" && passwd !== "")
     Meteor.loginWithPassword(email,passwd, function(err){
       if (err){
         console.log("couldn't find your email or password!");
+        $("div.alert").show();
+        $("div.alert").text(mf("error-pass", null, "We coudn't authenticate user/passworld."));
         return 'error';
       }else{
-        $(".ui.sidebar").sidebar("setting","transition","push");
-        $("#modal-handler").modal("hide");
+      Router.go("Chatrooms");
       }
     });
+    else
+        $("div.alert").text(mf("miss-field", null, "You're missing field."));
     //$('#registerModal').modal("toggle");
   },
   'click a#login': function(event, template){

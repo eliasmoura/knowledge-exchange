@@ -107,8 +107,9 @@ UI.registerHelper("group_settings", function(args){
         settings = user_room.settings;
         if(value === "muted")
             return settings.notification.muted;
-        if(value  === "message-threshold")
-            return settings.notification.threshhold;
+        if(value  === "threshold")
+          if(parseInt(settings.notification.threshold, 10) > 0)
+            return settings.notification.threshold;
         if(value === "any")
             return settings.notification.any;
         if(value === "direct")

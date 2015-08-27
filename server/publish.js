@@ -1,10 +1,11 @@
 Meteor.publish("requests", function(){
         //var groups = User_Group.find({user:this.userId, mod:true}).fetch();
-    var groupsArray = Roles.getGroupsForUser(this.userId, "group-manager")
+    var groupsArray = Roles.getGroupsForUser(this.userId, "group-manager");
         //var groupArray = new Array();
         var groupsRequest_participation = false;
 
-        var friendshipRequests = UserRequest.find({request_to: this.userId});
+    var friendshipRequests = UserRequest.find({request_to: this.userId,
+                                               accept:{$ne:false}});
         var     friends = false;
 
         var response = new Array();
@@ -32,7 +33,8 @@ Meteor.publish("user-contact", function(){
         return UsersRelations.find({user:this.userId});
 });
 Meteor.publish("private-chats", function(){
-    return PrivateChat.find({users:{$in:[this.userId]}});
+    return [PrivateChat.find({users:{$in:[this.userId]}}),
+            User_Room.find({user:this.userId, type:"private"})];
 });
 Meteor.publish("user-list", function(){
     var rooms = _.map(
@@ -42,24 +44,37 @@ Meteor.publish("user-list", function(){
         }
     );
     var users = _.map(User_Room.find({room:{$in:rooms}}).fetch(), function(element){return element.user;});
-        return Meteor.users.find({_id:{$in:users}},{fields:{_id:1, "profile.name":1,"profile.lastname":1,"profile.status":1}});
+    return Meteor.users.find({_id:{$in:users}},{fields:{_id:1, "profile.name":1,
+                                                        "profile.lastname":1,"profile.status":1,
+                                                        "profile.knownlanguages":1,
+                                                        "profile.learninglanguages":1,
+                                                        "profile.nativelang": 1,
+                                                        "profile.status":1}});
 });
-Meteor.publish("chatrooms-list", function(){
-        return Chatrooms.find({});
+Meteor.publish("users-profiles", function(){
+    var user_room = User_Room.findOne({user:this.userId,active:true});
+    var users = [];
+    if(user_room !== undefined)
+        users = _.map(User_Room.find({room:user_room.room}).fetch(), function(user){
+        return user.user;
+    });
+    var public_profiles = _.map(UsersRelations.find({user:this.userId}).fetch(),function(user){
+        return user.contact;
+    });
+    users = _.union(users, public_profiles);
+    return Meteor.users.find({_id:{$in:users}}, {fields:{_id:1, "profile.name":1,
+                                                         "profile.lastname":1,
+                                                         "profile.status":1,
+                                                         "profile.knownlanguages":1,
+                                                         "profile.learninglanguages":1,
+                                                         "profile.nativelang": 1,
+                                                         "profile.country":1,
+                                                         "profile.city":1,
+                                                         "profile.gender":1,
+                                                         "profile.birthday":1,
+                                                         "profile.interests":1,
+                                                         "profile.status":1}});
 });
-
-Meteor.publish("messages", function(room){
-    var messages = false;
-    var group = Groups.findOne({_id:room});
-    if(group !== undefined){
-        if(Roles.userIsInRole(this.userId, "group-member", room) || Roles.userIsInRole(this.userId, "group-manager", room) || Roles.userIsInRole(this.userId, "owner", room))
-            messages = Messages.find({room:room}, {sort: {time: +1}});
-        else messages = Messages.find({_id: null});
-    }else
-        messages = Messages.find({room:room}, {sort: {time: -1}, limit:10});
-     return messages;
-});
-
 Meteor.publish("users-room", function(room){
     var userList = new Array();
     var roomUsers = null;
@@ -74,8 +89,46 @@ Meteor.publish("users-room", function(room){
         {fields:{_id:1, "profile.name":1, "profile.lastname":1, "profile.status":1,status:1}},
         {sort:{"profile.status":["online","away","offline"],"profile.name":1,"profile.lastname":1}}
     );
-    return [userList, roomUsers];
+    return [roomUsers];
 });
+//userprofile
+Meteor.publish("profile",function(args){
+    var user = Meteor.users.findOne({_id:args.userId});
+    if(this.userId && this.userId === user._id)
+      user = Meteor.users.find({_id:this.userId});
+      else
+    if (user.profile.privacy == "open"){
+        user = Meteor.users.find({_id:args.userId},{fields:{_id:1,profile:1, status:1, privacy:1}});
+    }else if (user.profile.privacy =="contacts"){
+        if(UsersRelations.findOne({user:args.userId, contact:args.currentUser}))
+            user = Meteor.users.find({_id:args.userId},{fields:{_id:1,profile:1, status:1, privacy:1}});
+        else
+            user = Meteor.users.find({_id:args.userId}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, privacy:1}});
+    }else{
+        //them it's private, but the name and last name will always be shown
+        user = Meteor.users.find({_id:args.userId}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, privacy:1}});
+    }
+    return user;
+});
+Meteor.publish("chatrooms-list", function(){
+        return Chatrooms.find({});
+});
+
+Meteor.publish("messages", function(room, num_msg_rq){
+    var messages = false;
+    var group = Groups.findOne({_id:room});
+    if(group !== undefined){
+        if(Roles.userIsInRole(this.userId, "group-member", room) ||
+          Roles.userIsInRole(this.userId, "group-manager", room) ||
+          Roles.userIsInRole(this.userId, "owner", room))
+            messages = Messages.find({room:room}, {sort: {time: +1}});
+        else messages = Messages.find({_id: null});
+    }else
+        messages = Messages.find({room:room}, {sort: {time: -1}, limit:num_msg_rq});
+     return messages;
+});
+
+
 
 Meteor.publish("groups-list", function(){
     var groups = User_Room.find({user:this.userId, type:"group"},{fields:{room:1}}).fetch();
@@ -177,25 +230,6 @@ Meteor.publish("emails-received", function(){
 });
 
 
-//userprofile
-Meteor.publish("profile",function(args){
-    var user = Meteor.users.findOne({_id:args.userId});
-    if(this.userId && this.userId === user._id)
-      user = Meteor.users.find({_id:this.userId});
-      else
-    if (user.profile.privacy == "open"){
-        user = Meteor.users.find({_id:args.userId},{fields:{_id:1,profile:1, status:1, privacy:1}});
-    }else if (user.profile.privacy =="contacts"){
-        if(UsersRelations.findOne({user:args.userId, contact:args.currentUser}))
-            user = Meteor.users.find({_id:args.userId},{fields:{_id:1,profile:1, status:1, privacy:1}});
-        else
-            user = Meteor.users.find({_id:args.userId}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, privacy:1}});
-    }else{
-        //them it's private, but the name and last name will always be shown
-        user = Meteor.users.find({_id:args.userId}, {fields:{_id:1, "profile.name":1, "profile.lastname":1, privacy:1}});
-    }
-    return user;
-});
 // Users roles
 Meteor.publish(null, function (){ 
   return Meteor.roles.find({})

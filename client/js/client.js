@@ -26,6 +26,7 @@ Meteor.startup(function(){
     Session.set("add_ser",false);
     Session.set("user_modal_actions",false);
     Session.set("emails", false);
+    Session.set("num_msg_rq", 10);
     Session.set("langs",[
             {key:"akan",lang:mf("akan",null,"Akan")},
             {key:"amharic",lang:mf("amharic",null,"Amharic")},

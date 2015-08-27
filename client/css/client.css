@@ -6,7 +6,7 @@ html, body {height: 95%;}
 }
 #chat_content
 {
-    height: 95%;
+    height: 100%;
 /*    background-color: #Ff4500; */
 }
 .container-fluid, .pusher, #layout, .yield_wraper, .divchat, #content
@@ -14,37 +14,38 @@ html, body {height: 95%;}
     height:100%;
 }
 .yield_wraper {
-    margin: 14px;
+/*    margin: 14px;*/
 }
 div#chat-content {
-/*    background-color: #Ff4500; */
     padding: 0px;
     height: 100%;
-}
-.tab-content {
     margin: 0px;
-    padding:0px;
+}
+div#chat-content div.ui.tab-content {
+/*    margin-bottom: 0px;
+    padding-bottom :0px;*/
     height: 100%;
     resize: both;
+    clear: both;
+    background-color: #DCDCDC;
 }
 .user-list {
     height: 100%;
-    background-color: #A9a9a9;
+    background-color: #Dcdcdc;
 }
-
 div#chat-tab {
-    margin: 0px;
-    margin-top: -20px;
-    padding: 0px;
+/*    margin: 0px;
+    /* margin-top: -20px;
+    padding: 0px;*/
     resize: both;
 }
-div#chat-tab div.item {
+div#chat-container {
 
 }
 #chat-messages, .sidebar, .sidebar
 {
     overflow-y: auto;
-    height: 95%;
+    height: 100%;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -58,26 +59,6 @@ div.chat-content {
 dvi#chat-container {
 
 }
-div#message-input {
-    margin: 5px;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-textarea#message {
-    background-color: #11748C;
-    min-height: 2em;
-    max-height: 24em;
-    height: 3em;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-div.correction-setup div.form div textarea {
-    min-height: 2em;
-    max-height: 24em;
-    height: 3em;
-}
 
 li.message{
     cursor: pointer;
@@ -85,7 +66,7 @@ li.message{
 div#original-message {
     height: 100%;
 }
-.online
+/*.online
 {
     color: #18CE16;
 }
@@ -103,7 +84,7 @@ div#original-message {
 }
 .unchecked{
     color: #7E7C7C;
-}
+}*/
 .danger:hover { background-color:#FF0000; }
 .hidden { display:none; }
 .ui.input.hidden { display:none; }
@@ -118,11 +99,38 @@ div.divmessages{
     overflow-y: scroll;
     overflow-x: hidden;
     word-break: break-all;
-    background-color: #0B7A96;
+    /*   background-color: #0B7A96;*/
+    background-color: #Dcdcdc;
 }
+div#message-input {
+    padding: 0px;
+    margin: 0px;
+ /*   margin-top: -3px;*/
+    background-color: #Dcdcdc;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+/*    height: 100%;
+    width: 100%;*/
+}
+textarea#message {
+ /*   background-color: #11748C;
+    min-height: 2em;*/
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+}
+div.correction-setup div.form div textarea {
+    min-height: 2em;
+    max-height: 24em;
+    height: 3em;
+}
+
 label.stusername:hover{
     font-color: #B9C065;
-    background: #B9C065;
+/*    background: #B9C065;*/
 }
 div.chatusers{
     overflow-y: scroll;

@@ -47,13 +47,12 @@
 </template>
 
 <template name="room_overview">
-{{#with room_info this.room._id}}
 <div class="groups">
-  <div class="group panel panel-info" id="{{_id}}">
+  <div class="" id="{{this._id}}">
     <div class="panel-heading">
       <h4>
-        {{#if isInRole "group-member" _id}}
-          {{name}}
+        {{#if isInRole "group-member" this._id}}
+          {{this.name}}
         {{else}}
           {{#if actions.send_request}}
           <!-- show the "send request" action if the user isn't a member and the group isn't
@@ -75,13 +74,12 @@
           <a class="panel-title groupdatails" data-toggle-to="d{{_id}}" data-toggle="collapse" data-parent="#accordion" href="#">{{mf 'details' 'Details'}}:</a>
         </div>
         <div class="panel-body collapse out" id="d{{_id}}">
-          <p class="group" id="{{_id}}" >	{{description}}</p>
+          <p class="group" id="{{_id}}" >{{description}}</p>
         </div>
       </div>
     </div>
   </div>
 </div>
-{{/with}}
 </template>
 
 <template name="create_group">
@@ -193,6 +191,10 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="two fields">
+    <button class="ui button fluid field" id="create-group-send" >{{mf 'create' 'Create'}}</button>
+    <button class="ui button fluid field" id="create-group-cancel" >{{mf 'cancel' 'Cancel'}}</button>
   </div>
 </form>
 </template>

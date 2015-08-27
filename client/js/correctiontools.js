@@ -9,8 +9,27 @@ Template.basic_correction_tool.events({
         modal_handler.text = Messages.findOne({_id:Session.get("correct_message")}).message;
         Session.set("modal-handler", modal_handler);
         $(".modal#modal-handler").modal("show");
+    },
+    'changed textarea.basic-correction': function(event, template){
+        if (event.which == 13){//enter
+            var element = event.currentTarget;
+            if(element.value.replace(/^\s*|\s*$/g, "") !== ''){
+                var correction = element.value;
+                Correction.insert({
+                    correction:correction,
+                    explanation:explanation,
+                    corrector:this.userId,
+                    message:messageId,
+                    chattype:Meteor.user().profile.active_room.type,
+                    room:Meteor.user().profile.active_room.room,
+                    time: Date.now()
+                });
+                Alternative.insert({alternativefor:alternativefor , alternative:alternative});
+                Usage.insert({usagefor:usagefor,usage:usage});
+            }
+        }
     }
-})
+});
 Template.messagem_corrected_button.rendered = function(){
     var element = this.firstNode;
     var id = $(element).parent().attr('id');
@@ -34,27 +53,15 @@ Template.messagem_corrected_button.rendered = function(){
         //$(element).popover('destroy');
         $(element).addClass('hide');
     }
-}
-/*Template.messagem_corrected_button.correction = function(){
- var element = this.firstNode;
- var id = $(element).parent().attr('id');
- var message = Messages.findOne({_id:id});
- console.log('correction:' + element);
- if(message){
- //console.log(room.room + " " + user);
- console.log('correction');
- return true;
- }//-1 newest on the top
-
- return false;
- }*/
+};
 
 Template.correction_tool.source = function(e,t){
     return Session.get("correctionSource");
-}
+};
 Template.correction_tool.rendered = function(){
+    $("div.correct-accordion").accordion();
     $('#correctionModal').modal("toggle");
-}
+};
 Template.correction_tool.events = {
     'click button#crrbutton_close': function(e,t){
         //Session.set("action", false);

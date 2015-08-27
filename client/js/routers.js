@@ -41,7 +41,7 @@ Router.route('login', {
     data:{//activeHome: "active",
         pageTitle: "Home"}
 });
-Router.route('/signup', {
+Router.route('signup', {
     path:'/signup',
     name:'signup',
     template: 'register_form',
@@ -126,6 +126,7 @@ Router.route('/chat', {
                 Meteor.subscribe("requests"),
                 Meteor.subscribe("requests-invite"),
                 Meteor.subscribe("user-list"),
+                Meteor.subscribe("users-profiles"),
                 Meteor.subscribe("private-chats"),
                 Meteor.subscribe("user-groups"),
                 Meteor.subscribe("groups-list"),
@@ -147,6 +148,7 @@ Router.route('/chatroom/create-group', {
                 Meteor.subscribe("requests"),
                 Meteor.subscribe("requests-invite"),
                 Meteor.subscribe("user-list"),
+                Meteor.subscribe("users-profiles"),
                 Meteor.subscribe("private-chats"),
                 Meteor.subscribe("user-groups"),
                 Meteor.subscribe("groups-list"),
@@ -162,10 +164,13 @@ Router.route('/chatroom/public/:_id', {
     controller: "ChatroomCtrl",
     waitOn: function(){
         var subs = [];
+        var num_msg_rq = Session.get("num_msg_rq");
+        if(num_msg_rq === undefined)
+          num_msg_rq = 10;
         if(Meteor.user())
-            subs = [
+             subs = [
                 Meteor.subscribe("chatrooms-list"),
-                Meteor.subscribe("messages", this.params._id),
+                Meteor.subscribe("messages", this.params._id, num_msg_rq),
                 Meteor.subscribe("chat-corrections",{room:this.params._id, type:"public"}),
                 Meteor.subscribe("users-room",{room:this.params._id, type:"public"}),
                 Meteor.subscribe("currentRoom",this.params._id, "public"),
@@ -173,18 +178,19 @@ Router.route('/chatroom/public/:_id', {
                 Meteor.subscribe("requests"),
                 Meteor.subscribe("requests-invite"),
                 Meteor.subscribe("user-list"),
+                Meteor.subscribe("users-profiles"),
                 Meteor.subscribe("private-chats"),
                 Meteor.subscribe("user-groups"),
                 Meteor.subscribe("groups-list"),
                 Meteor.subscribe("user-contact"),
                 Meteor.subscribe("emails-received"),
                 Meteor.subscribe("emails-sent")
-            ];
+             ];
         return subs;
     },
     action: function(){
         this.state.set("roomid",this.params._id);
-        this.state.set("roomtype", "public");
+        this.state.set("roomtype", "group");
         this.render();
     }
 });
@@ -193,10 +199,13 @@ Router.route('/chatroom/group/:_id', {
     controller: "ChatroomCtrl",
     waitOn: function(){
         var subs = [];
+        var num_msg_rq = Session.get("num_msg_rq");
+        if(num_msg_rq === undefined)
+          num_msg_rq = 10;
         if(Meteor.user())
             subs = [
                 Meteor.subscribe("chatrooms-list"),
-                Meteor.subscribe("messages", this.params._id),
+                Meteor.subscribe("messages", this.params._id, num_msg_rq),
                 Meteor.subscribe("chat-corrections",{room:this.params._id, type:"group"}),
                 Meteor.subscribe("users-room",{room:this.params._id, type:"group"}),
                 Meteor.subscribe("currentRoom",this.params._id, "group"),
@@ -204,6 +213,7 @@ Router.route('/chatroom/group/:_id', {
                 Meteor.subscribe("requests"),
                 Meteor.subscribe("requests-invite"),
                 Meteor.subscribe("user-list"),
+                Meteor.subscribe("users-profiles"),
                 Meteor.subscribe("private-chats"),
                 Meteor.subscribe("user-groups"),
                 Meteor.subscribe("groups-list"),
@@ -224,17 +234,23 @@ Router.route('/chatroom/101/:_id', {
     controller: "ChatroomCtrl",
     waitOn: function(){
         var subs = [];
+        var num_msg_rq = Session.get("num_msg_rq");
+        if(num_msg_rq === undefined)
+          num_msg_rq = 10;
         if(Meteor.user())
             subs = [
                 Meteor.subscribe("chatrooms-list"),
-                Meteor.subscribe("messages", this.params._id),
-                Meteor.subscribe("chat-corrections",{room:this.params._id, type:"private"}),
-                Meteor.subscribe("users-room",{room:this.params._id, type:"private"}),
+                Meteor.subscribe("messages", this.params._id, num_msg_rq),
+                Meteor.subscribe("chat-corrections",{room:this.params._id,
+                                                     type:"private"}),
+                Meteor.subscribe("users-room",{room:this.params._id,
+                                               type:"private"}),
                 Meteor.subscribe("currentRoom",this.params._id, "user"),
                 Meteor.subscribe("languages-list"),
                 Meteor.subscribe("requests"),
                 Meteor.subscribe("requests-invite"),
                 Meteor.subscribe("user-list"),
+                Meteor.subscribe("users-profiles"),
                 Meteor.subscribe("user-groups"),
                 Meteor.subscribe("groups-list"),
                 Meteor.subscribe("user-contact"),
@@ -245,7 +261,7 @@ Router.route('/chatroom/101/:_id', {
     },
     action: function(){
         this.state.set("roomid",this.params._id);
-        this.state.set("roomtype", "private");
+        this.state.set("roomtype", "group");
         this.render();
     }
 });
@@ -325,11 +341,15 @@ ChatroomsCtrl = RouteController.extend({
             // render the home template but keep the url in the browser the same
             this.render('home');
         }else{
-            var room_handler = {};
+            var room_handler = Session.get("room_handler");
+            if(room_handler === undefined){
+            room_handler = {};
             room_handler.manage = {active:false};
             room_handler.chat = {active:"active"};
             room_handler.settings = {active:false};
+            room_handler.overview = {active:false};
             room_handler.create = {active:false};
+            }
             if(this.route.path() === "/chatroom/create-group"){
                 var group_handler = Session.get("group_handler");
                 group_handler.active = true;
@@ -420,6 +440,25 @@ ChatroomsCtrl = RouteController.extend({
                 }catch(e){}
                 users_relationsArray.push(user);
             });
+            var contacts_room = User_Room.find({type:"private", contact:{$ne:Meteor.userId()}}).fetch();
+            var users_relationsArray = new Array();
+            /*
+            users_relations.forEach(function(row){
+                var privatechat = PrivateChat.findOne({users:{$in:[row.contact]}});
+                var user = Meteor.users.findOne({_id:row.contact});
+                user.notification = privatechat.new_messages;
+                if (privatechat._id == Session.get("roomid"))
+                    user.active = true;
+                users_relationsArray.push(user);
+            });
+             */
+            var contacts = _.map(contacts_room, function(room){
+                var privatechat = PrivateChat.findOne({_id:room.room});
+                var user = Meteor.users.findOne({_id:room.contact});
+                room.user = user;
+                return room;
+            });
+            return contacts;
             /*
              var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();;
              var privatenotificationsArray = {};
@@ -509,36 +548,55 @@ ChatroomCtrl = RouteController.extend({
             // render the home template but keep the url in the browser the same
             this.render('home');
         }else{
-            var room_handler = {};
-            room_handler = {active:false};
-            room_handler.create = {active:false};
-            room_handler.manage = {active:false};
-            room_handler.settings = {active:false};
-            room_handler.overview = {active:false};
-            room_handler.chat = {active:'active'};
-            var group_handler = Session.get("group_handler");
-            if(!group_handler) group_handler = {};
-            group_handler.active = false;
-            group_handler.create = {active:false};
-            Session.set("group_handler",group_handler);
-            Session.set("roomid", this.state.get("roomid"));
-            Session.set("roomtype", this.state.get("roomtype"));
-
-            //if the user isn't in the public room, join him/her in
-            if(!User_Room.findOne({room:this.params._id, user:Meteor.userId()})){
-                if(Chatrooms.findOne({_id:this.params._id}) !== undefined){
-                    User_Room.insert({room:this.params._id, new_messages:0, user:Meteor.userId(), type: "public"});
-                    room_handler.chat.active = "active";
-                }else{
-                    room_handler.overview.active = "active";
+            var room_handler = Session.get("room_handler");
+            if(room_handler === undefined){
+                room_handler = {};
+                room_handler = {active:false};
+                room_handler.create = {active:false};
+                room_handler.manage = {active:false};
+                room_handler.settings = {active:false};
+                room_handler.overview = {active:false};
+                room_handler.chat = {active:'active'};
+            }else{
+              if(room_handler.chat === undefined)
+                room_handler.chat = {active:'active'};
+                if(room_handler.active === undefined)
+                room_handler = {active:false};
+                if(room_handler.create === undefined)
+                room_handler.create = {active:false};
+                if(room_handler.manage === undefined)
+                room_handler.manage = {active:false};
+                if(room_handler.settings === undefined)
+                room_handler.settings = {active:false};
+                if(room_handler.overview === undefined)
+                room_handler.overview = {active:false};
                 }
-            }else
-                room_handler.chat.active = "active";
-            Session.set("room_handler", room_handler);
-            var user_room = User_Room.findOne({room:this.state.get("roomid"), user:Meteor.userId()});
-            if(user_room !== undefined){
-                User_Room.update({_id:user_room._id}, {$set:{new_messages:0}});
-            }
+                var group_handler = Session.get("group_handler");
+                if(!group_handler) group_handler = {};
+                group_handler.active = false;
+                group_handler.create = {active:false};
+                Session.set("group_handler",group_handler);
+                var room = this.state.get("roomid");
+                var user_room = User_Room.findOne({room:room, user:Meteor.userId()});
+                Session.set("roomid", room);
+                Session.set("roomtype", this.state.get("roomtype"));
+
+                //if the user isn't in the public room, join him/her in
+                if(user_room === undefined){
+                    if(Chatrooms.findOne({_id:room}) !== undefined){
+                        User_Room.insert({room:room, new_messages:0, user:Meteor.userId(), type: "public"});
+                        room_handler.chat.active = "active";
+                    }else{
+                      if(room_handler.overview !== undefined)
+                        room_handler.overview.active = "active";
+                    }
+                }
+                Session.set("room_handler", room_handler);
+            /*
+            if(user_room !== undefined && room_hanlder.chat.active){
+                    User_Room.update({_id:user_room._id}, {$set:{new_messages:0}});
+                }
+             */
             this.next();
         }
     },
@@ -558,25 +616,18 @@ ChatroomCtrl = RouteController.extend({
             return roomsArray;
         },
         room: function(){
-            var room = Session.get("roomid");;
-            var type = Session.get("roomtype");
-            if(room == "none"){
-                return false;
-            }
+            var room = User_Room.findOne({room:Session.get("roomid")});
+            if(room == undefined) return false;
+            var type = room.type;
             if ( type == "public"){
-                room = Chatrooms.findOne({_id:room});
+                room.name = Chatrooms.findOne({_id:room.room}).name;
             }
             else if ( type == "group"){
-                room = Groups.findOne({_id:room});
+                room.name = Groups.findOne({_id:room.room}).name;
             }
-            else if ( type == "privatechat"){
-                var user  = PrivateChat.findOne({_id:room}).users;
-                if(user[0] != Meteor.userId()){
-                    user = Meteor.users.findOne({_id:user[0]});
-                }else{
-                    user = Meteor.users.findOne({_id:user[1]});
-                }
-                room = {name:user.profile.name, _id:PrivateChat.findOne({_id:room})._id};
+            else if ( type == "private"){
+                var user = Meteor.users.findOne({_id:room.contact});
+                room.name = user.profile.name + " " + user.profile.lastname;
             }
             return room;
         },
@@ -585,16 +636,26 @@ ChatroomCtrl = RouteController.extend({
             var type = Session.get("roomtype");
 
             var userList = new Array();
-            User_Room.find({room:room, type:type}).forEach(function(row){
+            User_Room.find({room:room}).forEach(function(row){
                 userList.push(row.user);
             });
-            userList = Meteor.users.find({_id:{$in:userList} }, {fields:{_id:1, status:1, "profile.name":1, "profile.lastname":1}});
-            userList = _.map(userList.fetch(), function(doc){return {_id:doc._id,name:doc.profile.name,lastname:doc.profile.lastname,fullname:doc.profile.name + " " + doc.profile.lastname};});
+            userList = Meteor.users.find({_id:{$in:userList} },
+                                         {fields:{_id:1, status:1,
+                                                  "profile.name":1,
+                                                  "profile.lastname":1}});
+            userList = _.map(userList.fetch(), function(doc)
+                             {
+                                 return {_id:doc._id,name:doc.profile.name,
+                                         lastname:doc.profile.lastname,
+                                         fullname:doc.profile.name + " " + doc.profile.lastname};
+                             });
             return userList;
         },
         contacts: function(){
-            var users_relations = UsersRelations.find({}).fetch();
+            //var users_relations = UsersRelations.find({}).fetch();
+            var contacts_room = User_Room.find({type:"private", contact:{$ne:Meteor.userId()}}).fetch();
             var users_relationsArray = new Array();
+            /*
             users_relations.forEach(function(row){
                 var privatechat = PrivateChat.findOne({users:{$in:[row.contact]}});
                 var user = Meteor.users.findOne({_id:row.contact});
@@ -603,6 +664,14 @@ ChatroomCtrl = RouteController.extend({
                     user.active = true;
                 users_relationsArray.push(user);
             });
+             */
+            var contacts = _.map(contacts_room, function(room){
+                var privatechat = PrivateChat.findOne({_id:room.room});
+                var user = Meteor.users.findOne({_id:room.contact});
+                room.user = user;
+                return room;
+            });
+            return contacts;
             /*
              var privatechatnotifications = PrivateChat.find({new_messages:{$gt:0}}).fetch();;
              var privatenotificationsArray = {};
@@ -618,7 +687,7 @@ ChatroomCtrl = RouteController.extend({
              users.push(row);
              });*/
 
-            return users_relationsArray;
+            //return  users_relationsArray;
         },
         emails_notifications: function(){
             return false;
@@ -630,10 +699,8 @@ ChatroomCtrl = RouteController.extend({
             if(Meteor.user() !== null)
                 blocked_users = Meteor.user().profile.blocked_users;
             var messagesArray = _.map(messages, function(row){
-                if( blocked_users == null)
-                    blocked_users = [];
-                // console.log(blocked_users);
-                if (blocked_users.indexOf(row.owner) == -1) {
+                if( blocked_users == null || blocked_users.indexOf(row.owner) == -1)
+                {
                     var corrections = Correction.find({message:row._id});
                     row.corrections = [];
                     corrections.forEach(function(crow){
@@ -641,6 +708,7 @@ ChatroomCtrl = RouteController.extend({
                         row.corrections.push(crow);
                     });
                 }
+                //row.message = row.message.replace(/\r?\n|\r/g,"<br />");
                 return row;
             });
             return messagesArray;

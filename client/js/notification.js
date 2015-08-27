@@ -140,7 +140,7 @@ UI.registerHelper(
          privatenotificationsArray[row.contact] = row.new_messages;
          });
          console.log(privatenotificationsArray);*/
-        var user_groups = User_Room.find({user: Meteor.userId()}).fetch();
+        var user_groups = User_Room.find({user: Meteor.userId(),new_messages:{$gt:0}}).fetch();
         // console.log(user_groups);
         var groupsArray = 0;
         // var groups = new Array();

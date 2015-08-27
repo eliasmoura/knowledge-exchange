@@ -34,17 +34,17 @@ Report = new Meteor.Collection('report');
 
 Messages.allow({
     insert: function(userId, doc){
-        var allowed = false;
         if(userId && doc.owner === userId)
             if(Chatrooms.findOne({_id:doc.room}))
-                allowed = true;
+                return true;
             else{
-                if(Groups.findOne({_id:doc.room}))
+                if(Groups.findOne({_id:doc.room})){
                     if(User_Room.findOne({user:doc.owner, room:doc.room}))
-                        allowed = true;
+                        return true;
+                }else if(PrivateChat.findOne({_id:doc.room}))
+                    return true;
             }
-
-        return allowed;
+        return false;
     },
     update: function(userId, doc, fields, modifier){
     },
@@ -170,15 +170,17 @@ User_Room.allow({
         var allowed = false;
         var group = Groups.findOne({_id:doc.room});
         var pgroup = Chatrooms.findOne({_id:doc.room});
+        var privatechat = PrivateChat.findOne({_id:doc.room});
         group = group !== undefined ? group : pgroup;
-        if(group !== undefined && userId){
+        group = group !== undefined ? group : privatechat;
+        if(group !== undefined && userId ){
             if(Roles.userIsInRole(userId, "group-manager", group._id))
                 if(!_.contains(fields,["user","_id", "new_messages","date","room", "settings"]))
                     allowed = true;
             if(fields.length == 1 && userId === doc.user)
                 if(_.contains(fields,"new_messages"))
                     allowed = true;
-            if(doc.user && userId)
+            if(doc.user)
                 if(!_.contains(fields, ["user","_id", "date", "room"]))
                     allowed = true;
         }
